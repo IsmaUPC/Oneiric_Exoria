@@ -8,18 +8,7 @@ Welcome to Lansdowne, one of the few academies where magic is considered another
 
 Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic style is pixel art using tiles with a top-down camera model.
 
-## Key Features
-
- - {Feature01}
- - {Feature02}
- - {Feature03}
- - {Feature04}
- 
-## Controls
-
- - {ControlsScheme}
-
-## Developers
+## Team Members
 
 **Lead/Design:** Ismael Tejada
 * **GitHub account:** [IsmaUPC](https://github.com/IsmaUPC)
@@ -42,8 +31,32 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 **QA Workflow**: Enric Morales
 * **GitHub account:** [enricmc19](https://github.com/enricmc19)
 
+## Links
+
+
+
 ## License
+~~~
+MIT License
 
-This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE](LICENSE) for further details.
+Copyright (c) 2020 Ray
+Copyright (c) 2020 7HD
 
-{AdditionalLicenses}
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+~~~
