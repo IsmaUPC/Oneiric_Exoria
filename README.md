@@ -33,7 +33,9 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 
 ## Links
 
-
+* **Repository** [Github](https://github.com/IsmaUPC/Oneiric_Exoria)
+* **Tutor:** [Ramon Santamaria](https://github.com/raysan5)
+* **University:** [CITM UPC](https://www.citm.upc.edu/)
 
 ## License
 ~~~
