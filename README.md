@@ -41,8 +41,8 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 ~~~
 MIT License
 
-Copyright (c) 2020 Ray
-Copyright (c) 2020 7HD
+Copyright (c) 2021 Ray
+Copyright (c) 2021 7HD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
