@@ -71,7 +71,8 @@ bool SceneIntro::Start()
 	menuSettings->MovePosition();
 
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
-	bgIntro = app->tex->Load("Assets/Textures/title_screen.png");
+	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
+	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
 	animationIntro.texture = app->tex->Load("Assets/Textures/dino_sprites.png");
 	animationIntro.position = { 180 , 363 };
 	idleAnim->loop = true;
@@ -82,7 +83,7 @@ bool SceneIntro::Start()
 
 	animationIntro.currentAnimation = idleAnim;
 
-	SDL_QueryTexture(bgIntro, NULL, NULL, &imgW, &imgH);
+	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
 	
 	ComprobeState(2);
@@ -134,6 +135,7 @@ bool SceneIntro::PostUpdate()
 	rectIntro = animationIntro.currentAnimation->GetCurrentFrame();
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
+	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 50);
 	app->render->DrawTexture(animationIntro.texture, animationIntro.position.x, animationIntro.position.y, &rectIntro);
 	
 	btnPlay->Draw();
@@ -158,6 +160,7 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(btnSettingsTex);
 	app->tex->UnLoad(btnExitTex);
 	app->tex->UnLoad(bgIntro);
+	app->tex->UnLoad(logoIntro);
 	app->tex->UnLoad(animationIntro.texture);
 
 	menuSettings->CleanUp();
@@ -177,6 +180,7 @@ bool SceneIntro::CleanUp()
 	btnExit = NULL;
 
 	bgIntro = nullptr;
+	logoIntro = nullptr;
 	active = false;
 	return true;
 }

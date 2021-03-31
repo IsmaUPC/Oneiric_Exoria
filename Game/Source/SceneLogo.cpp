@@ -1,9 +1,10 @@
-#include "App.h"
+﻿#include "App.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Render.h"
 #include "SceneLogo.h"
 #include "Audio.h"
+#include "ModuleFonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -31,7 +32,7 @@ bool SceneLogo::Start()
 {
 	app->SetLastScene((Module*)this);
 
-	img = app->tex->Load("Assets/Textures/scene_logo.png");
+	img = app->tex->Load("Assets/Textures/logo_7hd_2.png");
 	introFx = app->audio->LoadFx("Assets/Audio/Fx/intro.wav");
 	app->audio->PlayFx(introFx,100);
 
@@ -42,6 +43,9 @@ bool SceneLogo::Start()
 	state = 0;
 	timeCounter = 0.0f;
 	logoAlpha = 0.0f;
+
+	// Background color
+	color.r = 20; color.g = 20; color.b = 20;
 	
 	return true;
 }
@@ -90,12 +94,15 @@ bool SceneLogo::Update(float dt)
 
 bool SceneLogo::PostUpdate()
 {
+	app->render->SetBackgroundColor(color);
+
 	bool ret = true;
 	if (img != NULL)
 	{
 		SDL_SetTextureAlphaMod(img, logoAlpha);
-		app->render->DrawTexture(img, app->render->camera.x, app->render->camera.y);
+		app->render->DrawTexture(img, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2);
 	}
+
 	return ret;
 }
 

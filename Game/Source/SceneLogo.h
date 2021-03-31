@@ -39,10 +39,11 @@ private:
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	uint introFx;
 
+	SDL_Color color;		// Tint color
+
 	int state;
 	float timeCounter;
 	float logoAlpha;
-
 	
 };
 
