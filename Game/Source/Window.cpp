@@ -5,6 +5,7 @@
 #include "Log.h"
 
 #include "SDL/include/SDL.h"
+#include "SDL_image/include/SDL_image.h"
 
 
 Window::Window() : Module()
@@ -49,17 +50,51 @@ bool Window::Awake(pugi::xml_node& config)
 		if(resizable == true) flags |= SDL_WINDOW_RESIZABLE;
 		if(fullscreen_window == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		// Load window icon
+		icon = IMG_Load("Assets/textures/logo.png");
 
-		if(window == NULL)
+		if (fullscreen_window == true)fullScreen = true;
+
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
-			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
 		else
 		{
-			// Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
+			// Create window
+			Uint32 flags = SDL_WINDOW_SHOWN;
+
+			if (fullscreen_window == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN;
+			}
+
+			if (WIN_BORDERLESS == true)
+				flags |= SDL_WINDOW_BORDERLESS;
+
+			if (WIN_RESIZABLE == true)
+				flags |= SDL_WINDOW_RESIZABLE;
+
+			if (fullscreen_window == true)
+			{
+				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+			}
+		
+			window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+			SDL_SetWindowIcon(window, icon);
+
+			if(window == NULL)
+			{
+				LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+				ret = false;
+			}
+			else
+			{
+				// Get window surface
+				screenSurface = SDL_GetWindowSurface(window);
+
+			}
 		}
 	}
 
@@ -98,4 +133,26 @@ void Window::GetWindowSize(uint& width, uint& height) const
 uint Window::GetScale() const
 {
 	return scale;
+}
+
+void Window::FullScreen()
+{
+	if (fullScreen == true) SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	else SDL_SetWindowFullscreen(window, SDL_FALSE);
+}
+
+void Window::SetFullScreenMode()
+{
+	fullScreen = !fullScreen;
+}
+
+bool Window::GetFullScreen()
+{
+	return fullScreen;
+}
+
+bool Window::SaveState(pugi::xml_node& data) const
+{
+	data.child("fullscreen_window").attribute("value").set_value(fullScreen);
+	return true;
 }

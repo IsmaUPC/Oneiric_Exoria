@@ -10,6 +10,18 @@
 #endif
 #define NULL  0
 
+//Size Window
+#define WINDOW_W 1280
+#define WINDOW_H 720
+#define SCREEN_SIZE 1
+#define SPAWN_MARGIN 50
+
+#define FULL_SCREEN 0
+#define WIN_FULL_SCREEN 0
+
+#define WIN_BORDERLESS 0
+#define WIN_RESIZABLE 1
+
 // Deletes a buffer
 #define RELEASE( x ) \
 	{						\
