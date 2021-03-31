@@ -1,4 +1,6 @@
+#include "App.h"
 #include "Input.h"
+#include "Render.h"
 #include "Window.h"
 
 #include "Defs.h"
@@ -8,15 +10,13 @@
 
 #define MAX_KEYS 300
 
-Input::Input(Window* win) : Module()
+Input::Input() : Module()
 {
 	name.Create("input");
 
 	keyboard = new KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
 	memset(mouseButtons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
-
-	this->win = win;
 }
 
 // Destructor
@@ -93,14 +93,12 @@ bool Input::PreUpdate()
 			case SDL_WINDOWEVENT:
 				switch(event.window.event)
 				{
-					//case SDL_WINDOWEVENT_LEAVE:
 					case SDL_WINDOWEVENT_HIDDEN:
 					case SDL_WINDOWEVENT_MINIMIZED:
 					case SDL_WINDOWEVENT_FOCUS_LOST:
 					windowEvents[WE_HIDE] = true;
 					break;
 
-					//case SDL_WINDOWEVENT_ENTER:
 					case SDL_WINDOWEVENT_SHOWN:
 					case SDL_WINDOWEVENT_FOCUS_GAINED:
 					case SDL_WINDOWEVENT_MAXIMIZED:
@@ -112,21 +110,18 @@ bool Input::PreUpdate()
 
 			case SDL_MOUSEBUTTONDOWN:
 				mouseButtons[event.button.button - 1] = KEY_DOWN;
-				//LOG("Mouse button %d down", event.button.button-1);
 			break;
 
 			case SDL_MOUSEBUTTONUP:
 				mouseButtons[event.button.button - 1] = KEY_UP;
-				//LOG("Mouse button %d up", event.button.button-1);
 			break;
 
 			case SDL_MOUSEMOTION:
-				int scale = win->GetScale();
+				int scale = app->win->GetScale();
 				mouseMotionX = event.motion.xrel / scale;
 				mouseMotionY = event.motion.yrel / scale;
 				mouseX = event.motion.x / scale;
 				mouseY = event.motion.y / scale;
-				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
 			break;
 		}
 	}
@@ -142,6 +137,7 @@ bool Input::CleanUp()
 	return true;
 }
 
+
 bool Input::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];
@@ -149,8 +145,9 @@ bool Input::GetWindowEvent(EventWindow ev)
 
 void Input::GetMousePosition(int& x, int& y)
 {
-	x = mouseX;
-	y = mouseY;
+
+	x = mouseX - app->render->camera.x;
+	y = mouseY - app->render->camera.y;
 }
 
 void Input::GetMouseMotion(int& x, int& y)

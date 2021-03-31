@@ -1,71 +1,77 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include "SString.h"
+#include "SceneControl.h"
+#include "Animation.h"
+#include "Point.h"
 
-class Input;
-class Render;
-class Textures;
+#include "PugiXml\src\pugixml.hpp"
 
-class GuiControl;
+struct SDL_Texture;
 
-enum class SceneType
+struct AnimationFather
 {
-    LOGO,
-    TITLE,
-    GAMEPLAY,
-    ENDING
+	iPoint position;
+	Animation* currentAnimation;
+	SDL_Texture* texture;
 };
 
-class Scene
+class Scene : public SceneControl
 {
 public:
 
-    Scene() : active(true), loaded(false), transitionRequired(false) {}
+	Scene();
 
-    virtual bool Load(Textures* tex)
-    {
-        return true;
-    }
+	// Destructor
+	virtual ~Scene();
 
-    virtual bool Update(Input* input, float dt)
-    {
-        return true;
-    }
+	// Called before render is available
+	bool Awake();
 
-    virtual bool Draw(Render* render)
-    {
-        return true;
-    }
+	// Called before the first frame
+	bool Start();
 
-    virtual bool Unload()
-    {
-        return true;
-    }
+	void SetDebugCollaider();
+	bool* GetDebugCollaider() { return &debugCollisions; }
+	// Called before all Updates
+	bool PreUpdate();
 
-    void TransitionToScene(SceneType scene)
-    {
-        transitionRequired = true;
-        nextScene = scene;
-    }
+	// Called each loop iteration
+	bool Update(float dt);
 
-    // Define multiple Gui Event methods
-    virtual bool OnGuiMouseClickEvent(GuiControl* control)
-    {
-        return true;
-    }
+	// Called before all Updates
+	bool PostUpdate();
 
-public:
+	// Called before quitting
+	bool CleanUp();
+	int GetNumThisScene()
+	{
+		return numThisScene;
+	}
 
-    bool active = true;
-    SString name;         // Scene name identifier?
+	bool OnGuiMouseClickEvent(GuiControl* control);
 
-    // Possible properties
-    bool loaded = false;
-    // TODO: Transition animation properties
 
-    bool transitionRequired;
-    SceneType nextScene;
+	// Load state game
+	bool LoadState(pugi::xml_node& data);
+	// Save state game
+	bool SaveState(pugi::xml_node& data)const;
+private:
+
+	int numThisScene;
+
+	void Parallax();
+	void DebugKeys();
+
+	bool debugCollisions = false;
+	bool victory = false;
+	bool lose = false;
+	AnimationFather animationFather;
+	Animation* idleAnim= new Animation();
+	SDL_Texture* img;
+	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
+	float speedImg=0;
+
 };
 
 #endif // __SCENE_H__

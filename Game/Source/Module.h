@@ -5,11 +5,11 @@
 
 #include "PugiXml/src/pugixml.hpp"
 
-class GuiControl;
-enum class GuiControlState;
+class App;
 
 class Module
 {
+
 public:
 
 	Module() : active(false)
@@ -21,7 +21,6 @@ public:
 	}
 
 	// Called before render is available
-	// L01: DONE 5: Sending config file to all modules
 	virtual bool Awake(pugi::xml_node&)
 	{
 		return true;
@@ -57,21 +56,32 @@ public:
 		return true;
 	}
 
-    // L02: DONE 2: Create new virtual methods to Load / Save state
+	// Virtual methods to Load state
 	virtual bool LoadState(pugi::xml_node&)
 	{
 		return true;
 	}
-
+	// Virtual methods to Save state
 	virtual bool SaveState(pugi::xml_node&) const
 	{
 		return true;
 	}
+	 
+	 int GetNumThisScene()
+	 {
+		 return numThisScene;
+	 }
+
 
 public:
 
 	SString name;
 	bool active;
+private:
+	int numThisScene;
+	float oldFPS=-1;
+	bool firstCheck =true;
+	
 
 };
 

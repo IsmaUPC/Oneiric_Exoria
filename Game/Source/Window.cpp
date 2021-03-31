@@ -4,8 +4,8 @@
 #include "Defs.h"
 #include "Log.h"
 
-#include "SDL/include/SDL.h"
 #include "SDL_image/include/SDL_image.h"
+#include "SDL/include/SDL.h"
 
 
 Window::Window() : Module()
@@ -34,7 +34,6 @@ bool Window::Awake(pugi::xml_node& config)
 	else
 	{
 		// Create window
-		// L01: DONE 6: Load all required configurations from config.xml
 		Uint32 flags = SDL_WINDOW_SHOWN;
 		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(false);
 		bool borderless = config.child("borderless").attribute("value").as_bool(false);
@@ -49,18 +48,16 @@ bool Window::Awake(pugi::xml_node& config)
 		if(borderless == true) flags |= SDL_WINDOW_BORDERLESS;
 		if(resizable == true) flags |= SDL_WINDOW_RESIZABLE;
 		if(fullscreen_window == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-
-		// Load window icon
 		icon = IMG_Load("Assets/textures/logo.png");
 
-		if (fullscreen_window == true)fullScreen = true;
+		if (fullscreen_window == true)app->fullScreen = true;
 
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
 		}
-		else
+		else 
 		{
 			// Create window
 			Uint32 flags = SDL_WINDOW_SHOWN;
@@ -69,7 +66,7 @@ bool Window::Awake(pugi::xml_node& config)
 			{
 				flags |= SDL_WINDOW_FULLSCREEN;
 			}
-
+				
 			if (WIN_BORDERLESS == true)
 				flags |= SDL_WINDOW_BORDERLESS;
 
@@ -80,11 +77,10 @@ bool Window::Awake(pugi::xml_node& config)
 			{
 				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 			}
-		
-			window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+			window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 			SDL_SetWindowIcon(window, icon);
 
-			if(window == NULL)
+			if (window == NULL)
 			{
 				LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 				ret = false;
@@ -93,7 +89,6 @@ bool Window::Awake(pugi::xml_node& config)
 			{
 				// Get window surface
 				screenSurface = SDL_GetWindowSurface(window);
-
 			}
 		}
 	}
@@ -120,7 +115,6 @@ bool Window::CleanUp()
 // Set new window title
 void Window::SetTitle(const char* new_title)
 {
-	//title.create(new_title);
 	SDL_SetWindowTitle(window, new_title);
 }
 
@@ -135,24 +129,15 @@ uint Window::GetScale() const
 	return scale;
 }
 
-void Window::FullScreen()
+void Window::FullScreen(bool mode)
 {
-	if (fullScreen == true) SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	else SDL_SetWindowFullscreen(window, SDL_FALSE);
-}
-
-void Window::SetFullScreenMode()
-{
-	fullScreen = !fullScreen;
-}
-
-bool Window::GetFullScreen()
-{
-	return fullScreen;
+	if(mode)SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	if (!mode)SDL_SetWindowFullscreen(window, SDL_FALSE);
 }
 
 bool Window::SaveState(pugi::xml_node& data) const
 {
-	data.child("fullscreen_window").attribute("value").set_value(fullScreen);
+	data.child("fullscreen_window").attribute("value").set_value(app->fullScreen);
 	return true;
 }
+

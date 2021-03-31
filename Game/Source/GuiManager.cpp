@@ -9,7 +9,6 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type)
 	switch (type)
 	{
 		// Create the corresponding GuiControl type
-		//case GuiControlType::BUTTON: control = new GuiButton(1234);  break;
 		default: break;
 	}
 
@@ -23,8 +22,6 @@ bool GuiManager::Update(float dt)
 {
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
-
-	//UpdateAll(dt, doLogic);
 
 	if (doLogic == true)
 	{

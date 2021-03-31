@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 
+
 #define TMP_STRING_SIZE	4096
 
 class SString
@@ -251,11 +252,9 @@ public:
 
 	void Trim()
 	{
-		// cut right --
 		char* end = str + size;
 		while(*--end == ' ') *end = '\0';
 
-		// cut left --
 		char* start = str;
 		while(*++start == ' ');
 

@@ -31,9 +31,7 @@ public:
 	uint GetScale() const;
 
 	// FullScreen Mode
-	void FullScreen();
-	void SetFullScreenMode();
-	bool GetFullScreen();
+	void FullScreen(bool mode);
 
 	// Save FullScreenState
 	bool SaveState(pugi::xml_node& data)const;
@@ -50,9 +48,8 @@ private:
 	uint width;
 	uint height;
 	uint scale;
-
-	bool fullScreen = false;
 	SDL_Surface* icon = nullptr;
+
 };
 
 #endif // __WINDOW_H__

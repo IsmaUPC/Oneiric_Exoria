@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -10,71 +9,133 @@
       <Filter>External\PugiXml</Filter>
     </ClCompile>
     <ClCompile Include="Source\Audio.cpp">
-      <Filter>Modules</Filter>
+      <Filter>Modules\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Input.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Render.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Textures.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Window.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GuiButton.cpp">
-      <Filter>GuiControls</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GuiManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EntityManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneLogo.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneTitle.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneEnding.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneGameplay.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Pathfinding.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Item.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Modules\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Modules\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Font.cpp">
+    <ClCompile Include="Source\Render.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Textures.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.cpp">
+      <Filter>Modules\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App.cpp">
+      <Filter>Modules\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleFadeToBlack.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PerfTimer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entity.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Coins.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Pathfinding.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GUI.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FireBall.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ModuleFonts.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiButton.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
     <ClCompile Include="Source\GuiCheckBox.cpp">
-      <Filter>GuiControls</Filter>
+      <Filter>Modules\GuiControls</Filter>
     </ClCompile>
     <ClCompile Include="Source\GuiSlider.cpp">
-      <Filter>GuiControls</Filter>
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneIntro.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLevel2.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLogo.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLose.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneWin.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Lives.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiSettings.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiMenuPause.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Textures.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Window.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Render.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Input.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Audio.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App.cpp">
+      <Filter>Modules\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collisions.cpp">
+      <Filter>Modules\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Defs.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -99,32 +160,41 @@
     <ClInclude Include="Source\External\PugiXml\src\pugixml.hpp">
       <Filter>External\PugiXml</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Queue.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PQueue.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Enemy.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Entity.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Player.h">
-      <Filter>Entities</Filter>
+    <ClInclude Include="Source\Animation.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Audio.h">
-      <Filter>Modules</Filter>
+      <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Input.h">
-      <Filter>Modules</Filter>
+      <Filter>Modules\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Item.h">
-      <Filter>Entities</Filter>
+    <ClInclude Include="Source\Map.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Render.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Textures.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Window.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Module.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App.h">
+      <Filter>Modules\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleFadeToBlack.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PQueue.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\PerfTimer.h">
       <Filter>Utils</Filter>
@@ -132,59 +202,80 @@
     <ClInclude Include="Source\Timer.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Render.h">
-      <Filter>Modules</Filter>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Textures.h">
-      <Filter>Modules</Filter>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Window.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GuiButton.h">
-      <Filter>GuiControls</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GuiControl.h">
-      <Filter>GuiControls</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GuiManager.h">
-      <Filter>Modules</Filter>
+    <ClInclude Include="Source\Coins.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneTitle.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneLogo.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneEnding.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneGameplay.h">
-      <Filter>Scenes</Filter>
+      <Filter>Modules\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Source\Pathfinding.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Map.h">
-      <Filter>Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Font.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GUI.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FireBall.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ModuleFonts.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiControl.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiButton.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
     <ClInclude Include="Source\GuiCheckBox.h">
-      <Filter>GuiControls</Filter>
+      <Filter>Modules\GuiControls</Filter>
     </ClInclude>
     <ClInclude Include="Source\GuiSlider.h">
-      <Filter>GuiControls</Filter>
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneIntro.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLevel2.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLogo.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLose.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneWin.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneControl.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Lives.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiSettings.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiMenuPause.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collisions.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,16 +289,28 @@
       <UniqueIdentifier>{2855ff7f-53a1-413d-a75b-18b4ade921dd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Modules">
-      <UniqueIdentifier>{bfe4e094-9e73-4cb6-9027-deaaa69e9993}</UniqueIdentifier>
+      <UniqueIdentifier>{4f8199d9-f182-49df-a82c-fe4da550da1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Entities">
-      <UniqueIdentifier>{181a0403-1c29-4140-9889-f2865e448060}</UniqueIdentifier>
+    <Filter Include="Modules\Core">
+      <UniqueIdentifier>{52f5c3fa-3924-48d5-ada2-a59d542699ca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GuiControls">
-      <UniqueIdentifier>{4d3153ed-57fc-4feb-a588-da24db86de8d}</UniqueIdentifier>
+    <Filter Include="Modules\Gameplay">
+      <UniqueIdentifier>{24720a84-fcea-4698-8848-f227f148a354}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{3ed4a5d6-0e62-404d-b40b-cef602e825fd}</UniqueIdentifier>
+    <Filter Include="Modules\Application">
+      <UniqueIdentifier>{e47d1144-38b4-4e3f-9d56-e49e82b990c3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\Managers">
+      <UniqueIdentifier>{0ec4ad08-2606-4c2e-881b-6300a21d9e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\GuiControls">
+      <UniqueIdentifier>{e4bbf6e8-2865-480e-afef-10efaefa9158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Gameplay\Scenas">
+      <UniqueIdentifier>{1583aee1-b8bd-42dc-8c9a-3647825b204e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PlatformerGame.rc" />
   </ItemGroup>
 </Project>

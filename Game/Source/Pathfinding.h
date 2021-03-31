@@ -2,27 +2,19 @@
 #define __PATHFINDING_H__
 
 #include "Module.h"
-
+#include "PQueue.h"
 #include "Point.h"
 #include "DynArray.h"
 #include "List.h"
 
+#define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
-// --------------------------------------------------
-// Recommended reading:
-// Intro: http://www.raywenderlich.com/4946/introduction-to-a-pathfinding
-// Details: http://theory.stanford.edu/~amitp/GameProgramming/
-// --------------------------------------------------
-
-class PathFinding
+class PathFinding : public Module
 {
 public:
 
-	// NOTE: Constructor is private to avoid new instances creation
-
-	// Get unique instance of the class
-	static PathFinding* GetInstance();
+	PathFinding();
 
 	// Destructor
 	~PathFinding();
@@ -32,10 +24,13 @@ public:
 
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
+	// To request all tiles involved in the last generated path
+	DynArray<iPoint>* GetLastPath();
+	PQueue<iPoint>* GetFrontier();
+	List<iPoint>* GetVisited();
+	List<iPoint>* GetBreadcrumbs();
 
-	// Main function to request a path from A to B
-	DynArray<iPoint>* CreatePath(const iPoint& origin, const iPoint& destination);
-
+	void ResetPath(iPoint start);
 	// Utility: return true if pos is inside the map boundaries
 	bool CheckBoundaries(const iPoint& pos) const;
 
@@ -45,67 +40,24 @@ public:
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
 
+	bool PropagateAStar(const iPoint&);
+	void ComputePathAStar(const iPoint& origin, const iPoint& destination);
+
 private:
 
-	// Singleton instance
-	static PathFinding* instance;
-
-	// Private constructor, alternatively: PathFinding()=delete;
-	PathFinding();
-
-	// Declare the copy constructor and the assignment operator as 
-	// private (or delete them explicitly) to prevent cloning your object
-	PathFinding(const PathFinding&);
-	PathFinding& operator=(const PathFinding&);
-
-	// Size of the map
+	// size of the map
 	uint width;
 	uint height;
-
-	// Map walkability values [0..255]
+	PQueue<iPoint> frontier;
+	List<iPoint> visited;
+	List<iPoint> breadcrumbs;
+	// all map walkability values [0..255]
 	uchar* map;
-};
-
-// forward declaration
-struct PathList;
-
-// ---------------------------------------------------------------------
-// Pathnode: Helper struct to represent a node in the path creation
-// ---------------------------------------------------------------------
-struct PathNode
-{
-	int g;
-	int h;
-	iPoint pos;
-	const PathNode* parent; // needed to reconstruct the path in the end
-
-	// Convenient constructors
-	PathNode();
-	PathNode(int g, int h, const iPoint& pos, const PathNode* parent);
-	PathNode(const PathNode& node);
-
-	// Fills a list (PathList) of all valid adjacent pathnodes
-	uint FindWalkableAdjacents(PathFinding* pathf, PathList& list_to_fill) const;
-
-	// Calculates this tile score
-	int Score() const;
-	// Calculate the F for a specific destination tile
-	int CalculateF(const iPoint& destination);
-};
-
-// ---------------------------------------------------------------------
-// Helper struct to include a list of path nodes
-// ---------------------------------------------------------------------
-struct PathList
-{
-	// Looks for a node in this list and returns it's list node or NULL
-	const ListItem<PathNode>* Find(const iPoint& point) const;
-
-	// Returns the Pathnode with lowest score in this list or NULL if empty
-	ListItem<PathNode>* GetNodeLowestScore() const;
-
-	// The list itself, note they are not pointers!
-	List<PathNode> list;
+	bool destinationIsFind;
+	// we store the created path here
+	DynArray<iPoint> lastPath;
 };
 
 #endif // __PATHFINDING_H__
+
+

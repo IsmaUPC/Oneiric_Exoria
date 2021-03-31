@@ -1,15 +1,18 @@
 #include "SceneManager.h"
 
 #include "SceneLogo.h"
-#include "SceneTitle.h"
-#include "SceneGameplay.h"
-#include "SceneEnding.h"
+#include "SceneIntro.h"
+#include "Scene.h"
+#include "SceneLevel2.h"
+#include "SceneLose.h"
+#include "SceneWin.h"
 
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
 
 #include "GuiButton.h"
+#include "Audio.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -21,7 +24,23 @@
 
 SceneManager::SceneManager(Input* input, Render* render, Textures* tex) : Module()
 {
-	name.Create("scenemanager");
+
+
+	name.Create("scene_manager");
+
+	sceneLogo = new SceneLogo();
+	sceneIntro = new SceneIntro();
+	scene = new Scene();
+	sceneLevel2 = new SceneLevel2();
+	sceneWin = new SceneWin();
+	sceneLose = new SceneLose();
+
+	AddScene(sceneLogo, false);
+	AddScene(sceneIntro, false);
+	AddScene(scene, false);
+	AddScene(sceneLevel2, false);
+	AddScene(sceneWin, false);
+	AddScene(sceneLose, false);
 
 	onTransition = false;
 	fadeOutCompleted = false;
@@ -48,10 +67,18 @@ bool SceneManager::Awake()
 // Called before the first frame
 bool SceneManager::Start()
 {
-	current = new SceneTitle();
-	current->Load(tex);
-
+	current = new SceneLogo();
+	current->Start();
 	next = nullptr;
+
+	btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_selected.wav");
+	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
+	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
+	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
+
+
+	guiFont = app->fonts->Load("Assets/Textures/GUI/font_gui.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", 2, 195, 48);
 
 	return true;
 }
@@ -59,30 +86,7 @@ bool SceneManager::Start()
 // Called each loop iteration
 bool SceneManager::PreUpdate()
 {
-	/*
-	// L12b: Debug pathfing
-	static iPoint origin;
-	static bool originSelected = false;
-
-	int mouseX, mouseY;
-	app->input->GetMousePosition(mouseX, mouseY);
-	iPoint p = app->render->ScreenToWorld(mouseX, mouseY);
-	p = app->map->WorldToMap(p.x, p.y);
-
-	if(app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		if(originSelected == true)
-		{
-			app->pathFinding->CreatePath(origin, p);
-			originSelected = false;
-		}
-		else
-		{
-			origin = p;
-			originSelected = true;
-		}
-	}
-	*/
+	if (input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) ViewRectangles = !ViewRectangles;
 
 	return true;
 }
@@ -90,14 +94,14 @@ bool SceneManager::PreUpdate()
 // Called each loop iteration
 bool SceneManager::Update(float dt)
 {
+	bool ret = true;
+	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) && (current->name == "scene" || current->name == "sceneLevel2"))
+		pause = !pause;
+
 	if (!onTransition)
 	{
-		//if (input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) render->camera.y -= 1;
-		//if (input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) render->camera.y += 1;
-		//if (input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) render->camera.x -= 1;
-		//if (input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) render->camera.x += 1;
 
-		current->Update(input, dt);
+		ret = current->Update(dt);
 	}
 	else
 	{
@@ -111,13 +115,19 @@ bool SceneManager::Update(float dt)
 			{
 				transitionAlpha = 1.0f;
 
-				current->Unload();	// Unload current screen
-				next->Load(tex);	// Load next screen
-
+				current->CleanUp();	// Unload current screen
+				next->Start();	// Load next screen
+				if (current->isContinue)app->LoadGameRequest();
+				else if (next->name == "scene" || next->name == "sceneLevel2")// Save
+				{
+					app->SaveGameRequest();
+				}
 				RELEASE(current);	// Free current pointer
 				current = next;		// Assign next pointer
 				next = nullptr;
 
+				// Menu pause
+				menu = new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, btnTextureAtlas);
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;
 			}
@@ -135,31 +145,6 @@ bool SceneManager::Update(float dt)
 		}
 	}
 
-	// Draw current scene
-	current->Draw(render);
-
-	// Draw full screen rectangle in front of everything
-	if (onTransition)
-	{
-		render->DrawRectangle({ 0, 0, 1280, 720 }, { 0, 0, 0, (unsigned char)(255.0f * transitionAlpha) });
-	}
-
-	// L12b: Debug pathfinding
-	/*
-	app->input->GetMousePosition(mouseX, mouseY);
-	iPoint p = app->render->ScreenToWorld(mouseX, mouseY);
-	p = app->map->WorldToMap(p.x, p.y);
-	p = app->map->MapToWorld(p.x, p.y);
-
-	const DynArray<iPoint>* path = app->pathFinding->GetLastPath();
-
-	for(uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(debugTex, pos.x, pos.y);
-	}
-	*/
-
 	if (current->transitionRequired)
 	{
 		onTransition = true;
@@ -168,34 +153,75 @@ bool SceneManager::Update(float dt)
 
 		switch (current->nextScene)
 		{
-			case SceneType::LOGO: next = new SceneLogo(); break;
-			case SceneType::TITLE: next = new SceneTitle(); break;
-			case SceneType::GAMEPLAY: next = new SceneGameplay(); break;
-			case SceneType::ENDING: next = new SceneEnding(); break;
-			default: break;
+		case SceneType::LOGO: next = new SceneLogo(); break;
+		case SceneType::INTRO: next = new SceneIntro(); break;
+		case SceneType::LEVEL1: next = new Scene(); break;
+		case SceneType::LEVEL2: next = new SceneLevel2(); break;
+		case SceneType::WIN: next = new SceneWin(); break;
+		case SceneType::LOSE: next = new SceneLose(); break;
+		default: break;
 		}
 
 		current->transitionRequired = false;
 	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		current->TransitionToScene(SceneType::LEVEL1);
+		lastLevel = 1;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		current->TransitionToScene(SceneType::LEVEL2);
+		lastLevel =2;
+	}
+	// MENU
+	if(pause)ret = menu->Update(dt);
 
-	if (input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) return false;
-	return true;
+	return ret;
 }
 
 // Called each loop iteration
 bool SceneManager::PostUpdate()
 {
 	bool ret = true;
-
+	// Draw current scene
+	current->PostUpdate();
+	// Draw full screen rectangle in front of everything
+	if (onTransition)
+	{
+		render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
+	}
 	return ret;
+}
+
+void SceneManager::AddScene(SceneControl* scene, bool active)
+{
+	scene->active = active;
+	scenes.Add(scene);
 }
 
 // Called before quitting
 bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
+	app->tex->UnLoad(btnTextureAtlas);
+	app->fonts->UnLoad(guiFont);
+	if (current != nullptr) current->CleanUp();
 
-	if (current != nullptr) current->Unload();
+	return true;
+}
 
+bool SceneManager::LoadState(pugi::xml_node& data)
+{
+	if (current->lastLevel == 1)current = scene;
+	else if (current->lastLevel == 2)current = sceneLevel2;
+	current->LoadState(data);
+	return true;
+}
+
+bool SceneManager::SaveState(pugi::xml_node& data) const
+{
+	current->SaveState(data);
 	return true;
 }

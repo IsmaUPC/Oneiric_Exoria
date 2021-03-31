@@ -2,33 +2,18 @@
 #define __TIMER_H__
 
 #include "Defs.h"
-#include "SDL\include\SDL_timer.h"
 
 class Timer
 {
 public:
 
-	Timer()
-	{
-		Start();
-	}
+	// Constructor
+	Timer();
 
-	void Start()
-	{
-		startTime = SDL_GetTicks();
-	}
-
-	uint32 Read() const
-	{
-		return SDL_GetTicks() - startTime;
-	}
-
-	float ReadSec() const
-	{
-		return float(SDL_GetTicks() - startTime) / 1000.0f;
-	}
-
-private:
+	void Start();
+	uint32 Read() const;
+	float ReadSec() const;
+	bool check(int interval);
 
 	uint32 startTime;
 };
