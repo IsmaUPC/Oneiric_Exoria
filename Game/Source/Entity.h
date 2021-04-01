@@ -40,8 +40,10 @@ enum State {
 
 enum MoveDirection {
 
-	WALK_L=-1,
-	WALK_R=1,
+	WALK_L,
+	WALK_R,
+	WALK_UP,
+	WALK_DOWN
 };
 enum TypeCollision {
 

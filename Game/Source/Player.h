@@ -38,8 +38,6 @@ public:
 
 	bool Update(float dt);
 
-	void MoveHit();
-
 	void SpeedAnimationCheck(float dt);
 
 	void MoveBetweenCheckPoints();
@@ -79,7 +77,7 @@ private:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-	void MoveToDirection(int velocity);
+	void MoveToDirection();
 
 	void DebugCP();
 
@@ -97,12 +95,15 @@ private:
 	float velY = 0;
 	float velX = 0;
 
-	Animation* idleAnim= new Animation();
-	Animation* walkAnim = new Animation();
-	Animation* atakAnim = new Animation();
-	Animation* damageAnim = new Animation();
-	Animation* deadAnim = new Animation();
-	Animation* runAnim = new Animation( );
+	Animation* idleAnimR = new Animation();
+	Animation* idleAnimL = new Animation();
+	Animation* idleAnimUp = new Animation();
+	Animation* idleAnimDown = new Animation();
+
+	Animation* walkAnimR = new Animation();
+	Animation* walkAnimL = new Animation();
+	Animation* walkAnimUp = new Animation();
+	Animation* walkAnimDown = new Animation();
 
 	pugi::xml_document playerFile;
 	SString folder;

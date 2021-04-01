@@ -36,7 +36,6 @@ private:
 	bool CheckAllPoints(iPoint& mapPositionDestination, TypeCollision typeCollision);
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
 	void MoveEnemy(iPoint nextAuxPositionEenemy, iPoint mapPositionEnemy, TypeEntity type);
-	void MoveEnemyNULL(iPoint mapPositionEnemy);
 	int CalculateDistance(iPoint origin, iPoint destination);
 	void SpeedAnimationCheck(float dt);
 

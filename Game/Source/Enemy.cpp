@@ -221,25 +221,6 @@ void Enemy::CheckCollisionEnemyToPlayer()
 	}
 }
 
-void Enemy::MoveEnemyNULL(iPoint mapPositionEnemy)
-{
-	// if the next position is destination continue with current direction
-	if (entityData->type == GROUND_ENEMY) 
-	{
-		if (entityData->direction == WALK_L && (CheckCollision({ mapPositionEnemy.x, mapPositionEnemy.y + 1 }) == 1 || CheckCollision({ mapPositionEnemy.x, mapPositionEnemy.y + 2 }) == 1))
-			entityData->position.x -= entityData->velocity;
-		else if (entityData->direction == WALK_R && (CheckCollision({ mapPositionEnemy.x + 1, mapPositionEnemy.y + 1 }) == 1 || CheckCollision({ mapPositionEnemy.x + 1, mapPositionEnemy.y + 2 }) == 1))
-			entityData->position.x += entityData->velocity;
-
-	}
-	else if (entityData->type == AIR_ENEMY)
-	{
-		if (entityData->direction == WALK_L)
-			entityData->position.x -= entityData->velocity;
-		else if (entityData->direction == WALK_R)
-			entityData->position.x += entityData->velocity;
-	}
-}
 void Enemy::CheckCollisions()
 {
 	iPoint currentPositionPlayer = app->player->playerData.position;

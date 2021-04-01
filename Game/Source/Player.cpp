@@ -23,22 +23,14 @@ Player::~Player()
 
 bool Player::Start() 
 {
-
-	idleAnim = new Animation();
-	walkAnim = new Animation();
-	atakAnim = new Animation();
-	damageAnim = new Animation();
-	runAnim = new Animation();
-
-
-	iPoint pathInit =  app->map->WorldToMap(positionInitial->x ,positionInitial->y) ;
+	iPoint pathInit =  app->map->WorldToMap(positionInitial->x ,positionInitial->y);
 	app->map->ResetPath(pathInit);
 
-	playerData.texture = app->tex->Load("Assets/Textures/dino_green.png");
+	playerData.texture = app->tex->Load("Assets/Textures/kenzie.png");
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
-	playerData.direction = WALK_R;
+	playerData.direction = WALK_DOWN;
 
 	bonfireFx = app->audio->LoadFx("Assets/Audio/Fx/bonfire.wav");
 	damageFx = app->audio->LoadFx("Assets/Audio/Fx/damage.wav");
@@ -53,46 +45,37 @@ bool Player::Start()
 	win = false;
 	debugCheckPoints = false;
 
-	idleAnim->loop = true;
-	idleAnim->speed = 0.05f;
+	idleAnimL->loop = true;
+	idleAnimL->speed = 0.05f;
 
-	walkAnim->loop = true;
-	walkAnim->speed = 0.08f;
+	idleAnimR->loop = true;
+	idleAnimR->speed = 0.05f;
 
-	damageAnim->loop = false;
-	damageAnim->speed = 0.005f;
+	idleAnimUp->loop = true;
+	idleAnimUp->speed = 0.05f;
 
-	runAnim->loop = true;
-	runAnim->speed = 0.10f;
-	
-	atakAnim->loop = false;
-	atakAnim->speed = 0.10f;
+	idleAnimDown->loop = true;
+	idleAnimDown->speed = 0.05f;
 
-	for (int i = 0; i < 4; i++)
-		idleAnim->PushBack({ 78 * i,0, 78, 78 });
 
-	for (int i = 0; i < 6; i++)
-		walkAnim->PushBack({ 312 + (78 * i),0, 78, 78 });
+	//for (int i = 0; i < 6; i++)
+		idleAnimL->PushBack({ 0, 0, 32, 44 });
+		walkAnimL->PushBack({ 0, 0, 32, 44 });
 
-	for (int i = 0; i < 2; i++)
-		atakAnim->PushBack({ 858 + (78 * i),0, 78, 78 });
+	//for (int i = 0; i < 6; i++)
+		idleAnimR->PushBack({ 64, 0, 32, 44 });
+		walkAnimR->PushBack({ 64, 0, 32, 44 });
 
-	for (int i = 0; i < 4; i++)
-		damageAnim->PushBack({ 1008 + (78 * i),0, 78, 78 });
+	//for (int i = 0; i < 6; i++)
+		idleAnimUp->PushBack({ 32, 0, 32, 44 });
+		walkAnimUp->PushBack({ 32, 0, 32, 44 });
 
-	for (int j = 0; j < 1; j++)
-		for (int i = 2; i < 4; i++)
-			damageAnim->PushBack({ 1008 + (78 * i),0, 78, 78 });
-
-	deadAnim->PushBack({ 1008 + (78 * 1),0, 78, 78 });
-
-	for (int i = 0; i < 4; i++)
-		runAnim->PushBack({ 1319 + (78 * i),0, 78, 78 });
-
+	//for (int i = 0; i < 6; i++)
+		idleAnimDown->PushBack({ 96, 0, 32, 44 });
+		walkAnimDown->PushBack({ 96, 0, 32, 44 });
 
 	   
-	playerData.currentAnimation = idleAnim;
-	velX = playerData.velocity;
+	playerData.currentAnimation = idleAnimDown;
 
 	app->entityManager->AddEntity(HUD, 0, 0);
 
@@ -169,14 +152,9 @@ bool Player::Update(float dt)
 
 		PlayerMoveAnimation();
 		SpeedAnimationCheck(dt);
-		playerData.velocity = floor(1000 * dt/ 4) ;
+		playerData.velocity = floor(1000 * dt/ 8) ;
 
 		CameraPlayer();
-		if (playerData.state == ATTACK && playerData.currentAnimation->HasFinished())
-		{
-			playerData.state = IDLE;
-			atakAnim->Reset();
-		}
 		if (playerData.state != HIT && playerData.state != DEAD && playerData.state != ATTACK)
 		{
 			// Move player inputs control
@@ -189,41 +167,12 @@ bool Player::Update(float dt)
 	return true;
 }
 
-void Player::MoveHit()
-{
-	// DELETE IN RELEASE
-	if (app->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)SetHit();
-	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) app->entityManager->score += 50;
-
-	if (playerData.currentAnimation == damageAnim) 
-	{
-		if (!playerData.currentAnimation->HasFinished())
-		{
-			tmp = playerData.position;
-			playerData.position.x -= 2 * playerData.direction;
-			if (CollisionPlayer(playerData.position)) playerData.position = tmp;
-		}
-		else
-		{	
-			if(playerData.respawns <1)playerData.state = DEAD;
-			else
-			{
-				playerData.position = IPointMapToWorld(checkPoints.end->data);
-				damageAnim->Reset();
-				playerData.state = IDLE;
-			}
-		}
-	}
-	if (playerData.currentAnimation->HasFinished())damageAnim->Reset();
-}
-
 void Player::SpeedAnimationCheck(float dt)
 {
-	idleAnim->speed = (dt * 5) ;
-	walkAnim->speed = (dt * 9) ;
-	atakAnim->speed = (dt * 5) ;
-	damageAnim->speed = (dt * 10) ;
-	runAnim->speed = (dt * 9) ;
+	idleAnimL->speed = (dt * 5) ;
+	idleAnimR->speed = (dt * 5) ;
+	idleAnimUp->speed = (dt * 5) ;
+	idleAnimDown->speed = (dt * 5) ;
 }
 
 void Player::MoveBetweenCheckPoints()
@@ -280,23 +229,45 @@ void Player::PlayerMoveAnimation()
 	switch (playerData.state)
 	{
 	case IDLE:
-		playerData.currentAnimation = idleAnim;
+		switch (playerData.direction)
+		{
+		case WALK_L:
+			playerData.currentAnimation = idleAnimL;
+			break;
+
+		case WALK_R:
+			playerData.currentAnimation = idleAnimR;
+			break;
+
+		case WALK_UP:
+			playerData.currentAnimation = idleAnimUp;
+			break;
+
+		case WALK_DOWN:
+			playerData.currentAnimation = idleAnimDown;
+			break;
+		}
 		break;
 
 	case WALK:
-		playerData.currentAnimation = walkAnim;
-		break;
+		switch (playerData.direction)
+		{
+		case WALK_L:
+			playerData.currentAnimation = walkAnimL;
+			break;
 
-	case RUN:
-		playerData.currentAnimation = runAnim;
-		break;
-	
-	case HIT:
-		playerData.currentAnimation = damageAnim;
-		break;	
-	
-	case ATTACK:
-		playerData.currentAnimation = atakAnim;
+		case WALK_R:
+			playerData.currentAnimation = walkAnimR;
+			break;
+
+		case WALK_UP:
+			playerData.currentAnimation = walkAnimUp;
+			break;
+
+		case WALK_DOWN:
+			playerData.currentAnimation = walkAnimDown;
+			break;
+		}
 		break;
 
 	default:
@@ -311,9 +282,10 @@ void Player::PlayerControls(float dt)
 		&& (playerData.state == State::WALK || playerData.state == State::RUN))
 	{
 		velX = playerData.velocity * 2;
+		velY = playerData.velocity * 2;
 		playerData.state = State::RUN;
 	}
-		// Comprobamos si las tecas están pulsadas al mismo tiempo
+	// Comprobamos si las tecas están pulsadas al mismo tiempo
 	if (!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 	{
@@ -322,11 +294,22 @@ void Player::PlayerControls(float dt)
 			playerData.state = State::WALK;
 			velX = playerData.velocity;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_R, dt);
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_R, dt);
+	}
+	else if (!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		&& (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
+	{
+		if (playerData.state == State::IDLE || playerData.state == State::WALK)
+		{
+			playerData.state = State::WALK;
+			velY = playerData.velocity;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_UP, dt);
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_DOWN, dt);
+	}
+	else playerData.state = State::IDLE;
 
-	}	// Any key is pressed or A and D pressed in same time, set player in IDLE state
-	//else if(playerData.state != JUMP) playerData.state = State::IDLE;
 
 	if (godMode == true)
 	{
@@ -351,15 +334,11 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 		break;	
 
 	case WALK:
-		// Move in state WALK 
-		MoveToDirection(velX);
-		// Future conditions in state WALK...
-		break;
-
 	case RUN:
-		// Move in state RUN 
-		MoveToDirection(velX);
-		// Future conditions in state RUN...
+		// Move in state WALK 
+		MoveToDirection();
+		MoveToDirection();
+		// Future conditions in state WALK...
 		break;
 
 	default:
@@ -370,17 +349,25 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 	
 }
 
-void Player::MoveToDirection(int velocity)
+void Player::MoveToDirection()
 {
 	switch (playerData.direction)
 	{	
 	// Move in to correct direction
 	case WALK_L:
-		playerData.position.x -= velocity;
+		playerData.position.x += velX;
 		break;
 
 	case WALK_R:
-		playerData.position.x += velocity;
+		playerData.position.x -= velX;
+		break;
+
+	case WALK_UP:
+		playerData.position.y -= velY;
+		break;
+
+	case WALK_DOWN:
+		playerData.position.y += velY;
 		break;
 
 	default:
@@ -435,11 +422,9 @@ bool Player::PostUpdate()
 {
 	SDL_Rect rectPlayer;
 	rectPlayer = playerData.currentAnimation->GetCurrentFrame();
+
 	// Draw player in correct direction
-	if (playerData.direction == MoveDirection::WALK_R )
-		app->render->DrawTexture(playerData.texture, playerData.position.x -15, playerData.position.y - (rectPlayer.h - 10), &rectPlayer);
-	else if (playerData.direction == MoveDirection::WALK_L)
-		app->render->DrawTextureFlip(playerData.texture, playerData.position.x -15, playerData.position.y - (rectPlayer.h - 10), &rectPlayer);
+	app->render->DrawTexture(playerData.texture, playerData.position.x, playerData.position.y, &rectPlayer);
 	
 	endUpdate = true;
 	return true;
@@ -457,11 +442,15 @@ bool Player::CleanUp()
 	active = false;
 	pendingToDelete = true;
 
-	delete idleAnim;
-	delete walkAnim;
-	delete atakAnim;
-	delete damageAnim;
-	delete runAnim;
+	delete idleAnimL;
+	delete idleAnimR;
+	delete idleAnimUp;
+	delete idleAnimDown;
+
+	delete walkAnimL;
+	delete walkAnimR;
+	delete walkAnimUp;
+	delete walkAnimDown;
 
 	checkPoints.Clear();
 	return true;
@@ -487,7 +476,7 @@ bool Player::CheckGameOver(int level)
 {
 	if (playerData.state==DEAD)
 	{
-		playerData.currentAnimation = deadAnim;
+		//playerData.currentAnimation = deadAnim;
 		return true;
 	}
 	if (level == 1 && !godMode)
