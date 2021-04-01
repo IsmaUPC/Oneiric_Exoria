@@ -27,43 +27,37 @@ bool SceneIntro::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-
-
 	return ret;
-
-
 }
 
 bool SceneIntro::Start()
 {
 	SDL_Texture* btnTextureAtlas = app->sceneManager->btnTextureAtlas;
-	btnSettingsTex = app->tex->Load("Assets/Textures/GUI/setting_button.png");
-	btnExitTex = app->tex->Load("Assets/Textures/GUI/exit_button.png");
 
 	// GUI: Initialize required controls for the screen
 	int margin= 7;
-	int padding = 98;
-	int yPosition = 330 + (margin * 1);
+	int padding = 110;
+	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { WINDOW_W / 2 - 200 / 2,yPosition + (padding * 0),  183, 91 }, "PLAY", RECTANGLE, btnTextureAtlas);
+	btnPlay = new GuiButton(1, { WINDOW_W / 2 - 200 / 2,yPosition + (padding * 2),  183, 91 }, "PLAY", RECTANGLE, btnTextureAtlas);
 	btnPlay->SetObserver(this);
 
-	btnContinue = new GuiButton(2, { WINDOW_W / 2 - 200 / 2, yPosition + (padding * 1),  183, 91 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(2, { WINDOW_W / 2 + 90 , yPosition + (padding * 2),  183, 91 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
 	btnContinue->SetObserver(this);
 
-	btnRemove = new GuiButton(3, { WINDOW_W / 2 + 90 ,yPosition + (padding * 1), 88, 88 }, "", REMOVE, btnTextureAtlas);
+	btnRemove = new GuiButton(3, { WINDOW_W / 2 + 280 ,yPosition + (padding * 2), 88, 88 }, "", REMOVE, btnTextureAtlas);
 	btnRemove->SetObserver(this);
 
-	btnSettings = new GuiButton(4, { WINDOW_W / 2 - 200 / 2, yPosition + (padding * 2), 183, 91 }, "SETTINGS", RECTANGLE, btnTextureAtlas);
+	btnSettings = new GuiButton(4, { WINDOW_W / 2 - 290, yPosition + (padding * 2), 183, 91 }, "SETTINGS", RECTANGLE, btnTextureAtlas);
 	btnSettings->SetObserver(this);
 
-	btnCredits = new GuiButton(5, { WINDOW_W-( WINDOW_W /9) , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
+	btnCredits = new GuiButton(5, { 20 , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
 	btnCredits->SetObserver(this);
 
-	btnExit = new GuiButton(6, { WINDOW_W / 2 - 200 ,yPosition + (padding * 2),  88, 88 }, "", EXIT, btnTextureAtlas);
+	btnExit = new GuiButton(6, { WINDOW_W / 2 - 390 ,yPosition + (padding * 2),  88, 88 }, "", EXIT, btnTextureAtlas);
 	btnExit->SetObserver(this);
 	
-	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, yPosition - (padding * 2) }, this);
+	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, yPosition - (padding * 2) - 50 }, this);
 
 	app->SetLastScene((Module*)this);
 	transition = false;
@@ -73,15 +67,6 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
-	animationIntro.texture = app->tex->Load("Assets/Textures/dino_sprites.png");
-	animationIntro.position = { 180 , 363 };
-	idleAnim->loop = true;
-	idleAnim->speed = 0.005f;
-
-	for (int i = 0; i < 4; i++)
-		idleAnim->PushBack({ 336 * i,0, 336, 336 });
-
-	animationIntro.currentAnimation = idleAnim;
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -106,9 +91,6 @@ bool SceneIntro::PreUpdate()
 bool SceneIntro::Update(float dt)
 {
 	bool ret = true;
-	animationIntro.currentAnimation->Update();
-	
-	idleAnim->speed = (dt * 100) * 0.05f;
 
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) && (menuSettings->GetActiveSettings()))
 	{
@@ -131,12 +113,9 @@ bool SceneIntro::Update(float dt)
 bool SceneIntro::PostUpdate()
 {
 	bool ret = true;
-	SDL_Rect rectIntro;
-	rectIntro = animationIntro.currentAnimation->GetCurrentFrame();
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
-	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 50);
-	app->render->DrawTexture(animationIntro.texture, animationIntro.position.x, animationIntro.position.y, &rectIntro);
+	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 30);
 	
 	btnPlay->Draw();
 	btnContinue->Draw();
@@ -157,11 +136,8 @@ bool SceneIntro::CleanUp()
 
 	LOG("Freeing scene");
 	Mix_HaltMusic();
-	app->tex->UnLoad(btnSettingsTex);
-	app->tex->UnLoad(btnExitTex);
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
-	app->tex->UnLoad(animationIntro.texture);
 
 	menuSettings->CleanUp();
 

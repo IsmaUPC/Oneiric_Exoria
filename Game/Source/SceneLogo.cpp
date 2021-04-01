@@ -32,7 +32,7 @@ bool SceneLogo::Start()
 {
 	app->SetLastScene((Module*)this);
 
-	img = app->tex->Load("Assets/Textures/logo_7hd_2.png");
+	img = app->tex->Load("Assets/Textures/scene_logo.png");
 	introFx = app->audio->LoadFx("Assets/Audio/Fx/intro.wav");
 	app->audio->PlayFx(introFx,100);
 
@@ -100,7 +100,7 @@ bool SceneLogo::PostUpdate()
 	if (img != NULL)
 	{
 		SDL_SetTextureAlphaMod(img, logoAlpha);
-		app->render->DrawTexture(img, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2);
+		app->render->DrawTexture(img, 0, 0);
 	}
 
 	return ret;

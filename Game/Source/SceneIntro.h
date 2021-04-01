@@ -9,13 +9,6 @@
 
 struct SDL_Texture;
 
-struct AnimationIntro
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
-
 class SceneIntro : public SceneControl
 {
 public:
@@ -52,11 +45,6 @@ public:
 	void ComprobeState(int id);
 
 private:
-	AnimationIntro animationIntro;
-	Animation* idleAnim=new Animation();
-
-	SDL_Texture* btnSettingsTex;
-	SDL_Texture* btnExitTex;
 
 	SDL_Texture* bgIntro;
 	SDL_Texture* logoIntro;
