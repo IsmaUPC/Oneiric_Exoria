@@ -10,14 +10,9 @@ struct PlayerData
 	MoveDirection direction;
 	Animation* currentAnimation;
 	float velocity ;
-	bool isJumped;
-	bool isJumpedAgain;
 	uint lives = 0;
 	uint respawns = 0;
 	uint coins = 0;
-	uint *stateShoot = 0;
-	iPoint* shootPosition;
-	iPoint* shootPointsCollision;
 
 	SDL_Texture* texture;
 	static const int numPoints = 6;
@@ -45,8 +40,6 @@ public:
 
 	void MoveHit();
 
-	void GravityDown(float dt);
-
 	void SpeedAnimationCheck(float dt);
 
 	void MoveBetweenCheckPoints();
@@ -57,8 +50,6 @@ public:
 
 	void PlayerControls(float dt);
 
-	void Jump();
-
 	void MovePlayer(MoveDirection playerDirection, float dt);
 
 	bool PostUpdate();
@@ -66,7 +57,6 @@ public:
 	bool CleanUp();
 
 	bool CollisionPlayer(iPoint nextPosition);
-	bool CollisionJumping(iPoint positionMapPlayer);
 	bool CheckGameOver(int level);
 
 	void SetHit();
@@ -81,11 +71,6 @@ public:
 
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
-	uint* GetStateShoot() { return playerData.stateShoot; };
-
-	void SetStateShoot(uint *state) { playerData.stateShoot = state; };
-	void SetPositionShoot(iPoint* position) { playerData.shootPosition = position; };
-	void SetCollidersShoot(iPoint* colliders) { playerData.shootPointsCollision = colliders; };
 
 private:
 
@@ -94,7 +79,6 @@ private:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-	void GravityDownCollision(float dt);
 	void MoveToDirection(int velocity);
 
 	void DebugCP();
@@ -110,7 +94,6 @@ private:
 	
 	int levelScene;
 
-	float gravity = 0.3f;
 	float velY = 0;
 	float velX = 0;
 
@@ -120,7 +103,6 @@ private:
 	Animation* damageAnim = new Animation();
 	Animation* deadAnim = new Animation();
 	Animation* runAnim = new Animation( );
-	Animation* jumpAnim = new Animation( );
 
 	pugi::xml_document playerFile;
 	SString folder;
@@ -137,7 +119,6 @@ private:
 	int lastCP;
 	bool checkpointMove;
 	bool endUpdate;
-	bool jumpHit;
 
 	State lastState;
 	MoveDirection hitDirection;

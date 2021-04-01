@@ -1,6 +1,5 @@
 ﻿#include "GUI.h"
 #include "Player.h"
-#include "FireBall.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include "ModuleFonts.h"
@@ -38,8 +37,6 @@ bool GUI::Start()
 	headAnim = new Animation();
 	arrowAnim = new Animation();
 	buttonEAnim = new Animation();
-	fireBallOnAnim = new Animation();
-	fireBallOffAnim = new Animation();
 	coinHudAnim = new Animation();
 
 	active = true;
@@ -68,22 +65,11 @@ bool GUI::Start()
 	for (int i = 0; i < 16; i++)
 		coinHudAnim->PushBack({ 0,(80 * i), 80, 80 });
 
-	imgH = 0;
-	imgW = 0;
-	fireBallTex = app->tex->Load("Assets/Textures/GUI/fire_ball.png");
-	SDL_QueryTexture(fireBallTex, NULL, NULL, &imgW, &imgH);
-	imgH = imgH / 2;
-
-	fireBallOnAnim->PushBack(	{ 0,0,imgW,imgH		});
-	fireBallOffAnim->PushBack(	{ 0,imgH,imgW,imgH	});
-
 	respawn = &app->player->playerData.respawns;
 	coins = &app->player->playerData.coins;
 
 	// Text
 	hudFont = app->fonts->Load("Assets/Textures/GUI/hud_font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,0123456789им?!*$%&()+-/:;<=>@_      ", 5, 705, 225);
-
-	fireBallState = app->player->GetStateShoot();
 
 	activeFPS = false;
 	timer.Start();
@@ -160,27 +146,12 @@ bool GUI::PostUpdate()
 	sprintf_s(coinText, 9, "x%d", *coins);
 	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
 
-	// FireBall
-	point0.x = -app->render->camera.x;
-	point0.y = -app->render->camera.y;
-	point0.x = point0.x + 40;
-	point0.y = point0.y + WINDOW_H - 120;
-
-	if (*fireBallState == 0)
-	{
-		rectGUI = fireBallOnAnim->GetCurrentFrame();
-		app->render->DrawTexture(fireBallTex, point0.x, point0.y,&rectGUI);
-	}
-	else
-	{
-		rectGUI = fireBallOffAnim->GetCurrentFrame();
-		app->render->DrawTexture(fireBallTex, point0.x, point0.y, &rectGUI);
-	}
+	// Time
 	point0.x = -app->render->camera.x;
 	point0.y = -app->render->camera.y;
 	point0.x = point0.x + (WINDOW_W - 250);
 	point0.y = point0.y + 20;
-	// Time
+	
 	if (app->sceneManager->GetIsPause() && !stopTime)
 	{
 		auxTimePause.Start();
@@ -232,14 +203,11 @@ bool GUI::CleanUp()
 
 	app->tex->UnLoad(arrowTex);
 	app->tex->UnLoad(imgCoin);
-	app->tex->UnLoad(fireBallTex);
 	app->fonts->UnLoad(hudFont);
 
 	delete headAnim;
 	delete arrowAnim;
 	delete buttonEAnim;
-	delete fireBallOnAnim;
-	delete fireBallOffAnim;
 	delete coinHudAnim;
 
 	active = false;

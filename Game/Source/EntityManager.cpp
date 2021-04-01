@@ -158,10 +158,6 @@ void EntityManager::SpawnEnemy(const EntitySpawnPoint& info)
 		entities.Add(new GUI(info.type, { info.x,info.y }, 1, texHead));
 		entities.end->data->Start();
 		break;
-	case TypeEntity::FIREBALL:
-		entities.Add(new FireBall(info.type, { info.x,info.y }, 1, tex));
-		entities.end->data->Start();
-		break;
 	case TypeEntity::COIN:
 		entities.Add(new Coins(info.type, { info.x,info.y }, 1, texCoin));
 		entities.end->data->Start();

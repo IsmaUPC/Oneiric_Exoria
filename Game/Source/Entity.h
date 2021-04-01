@@ -21,16 +21,14 @@ enum TypeEntity {
 	GROUND_ENEMY=2,
 	AIR_ENEMY=3,
 	HUD=4,
-	FIREBALL=5,
-	COIN=6,
-	LIVE=7,
+	COIN=5,
+	LIVE=6,
 };
 
 
 enum State {
 
 	IDLE,
-	JUMP,
 	WALK,
 	RUN,
 	RETURN,

@@ -62,9 +62,6 @@
     <ClCompile Include="Source\GUI.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\FireBall.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ModuleFonts.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
@@ -218,9 +215,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI.h">
-      <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FireBall.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\ModuleFonts.h">

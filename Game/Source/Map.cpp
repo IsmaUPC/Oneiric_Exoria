@@ -240,7 +240,8 @@ int Properties::GetProperty(const char* value, int defaultValue) const
 	{
 		if (strcmp(list.At(i)->data->name.GetString(), value)==0)
 		{
-			if (list.At(i)->data->value != defaultValue) return list.At(i)->data->value;
+			if (list.At(i)->data->value != defaultValue) 
+				return list.At(i)->data->value;
 			else return defaultValue;
 		}
 	}
@@ -277,10 +278,10 @@ void Map::Draw()
 					iPoint vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
-						if(data.layers.At(i)->data->properties.GetProperty("Nodraw",0)==0 || drawColl)
+						if(layer->data->properties.GetProperty("Nodraw",0) == 0 )//|| drawColl)
 							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
-						else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0 || drawColl2)
-							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+						//else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0)// || drawColl2)
+							//app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 					}
 				}
 			}
@@ -288,21 +289,21 @@ void Map::Draw()
 	}
 	
 	// CheckPoints
-	for (int i = 0; i < checKpointsMap.list.Count(); i++)
-	{
-		iPoint pos = checKpointsMap.list.At(i)->data->pos;
-		pos = MapToWorld(pos.x,pos.y);
+	//for (int i = 0; i < checKpointsMap.list.Count(); i++)
+	//{
+	//	iPoint pos = checKpointsMap.list.At(i)->data->pos;
+	//	pos = MapToWorld(pos.x,pos.y);
 
-		CheckPoints::CP* actCP = checKpointsMap.list.At(i)->data;
-		SDL_Rect rectCP;
+	//	CheckPoints::CP* actCP = checKpointsMap.list.At(i)->data;
+	//	SDL_Rect rectCP;
 
-		if (actCP->active)
-			rectCP = checKpointsMap.checkPointOnAnim->GetCurrentFrame();
-		else
-			rectCP = checKpointsMap.checkPointOffAnim->GetCurrentFrame();
-		
-		app->render->DrawTexture(checKpointsMap.texture, pos.x, pos.y-2, &rectCP);
-	}
+	//	if (actCP->active)
+	//		rectCP = checKpointsMap.checkPointOnAnim->GetCurrentFrame();
+	//	else
+	//		rectCP = checKpointsMap.checkPointOffAnim->GetCurrentFrame();
+	//	
+	//	app->render->DrawTexture(checKpointsMap.texture, pos.x, pos.y-2, &rectCP);
+	//}
 
 
 	if(drawColl)app->map->DrawPath();
@@ -509,7 +510,7 @@ bool Map::Load(const char* filenameGame)
 		}
 	}
 
-	LoadCollectable();
+	// LoadCollectable();
 
 	if(ret == true)
 	{
@@ -529,7 +530,7 @@ bool Map::Load(const char* filenameGame)
 			LOG("NumTilesHeight: %d", data.tilesets.At(i)->data->numTilesHeight);
 		}
 		// LOG("CheckPoint count: %d", LoadCheckPoint());
-		LoadCheckPoint();
+		//LoadCheckPoint();
 		for (int i = 0; i < data.layers.Count(); i++)
 		{
 			/*

@@ -29,7 +29,7 @@ bool Player::Start()
 	atakAnim = new Animation();
 	damageAnim = new Animation();
 	runAnim = new Animation();
-	jumpAnim = new Animation();
+
 
 	iPoint pathInit =  app->map->WorldToMap(positionInitial->x ,positionInitial->y) ;
 	app->map->ResetPath(pathInit);
@@ -38,7 +38,6 @@ bool Player::Start()
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
-	playerData.isJumped = false;
 	playerData.direction = WALK_R;
 
 	bonfireFx = app->audio->LoadFx("Assets/Audio/Fx/bonfire.wav");
@@ -69,14 +68,8 @@ bool Player::Start()
 	atakAnim->loop = false;
 	atakAnim->speed = 0.10f;
 
-	jumpAnim->loop = true;
-	jumpAnim->speed = 0.24f;
-
 	for (int i = 0; i < 4; i++)
 		idleAnim->PushBack({ 78 * i,0, 78, 78 });
-
-	for (int i = 0; i < 6; i++)
-		jumpAnim->PushBack({ 312 + (78 * i),0, 78, 78 });
 
 	for (int i = 0; i < 6; i++)
 		walkAnim->PushBack({ 312 + (78 * i),0, 78, 78 });
@@ -101,7 +94,6 @@ bool Player::Start()
 	playerData.currentAnimation = idleAnim;
 	velX = playerData.velocity;
 
-	app->entityManager->AddEntity(FIREBALL, 0, 0);
 	app->entityManager->AddEntity(HUD, 0, 0);
 
 	return true;
@@ -178,10 +170,7 @@ bool Player::Update(float dt)
 		PlayerMoveAnimation();
 		SpeedAnimationCheck(dt);
 		playerData.velocity = floor(1000 * dt/ 4) ;
-		gravity = ceil(600 * dt);
 
-		MoveHit();
-		GravityDown(dt);
 		CameraPlayer();
 		if (playerData.state == ATTACK && playerData.currentAnimation->HasFinished())
 		{
@@ -212,12 +201,6 @@ void Player::MoveHit()
 		{
 			tmp = playerData.position;
 			playerData.position.x -= 2 * playerData.direction;
-			if (!jumpHit)
-			{
-				jumpHit = true;
-				if (app->GetFramerate() == 60)	velY = -10.5f;
-				else if (app->GetFramerate() == 30) velY = -21;
-			}
 			if (CollisionPlayer(playerData.position)) playerData.position = tmp;
 		}
 		else
@@ -234,25 +217,13 @@ void Player::MoveHit()
 	if (playerData.currentAnimation->HasFinished())damageAnim->Reset();
 }
 
-void Player::GravityDown(float dt)
-{
-	if (godMode == false)
-	{
-		playerData.currentAnimation->Update();
-		GravityDownCollision(dt);
-	}
-	else playerData.currentAnimation = idleAnim;
-}
-
 void Player::SpeedAnimationCheck(float dt)
 {
 	idleAnim->speed = (dt * 5) ;
 	walkAnim->speed = (dt * 9) ;
-	jumpAnim->speed = (dt * 18) ;
 	atakAnim->speed = (dt * 5) ;
 	damageAnim->speed = (dt * 10) ;
 	runAnim->speed = (dt * 9) ;
-	
 }
 
 void Player::MoveBetweenCheckPoints()
@@ -275,31 +246,33 @@ void Player::CameraPlayer()
 {
 	// Camera follow the player
 	int followPositionPalyerX = (WINDOW_W / 2) + (playerData.position.x * -1);
-	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1) + 125;
+	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1);
 
-	if (playerData.position.x < (WINDOW_W/2))
-		if (app->render->camera.x < 48) followPositionPalyerX = 0;
+	app->render->camera.x = followPositionPalyerX;
+	app->render->camera.y = followPositionPalyerY;
+	/*if (playerData.position.x < (WINDOW_W/2))
+		if (app->render->camera.x < 48) followPositionPalyerX = 0;*/
 
-	// Camera delimitation x
-	if (app->render->camera.x <= (playerData.position.x * -1)&& app->render->camera.x >= -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W))
-		app->render->camera.x = followPositionPalyerX;
-	else if (followPositionPalyerX<-1&& followPositionPalyerX>-((app->map->data.width * app->map->data.tileWidth) - WINDOW_W+32))
-		app->render->camera.x = followPositionPalyerX;
+	//// Camera delimitation x
+	//if (app->render->camera.x <= (playerData.position.x * -1)&& app->render->camera.x >= -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W))
+	//	app->render->camera.x = followPositionPalyerX;
+	//else if (followPositionPalyerX<-1&& followPositionPalyerX>-((app->map->data.width * app->map->data.tileWidth) - WINDOW_W+32))
+	//	app->render->camera.x = followPositionPalyerX;
 
-	// Reposition right in limit camera in X
-	if ((playerData.position.x *-1)< -((app->map->data.width * app->map->data.tileWidth) - (WINDOW_W/2) + 32))
-		app->render->camera.x = -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W + 32);
+	//// Reposition right in limit camera in X
+	//if ((playerData.position.x *-1)< -((app->map->data.width * app->map->data.tileWidth) - (WINDOW_W/2) + 32))
+	//	app->render->camera.x = -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W + 32);
 
-	if ((playerData.position.x *-1)> -(WINDOW_W/2) + 32)
-		app->render->camera.x = 0;
+	//if ((playerData.position.x *-1)> -(WINDOW_W/2) + 32)
+	//	app->render->camera.x = 0;
 
-	// Camera delimitation y
-	if ((app->render->camera.y <= -48) && (app->render->camera.y >= -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
-		app->render->camera.y = followPositionPalyerY;
-	else if ((followPositionPalyerY < -48) && (followPositionPalyerY > -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
-		app->render->camera.y = followPositionPalyerY;
-	if (app->render->camera.y >= -39)
-		app->render->camera.y = -39;
+	//// Camera delimitation y
+	//if ((app->render->camera.y <= -48) && (app->render->camera.y >= -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
+	//	app->render->camera.y = followPositionPalyerY;
+	//else if ((followPositionPalyerY < -48) && (followPositionPalyerY > -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
+	//	app->render->camera.y = followPositionPalyerY;
+	//if (app->render->camera.y >= -39)
+	//	app->render->camera.y = -39;
 }
 
 void Player::PlayerMoveAnimation()
@@ -312,10 +285,6 @@ void Player::PlayerMoveAnimation()
 
 	case WALK:
 		playerData.currentAnimation = walkAnim;
-		break;
-
-	case JUMP:
-		playerData.currentAnimation = jumpAnim;
 		break;
 
 	case RUN:
@@ -344,7 +313,7 @@ void Player::PlayerControls(float dt)
 		velX = playerData.velocity * 2;
 		playerData.state = State::RUN;
 	}
-		// Comprobamos si las tecas est�n pulsadas al mismo tiempo
+		// Comprobamos si las tecas están pulsadas al mismo tiempo
 	if (!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 	{
@@ -357,10 +326,7 @@ void Player::PlayerControls(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
 
 	}	// Any key is pressed or A and D pressed in same time, set player in IDLE state
-	else if(playerData.state != JUMP) playerData.state = State::IDLE;
-
-	// Player Jump
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) Jump();
+	//else if(playerData.state != JUMP) playerData.state = State::IDLE;
 
 	if (godMode == true)
 	{
@@ -383,12 +349,6 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 	case IDLE:
 		// Future conditions in state IDLE...
 		break;	
-
-	case JUMP:
-		// Move in state JUMP 
-		MoveToDirection(velX);
-		// Future conditions in state JUMP...
-		break;
 
 	case WALK:
 		// Move in state WALK 
@@ -485,44 +445,6 @@ bool Player::PostUpdate()
 	return true;
 }
 
-// Implements to gravity fall down
-void Player::GravityDownCollision(float dt)
-{
-
-	tmp = playerData.position;	
-	lastState = playerData.state;
-
-	playerData.position.y += velY;
-
-	iPoint PlayerCurrPos = { playerData.position.x  ,playerData.position.y};
-	bool fallingCollision = false;
-	bool feedCollision = false;
-	for (int i = 0; i < playerData.numPoints; i++)
-	{
-		if (CollisionJumping({ PlayerCurrPos.x + playerData.pointsCollision[i].x ,PlayerCurrPos.y + playerData.pointsCollision[i].y }))
-			fallingCollision = true;		
-		if (fallingCollision && (i == 0 || i == 1))feedCollision = true;
-	}
-	if (fallingCollision)
-	{	
-		if (feedCollision)
-		{
-			jumpHit = false;
-			playerData.isJumped = false;
-			playerData.isJumpedAgain = false;
-			if (playerData.state != JUMP)playerData.state = lastState;
-			else playerData.state = IDLE;
-		}
-		playerData.position = tmp;
-		velY = 0.0f;
-		fallingCollision = false;
-	}
-	else{
-		if(app->GetFramerate()==60)velY += 0.55f;
-		else if(app->GetFramerate()==30) velY += 2.1f;
-	}
-}
-
 bool Player::CleanUp() 
 {
 	if (!active)
@@ -540,7 +462,6 @@ bool Player::CleanUp()
 	delete atakAnim;
 	delete damageAnim;
 	delete runAnim;
-	delete jumpAnim;
 
 	checkPoints.Clear();
 	return true;
@@ -561,36 +482,6 @@ bool Player::CollisionPlayer(iPoint nextPosition)
 	}
 	return false;
 }
-
-bool Player::CollisionJumping(iPoint nextPosition)
-{
-	iPoint positionMapPlayer;
-	int y = nextPosition.y;
-	positionMapPlayer = app->map->WorldToMap(nextPosition.x, nextPosition.y);
-	if (CheckCollision(positionMapPlayer)== COLLISION) return true;
-	return false;
-}
-
-void Player::Jump()
-{
-	lastState = playerData.state;
-	if (playerData.isJumped && !playerData.isJumpedAgain)
-	{
-		// Generate second impulse
-		if (app->GetFramerate() == 60)velY = -9.75f;
-		else if (app->GetFramerate() == 30) velY = -19.50;
-		playerData.isJumpedAgain = true;
-	}
-	if (!playerData.isJumped)
-	{
-		// Generate first impulse
-		if (app->GetFramerate() == 60)	velY = -10.5f;
-		else if (app->GetFramerate() == 30) velY = -21;
-		playerData.isJumped = true;
-	}
-	playerData.state = State::JUMP;
-}
-
 
 bool Player::CheckGameOver(int level)
 {

@@ -220,35 +220,7 @@ void Enemy::CheckCollisionEnemyToPlayer()
 		if (!app->player->godMode)app->player->SetHit();
 	}
 }
-void Enemy::CheckCollisionEnemyToFireBall()
-{
-	iPoint auxPositionEnemey[4];
-	for (int i = 0; i < 4; i++)
-	{
-		auxPositionEnemey[i] = { entityData->position.x + entityData->pointsCollision[i].x,
-			entityData->position.y + entityData->pointsCollision[i].y };
-	}
 
-	iPoint collisionFireBall[4];
-	for (int i = 0; i < 4; i++)
-	{
-		collisionFireBall[i] = { app->player->playerData.shootPosition->x + app->player->playerData.shootPointsCollision[i].x,
-			-48 + app->player->playerData.shootPosition->y + app->player->playerData.shootPointsCollision[i].y };
-	}
-
-	iPoint collisionBullet = app->map->WorldToMap(app->player->playerData.shootPosition->x, app->player->playerData.shootPosition->y);
-	iPoint collisionEnemy = app->map->WorldToMap(entityData->position.x, entityData->position.y);
-	if (collisionBullet == collisionEnemy)
-	{
-		*app->player->playerData.stateShoot = 2;
-		entityData->state = DEADING;
-		entityData->currentAnimation = deadAnim;
-		app->audio->PlayFx(entityData->deadFx);
-		app->entityManager->score += entityData->dropScore;
-
-	}
-
-}
 void Enemy::MoveEnemyNULL(iPoint mapPositionEnemy)
 {
 	// if the next position is destination continue with current direction
@@ -286,7 +258,7 @@ void Enemy::CheckCollisions()
 		}
 		CheckCollisionEnemyToPlayer();
 	}
-	CheckCollisionEnemyToFireBall();
+
 	if (!Radar(currentPositionPlayer) && entityData->state != DEADING)
 	{
 		entityData->state = IDLE;

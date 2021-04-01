@@ -4,7 +4,6 @@
 #include "Entity.h"
 #include "Player.h"
 #include "GUI.h"
-#include "FireBall.h"
 #include "Enemy.h"
 #include "Coins.h"
 #include "Lives.h"

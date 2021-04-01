@@ -9,13 +9,6 @@
 
 struct SDL_Texture;
 
-struct AnimationFather
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
-
 class Scene : public SceneControl
 {
 public:
@@ -60,18 +53,15 @@ private:
 
 	int numThisScene;
 
-	void Parallax();
 	void DebugKeys();
 
 	bool debugCollisions = false;
 	bool victory = false;
 	bool lose = false;
-	AnimationFather animationFather;
+
 	Animation* idleAnim= new Animation();
-	SDL_Texture* img;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg=0;
-
 };
 
 #endif // __SCENE_H__

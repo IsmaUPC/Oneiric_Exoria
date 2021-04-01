@@ -44,18 +44,14 @@ private:
 	int headW = 0;
 
 	uint* respawn = 0;
-	uint* fireBallState = 0;
 
 	iPoint point0 = { 0,0 };
 	SDL_Texture* headTex;
 	SDL_Texture* arrowTex;
-	SDL_Texture* fireBallTex;
 
 	Animation* headAnim;
 	Animation* arrowAnim;
 	Animation* buttonEAnim;
-	Animation* fireBallOnAnim;
-	Animation* fireBallOffAnim;
 
 	bool inCheckPoint;
 

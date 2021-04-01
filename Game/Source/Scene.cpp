@@ -43,7 +43,7 @@ bool Scene::Start()
 	victory=false;
 	app->player->win = false;
 
-	if (app->map->Load("map_1.tmx") == true)
+	if (app->map->Load("room.tmx") == true)
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -56,10 +56,7 @@ bool Scene::Start()
 
 	// Positions Initials
 	app->entityManager->Start();
-	app->player->positionInitial = new iPoint(432,1170 );
-	app->entityManager->AddEntity(GROUND_ENEMY, 43, 27);
-	app->entityManager->AddEntity(GROUND_ENEMY, 30, 17);
-	app->entityManager->AddEntity(GROUND_ENEMY, 20, 14);	
+	app->player->positionInitial = new iPoint(300,300 );	
 
 	// Active calls
 	app->player->Init();
@@ -68,21 +65,6 @@ bool Scene::Start()
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
-	img = app->tex->Load("Assets/Textures/sky.png");
-	animationFather.texture = app->tex->Load("Assets/Textures/dino_orange.png");
-	
-	animationFather.position = { 2352, 495 };
-	idleAnim->loop = true;
-	idleAnim->speed = 0.025;
-
-	for (int i = 0; i < 4; i++)
-		idleAnim->PushBack({ 117 * i,0, 117, 117 });
-
-	animationFather.currentAnimation = idleAnim;
-
-	SDL_QueryTexture(img, NULL,NULL,&imgW,&imgH);
-
-	app->render->camera.y -= imgH;
 
 	return true;
 }
@@ -119,8 +101,6 @@ bool Scene::Update(float dt)
 
 	idleAnim->speed = (dt * 100) * 0.025f;
 
-	animationFather.currentAnimation->Update();
-
 	if(app->player->win)victory = true;
 
 	else if (app->player->CheckGameOver(1) && lose == false && app->player->godMode == false)
@@ -134,14 +114,10 @@ bool Scene::Update(float dt)
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	// Draw Background
-	Parallax();
 	// Draw map
 	app->map->Draw();
 
 	bool ret = true;
-	SDL_Rect rectFather;
-	rectFather = animationFather.currentAnimation->GetCurrentFrame();
 
 	if (victory == true)
 	{
@@ -155,8 +131,6 @@ bool Scene::PostUpdate()
 		TransitionToScene(SceneType::LOSE);
 		return true;
 	}
-	app->render->DrawTextureFlip(animationFather.texture, animationFather.position.x, animationFather.position.y - (rectFather.h), &rectFather);
-
 
 	return ret;
 }
@@ -170,8 +144,6 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
-	app->tex->UnLoad(img);
-	app->tex->UnLoad(animationFather.texture);
 	app->player->CleanUp();
 	app->entityManager->CleanUp();
 
@@ -179,17 +151,6 @@ bool Scene::CleanUp()
 
 	active = false;
 	return true;
-}
-
-void Scene::Parallax()
-{
-	speedImg = -0.9f;
-	imgX = (int)(app->render->camera.x / 6) - 10;
-	imgX *= speedImg;
-
-	imgY = (int)((app->render->camera.y / 6) + 1250) * 0.2f;
-
-	app->render->DrawTexture(img, imgX, imgY);
 }
 
 void Scene::DebugKeys()

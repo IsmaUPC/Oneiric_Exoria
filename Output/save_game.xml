@@ -6,10 +6,10 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="0" y="-675" />
+		<camera x="357" y="70" />
 	</renderer>
 	<player>
-		<position x="432" y="1170" />
+		<position x="300" y="300" />
 		<coins count="0" />
 		<lives num_respawns="3" />
 	</player>
@@ -21,22 +21,6 @@
 		<score value="0" />
 		<time value="0" />
 		<entities>
-			<entity type="6" x="2112" y="384" state="0" />
-			<entity type="6" x="1728" y="528" state="0" />
-			<entity type="6" x="1008" y="576" state="0" />
-			<entity type="6" x="1824" y="816" state="0" />
-			<entity type="7" x="1056" y="864" state="0" />
-			<entity type="6" x="2304" y="864" state="0" />
-			<entity type="6" x="768" y="912" state="0" />
-			<entity type="6" x="2640" y="960" state="0" />
-			<entity type="7" x="288" y="1152" state="0" />
-			<entity type="6" x="1152" y="1200" state="0" />
-			<entity type="6" x="1632" y="1200" state="0" />
-			<entity type="6" x="2256" y="1200" state="0" />
-			<entity type="2" x="2064" y="1296" state="0" />
-			<entity type="2" x="1440" y="816" state="0" />
-			<entity type="2" x="960" y="672" state="0" />
-			<entity type="5" x="-100" y="-100" state="0" />
 			<entity type="4" x="0" y="0" state="0" />
 		</entities>
 	</entity_manager>
