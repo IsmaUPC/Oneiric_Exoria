@@ -48,7 +48,7 @@ enum MoveDirection {
 enum TypeCollision {
 
 	VICTORY=0,
-	COLLISION=1,
+	COLLISION=12, // Change to id tile of collision
 	CHECK_POINT=2,
 	AIR,
 };

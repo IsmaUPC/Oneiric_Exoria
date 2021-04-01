@@ -109,7 +109,7 @@ int Entity::CheckCollision(iPoint positionMap)
 		{
 		case VICTORY:
 			// Victory
-			if(positionMap== app->map->WorldToMap( app->player->playerData.position))
+			if(positionMap == app->map->WorldToMap( app->player->playerData.position))
 			app->player->win = true;
 			return VICTORY;
 			break;

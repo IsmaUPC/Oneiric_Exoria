@@ -15,9 +15,9 @@ struct PlayerData
 	uint coins = 0;
 
 	SDL_Texture* texture;
-	static const int numPoints = 6;
+	static const int numPoints = 4;
 
-	iPoint pointsCollision[numPoints] = { { 0,0 },{45 , 0},{ 45,-26 },{45 ,-54 }, {0, -54},{0, -26} };
+	iPoint pointsCollision[numPoints] = { { 0,0 },{32 , 0},{ 32,44 },{0 ,44 } };
 
 };
 

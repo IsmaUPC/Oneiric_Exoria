@@ -289,7 +289,7 @@ void Player::PlayerControls(float dt)
 	if (!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
 	{
-		if (playerData.state == State::IDLE || playerData.state == State::WALK) 
+		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
 			velX = playerData.velocity;
@@ -465,9 +465,9 @@ bool Player::CollisionPlayer(iPoint nextPosition)
 	for (int i = 0; i < playerData.numPoints; i++)
 	{	
 		inCheckPoint = false;
-		// Concvert position player WorldToMap 
+		// Convert position player WorldToMap 
 		positionMapPlayer = app->map->WorldToMap(x+playerData.pointsCollision[i].x, y+playerData.pointsCollision[i].y);
-		if (CheckCollision(positionMapPlayer)== COLLISION) return true;
+		if (CheckCollision(positionMapPlayer) == COLLISION) return true;
 	}
 	return false;
 }
