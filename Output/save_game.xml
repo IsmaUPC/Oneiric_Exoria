@@ -6,14 +6,14 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="213" y="158" />
+		<camera x="357" y="70" />
 	</renderer>
 	<player>
-		<position x="444" y="212" />
+		<position x="300" y="300" />
 		<partners>
-			<partner_1 x="404" y="212" />
-			<partner_2 x="364" y="212" />
-			<partner_3 x="324" y="212" />
+			<partner_1 x="260" y="300" />
+			<partner_2 x="220" y="300" />
+			<partner_3 x="180" y="300" />
 		</partners>
 		<coins count="0" />
 		<lives num_respawns="3" />
@@ -24,7 +24,7 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="4090" />
+		<time value="0" />
 		<entities>
 			<entity type="4" x="0" y="0" state="0" />
 		</entities>

@@ -338,6 +338,7 @@ void Player::PlayerMoveAnimation(State state, MoveDirection direction, Animation
 
 void Player::PlayerControls(float dt)
 {
+	GamePad& pad = app->input->pads[0];
 	// Player Run
 	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
 		&& (playerData.state == State::WALK || playerData.state == State::RUN))
@@ -346,27 +347,29 @@ void Player::PlayerControls(float dt)
 		playerData.state = State::RUN;
 	}
 	// Comprobamos si las tecas están pulsadas al mismo tiempo
-	if (!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT))
+	if ((!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)) 
+		|| (pad.l_x < -0.2f || pad.l_x > 0.2f) || (pad.left == true || pad.right == true))
 	{
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
 			vel = playerData.velocity;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_R, dt);
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || pad.l_x > 0.2f || pad.right)MovePlayer(MoveDirection::WALK_R, dt);
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || pad.l_x < -0.2f || pad.left)MovePlayer(MoveDirection::WALK_L, dt);
 	}
-	else if (!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	else if ((!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
+		|| (pad.l_y < -0.2f || pad.l_y > 0.2f) || (pad.up == true || pad.down == true))
 	{
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
 			vel = playerData.velocity;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_UP, dt);
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_DOWN, dt);
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || pad.l_y < -0.2f || pad.up) MovePlayer(MoveDirection::WALK_UP, dt);
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || pad.l_y > 0.2f || pad.down) MovePlayer(MoveDirection::WALK_DOWN, dt);
 	}
 	else playerData.state = State::IDLE;
 
@@ -584,6 +587,9 @@ bool Player::CleanUp()
 
 	checkPoints.Clear();
 	path.Clear();
+
+	app->input->ShakeController(0, 60, 0);
+
 	return true;
 }
 

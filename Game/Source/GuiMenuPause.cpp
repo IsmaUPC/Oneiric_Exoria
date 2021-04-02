@@ -50,7 +50,7 @@ bool GuiMenuPause::Update(float dt)
 		if (activeMenu) 
 		{
 			menuSettings->Update(dt);
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)// || app->input->pads[0].start)
 			{
 				CloaseMenuSettings();
 				btnResume->PressButtonSound();
@@ -58,7 +58,7 @@ bool GuiMenuPause::Update(float dt)
 		}
 		else
 		{
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN )//|| app->input->pads[0].start)
 			{
 				btnResume->PressButtonSound();
 				app->sceneManager->SetPause(false);

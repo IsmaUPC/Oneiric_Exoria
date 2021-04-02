@@ -91,8 +91,7 @@ bool SceneIntro::PreUpdate()
 bool SceneIntro::Update(float dt)
 {
 	bool ret = true;
-
-	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) && (menuSettings->GetActiveSettings()))
+	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (menuSettings->GetActiveSettings()))
 	{
 		menuSettings->btnBack->PressButtonSound();
 		CloaseMenuSettings();
