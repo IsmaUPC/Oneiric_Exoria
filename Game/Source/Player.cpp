@@ -118,16 +118,27 @@ bool Player::Awake(pugi::xml_node& config)
 bool Player::LoadState(pugi::xml_node& player) 
 {
 	bool ret=true;
-		playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
-		playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
-		playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
-		playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
+	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
+	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
+	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
+	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
+
+	pugi::xml_node positionPartners = player.child("partners");
+	partners[0].position.x = positionPartners.child("partner_1").attribute("x").as_int(partners[0].position.x);
+	partners[1].position.x = positionPartners.child("partner_2").attribute("x").as_int(partners[1].position.x);
+	partners[2].position.x = positionPartners.child("partner_3").attribute("x").as_int(partners[2].position.x);
+
+	partners[0].position.y = positionPartners.child("partner_1").attribute("y").as_int(partners[0].position.y);
+	partners[1].position.y = positionPartners.child("partner_2").attribute("y").as_int(partners[1].position.y);
+	partners[2].position.y = positionPartners.child("partner_3").attribute("y").as_int(partners[2].position.y);
+
 	return ret;
 }
 
 bool Player::SaveState(pugi::xml_node& player) const
 {
 	pugi::xml_node positionPlayer = player.child("position");
+	pugi::xml_node positionPartners = player.child("partners");
 	pugi::xml_node coinsPlayer = player.child("coins");
 	pugi::xml_node respawnsPlayer = player.child("lives");
 
@@ -152,6 +163,14 @@ bool Player::SaveState(pugi::xml_node& player) const
 		positionPlayer.attribute("y").set_value(playerData.position.y);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
+
+		positionPartners.child("partner_1").attribute("x").set_value(partners[0].position.x);			
+		positionPartners.child("partner_2").attribute("x").set_value(partners[1].position.x);			
+		positionPartners.child("partner_3").attribute("x").set_value(partners[2].position.x);
+
+		positionPartners.child("partner_1").attribute("y").set_value(partners[0].position.y);
+		positionPartners.child("partner_2").attribute("y").set_value(partners[1].position.y);
+		positionPartners.child("partner_3").attribute("y").set_value(partners[2].position.y);
 	}
 
 	return true;
