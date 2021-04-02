@@ -79,6 +79,13 @@ bool SceneIntro::Start()
 		btnRemove->state = GuiControlState::DISABLED;
 	}
 	app->sceneManager->SetPause(false);
+
+	buttons.Add(btnPlay);
+	buttons.Add(btnContinue);
+	buttons.Add(btnRemove);
+	buttons.Add(btnCredits);
+	buttons.Add(btnExit);
+	buttons.Add(btnSettings);
 	
 	return true;
 }
@@ -97,13 +104,14 @@ bool SceneIntro::Update(float dt)
 		CloaseMenuSettings();
 	}
 
+	SelectButton();	
 
-	btnPlay->Update(dt);
-	btnContinue->Update(dt);
-	btnRemove->Update(dt);
-	btnSettings->Update(dt);
-	btnCredits->Update(dt);
-	ret=btnExit->Update(dt);
+	for (int i = 0; i < buttons.Count(); i++)
+	{
+		ret=buttons.At(i)->data->Update(dt);
+		if (ret == false) return false;
+	}
+
 	menuSettings->Update(dt);
 
 	return ret;
@@ -116,12 +124,10 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
 	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 30);
 	
-	btnPlay->Draw();
-	btnContinue->Draw();
-	btnRemove->Draw();
-	btnSettings->Draw();
-	btnCredits->Draw();
-	btnExit->Draw();
+	for (int i = 0; i < buttons.Count(); i++)
+	{
+		buttons.At(i)->data->Draw();
+	}
 
 	menuSettings->Draw();
 
@@ -139,20 +145,7 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(logoIntro);
 
 	menuSettings->CleanUp();
-
-	delete btnPlay;
-	delete btnContinue;
-	delete btnRemove;
-	delete btnSettings;
-	delete btnCredits;
-	delete btnExit;
-	
-	btnPlay = NULL;
-	btnContinue = NULL;
-	btnRemove = NULL;
-	btnSettings = NULL;
-	btnCredits = NULL;
-	btnExit = NULL;
+	buttons.Clear();
 
 	bgIntro = nullptr;
 	logoIntro = nullptr;
@@ -192,10 +185,10 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		{
 			btnPlay->state = GuiControlState::DISABLED;
 			btnContinue->state = GuiControlState::DISABLED;
+			btnRemove->state = GuiControlState::DISABLED;
 			btnSettings->state = GuiControlState::DISABLED;
 			btnCredits->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnRemove->state = GuiControlState::DISABLED;
 
 			menuSettings->MovePosition();
 			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
@@ -252,6 +245,80 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 	default: break;
 	}
 	return true;
+}
+
+void SceneIntro::SelectButton()
+{
+	GamePad& pad = app->input->pads[0];
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
+		|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
+		|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y)
+	{
+		bool isFocused = false;
+		int i = 0;
+		for (i; i < buttons.Count(); i++)
+		{
+			if (buttons.At(i)->data->state == GuiControlState::FOCUSED)
+			{
+				isFocused = true;
+				buttons.At(i)->data->state = GuiControlState::NORMAL;
+				if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
+					|| pad.right || pad.down || pad.l_x > 0.2 || pad.l_y < -0.2)
+				{
+					int j = i + 1;
+					while (j != i)
+					{
+						if (j == buttons.Count()) j = 0;
+						if (buttons.At(j)->data->state != GuiControlState::DISABLED)
+						{
+							buttons.At(j)->data->state = GuiControlState::FOCUSED;
+							break;
+						}
+						j++;
+					}
+				}
+				if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
+					|| pad.left || pad.up || pad.l_x < -0.2 || pad.l_y > 0.2)
+				{
+					int j = i - 1;
+					while (j != i)
+					{
+						if (j == -1) j = buttons.Count() - 1;
+						if (buttons.At(j)->data->state != GuiControlState::DISABLED)
+						{
+							buttons.At(j)->data->state = GuiControlState::FOCUSED;
+							break;
+						}
+						j--;
+					}
+				}
+
+				break;
+			}
+
+		}
+		if (!isFocused) buttons.At(0)->data->state = GuiControlState::FOCUSED;
+	}
+
+	// If mouse is on any button, the rest state = NORMAL
+	int mouseX, mouseY;
+	app->input->GetMousePosition(mouseX, mouseY);
+
+	for (int i = 0; i < buttons.Count(); i++)
+	{
+		SDL_Rect bounds = buttons.At(i)->data->bounds;
+		if (((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h))))
+		{
+			for (int i = 0; i < buttons.Count(); i++)
+			{
+				if(buttons.At(i)->data->state != GuiControlState::DISABLED)
+					buttons.At(i)->data->state = GuiControlState::NORMAL;
+			}
+			break;
+		}
+	}
+	
 }
 
 void SceneIntro::CloaseMenuSettings()

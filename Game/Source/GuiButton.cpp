@@ -18,35 +18,34 @@ GuiButton::~GuiButton()
 bool GuiButton::Update(float dt)
 {
 	bool ret = true;
-
+	GamePad& pad = app->input->pads[0];
 	int mouseX, mouseY;
 	app->input->GetMousePosition(mouseX, mouseY);
 
 	// Check collision between mouse and button bounds
-	if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-		(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+	if (((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+		(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h))) || state == GuiControlState::FOCUSED)
 	{
 		if (state != GuiControlState::DISABLED)
 		{
 			state = GuiControlState::FOCUSED;
 			if (!mouseIn)app->audio->PlayFx(app->sceneManager->btnSelected), mouseIn = true;
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
-
 			}
 
 			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				app->audio->PlayFx(app->sceneManager->btnPressed);
 				ret = NotifyObserver();
 			}
 		}
-		else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			app->audio->PlayFx(app->sceneManager->btnDisabled);
 	}
-	else if (state != GuiControlState::DISABLED) state = GuiControlState::NORMAL, mouseIn = false;
+	if (state != GuiControlState::DISABLED && state != GuiControlState::FOCUSED) state = GuiControlState::NORMAL, mouseIn = false;
 
 
 	return ret;
