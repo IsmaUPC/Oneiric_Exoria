@@ -23,6 +23,18 @@ Player::~Player()
 
 bool Player::Start() 
 {
+	//Animations
+
+	idleAnimR = new Animation();
+	idleAnimL = new Animation();
+	idleAnimUp = new Animation();
+	idleAnimDown = new Animation();
+
+	walkAnimR = new Animation();
+	walkAnimL = new Animation();
+	walkAnimUp = new Animation();
+	walkAnimDown = new Animation();
+
 	iPoint pathInit =  app->map->WorldToMap(positionInitial->x ,positionInitial->y);
 	app->map->ResetPath(pathInit);
 
@@ -30,7 +42,8 @@ bool Player::Start()
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
-	playerData.direction = WALK_DOWN;
+	playerData.direction = WALK_R;
+	lastDirection = playerData.direction;
 
 	bonfireFx = app->audio->LoadFx("Assets/Audio/Fx/bonfire.wav");
 	damageFx = app->audio->LoadFx("Assets/Audio/Fx/damage.wav");
@@ -59,26 +72,37 @@ bool Player::Start()
 
 
 	//for (int i = 0; i < 6; i++)
-		idleAnimL->PushBack({ 0, 0, 32, 44 });
-		walkAnimL->PushBack({ 0, 0, 32, 44 });
+		idleAnimL->PushBack({ 64, 0, 32, 48 });
+		walkAnimL->PushBack({ 64, 0, 32, 48 });
 
 	//for (int i = 0; i < 6; i++)
-		idleAnimR->PushBack({ 64, 0, 32, 44 });
-		walkAnimR->PushBack({ 64, 0, 32, 44 });
+		idleAnimR->PushBack({ 0, 0, 32, 48 });
+		walkAnimR->PushBack({ 0, 0, 32, 48 });
 
 	//for (int i = 0; i < 6; i++)
-		idleAnimUp->PushBack({ 32, 0, 32, 44 });
-		walkAnimUp->PushBack({ 32, 0, 32, 44 });
+		idleAnimUp->PushBack({ 32, 0, 32, 48 });
+		walkAnimUp->PushBack({ 32, 0, 32, 48 });
 
 	//for (int i = 0; i < 6; i++)
-		idleAnimDown->PushBack({ 96, 0, 32, 44 });
-		walkAnimDown->PushBack({ 96, 0, 32, 44 });
+		idleAnimDown->PushBack({ 96, 0, 32, 48 });
+		walkAnimDown->PushBack({ 96, 0, 32, 48 });
 
 	   
-	playerData.currentAnimation = idleAnimDown;
+	playerData.currentAnimation = idleAnimR;
 
 	app->entityManager->AddEntity(HUD, 0, 0);
 
+	//Init position partner
+	for (int i = 0; i < numPartners; i++)
+	{
+		partners[i].texture = app->tex->Load("Assets/Textures/brenda.png");
+		partners[i].position.x = playerData.position.x - (40 * i) - 40;
+		partners[i].position.y = playerData.position.y;
+		partners[i].direction = WALK_R;
+		partners[i].currentAnimation = idleAnimR;
+		partners[i].breadcrumb = 0;
+	}
+	
 	return true;
 }
 
@@ -150,18 +174,15 @@ bool Player::Update(float dt)
 		}
 
 
-		PlayerMoveAnimation();
+		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		SpeedAnimationCheck(dt);
 		playerData.velocity = floor(1000 * dt/ 8) ;
 
 		CameraPlayer();
-		if (playerData.state != HIT && playerData.state != DEAD && playerData.state != ATTACK)
-		{
-			// Move player inputs control
-			if (!checkpointMove)PlayerControls(dt);
-			// Move Between CheckPoints
-			else MoveBetweenCheckPoints();
-		}
+		// Move player inputs control
+		if (!checkpointMove)PlayerControls(dt);
+		// Move Between CheckPoints
+		else MoveBetweenCheckPoints();
 	}
 	
 	return true;
@@ -224,48 +245,69 @@ void Player::CameraPlayer()
 	//	app->render->camera.y = -39;
 }
 
-void Player::PlayerMoveAnimation()
+void Player::AddBreadcrumb()
 {
-	switch (playerData.state)
+	iPoint* pos = new iPoint;
+	pos->x = tmp.x;
+	pos->y = tmp.y;
+	path.Add(pos);
+}
+
+void Player::DeleteBreadcrumb(iPoint* pos)
+{
+	ListItem<iPoint*>* item;
+
+	for (item = path.start; item != NULL; item = item->next)
+	{
+		if (item->data == pos)
+		{
+			path.Del(item);
+		}
+	}
+}
+
+void Player::PlayerMoveAnimation(State state, MoveDirection direction, Animation* &currentAnimation)
+{
+	switch (state)
 	{
 	case IDLE:
-		switch (playerData.direction)
+		switch (direction)
 		{
 		case WALK_L:
-			playerData.currentAnimation = idleAnimL;
+			currentAnimation = idleAnimL;
 			break;
 
 		case WALK_R:
-			playerData.currentAnimation = idleAnimR;
+			currentAnimation = idleAnimR;
 			break;
 
 		case WALK_UP:
-			playerData.currentAnimation = idleAnimUp;
+			currentAnimation = idleAnimUp;
 			break;
 
 		case WALK_DOWN:
-			playerData.currentAnimation = idleAnimDown;
+			currentAnimation = idleAnimDown;
 			break;
 		}
 		break;
 
 	case WALK:
-		switch (playerData.direction)
+		switch (direction)
 		{
 		case WALK_L:
-			playerData.currentAnimation = walkAnimL;
+			currentAnimation = walkAnimL;
 			break;
 
 		case WALK_R:
-			playerData.currentAnimation = walkAnimR;
+			currentAnimation = walkAnimR;
 			break;
 
 		case WALK_UP:
-			playerData.currentAnimation = walkAnimUp;
+			currentAnimation = walkAnimUp;
 			break;
 
 		case WALK_DOWN:
-			playerData.currentAnimation = walkAnimDown;
+			currentAnimation = walkAnimDown;
 			break;
 		}
 		break;
@@ -281,8 +323,7 @@ void Player::PlayerControls(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
 		&& (playerData.state == State::WALK || playerData.state == State::RUN))
 	{
-		velX = playerData.velocity * 2;
-		velY = playerData.velocity * 2;
+		vel = playerData.velocity * 1.5;
 		playerData.state = State::RUN;
 	}
 	// Comprobamos si las tecas están pulsadas al mismo tiempo
@@ -292,10 +333,10 @@ void Player::PlayerControls(float dt)
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
-			velX = playerData.velocity;
+			vel = playerData.velocity;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_R, dt);
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_R, dt);
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_L, dt);
 	}
 	else if (!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
@@ -303,7 +344,7 @@ void Player::PlayerControls(float dt)
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
-			velY = playerData.velocity;
+			vel = playerData.velocity;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_UP, dt);
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)MovePlayer(MoveDirection::WALK_DOWN, dt);
@@ -313,11 +354,10 @@ void Player::PlayerControls(float dt)
 
 	if (godMode == true)
 	{
-		velX = playerData.velocity * 2;
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)playerData.position.y -= velX;
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)playerData.position.y += velX;
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)playerData.position.x -= velX;
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)playerData.position.x += velX;
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)playerData.position.y -= vel;
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)playerData.position.y += vel;
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)playerData.position.x -= vel;
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)playerData.position.x += vel;
 	}
 
 }
@@ -336,8 +376,7 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 	case WALK:
 	case RUN:
 		// Move in state WALK 
-		MoveToDirection();
-		MoveToDirection();
+		MoveToDirection(playerDirection, playerData.position);
 		// Future conditions in state WALK...
 		break;
 
@@ -345,29 +384,95 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 		break;
 	}
 
+	// If player change direction active boolean
+	if (lastDirection != playerData.direction)
+	{
+		lastDirection = playerData.direction;
+		AddBreadcrumb();		
+	}
+
 	if (CollisionPlayer(playerData.position))playerData.position = tmp;
-	
+	else // If player no collision partners can move
+	{
+		for (int i = 0; i < numPartners; i++)
+		{
+			if (path.Count() == 0 || path.At(partners[i].breadcrumb) == NULL)
+			{
+				partners[i].direction = playerData.direction;
+			}
+			else
+			{
+				PartnerDirection(i);
+			}
+			PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
+			MoveToDirection(partners[i].direction, partners[i].position);
+			if (path.At(partners[i].breadcrumb) != NULL) NextBreadcrumb(i);
+		}
+	}
 }
 
-void Player::MoveToDirection()
+void Player::PartnerDirection(int index)
 {
-	switch (playerData.direction)
+	iPoint partnerPos = partners[index].position;
+	int i = partners[index].breadcrumb;
+
+	if (partnerPos.x < path.At(i)->data->x)
+	{
+		partners[index].direction = WALK_R;
+	}
+	else if (partnerPos.x > path.At(i)->data->x)
+	{
+		partners[index].direction = WALK_L;
+	}
+	else if (partnerPos.y < path.At(i)->data->y)
+	{
+		partners[index].direction = WALK_DOWN;
+	}
+	else if (partnerPos.y > path.At(i)->data->y)
+	{
+		partners[index].direction = WALK_UP;
+	}	
+}
+
+void Player::NextBreadcrumb(int index)
+{
+	iPoint partnerPos = partners[index].position;
+	int i = partners[index].breadcrumb;
+
+	if (partnerPos.x == path.At(i)->data->x && partnerPos.y == path.At(i)->data->y)
+	{
+		partners[index].breadcrumb++;
+		if (index == 2)
+		{
+			DeleteBreadcrumb(path.start->data);
+			for (int i = 0; i < numPartners; i++)
+			{
+				partners[i].breadcrumb--;
+			}
+		}
+		if (path.Count() != 0 && path.At(partners[index].breadcrumb) != NULL) PartnerDirection(index);
+	}
+}
+
+void Player::MoveToDirection(MoveDirection direction, iPoint &position)
+{
+	switch (direction)
 	{	
 	// Move in to correct direction
 	case WALK_L:
-		playerData.position.x += velX;
+		position.x -= vel;
 		break;
 
 	case WALK_R:
-		playerData.position.x -= velX;
+		position.x += vel;
 		break;
 
 	case WALK_UP:
-		playerData.position.y -= velY;
+		position.y -= vel;
 		break;
 
 	case WALK_DOWN:
-		playerData.position.y += velY;
+		position.y += vel;
 		break;
 
 	default:
@@ -411,7 +516,6 @@ void Player::DebugCP()
 	}
 }
 
-
 iPoint Player::IPointMapToWorld(iPoint ipoint)
 {
 	iPoint CPos = app->map->MapToWorld(ipoint.x, ipoint.y);
@@ -423,8 +527,15 @@ bool Player::PostUpdate()
 	SDL_Rect rectPlayer;
 	rectPlayer = playerData.currentAnimation->GetCurrentFrame();
 
+	// Draw partners
+	for (int i = 0; i < numPartners; i++)
+	{
+		app->render->DrawTexture(partners[i].texture, partners[i].position.x, partners[i].position.y, &partners[i].currentAnimation->GetCurrentFrame());
+	}
+
 	// Draw player in correct direction
 	app->render->DrawTexture(playerData.texture, playerData.position.x, playerData.position.y, &rectPlayer);
+
 	
 	endUpdate = true;
 	return true;
@@ -453,6 +564,7 @@ bool Player::CleanUp()
 	delete walkAnimDown;
 
 	checkPoints.Clear();
+	path.Clear();
 	return true;
 }
 

@@ -17,8 +17,17 @@ struct PlayerData
 	SDL_Texture* texture;
 	static const int numPoints = 4;
 
-	iPoint pointsCollision[numPoints] = { { 0,0 },{32 , 0},{ 32,44 },{0 ,44 } };
+	iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32, 44 },{ 0, 44 } };
 
+};
+struct Partner 
+{
+	iPoint position;
+	State state;
+	MoveDirection direction;
+	Animation* currentAnimation;
+	SDL_Texture* texture;
+	int breadcrumb = 0;
 };
 
 
@@ -44,7 +53,7 @@ public:
 
 	void CameraPlayer();
 
-	void PlayerMoveAnimation();
+	void PlayerMoveAnimation(State state, MoveDirection direction, Animation* &currentAnimation);
 
 	void PlayerControls(float dt);
 
@@ -77,9 +86,15 @@ private:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-	void MoveToDirection();
+	void MoveToDirection(MoveDirection direction, iPoint &position);
 
 	void DebugCP();
+
+	void AddBreadcrumb();
+	void DeleteBreadcrumb(iPoint* pos);
+
+	void PartnerDirection(int index);
+	void NextBreadcrumb(int index);
 
 public:
 
@@ -92,18 +107,24 @@ private:
 	
 	int levelScene;
 
-	float velY = 0;
-	float velX = 0;
+	float vel = 0;
 
-	Animation* idleAnimR = new Animation();
-	Animation* idleAnimL = new Animation();
-	Animation* idleAnimUp = new Animation();
-	Animation* idleAnimDown = new Animation();
+	// Partners
+	int numPartners = 3;
+	Partner partners[3];
+	MoveDirection lastDirection;
+	List<iPoint*> path;
 
-	Animation* walkAnimR = new Animation();
-	Animation* walkAnimL = new Animation();
-	Animation* walkAnimUp = new Animation();
-	Animation* walkAnimDown = new Animation();
+
+	Animation* idleAnimR;
+	Animation* idleAnimL;
+	Animation* idleAnimUp;
+	Animation* idleAnimDown;
+
+	Animation* walkAnimR;
+	Animation* walkAnimL;
+	Animation* walkAnimUp;
+	Animation* walkAnimDown;
 
 	pugi::xml_document playerFile;
 	SString folder;
