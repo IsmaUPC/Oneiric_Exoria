@@ -131,8 +131,10 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
 
-	menuSettings->CleanUp();
 	app->guiManager->DeleteList();
+
+	delete menuSettings;
+	menuSettings = nullptr;
 
 	bgIntro = nullptr;
 	logoIntro = nullptr;

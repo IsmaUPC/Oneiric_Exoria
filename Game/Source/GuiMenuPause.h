@@ -19,8 +19,8 @@ public:
 
 	bool Event(GuiControl* control);
 
-	void AbleDisableSetting() { active = !active; };
-	void AbleDisableMenu() { activeMenu = !activeMenu; };
+	void AbleDisableMenu();
+	void AbleDisableSetting();
 
 	void CloaseMenuSettings();
 
@@ -42,7 +42,7 @@ private:
 	SDL_Rect screenRect = { NULL };
 
 	bool active;
-	bool activeMenu;
+	bool activeSettings;
 
 };
 

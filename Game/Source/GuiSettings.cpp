@@ -59,18 +59,6 @@ bool GuiSettings::Draw()
 
 bool GuiSettings::CleanUp()
 {
-	delete sldMusic;
-	delete sldFx;
-	delete chBxFullScreen;
-	delete chBxVSync;
-	delete btnBack;
-
-	sldMusic = NULL;
-	sldFx = NULL;
-	chBxFullScreen = NULL;
-	chBxVSync = NULL;
-	btnBack = NULL;
-
 	return true;
 }
 

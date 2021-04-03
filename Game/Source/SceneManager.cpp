@@ -88,7 +88,7 @@ bool SceneManager::Update(float dt)
 {
 	bool ret = true;
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (current->name == "scene" || current->name == "sceneLevel2"))
-		pause = !pause;
+		pause = !pause, menu->AbleDisableMenu();
 
 	if (!onTransition)
 	{
@@ -119,6 +119,8 @@ bool SceneManager::Update(float dt)
 				next = nullptr;
 
 				// Menu pause
+				delete menu;
+				menu = nullptr;
 				menu = new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, app->guiManager->btnTextureAtlas);
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;
@@ -168,7 +170,7 @@ bool SceneManager::Update(float dt)
 		lastLevel =2;
 	}
 	// MENU
-	if(pause)ret = menu->Update(dt);
+	if(pause) menu->Update(dt);
 
 	return ret;
 }
@@ -184,6 +186,8 @@ bool SceneManager::PostUpdate()
 	{
 		render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
 	}
+	if (app->sceneManager->GetIsPause())(app->sceneManager->menu->Draw());
+
 	return ret;
 }
 
@@ -199,6 +203,9 @@ bool SceneManager::CleanUp()
 	LOG("Freeing scene");
 	app->fonts->UnLoad(guiFont);
 	if (current != nullptr) current->CleanUp();
+
+	delete menu;
+	menu = nullptr;
 
 	return true;
 }

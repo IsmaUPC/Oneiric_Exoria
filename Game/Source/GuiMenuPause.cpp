@@ -3,6 +3,7 @@
 #include "Audio.h"
 #include "SceneManager.h"
 #include "SceneControl.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -15,22 +16,30 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 	
 	btnResume = new GuiButton(1, { Position.x , Position.y + padding*0, 183, 91 }, "RESUME", RECTANGLE, textureAtlas);
 	btnResume->SetObserver(moduleObserver);
+	btnResume->active = false;
+	app->guiManager->AddGuiButton(btnResume);
 
 	btnSettings = new GuiButton(2, { Position.x, Position.y + padding * 1, 183, 91 }, "SETTINGS",RECTANGLE, textureAtlas);
 	btnSettings->SetObserver(moduleObserver);
+	btnSettings->active = false;
+	app->guiManager->AddGuiButton(btnSettings);
 
 	btnBackToTitle = new GuiButton(3, { Position.x, Position.y + padding * 2, 183, 91 }, "TITLE", RECTANGLE, textureAtlas);
 	btnBackToTitle->SetObserver(moduleObserver);
+	btnBackToTitle->active = false;
+	app->guiManager->AddGuiButton(btnBackToTitle);
 
 	btnExit = new GuiButton(4, { Position.x, Position.y + padding * 3, 88, 88 }, "", EXIT, textureAtlas);
 	btnExit->SetObserver(moduleObserver);
+	btnExit->active = false;
+	app->guiManager->AddGuiButton(btnExit);
 
 	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, Position.y - padding }, moduleObserver);
 
 	observer = moduleObserver;
 
 	active = false;
-	activeMenu = false;	
+	activeSettings = false;	
 }
 
 GuiMenuPause::~GuiMenuPause()
@@ -43,11 +52,7 @@ bool GuiMenuPause::Update(float dt)
 
 	if (active)
 	{
-		btnResume->Update(dt);
-		btnSettings->Update(dt);
-		btnBackToTitle->Update(dt);
-		ret = btnExit->Update(dt);
-		if (activeMenu) 
+		if (activeSettings) 
 		{
 			menuSettings->Update(dt);
 			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -56,25 +61,14 @@ bool GuiMenuPause::Update(float dt)
 				btnResume->PressButtonSound();
 			}
 		}
-		else
+		else if (app->input->GetKey(SDL_CONTROLLER_BUTTON_B) == SDL_CONTROLLERBUTTONDOWN)
 		{
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-			{
-				btnResume->PressButtonSound();
-				app->sceneManager->SetPause(false);
-				active = false;
-				activeMenu = false;
-			}
+			btnResume->PressButtonSound();
+			app->sceneManager->SetPause(false);
+			AbleDisableMenu();
 		}
 	}
 
-	if (app->sceneManager->GetIsPause())
-	{
-		if (active) return ret;
-		btnResume->PressButtonSound();
-		MovePosition();
-		active = true;
-	}
 	return ret;
 }
 
@@ -85,12 +79,6 @@ bool GuiMenuPause::Draw()
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
-
-		btnResume->Draw();
-		btnSettings->Draw();
-		btnBackToTitle->Draw();
-		btnExit->Draw();
-		if (activeMenu) menuSettings->Draw();
 	}
 	return true;
 }
@@ -98,14 +86,8 @@ bool GuiMenuPause::Draw()
 bool GuiMenuPause::CleanUp()
 {
 	active = false;
+	activeSettings = false;
 
-	delete btnResume;
-	delete btnSettings;
-	delete btnBackToTitle;
-	delete btnExit;
-	delete menuSettings;
-
-	activeMenu = false;
 	return true;
 }
 
@@ -119,20 +101,22 @@ bool GuiMenuPause::Event(GuiControl* control)
 		if (control->id == 1) 
 		{
 			app->sceneManager->SetPause(false);
-			active = false;
-			activeMenu = false;
+			AbleDisableMenu();
+			activeSettings = false;
 		}
 		else if (control->id == 2)
 		{
-			activeMenu = true;
+			activeSettings = true;
+			AbleDisableSetting();
+
 			btnResume->state = GuiControlState::DISABLED;
 			btnSettings->state = GuiControlState::DISABLED;
 			btnBackToTitle->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
+
 			menuSettings->MovePosition();
 			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
 			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
-			menuSettings->AbleDisableSetting();
 		}
 		else if (control->id == 3)
 		{
@@ -186,14 +170,31 @@ bool GuiMenuPause::Event(GuiControl* control)
 	return true;
 }
 
+void GuiMenuPause::AbleDisableMenu()
+{
+	active = !active;
+	btnResume->active = active;
+	btnSettings->active = active;
+	btnBackToTitle->active = active;
+	btnExit->active = active;
+	
+	btnResume->PressButtonSound();
+	if (active == true)MovePosition();
+}
+
+void GuiMenuPause::AbleDisableSetting()
+{
+	menuSettings->AbleDisableSetting();
+}
+
 void GuiMenuPause::CloaseMenuSettings()
 {
-	activeMenu = false;
+	activeSettings = false;
 	btnResume->state = GuiControlState::NORMAL;
-	btnSettings->state = GuiControlState::NORMAL;
+	btnSettings->state = GuiControlState::FOCUSED;
 	btnBackToTitle->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
-	menuSettings->AbleDisableSetting();
+	AbleDisableSetting();
 	app->SaveConfigRequested();
 }
 

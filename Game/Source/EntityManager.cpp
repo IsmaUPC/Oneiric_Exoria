@@ -69,7 +69,7 @@ bool EntityManager::Update(float dt)
 bool EntityManager::PostUpdate()
 {
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next) entiti->data->PostUpdate();
-	if(app->sceneManager->GetIsPause())(app->sceneManager->menu->Draw());
+	
 	return true;
 }
 
