@@ -21,6 +21,7 @@ class Map;
 class Player;
 class EntityManager;
 class SceneManager;
+class GuiManager;
 class Entity;
 class PathFinding;
 class ModuleFonts;
@@ -108,6 +109,7 @@ public:
 	Player* player;
 	EntityManager* entityManager;
 	SceneManager* sceneManager;
+	GuiManager* guiManager;
 	Entity* entity;
 	PathFinding* pathfinding;
 	ModuleFonts* fonts;

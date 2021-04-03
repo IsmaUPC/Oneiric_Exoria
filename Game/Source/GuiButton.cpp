@@ -1,5 +1,6 @@
 #include "GuiButton.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, TypeButton typeButton, SDL_Texture* texture ) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -23,13 +24,12 @@ bool GuiButton::Update(float dt)
 	app->input->GetMousePosition(mouseX, mouseY);
 
 	// Check collision between mouse and button bounds
-	if (((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-		(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h))) || state == GuiControlState::FOCUSED)
+	if (state == GuiControlState::FOCUSED)
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			state = GuiControlState::FOCUSED;
-			if (!mouseIn)app->audio->PlayFx(app->sceneManager->btnSelected), mouseIn = true;
+			//state = GuiControlState::FOCUSED;
+			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
@@ -38,15 +38,13 @@ bool GuiButton::Update(float dt)
 			// If mouse button pressed -> Generate event!
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				app->audio->PlayFx(app->sceneManager->btnPressed);
+				app->audio->PlayFx(app->guiManager->btnPressed);
+				state = GuiControlState::NORMAL;
 				ret = NotifyObserver();
 			}
 		}
-		else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-			app->audio->PlayFx(app->sceneManager->btnDisabled);
 	}
-	if (state != GuiControlState::DISABLED && state != GuiControlState::FOCUSED) state = GuiControlState::NORMAL, mouseIn = false;
-
+	if(state == GuiControlState::NORMAL) mouseIn = false;
 
 	return ret;
 }
@@ -99,7 +97,6 @@ bool GuiButton::Draw()
 
 void GuiButton::DefinePositionAtlas()
 {
-
 	switch (typeButton)
 	{
 	case RECTANGLE:
@@ -120,10 +117,9 @@ void GuiButton::DefinePositionAtlas()
 	default:
 		break;
 	}
-
 }
 
 void GuiButton::PressButtonSound()
 {
-	app->audio->PlayFx(app->sceneManager->btnPressed);
+	app->audio->PlayFx(app->guiManager->btnPressed);
 }

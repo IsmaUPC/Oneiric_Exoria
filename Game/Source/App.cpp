@@ -9,6 +9,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 #include "ModuleFadeToBlack.h"
 #include "Pathfinding.h"
 #include "ModuleFonts.h"
@@ -33,6 +34,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new Player();
 	entityManager = new EntityManager();
 	sceneManager = new SceneManager(input, render, tex);
+	guiManager = new GuiManager(input, render);
 	pathfinding = new PathFinding();
 	fonts = new ModuleFonts();
 
@@ -44,6 +46,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(map);
 	AddModule(sceneManager);
+	AddModule(guiManager);
 	AddModule(entityManager);
 	AddModule(player);
 	AddModule(fonts);

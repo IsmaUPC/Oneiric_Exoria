@@ -10,9 +10,8 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
-
-#include "GuiButton.h"
 #include "Audio.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -71,13 +70,6 @@ bool SceneManager::Start()
 	current->Start();
 	next = nullptr;
 
-	btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_selected.wav");
-	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
-	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
-	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
-	btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
-
-
 	guiFont = app->fonts->Load("Assets/Textures/GUI/font_gui.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", 2, 195, 48);
 
 	return true;
@@ -127,7 +119,7 @@ bool SceneManager::Update(float dt)
 				next = nullptr;
 
 				// Menu pause
-				menu = new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, btnTextureAtlas);
+				menu = new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, app->guiManager->btnTextureAtlas);
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;
 			}
@@ -205,7 +197,6 @@ void SceneManager::AddScene(SceneControl* scene, bool active)
 bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
-	app->tex->UnLoad(btnTextureAtlas);
 	app->fonts->UnLoad(guiFont);
 	if (current != nullptr) current->CleanUp();
 

@@ -1,6 +1,7 @@
 #include "GuiSlider.h"
 #include "Log.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 
 #define SPACEBOUNDBAR 10
 
@@ -76,7 +77,7 @@ bool GuiSlider::Update(float dt)
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
 			{
 				if (text == "FX")
-					app->audio->PlayFx(app->sceneManager->btnSlider);
+					app->audio->PlayFx(app->guiManager->btnSlider);
 
 			}
 		}

@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "SceneControl.h"
 #include "GuiSettings.h"
+#include "GuiManager.h"
 
 
 GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
@@ -11,7 +12,7 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	initialPos = Position;
 
-	SDL_Texture* btnTextureAtlas = app->sceneManager->btnTextureAtlas;
+	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
 	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 91 }, "MUSIC", 0, 100, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);

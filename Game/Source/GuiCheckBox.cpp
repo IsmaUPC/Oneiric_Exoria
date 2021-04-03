@@ -1,5 +1,6 @@
 #include "GuiCheckBox.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 
 GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* text, bool initState, SDL_Texture* texture) : GuiControl(GuiControlType::CHECKBOX, id)
 {
@@ -48,7 +49,7 @@ bool GuiCheckBox::Update(float dt)
 		if (state != GuiControlState::DISABLED)
 		{
 			state = GuiControlState::FOCUSED;
-			if (!mouseIn)app->audio->PlayFx(app->sceneManager->btnSelected), mouseIn = true;
+			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				state = GuiControlState::PRESSED;
@@ -59,11 +60,11 @@ bool GuiCheckBox::Update(float dt)
 			{
 				checked = !checked;
 				ret = NotifyObserver();
-				app->audio->PlayFx(app->sceneManager->btnPressed);
+				app->audio->PlayFx(app->guiManager->btnPressed);
 			}
 		}
 		else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
-			app->audio->PlayFx(app->sceneManager->btnDisabled);
+			app->audio->PlayFx(app->guiManager->btnDisabled);
 	}
 	else if (state != GuiControlState::DISABLED) state = GuiControlState::NORMAL, mouseIn = false;
 

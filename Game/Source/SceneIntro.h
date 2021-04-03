@@ -29,8 +29,6 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
-	void SelectButton();
-
 	// Called before all Updates
 	bool PostUpdate();
 
@@ -55,8 +53,6 @@ private:
 
 	pugi::xml_document sceneFile;
 	pugi::xml_node sceneStateFile;
-
-	List<GuiButton*> buttons;
 
 	GuiButton* btnPlay;
 	GuiButton* btnContinue;

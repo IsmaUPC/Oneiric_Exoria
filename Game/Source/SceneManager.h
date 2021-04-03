@@ -92,13 +92,6 @@ public:
 
 	SceneControl* sceneControl;
 
-	SDL_Texture* btnTextureAtlas;
-
-	uint btnSelected;
-	uint btnPressed;
-	uint btnDisabled;
-	uint btnSlider;
-
 	int lastLevel = 0;
 	int guiFont;
 };
