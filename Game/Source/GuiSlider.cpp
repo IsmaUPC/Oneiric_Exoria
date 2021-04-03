@@ -55,9 +55,10 @@ bool GuiSlider::Update(float dt)
 		app->input->GetMousePosition(mouseX, mouseY);
 
 		// Check collision between mouse and button bounds
-		if (state == GuiControlState::FOCUSED)
+		if (state == GuiControlState::FOCUSED || state == GuiControlState::PRESSED)
 		{
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT 
+				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 			{
 				state = GuiControlState::PRESSED;
 			}
@@ -67,11 +68,12 @@ bool GuiSlider::Update(float dt)
 				SliderControl(mouseX, mouseY);
 				NotifyObserver();
 			}
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP 
+				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 			{
 				if (text == "FX")
 					app->audio->PlayFx(app->guiManager->btnSlider);
-
+				state = GuiControlState::FOCUSED;
 			}
 		}
 	}
@@ -151,10 +153,19 @@ bool GuiSlider::Draw()
 
 void GuiSlider::SliderControl(int mouseX, int mouseY)
 {
+	if (((mouseX > sliderBarInput.x) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
+		(mouseY > sliderBarInput.y) && (mouseY < (sliderBarInput.y + sliderBarInput.h))) ||
+		((mouseX > slider.x) && (mouseX < (slider.x + slider.w)) &&
+			(mouseY > slider.y) && (mouseY < (slider.y + slider.h))))
+	{
+		slider.x = mouseX - (slider.w / 2);
 
-	slider.x = mouseX - (slider.w / 2);
+		value = ((maxValue - minValue) * (mouseX - (float)(sliderBarInput.x + slider.w / 2))) / (float)(sliderBarInput.w - slider.w) + minValue;
 
-	value = ((maxValue - minValue) * (mouseX - (float)(sliderBarInput.x + slider.w / 2))) / (float)(sliderBarInput.w - slider.w) + minValue;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) value--;
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) value++;
+
 
 	// Limits
 	if (slider.x < sliderBarInput.x)
