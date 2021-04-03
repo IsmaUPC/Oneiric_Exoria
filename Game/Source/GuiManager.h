@@ -9,6 +9,8 @@
 
 #include "List.h"
 
+#define SPACEBOUNDBAR 10
+
 class GuiManager : public Module
 {
 public:
@@ -34,7 +36,9 @@ public:
 	bool CleanUp();
 	void DeleteList();
 
-	void SelectButton();
+	void SelectControl();
+	void ComprobeMouseOnControl(GamePad& pad);
+	void ReAssignState(int i, GamePad& pad);
 
 	// Additional methods
 	GuiControl* CreateGuiControl(GuiControlType type);

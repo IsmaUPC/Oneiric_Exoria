@@ -149,7 +149,6 @@ bool App::Update()
 {
 	bool ret = true;
 
-
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) changeFPS = !changeFPS;
 	
 	if(changeFPS)

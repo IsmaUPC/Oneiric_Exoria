@@ -171,7 +171,6 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		else if (control->id == 4)
 		{
 			TransitionToScene(SceneType::LOGO);
-
 		}
 		else if (control->id == 5)
 		{

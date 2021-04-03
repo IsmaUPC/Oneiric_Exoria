@@ -3,8 +3,6 @@
 #include "SceneManager.h"
 #include "GuiManager.h"
 
-#define SPACEBOUNDBAR 10
-
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds,const char* text = "SLIDER", int min, int max, SDL_Texture* texture) : GuiControl(GuiControlType::SLIDER, id)
 {
 	this->bounds = bounds;
@@ -57,13 +55,8 @@ bool GuiSlider::Update(float dt)
 		app->input->GetMousePosition(mouseX, mouseY);
 
 		// Check collision between mouse and button bounds
-		if (((mouseX > sliderBarInput.x) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
-			(mouseY > sliderBarInput.y) && (mouseY < (sliderBarInput.y + sliderBarInput.h))) || 
-			((mouseX > slider.x) && (mouseX < (slider.x + slider.w)) &&
-			(mouseY > slider.y) && (mouseY < (slider.y + slider.h))))
+		if (state == GuiControlState::FOCUSED)
 		{
-			state = GuiControlState::FOCUSED;
-
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
 			{
 				state = GuiControlState::PRESSED;
@@ -81,7 +74,6 @@ bool GuiSlider::Update(float dt)
 
 			}
 		}
-		else state = GuiControlState::NORMAL;
 	}
 
 	return false;

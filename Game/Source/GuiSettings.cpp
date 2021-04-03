@@ -16,20 +16,29 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 91 }, "MUSIC", 0, 100, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
+	sldMusic->active = false;
+	app->guiManager->AddGuiSlider(sldMusic);
 
 	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 91 }, "FX", 0, 100, btnTextureAtlas);
 	sldFx->SetObserver(moduleObserver);
+	sldFx->active = false;
+	app->guiManager->AddGuiSlider(sldFx);
 
 	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 183, 91 }, "FULLSC", app->fullScreen, btnTextureAtlas);
 	chBxFullScreen->SetObserver(moduleObserver);
+	chBxFullScreen->active = false;
+	app->guiManager->AddGuiCheckBox(chBxFullScreen);
 
 	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 183, 91 }, "VSYNC",false, btnTextureAtlas);
 	chBxVSync->SetObserver(moduleObserver);
-
 	chBxVSync->state = GuiControlState::DISABLED;
+	chBxVSync->active = false;
+	app->guiManager->AddGuiCheckBox(chBxVSync);
 
 	btnBack = new GuiButton(10, { initialPos.x, initialPos.y + padding * 4, 88, 88 }, "", BACK,btnTextureAtlas);
 	btnBack->SetObserver(moduleObserver);
+	btnBack->active = false;
+	app->guiManager->AddGuiButton(btnBack);
 
 }
 
@@ -40,36 +49,16 @@ GuiSettings::~GuiSettings()
 
 bool GuiSettings::Update(float dt)
 {
-	if (active)
-	{
-		sldMusic->Update(dt);
-		sldFx->Update(dt);
-		chBxFullScreen->Update(dt);
-		chBxVSync->Update(dt);
-		btnBack->Update(dt);
-	}
-
 	return true;
 }
 
 bool GuiSettings::Draw()
 {
-	if (active)
-	{
-		sldMusic->Draw();
-		sldFx->Draw();
-		chBxFullScreen->Draw();
-		chBxVSync->Draw();
-		btnBack->Draw();
-	}
-
 	return true;
 }
 
 bool GuiSettings::CleanUp()
 {
-	active = false;
-
 	delete sldMusic;
 	delete sldFx;
 	delete chBxFullScreen;
@@ -83,6 +72,16 @@ bool GuiSettings::CleanUp()
 	btnBack = NULL;
 
 	return true;
+}
+
+void GuiSettings::AbleDisableSetting()
+{
+	active = !active;
+	sldMusic->active = active;
+	sldFx->active = active;
+	chBxFullScreen->active = active;
+	chBxVSync->active = active;
+	btnBack->active = active;
 }
 
 void GuiSettings::MovePosition()

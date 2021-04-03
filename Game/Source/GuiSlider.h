@@ -20,6 +20,8 @@ public:
 	 void SliderControl(int mouseX, int mouseY);
 
 	 int GetValue() { return value; };
+	 SDL_Rect GetSlider() { return slider; };
+	 SDL_Rect GetsliderBarInput() { return sliderBarInput; };
 
 	 // Put the slider in the correct position respected the value && change the value
 	 void SetValue(int newValue);

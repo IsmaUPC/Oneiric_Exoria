@@ -34,39 +34,36 @@ GuiCheckBox::~GuiCheckBox()
 
 bool GuiCheckBox::Update(float dt)
 {
-
 	bool ret = true;
 	checkBoxInput.x = bounds.x + bounds.w + (bounds.w / 4);
 	checkBoxInput.y = bounds.y;
 
+	GamePad& pad = app->input->pads[0];
 	int mouseX, mouseY;
 	app->input->GetMousePosition(mouseX, mouseY);
 
 	// Check collision between mouse and button bounds
-	if ((mouseX > checkBoxInput.x) && (mouseX < (checkBoxInput.x + checkBoxInput.w)) &&
-		(mouseY > checkBoxInput.y) && (mouseY < (checkBoxInput.y + checkBoxInput.h)))
+	if (state == GuiControlState::FOCUSED)
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			state = GuiControlState::FOCUSED;
 			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
 			}
 
 			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				checked = !checked;
-				ret = NotifyObserver();
 				app->audio->PlayFx(app->guiManager->btnPressed);
+				checked = !checked;
+				state = GuiControlState::NORMAL;
+				ret = NotifyObserver();
 			}
 		}
-		else if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
-			app->audio->PlayFx(app->guiManager->btnDisabled);
 	}
-	else if (state != GuiControlState::DISABLED) state = GuiControlState::NORMAL, mouseIn = false;
+	if (state == GuiControlState::NORMAL) mouseIn = false;
 
 	return ret;
 }

@@ -40,6 +40,7 @@ bool GuiManager::Start()
 
 bool GuiManager::Update(float dt)
 {
+	bool ret = true;
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
 
@@ -49,37 +50,44 @@ bool GuiManager::Update(float dt)
 		doLogic = false;
 	}
 
-	SelectButton();
+	SelectControl();
 
 	for (int i = 0; i < buttons.Count(); i++)
 	{
-		buttons.At(i)->data->Update(dt);
+		if(buttons.At(i)->data->active) 
+			ret = buttons.At(i)->data->Update(dt);
+		if (ret == false) return false;
 	}
 	for (int i = 0; i < checkBoxs.Count(); i++)
 	{
-		checkBoxs.At(i)->data->Update(dt);
+		if (checkBoxs.At(i)->data->active)
+			checkBoxs.At(i)->data->Update(dt);
 	}
 	for (int i = 0; i < sliders.Count(); i++)
 	{
-		sliders.At(i)->data->Update(dt);
+		if (sliders.At(i)->data->active)
+			sliders.At(i)->data->Update(dt);
 	}
 	
-	return true;
+	return ret;
 }
 
 bool GuiManager::PostUpdate()
 {
 	for (int i = 0; i < buttons.Count(); i++)
 	{
-		buttons.At(i)->data->Draw();
+		if (buttons.At(i)->data->active)
+			buttons.At(i)->data->Draw();
 	}
 	for (int i = 0; i < checkBoxs.Count(); i++)
 	{
-		checkBoxs.At(i)->data->Draw();
+		if (checkBoxs.At(i)->data->active)
+			checkBoxs.At(i)->data->Draw();
 	}
 	for (int i = 0; i < sliders.Count(); i++)
 	{
-		sliders.At(i)->data->Draw();
+		if (sliders.At(i)->data->active)
+			sliders.At(i)->data->Draw();
 	}
 
 	return true;
@@ -133,7 +141,7 @@ void GuiManager::AddGuiSlider(GuiSlider* slider)
 	controls.Add(slider);
 }
 
-void GuiManager::SelectButton()
+void GuiManager::SelectControl()
 {
 	GamePad& pad = app->input->pads[0];
 	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
@@ -155,7 +163,7 @@ void GuiManager::SelectButton()
 					while (j != i)
 					{
 						if (j == controls.Count()) j = 0;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED)
+						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
 						{
 							controls.At(j)->data->state = GuiControlState::FOCUSED;
 							break;
@@ -170,7 +178,7 @@ void GuiManager::SelectButton()
 					while (j != i)
 					{
 						if (j == -1) j = controls.Count() - 1;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED)
+						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
 						{
 							controls.At(j)->data->state = GuiControlState::FOCUSED;
 							break;
@@ -181,35 +189,107 @@ void GuiManager::SelectButton()
 
 				break;
 			}
-
 		}
-		//if (!isFocused && !menuSettings->GetActiveSettings()) controls.At(0)->data->state = GuiControlState::FOCUSED;
+		if (!isFocused)
+		{
+			for (int i = 0; i < controls.Count(); i++)
+			{
+				if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+				{
+					controls.At(i)->data->state = GuiControlState::FOCUSED;
+					break;
+				}
+			}
+		}
 	}
 
+	ComprobeMouseOnControl(pad);
+}
+
+void GuiManager::ComprobeMouseOnControl(GamePad& pad)
+{
 	// If mouse is on any button, the rest state = NORMAL
 	int mouseX, mouseY;
 	app->input->GetMousePosition(mouseX, mouseY);
 
+	SDL_Rect bounds = {};
+	SDL_Rect checkBoxInput = {};
+	SDL_Rect sliderBarInput = {};
+	SDL_Rect slider = {};
+
 	for (int i = 0; i < controls.Count(); i++)
 	{
-		SDL_Rect bounds = controls.At(i)->data->bounds;
-		if (((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h))))
+		if (controls.At(i)->data->active)
 		{
-			for (int j = 0; j < controls.Count(); j++)
+			bounds = controls.At(i)->data->bounds;
+			switch (controls.At(i)->data->type)
 			{
-				if (controls.At(j)->data->state != GuiControlState::DISABLED)
-					controls.At(j)->data->state = GuiControlState::NORMAL;
-			}
-			if (controls.At(i)->data->state != GuiControlState::DISABLED)
-				controls.At(i)->data->state = GuiControlState::FOCUSED;
+			case GuiControlType::BUTTON:
+				if (((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
+					(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h))))
+				{
+					ReAssignState(i, pad);
+					break;
+				}
+				break;
+			case GuiControlType::CHECKBOX:
 
-			if (controls.At(i)->data->state == GuiControlState::DISABLED)
-				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-					app->audio->PlayFx(btnDisabled);
-			break;
+				for (int j = 0; j < checkBoxs.Count(); j++)
+				{
+					if (checkBoxs.At(j)->data->id == controls.At(i)->data->id)
+					{
+						checkBoxInput = checkBoxs.At(j)->data->GetCheckBoxInput();
+						break;
+					}
+				}
+
+				if ((mouseX > checkBoxInput.x) && (mouseX < (checkBoxInput.x + checkBoxInput.w)) &&
+					(mouseY > checkBoxInput.y) && (mouseY < (checkBoxInput.y + checkBoxInput.h)))
+				{
+					ReAssignState(i, pad);
+					break;
+				}
+				break;
+			case GuiControlType::SLIDER:
+
+				for (int j = 0; j < sliders.Count(); j++)
+				{
+					if (sliders.At(j)->data->id == controls.At(i)->data->id)
+					{
+						sliderBarInput = sliders.At(j)->data->GetsliderBarInput();
+						slider = sliders.At(j)->data->GetSlider();
+						break;
+					}
+				}
+
+				if (((mouseX > sliderBarInput.x) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
+					(mouseY > sliderBarInput.y) && (mouseY < (sliderBarInput.y + sliderBarInput.h))) ||
+					((mouseX > slider.x) && (mouseX < (slider.x + slider.w)) &&
+						(mouseY > slider.y) && (mouseY < (slider.y + slider.h))))
+				{
+					ReAssignState(i, pad);
+					break;
+				}
+				break;
+			default:
+				break;
+			}
 		}
 	}
+}
 
+void GuiManager::ReAssignState(int i, GamePad& pad)
+{
+	for (int j = 0; j < controls.Count(); j++)
+	{
+		if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
+			controls.At(j)->data->state = GuiControlState::NORMAL;
+	}
+	if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+		controls.At(i)->data->state = GuiControlState::FOCUSED;
+
+	if (controls.At(i)->data->state == GuiControlState::DISABLED && controls.At(i)->data->active)
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			app->audio->PlayFx(btnDisabled);
 }
 

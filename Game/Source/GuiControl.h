@@ -92,6 +92,7 @@ public:
 	SDL_Rect section;	   // Texture atlas base section
 
 	int font;			// Text font
+	bool active = true;
 
 	SceneControl* observer;		// Observer module (it should probably be an array/list)
 };

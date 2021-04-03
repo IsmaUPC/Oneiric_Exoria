@@ -19,6 +19,7 @@ public:
 
 	bool GetValue() { return checked; };
 	void SetValue(bool state) { checked = state; };
+	SDL_Rect GetCheckBoxInput() { return checkBoxInput; };
 
 private:
 
