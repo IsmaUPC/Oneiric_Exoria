@@ -108,6 +108,7 @@ bool SceneManager::Update(float dt)
 				transitionAlpha = 1.0f;
 
 				current->CleanUp();	// Unload current screen
+				app->guiManager->DeleteList();
 				next->Start();	// Load next screen
 				if (current->isContinue)app->LoadGameRequest();
 				else if (next->name == "scene" || next->name == "sceneLevel2")// Save
