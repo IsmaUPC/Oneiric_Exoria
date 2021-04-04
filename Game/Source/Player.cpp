@@ -487,7 +487,9 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 	if (CollisionPlayer(playerData.position))
 	{
 		playerData.position = tmp;
-		playerCollision = true;
+		if (diagonal == 2 && playerCollision == false)
+			playerCollision = false;
+		else playerCollision = true;
 	}
 	else // If player no collision partners can move
 	{
