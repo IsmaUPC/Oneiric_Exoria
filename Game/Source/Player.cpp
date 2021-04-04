@@ -21,7 +21,7 @@ Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Te
 Player::~Player()
 {}
 
-bool Player::Start() 
+bool Player::Start()
 {
 	//Animations
 
@@ -35,11 +35,11 @@ bool Player::Start()
 	walkAnimUp = new Animation();
 	walkAnimDown = new Animation();
 
-	iPoint pathInit =  app->map->WorldToMap(positionInitial->x ,positionInitial->y);
+	iPoint pathInit = app->map->WorldToMap(positionInitial->x, positionInitial->y);
 	app->map->ResetPath(pathInit);
 
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
-	//playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
+	//playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
+	playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
@@ -72,22 +72,26 @@ bool Player::Start()
 	idleAnimDown->speed = 0.05f;
 
 
-	//for (int i = 0; i < 6; i++)
-		idleAnimL->PushBack({ 64, 0, 32, 48 });
-		walkAnimL->PushBack({ 64, 0, 32, 48 });
-
-	//for (int i = 0; i < 6; i++)
-		idleAnimR->PushBack({ 0, 0, 32, 48 });
-		walkAnimR->PushBack({ 0, 0, 32, 48 });
-
-	//for (int i = 0; i < 6; i++)
-		idleAnimUp->PushBack({ 32, 0, 32, 48 });
-		walkAnimUp->PushBack({ 32, 0, 32, 48 });
-
-	//for (int i = 0; i < 6; i++)
-		idleAnimDown->PushBack({ 96, 0, 32, 48 });
-		walkAnimDown->PushBack({ 96, 0, 32, 48 });
-
+	for (int i = 0; i < 6; i++)
+	{
+		idleAnimL->PushBack({ (32 * i) + (32 * 12), 82, 32, 48 });
+		walkAnimL->PushBack({ (32 * i) + (32 * 12), 146, 32, 48 });
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		idleAnimR->PushBack({ (32 * i) , 82, 32, 48 });
+		walkAnimR->PushBack({ (32 * i) , 146, 32, 48 });
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		idleAnimUp->PushBack({ (32 * i) + (32*6), 82, 32, 48 });
+		walkAnimUp->PushBack({ (32 * i) + (32 * 6), 146, 32, 48 });
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		idleAnimDown->PushBack({ (32*i) + (32 * 18), 82, 32, 48 });
+		walkAnimDown->PushBack({ (32 * i) + (32 * 18), 146, 32, 48 });
+	}
 	   
 	playerData.currentAnimation = idleAnimR;
 
@@ -96,7 +100,7 @@ bool Player::Start()
 	//Init position partner
 	for (int i = 0; i < numPartners; i++)
 	{
-		partners[i].texture = app->tex->Load("Assets/Textures/Characters/brenda.png");
+		partners[i].texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
 		partners[i].position.x = playerData.position.x - (40 * i) - 40;
 		partners[i].position.y = playerData.position.y;
 		partners[i].direction = WALK_R;
@@ -165,8 +169,8 @@ bool Player::SaveState(pugi::xml_node& player) const
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
-		positionPartners.child("partner_1").attribute("x").set_value(partners[0].position.x);			
-		positionPartners.child("partner_2").attribute("x").set_value(partners[1].position.x);			
+		positionPartners.child("partner_1").attribute("x").set_value(partners[0].position.x);
+		positionPartners.child("partner_2").attribute("x").set_value(partners[1].position.x);
 		positionPartners.child("partner_3").attribute("x").set_value(partners[2].position.x);
 
 		positionPartners.child("partner_1").attribute("y").set_value(partners[0].position.y);
@@ -184,6 +188,8 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt) 
 {
+	playerData.currentAnimation->Update();
+
 	if (!app->sceneManager->GetIsPause())
 	{
 		if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
@@ -194,7 +200,6 @@ bool Player::Update(float dt)
 		}
 
 
-		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		SpeedAnimationCheck(dt);
 		playerData.velocity = floor(1000 * dt/ 8) ;
 
@@ -204,6 +209,7 @@ bool Player::Update(float dt)
 		// Move Between CheckPoints
 		else MoveBetweenCheckPoints();
 
+		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		OffsetPartners();
 	}
 	
@@ -266,6 +272,12 @@ void Player::SpeedAnimationCheck(float dt)
 	idleAnimR->speed = (dt * 5) ;
 	idleAnimUp->speed = (dt * 5) ;
 	idleAnimDown->speed = (dt * 5) ;
+
+	walkAnimR->speed = (dt * 5);
+	walkAnimL->speed = (dt * 5);
+	walkAnimUp->speed = (dt * 5);
+	walkAnimDown->speed = (dt * 5);
+
 }
 
 void Player::MoveBetweenCheckPoints()
@@ -413,7 +425,9 @@ void Player::PlayerControls(float dt)
 		}
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || pad.l_x > 0.2f || pad.right)MovePlayer(MoveDirection::WALK_R, dt);
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || pad.l_x < -0.2f || pad.left)MovePlayer(MoveDirection::WALK_L, dt);
-	}
+	}else playerData.state = State::IDLE;
+
+
 	if ((!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
 		|| (pad.l_y < -0.2f || pad.l_y > 0.2f) || (pad.up == true || pad.down == true))
@@ -427,7 +441,7 @@ void Player::PlayerControls(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || pad.l_y < -0.2f || pad.up) MovePlayer(MoveDirection::WALK_UP, dt);
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || pad.l_y > 0.2f || pad.down) MovePlayer(MoveDirection::WALK_DOWN, dt);
 	}
-	else playerData.state = State::IDLE;
+	
 
 	// If player change direction active boolean
 	if (lastDirection != playerData.direction || diagonal == 2)
@@ -449,6 +463,7 @@ void Player::PlayerControls(float dt)
 
 void Player::MovePlayer(MoveDirection playerDirection, float dt)
 {
+	playerData.state = State::WALK;
 	tmp = playerData.position;
 	playerData.direction = playerDirection;
 
