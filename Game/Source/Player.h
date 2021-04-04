@@ -17,7 +17,8 @@ struct PlayerData
 	SDL_Texture* texture;
 	static const int numPoints = 4;
 
-	iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32, 44 },{ 0, 44 } };
+	//iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32,44 },{ 0, 44 } };
+	iPoint pointsCollision[numPoints] =  { { 0,30 },{ 32, 30 },{ 32, 46 },{ 0, 46 } };
 
 };
 struct Partner 
