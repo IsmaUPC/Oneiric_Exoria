@@ -95,6 +95,8 @@ private:
 
 	void PartnerDirection(int index);
 	void NextBreadcrumb(int index);
+	void MovePartners();
+	void OffsetPartners();
 
 public:
 
@@ -114,6 +116,8 @@ private:
 	Partner partners[3];
 	MoveDirection lastDirection;
 	List<iPoint*> path;
+	bool playerCollision = true;
+	int diagonal = 0;
 
 
 	Animation* idleAnimR;

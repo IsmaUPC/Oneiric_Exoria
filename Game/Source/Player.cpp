@@ -202,9 +202,61 @@ bool Player::Update(float dt)
 		if (!checkpointMove)PlayerControls(dt);
 		// Move Between CheckPoints
 		else MoveBetweenCheckPoints();
+
+		OffsetPartners();
 	}
 	
 	return true;
+}
+
+void Player::OffsetPartners()
+{
+	if (path.Count() == 0)
+	{
+		int offsetX = abs(playerData.position.x - partners[0].position.x);
+		int offsetY = abs(playerData.position.y - partners[0].position.y);
+		switch (playerData.direction)
+		{
+		case WALK_R:
+			if (offsetX > 40)
+			{
+				for (int i = 0; i < numPartners; i++)
+				{
+					partners[i].position.x++;
+				}
+			}
+			break;
+		case WALK_L:
+			if (offsetX > 40)
+			{
+				for (int i = 0; i < numPartners; i++)
+				{
+					partners[i].position.x--;
+				}
+			}
+			break;
+		case WALK_UP:
+			if (offsetY > 40)
+			{
+				for (int i = 0; i < numPartners; i++)
+				{
+					partners[i].position.y--;
+				}
+			}
+			break;
+		case WALK_DOWN:
+			if (offsetY > 40)
+			{
+				for (int i = 0; i < numPartners; i++)
+				{
+					partners[i].position.y++;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void Player::SpeedAnimationCheck(float dt)
@@ -338,6 +390,7 @@ void Player::PlayerMoveAnimation(State state, MoveDirection direction, Animation
 
 void Player::PlayerControls(float dt)
 {
+	diagonal = 0;
 	GamePad& pad = app->input->pads[0];
 	// Player Run
 	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
@@ -351,6 +404,7 @@ void Player::PlayerControls(float dt)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)) 
 		|| (pad.l_x < -0.2f || pad.l_x > 0.2f) || (pad.left == true || pad.right == true))
 	{
+		diagonal++;
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
@@ -359,10 +413,11 @@ void Player::PlayerControls(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || pad.l_x > 0.2f || pad.right)MovePlayer(MoveDirection::WALK_R, dt);
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || pad.l_x < -0.2f || pad.left)MovePlayer(MoveDirection::WALK_L, dt);
 	}
-	else if ((!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if ((!(app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT))
 		|| (pad.l_y < -0.2f || pad.l_y > 0.2f) || (pad.up == true || pad.down == true))
 	{
+		diagonal++;
 		if (playerData.state == State::IDLE || playerData.state == State::WALK)
 		{
 			playerData.state = State::WALK;
@@ -373,6 +428,13 @@ void Player::PlayerControls(float dt)
 	}
 	else playerData.state = State::IDLE;
 
+	// If player change direction active boolean
+	if (lastDirection != playerData.direction || diagonal == 2)
+	{
+		lastDirection = playerData.direction;
+		AddBreadcrumb();
+	}
+	if(!playerCollision) MovePartners();
 
 	if (godMode == true)
 	{
@@ -406,31 +468,34 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 		break;
 	}
 
-	// If player change direction active boolean
-	if (lastDirection != playerData.direction)
+	if (CollisionPlayer(playerData.position))
 	{
-		lastDirection = playerData.direction;
-		AddBreadcrumb();		
+		playerData.position = tmp;
+		playerCollision = true;
 	}
-
-	if (CollisionPlayer(playerData.position))playerData.position = tmp;
 	else // If player no collision partners can move
 	{
-		for (int i = 0; i < numPartners; i++)
-		{
-			if (path.Count() == 0 || path.At(partners[i].breadcrumb) == NULL)
-			{
-				partners[i].direction = playerData.direction;
-			}
-			else
-			{
-				PartnerDirection(i);
-			}
-			PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
-			MoveToDirection(partners[i].direction, partners[i].position);
-			if (path.At(partners[i].breadcrumb) != NULL) NextBreadcrumb(i);
-		}
+		playerCollision = false;
 	}
+}
+
+void Player::MovePartners()
+{
+	for (int i = 0; i < numPartners; i++)
+	{
+		if (path.Count() == 0 || path.At(partners[i].breadcrumb) == NULL)
+		{
+			partners[i].direction = playerData.direction;
+			MoveToDirection(partners[i].direction, partners[i].position);
+		}
+		else
+		{
+			PartnerDirection(i);
+			NextBreadcrumb(i);
+		}
+		PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
+	}
+	playerCollision = true;
 }
 
 void Player::PartnerDirection(int index)
@@ -441,18 +506,22 @@ void Player::PartnerDirection(int index)
 	if (partnerPos.x < path.At(i)->data->x)
 	{
 		partners[index].direction = WALK_R;
+		MoveToDirection(partners[index].direction, partners[index].position);
 	}
 	else if (partnerPos.x > path.At(i)->data->x)
 	{
 		partners[index].direction = WALK_L;
+		MoveToDirection(partners[index].direction, partners[index].position);
 	}
-	else if (partnerPos.y < path.At(i)->data->y)
+	if (partnerPos.y < path.At(i)->data->y)
 	{
 		partners[index].direction = WALK_DOWN;
+		MoveToDirection(partners[index].direction, partners[index].position);
 	}
 	else if (partnerPos.y > path.At(i)->data->y)
 	{
 		partners[index].direction = WALK_UP;
+		MoveToDirection(partners[index].direction, partners[index].position);
 	}	
 }
 
@@ -472,7 +541,7 @@ void Player::NextBreadcrumb(int index)
 				partners[i].breadcrumb--;
 			}
 		}
-		if (path.Count() != 0 && path.At(partners[index].breadcrumb) != NULL) PartnerDirection(index);
+		//if (path.Count() != 0 && path.At(partners[index].breadcrumb) != NULL) PartnerDirection(index);
 	}
 }
 

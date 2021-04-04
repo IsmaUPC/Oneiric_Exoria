@@ -24,6 +24,7 @@
 #define WIN_RESIZABLE 1
 
 #define CCOOLDOWNSCENE 3.5f
+#define PI 3.14159265
 //
 
 
