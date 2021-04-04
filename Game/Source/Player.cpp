@@ -39,6 +39,7 @@ bool Player::Start()
 	app->map->ResetPath(pathInit);
 
 	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
+	//playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
