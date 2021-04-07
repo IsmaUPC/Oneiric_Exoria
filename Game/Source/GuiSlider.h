@@ -17,7 +17,7 @@ public:
 	 bool Update(float dt);
 	 bool Draw();
 
-	 void SliderControl(int mouseX, int mouseY);
+	 void SliderControl(int mouseX, int mouseY,GamePad pad);
 
 	 int GetValue() { return value; };
 	 SDL_Rect GetSlider() { return slider; };

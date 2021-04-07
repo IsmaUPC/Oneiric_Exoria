@@ -55,18 +55,19 @@ bool GuiMenuPause::Update(float dt)
 		if (activeSettings) 
 		{
 			menuSettings->Update(dt);
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
 			{
 				CloaseMenuSettings();
 				btnResume->PressButtonSound();
 			}
 		}
-		else if (app->input->GetKey(SDL_CONTROLLER_BUTTON_B) == SDL_CONTROLLERBUTTONDOWN)
+		/*
+		else if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
 		{
 			btnResume->PressButtonSound();
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
-		}
+		}*/
 	}
 
 	return ret;
@@ -191,7 +192,7 @@ void GuiMenuPause::CloaseMenuSettings()
 {
 	activeSettings = false;
 	btnResume->state = GuiControlState::NORMAL;
-	btnSettings->state = GuiControlState::FOCUSED;
+	btnSettings->state = GuiControlState::NORMAL;
 	btnBackToTitle->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
 	AbleDisableSetting();

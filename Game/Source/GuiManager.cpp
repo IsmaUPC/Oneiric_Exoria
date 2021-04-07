@@ -33,7 +33,7 @@ bool GuiManager::Start()
 	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
 	btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
-
+	press = false;
 	return true;
 }
 
@@ -143,11 +143,13 @@ void GuiManager::AddGuiSlider(GuiSlider* slider)
 
 void GuiManager::SelectControl()
 {
+
 	GamePad& pad = app->input->pads[0];
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
+	if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
 		|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
-		|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y)
+		|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y) && !press)
 	{
+		press = true;
 		bool isFocused = false;
 		int i = 0;
 		for (i; i < controls.Count(); i++)
@@ -202,7 +204,10 @@ void GuiManager::SelectControl()
 			}
 		}
 	}
-
+	
+	if (pad.l_y >= -0.2f && pad.l_y <= 0.2f && pad.l_x >= -0.2f && pad.l_x <= 0.2f && pad.up == false && pad.down == false && pad.left == false && pad.right == false && pad.a == false) {
+		press = false;
+	}
 	ComprobeMouseOnControl(pad);
 }
 

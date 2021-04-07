@@ -66,9 +66,12 @@ public:
 
 	SDL_Texture* btnTextureAtlas;
 
+	bool press;
+
 private:
 	Input* input;
 	Render* render;
+
 };
 
 #endif // __GUIMANAGER_H__

@@ -52,24 +52,27 @@ bool GuiSlider::Update(float dt)
 	if (state != GuiControlState::DISABLED)
 	{
 		int mouseX, mouseY;
+		GamePad& pad = app->input->pads[0];
 		app->input->GetMousePosition(mouseX, mouseY);
 
 		// Check collision between mouse and button bounds
 		if (state == GuiControlState::FOCUSED || state == GuiControlState::PRESSED)
 		{
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT 
-				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT
+				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
 			{
 				state = GuiControlState::PRESSED;
 			}
 
 			if (state == GuiControlState::PRESSED)
 			{
-				SliderControl(mouseX, mouseY);
+				SliderControl(mouseX, mouseY, pad);
 				NotifyObserver();
 			}
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP 
-				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
+				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP 
+				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
 			{
 				if (text == "FX")
 					app->audio->PlayFx(app->guiManager->btnSlider);
@@ -151,7 +154,7 @@ bool GuiSlider::Draw()
 	return false;
 }
 
-void GuiSlider::SliderControl(int mouseX, int mouseY)
+void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 {
 	if (((mouseX > sliderBarInput.x) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
 		(mouseY > sliderBarInput.y) && (mouseY < (sliderBarInput.y + sliderBarInput.h))) ||
@@ -163,8 +166,8 @@ void GuiSlider::SliderControl(int mouseX, int mouseY)
 		value = ((maxValue - minValue) * (mouseX - (float)(sliderBarInput.x + slider.w / 2))) / (float)(sliderBarInput.w - slider.w) + minValue;
 
 	}
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) value--;
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) value++;
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || pad.right || pad.l_x > 0.2) value++;
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || pad.left || pad.l_x < -0.2) value--;
 
 
 	// Limits

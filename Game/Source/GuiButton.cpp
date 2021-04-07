@@ -29,14 +29,16 @@ bool GuiButton::Update(float dt)
 		if (state != GuiControlState::DISABLED)
 		{
 			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				state = GuiControlState::PRESSED;
 			}
 
 			// If mouse button pressed -> Generate event!
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
+				app->guiManager->press = true;
 				app->audio->PlayFx(app->guiManager->btnPressed);
 				ret = NotifyObserver();
 			}

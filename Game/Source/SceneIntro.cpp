@@ -98,7 +98,7 @@ bool SceneIntro::PreUpdate()
 bool SceneIntro::Update(float dt)
 {
 	bool ret = true;
-	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (menuSettings->GetActiveSettings()))
+	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && (menuSettings->GetActiveSettings()))
 	{
 		menuSettings->btnBack->PressButtonSound();
 		CloaseMenuSettings();
@@ -238,7 +238,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 void SceneIntro::CloaseMenuSettings()
 {
 	btnPlay->state = GuiControlState::NORMAL;
-	btnSettings->state = GuiControlState::FOCUSED;
+	btnSettings->state = GuiControlState::NORMAL;
 	btnCredits->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
 	if (lastLevel != 0)

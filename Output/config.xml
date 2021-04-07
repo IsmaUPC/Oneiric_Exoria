@@ -12,11 +12,11 @@
 		<fullscreen value="false" />
 		<borderless value="false" />
 		<resizable value="false" />
-		<fullscreen_window value="false" />
+		<fullscreen_window value="true" />
 	</window>
 	<audio>
-		<music volume="8" />
-		<fx volume="32" />
+		<music volume="40" />
+		<fx volume="49" />
 	</audio>
 	<map>
 		<folder>Assets/Maps/</folder>
