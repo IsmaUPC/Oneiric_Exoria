@@ -43,7 +43,7 @@ bool Scene::Start()
 	victory=false;
 	app->player->win = false;
 
-	if (app->map->Load("room.tmx") == true)
+	if (app->map->Load("level.tmx") == true)
 	{
 		int w, h;
 		uchar* data = NULL;

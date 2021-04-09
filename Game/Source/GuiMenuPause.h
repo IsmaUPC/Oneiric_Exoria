@@ -13,7 +13,7 @@ public:
 	~GuiMenuPause();
 
 	bool Update(float dt);
-	bool Draw();
+	bool PostUpdate();
 
 	bool CleanUp();
 

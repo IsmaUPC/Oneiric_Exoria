@@ -187,7 +187,6 @@ bool SceneManager::PostUpdate()
 	{
 		render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
 	}
-	if (app->sceneManager->GetIsPause())(app->sceneManager->menu->Draw());
 
 	return ret;
 }

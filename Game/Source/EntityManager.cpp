@@ -141,8 +141,8 @@ void EntityManager::SpawnEnemy(const EntitySpawnPoint& info)
 	switch (info.type)
 	{
 	case TypeEntity::PLAYER:
-		entities.Add(new Player(info.type,{ info.x,info.y }, 1, tex));
-		entities.end->data->Start();
+		//entities.Add(new Player(info.type,{ info.x,info.y }, 1, tex));
+		//entities.end->data->Start();
 		break;
 
 	case TypeEntity::GROUND_ENEMY:

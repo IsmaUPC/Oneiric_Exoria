@@ -99,8 +99,8 @@ iPoint Entity::MapToWorld(iPoint position)
 // Comprove position player in array of tiles in mapLayer collision
 int Entity::CheckCollision(iPoint positionMap)
 {
-	uint typeTilePlayer = app->map->data.layers.At(1)->data->Get(positionMap.x, positionMap.y);
-	uint firstgidLayerCollisions = app->map->data.tilesets.At(0)->data->firstgid;
+	uint typeTilePlayer = app->map->data.layers.At(0)->data->Get(positionMap.x, positionMap.y);
+	uint firstgidLayerCollisions = app->map->data.tilesets.At(5)->data->firstgid;
 	typeTilePlayer -= firstgidLayerCollisions;
 
 	if (app->player->godMode == false) 
