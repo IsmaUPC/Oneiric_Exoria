@@ -311,10 +311,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="369"/>
+   <tile gid="369"/>
+   <tile gid="369"/>
+   <tile gid="370"/>
    <tile/>
    <tile/>
    <tile/>
@@ -522,10 +522,10 @@
    <tile gid="1045"/>
    <tile gid="77"/>
    <tile gid="375"/>
-   <tile gid="369"/>
-   <tile gid="369"/>
-   <tile gid="369"/>
-   <tile gid="370"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="1045"/>
    <tile gid="1045"/>
    <tile gid="1045"/>
