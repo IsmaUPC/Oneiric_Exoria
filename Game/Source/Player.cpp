@@ -47,13 +47,6 @@ bool Player::Start()
 	playerData.direction = WALK_R;
 	lastDirection = playerData.direction;
 
-	// Camera follow the player
-	int followPositionPalyerX = (WINDOW_W / 2) + (playerData.position.x * -1);
-	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1);
-
-	app->render->camera.x = followPositionPalyerX;
-	app->render->camera.y = followPositionPalyerY;
-
 	bonfireFx = app->audio->LoadFx("Assets/Audio/Fx/bonfire.wav");
 	damageFx = app->audio->LoadFx("Assets/Audio/Fx/damage.wav");
 
@@ -103,9 +96,6 @@ bool Player::Start()
 	   
 	playerData.currentAnimation = idleAnimR;
 
-	iPoint positionHUD = app->map->WorldToMap({ app->render->camera.x, app->render->camera.y });
-	app->entityManager->AddEntity(HUD, positionHUD.x, positionHUD.y);
-
 	//Init position partner
 	for (int i = 0; i < numPartners; i++)
 	{
@@ -116,6 +106,15 @@ bool Player::Start()
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
 	}
+
+	// Camera follow the player
+	int followPositionPalyerX = (WINDOW_W / 2) + (playerData.position.x * -1);
+	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1);
+
+	app->render->camera.x = followPositionPalyerX;
+	app->render->camera.y = followPositionPalyerY;
+
+	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y);
 	
 	return true;
 }
