@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Audio.h"
 #include "ModuleFadeToBlack.h"
+#include "GuiMenuPause.h"
 #include "SceneManager.h"
 
 Player::Player() : Entity()
@@ -653,7 +654,9 @@ bool Player::PostUpdate()
 	// Draw player in correct direction
 	app->render->DrawTexture(playerData.texture, playerData.position.x, playerData.position.y, &rectPlayer);
 
-	
+	// Paint walls above the player
+	app->map->DrawUp();
+
 	endUpdate = true;
 	return true;
 }

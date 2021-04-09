@@ -268,47 +268,57 @@ void Map::Draw()
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
 	{
+		if (layer->data->properties.GetProperty("up_draw", 0) == 1)
+		{
+			if (layerDrawUp->Count()>0)
+			{
+				if(layerDrawUp->Find(layer->data)== -1 )layerDrawUp->Add(layer->data);
+			}else layerDrawUp->Add(layer->data);
+		}else
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
 				int tileId = layer->data->Get(x, y);
 				if (tileId > 0)
-				{	
+				{
+				
 					iPoint vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
-						if(layer->data->properties.GetProperty("Nodraw",0) == 0 )//|| drawColl)
+						if (layer->data->properties.GetProperty("Nodraw", 0) == 0)//|| drawColl)
 							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 						//else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0)// || drawColl2)
 							//app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+
 					}
 				}
 			}
 		}
 	}
-	
-	// CheckPoints
-	//for (int i = 0; i < checKpointsMap.list.Count(); i++)
-	//{
-	//	iPoint pos = checKpointsMap.list.At(i)->data->pos;
-	//	pos = MapToWorld(pos.x,pos.y);
-
-	//	CheckPoints::CP* actCP = checKpointsMap.list.At(i)->data;
-	//	SDL_Rect rectCP;
-
-	//	if (actCP->active)
-	//		rectCP = checKpointsMap.checkPointOnAnim->GetCurrentFrame();
-	//	else
-	//		rectCP = checKpointsMap.checkPointOffAnim->GetCurrentFrame();
-	//	
-	//	app->render->DrawTexture(checKpointsMap.texture, pos.x, pos.y-2, &rectCP);
-	//}
-
-
-	if(drawColl)app->map->DrawPath();
-	if(drawColl2)app->map->DrawPath();
 }
+
+
+void Map::DrawUp()
+{
+	if (layerDrawUp->Count() <= 0) return;
+	// Make sure we draw all the layers and not just the first one
+	for (ListItem<MapLayer*>* layersUp = layerDrawUp->start; layersUp; layersUp = layersUp->next)
+		for (int y = 0; y < data.height; ++y)
+			for (int x = 0; x < data.width; ++x)
+			{
+				int tileId = layersUp->data->Get(x, y);
+				if (tileId > 0)
+				{
+					iPoint vec = MapToWorld(x, y);
+					for (int i = 0; i < data.tilesets.Count(); i++)
+					{
+					app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+					}
+				}
+			}
+}
+
 
 // Translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
@@ -551,6 +561,8 @@ bool Map::LoadMap()
 {
 	bool ret = true;
 	pugi::xml_node map = mapFile.child("map");
+
+	layerDrawUp = new List<MapLayer*>();
 
 	if (map == NULL)
 	{

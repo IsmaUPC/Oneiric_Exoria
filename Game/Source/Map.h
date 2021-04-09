@@ -109,15 +109,14 @@ struct MapData
 	List<MapLayer*> layers;
 };
 
+
 struct CheckPoints{
-	
 	struct CP
 	{
 		CP(iPoint pos) : pos(pos)
 		{
 			active = false;
 		}
-
 		iPoint pos;
 		bool active;
 	};
@@ -154,6 +153,9 @@ public:
 
 	// Called each loop iteration
 	void Draw();
+
+	// Called each loop iteration, post player draw
+	void DrawUp();
 
 	// Called before quitting
 	bool CleanUp();
@@ -245,6 +247,8 @@ private:
 	bool finishAStar = false;	// Detect when reached goal
 
 	SDL_Texture* tileX = nullptr;
+
+	List<MapLayer*>* layerDrawUp;
 
 };
 

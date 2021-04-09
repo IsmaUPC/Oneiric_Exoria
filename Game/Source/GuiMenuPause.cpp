@@ -73,8 +73,9 @@ bool GuiMenuPause::Update(float dt)
 	return ret;
 }
 
-bool GuiMenuPause::Draw()
+bool GuiMenuPause::PostUpdate()
 {
+
 	if (active)
 	{
 		screenRect.x = -app->render->camera.x;

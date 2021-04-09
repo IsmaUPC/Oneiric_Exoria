@@ -142,9 +142,8 @@ void EntityManager::CheckDespawnEntities()
 
 bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int level)
 {
-	iPoint positionSpawn = app->entity->MapToWorld(iPoint(pX,pY));
-
 	Entity* b = new Entity;
+	iPoint positionSpawn = { pX, pY };
 	b->entityData.type = pType;
 	b->entityData.position = positionSpawn;
 	b->entityData.level = level;
@@ -165,6 +164,7 @@ void EntityManager::SpawnEntity(Entity* info)
 	case FIGHTER:
 		entities.Add(new Enemy(info, texCoin));
 		break;
+
 	case HUD:
 		entities.Add(new GUI(info, texHead));
 		break;

@@ -74,6 +74,7 @@ bool GuiManager::Update(float dt)
 
 bool GuiManager::PostUpdate()
 {
+
 	for (int i = 0; i < buttons.Count(); i++)
 	{
 		if (buttons.At(i)->data->active)
@@ -298,3 +299,7 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 			app->audio->PlayFx(btnDisabled);
 }
 
+//void GuiManager::DrawRectanglePause() 
+//{
+//
+//}
