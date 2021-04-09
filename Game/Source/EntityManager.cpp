@@ -48,7 +48,6 @@ bool EntityManager::PreUpdate()
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 		if(entiti->data->pendingToDelete)entities.Del(entiti);
 	
-
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next) entiti->data->PreUpdate();
 
 	return true;
@@ -154,14 +153,17 @@ void EntityManager::SpawnEnemy(const EntitySpawnPoint& info)
 		entities.Add(new Enemy(info.type, { info.x,info.y }, 1, texBat,150,batFx));
 		entities.end->data->Start();
 		break;
+
 	case TypeEntity::HUD:
 		entities.Add(new GUI(info.type, { info.x,info.y }, 1, texHead));
 		entities.end->data->Start();
 		break;
+
 	case TypeEntity::COIN:
 		entities.Add(new Coins(info.type, { info.x,info.y }, 1, texCoin));
 		entities.end->data->Start();
 		break;
+
 	case TypeEntity::LIVE:
 		entities.Add(new Lives(info.type, { info.x,info.y }, 1, texLive,(int)50,liveFx));
 		entities.end->data->Start();
