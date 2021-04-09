@@ -26,7 +26,7 @@
 		<score value="0" />
 		<time value="0" />
 		<entities>
-			<entity type="4" x="0" y="0" state="0" />
+			<entity type="13" x="357" y="70" state="0" />
 		</entities>
 	</entity_manager>
 </save_state>

@@ -5,18 +5,16 @@
 #include "Defs.h"
 #include "Log.h"
 
-Entity::Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx) : Module()
+Entity::Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) : Module()
 {
 	name.Create("Entity");
 	isAlive = true;
-	entityData = new EntityData(pTypeEntity, pPosition, pVelocity, pTexture,dropScore, deadFx);
 }
 
 Entity::Entity() : Module()
 {
 	name.Create("Entity");
 	isAlive = true;
-	entityData = new EntityData();
 }
 
 // Destructor
@@ -61,10 +59,9 @@ bool Entity::CleanUp()
 	LOG("Destroying Entity");
 	active = false;
 
-	delete entityData->currentAnimation;
-	delete entityData->pointsCollision;
+	delete entityData.currentAnimation;
+	delete entityData.pointsCollision;
 
-	delete entityData;
 	return true;
 }
 

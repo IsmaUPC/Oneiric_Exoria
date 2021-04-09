@@ -17,12 +17,20 @@
 enum TypeEntity {
 
 	UNKNOWN=0,
-	PLAYER=1,
-	GROUND_ENEMY=2,
-	AIR_ENEMY=3,
-	HUD=4,
-	COIN=5,
-	LIVE=6,
+	BANDIT=1,
+	FIGHTER=2,
+	SAPLING=3,
+	TRUNK=4,
+	PERRY=5,
+	ALENS=6,
+	LIAM=7,
+	NAN_=8,
+	BIN=9,
+	LICAN=10,
+	EESAAC=11,
+	HEADACHE=12,
+	HUD=13,
+	NPC=14
 };
 
 
@@ -56,22 +64,20 @@ enum TypeCollision {
 struct EntityData
 {
 	iPoint position;
-	State state;
-	MoveDirection direction;
+	State state = IDLE;
+	MoveDirection direction = WALK_R;
 	Animation* currentAnimation = nullptr;
-	float velocity;
 	TypeEntity type;
 	SDL_Texture* texture;
+	int level = 0;
+	float velocity = 1;
 	int numPoints = 0;
 	iPoint* pointsCollision;
-	int fireBallState;
-	uint deadFx;
-	int dropScore;
 
 public:
-	EntityData(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx) :
+	EntityData(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
 		position(pPosition), state(IDLE), direction(WALK_R), velocity(pVelocity),
-		texture(pTexture), type(pTypeEntity),deadFx(deadFx), dropScore(dropScore)
+		texture(pTexture), type(pTypeEntity)
 	{};
 	EntityData::EntityData() {};
 };
@@ -81,7 +87,7 @@ class Entity : public Module
 public:
 
 
-	Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore=0, uint deadFx=0);
+	Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture);
 	Entity();
 	~Entity();
 
@@ -114,7 +120,7 @@ public:
 	bool isAlive= false;
 	bool pendingToDelete = false;
 
-	EntityData* entityData;
+	EntityData entityData;
 	Collisions collision;
 };
 

@@ -13,7 +13,7 @@ Lives::Lives(iPoint pos) : Entity()
 	position = pos;
 }
 Lives::Lives(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx)
-	: Entity(pTypeEntity, pPosition, pVelocity, pTexture, dropScore, deadFx)
+	: Entity(pTypeEntity, pPosition, pVelocity, pTexture)
 {
 	name.Create("lives");
 	position = pPosition;
@@ -26,12 +26,11 @@ bool Lives::Start()
 {
 	liveAnimation = new Animation();
 	particleAnimation = new Animation();
-	entityData->currentAnimation = new Animation();
-	entityData->state = IDLE;
+	entityData.currentAnimation = new Animation();
+	entityData.state = IDLE;
 	active = true;
 
-	texLive = entityData->texture;
-	liveFx = entityData->deadFx;
+	texLive = entityData.texture;
 
 	numPoints = 4;
 	pointsCollision = new iPoint[4]{ { 4, 0 }, { 40 ,0 }, { 32,-26 }, { 4 ,-26 } };
@@ -67,7 +66,7 @@ bool Lives::PreUpdate()
 	iPoint currentPositionPlayer = app->player->playerData.position;
 	iPoint auxPositionLive[4];
 
-	if (entityData->state == DEAD)
+	if (entityData.state == DEAD)
 	{
 		isCollected = true;
 		pendingToDelete = true;
@@ -86,30 +85,29 @@ bool Lives::PreUpdate()
 				-48 + currentPositionPlayer.y + app->player->playerData.pointsCollision[i].y };
 		}
 		if (collision.IsInsidePolygons(auxPositionPlayer, app->player->playerData.numPoints, auxPositionLive, numPoints)
-			&& collision.IsInsidePolygons(auxPositionLive, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData->state == IDLE)
+			&& collision.IsInsidePolygons(auxPositionLive, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData.state == IDLE)
 		{
-			entityData->state = DEADING;
-			app->entityManager->score += entityData->dropScore;
+			entityData.state = DEADING;
 			app->audio->PlayFx(liveFx);
 			app->player->LivePlus();
 		}
-		if (entityData->state == DEADING && entityData->currentAnimation->HasFinished())
-			entityData->state = DEAD;
+		if (entityData.state == DEADING && entityData.currentAnimation->HasFinished())
+			entityData.state = DEAD;
 	}
 	return false;
 }
 
 bool Lives::Update(float dt)
 {
-	entityData->currentAnimation->Update();
-	entityData->currentAnimation->speed = (dt * 13);
+	entityData.currentAnimation->Update();
+	entityData.currentAnimation->speed = (dt * 13);
 	return true;
 }
 
 bool Lives::PostUpdate()
 {
 	SDL_Rect rectLives;
-	rectLives = entityData->currentAnimation->GetCurrentFrame();
+	rectLives = entityData.currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texLive, position.x, position.y, &rectLives);
 
 	return true;
@@ -128,14 +126,14 @@ bool Lives::CleanUp()
 
 void Lives::CurrentLiveAnimation()
 {
-	switch (entityData->state)
+	switch (entityData.state)
 	{
 	case IDLE:
-		entityData->currentAnimation = liveAnimation;
+		entityData.currentAnimation = liveAnimation;
 		break;
 
 	case DEADING:
-		entityData->currentAnimation = particleAnimation;
+		entityData.currentAnimation = particleAnimation;
 		break;
 
 	default:

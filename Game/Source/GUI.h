@@ -9,7 +9,7 @@ class GUI : public Entity
 public:
 
 	GUI();
-	GUI(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture);
+	GUI(Entity* entity, SDL_Texture* pTexture);
 
 	virtual ~GUI();
 

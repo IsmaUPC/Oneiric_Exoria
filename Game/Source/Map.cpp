@@ -679,14 +679,7 @@ void Map::LoadCollectable()
 			for (int x = 0; x < data.width; ++x)
 			{
 				int tileId = layer->data->Get(x, y);
-				if (tileId == data.tilesets.At(3)->data->firstgid)
-				{
-					app->entityManager->AddEntity(COIN,x,y);
-				}
-				if (tileId == data.tilesets.At(3)->data->firstgid+3)
-				{
-					app->entityManager->AddEntity(LIVE, x, y);
-				}
+				// Add collectable
 			}
 		}
 	}

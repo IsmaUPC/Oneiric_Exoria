@@ -71,7 +71,5 @@ public:
 private:
 	Input* input;
 	Render* render;
-
 };
-
 #endif // __GUIMANAGER_H__

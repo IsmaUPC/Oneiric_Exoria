@@ -5,11 +5,21 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "Audio.h"
 
+struct Stats
+{
+	int attack = 0;
+	int defense = 0;
+	int speed = 0;
+	int Health = 0;
+	int mana = 0;
+	float exp = 0;
+};
+
 class Enemy : public Entity
 {
 public:
 	Enemy();
-	Enemy(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx);
+	Enemy(Entity* entity, SDL_Texture* tex);
 
 	virtual ~Enemy();
 
@@ -37,27 +47,19 @@ private:
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
 	void MoveEnemy(iPoint nextAuxPositionEenemy, iPoint mapPositionEnemy, TypeEntity type);
 	int CalculateDistance(iPoint origin, iPoint destination);
-	void SpeedAnimationCheck(float dt);
-
 
 private:
-	Animation* idleAnim = new Animation();
-	Animation* isDetectedAnim = new Animation();
-	Animation* walkAnim = new Animation();
-	Animation* deadAnim = new Animation();
 
 	int range = 500;
 	bool isDetected = false;
 	bool returning;
-	// Timer
-	Timer* checkDestination = new Timer();
-	iPoint destination;
+	
 	iPoint positionInitial;
+	iPoint destination;
 	// We store the created path here
 	DynArray<iPoint>* lastPath;
 
-	uint chickenFx;
-	uint batFx;
-	
+	// Stats
+	Stats stats;		
 };
 #endif // _ENEMY_H_

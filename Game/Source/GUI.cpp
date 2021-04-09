@@ -13,10 +13,12 @@ GUI::GUI() : Entity()
 	name.Create("GUI");
 }
 
-GUI::GUI(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture)
-	: Entity(pTypeEntity, pPosition, pVelocity, pTexture)
+GUI::GUI(Entity* entity, SDL_Texture* pTexture)
 {
 	name.Create("GUI");
+	entityData = entity->entityData;
+	entityData.texture = pTexture;
+	headTex = pTexture;
 }
 
 GUI::~GUI()
@@ -33,7 +35,6 @@ bool GUI::Awake(pugi::xml_node& config)
 
 bool GUI::Start()
 {
-
 	headAnim = new Animation();
 	arrowAnim = new Animation();
 	buttonEAnim = new Animation();
@@ -43,7 +44,7 @@ bool GUI::Start()
 	int imgH = 0;
 	int imgW = 0;
 
-	headTex = entityData->texture;
+	//headTex = entityData.texture;
 	SDL_QueryTexture(headTex, NULL, NULL, &headW, &imgH);
 
 	headAnim->PushBack({0,0,headW,imgH });
@@ -95,6 +96,9 @@ bool GUI::Update(float dt)
 	miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
 	coinHudAnim->Update();
 	Chronometer();
+	entityData.position.x = app->render->camera.x;
+	entityData.position.y = app->render->camera.y;
+
 	return true;
 }
 

@@ -27,11 +27,11 @@ bool Coins::Start()
 
 	coinAnimation = new Animation();
 	particleAnimation = new Animation();
-	entityData->currentAnimation= new Animation();
-	entityData->state = IDLE;
+	entityData.currentAnimation= new Animation();
+	entityData.state = IDLE;
 	active = true;
 
-	texCoin = entityData->texture;
+	texCoin = entityData.texture;
 	coinFx= app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
 	
 	numPoints = 4;
@@ -69,7 +69,7 @@ bool Coins::PreUpdate()
 	iPoint currentPositionPlayer = app->player->playerData.position;
 	iPoint auxPositionCoin[4];
 
-	if (entityData->state == DEAD)
+	if (entityData.state == DEAD)
 	{
 		isCollected = true;
 		pendingToDelete = true;
@@ -89,22 +89,22 @@ bool Coins::PreUpdate()
 
 		}
 		if (collision.IsInsidePolygons(auxPositionPlayer, app->player->playerData.numPoints, auxPositionCoin, numPoints)
-			&& collision.IsInsidePolygons(auxPositionCoin, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData->state == IDLE)
+			&& collision.IsInsidePolygons(auxPositionCoin, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData.state == IDLE)
 		{
-			entityData->state = DEADING;
+			entityData.state = DEADING;
 			app->audio->PlayFx(coinFx);
 			app->player->CoinPlus();
 		}
-		if (entityData->state == DEADING && entityData->currentAnimation->HasFinished())
-			entityData->state = DEAD;
+		if (entityData.state == DEADING && entityData.currentAnimation->HasFinished())
+			entityData.state = DEAD;
 	}
 	return false;
 }
 
 bool Coins::Update(float dt)
 {
-	entityData->currentAnimation->Update();
-	entityData->currentAnimation->speed = (dt * 9);
+	entityData.currentAnimation->Update();
+	entityData.currentAnimation->speed = (dt * 9);
 
 	return true;
 }
@@ -112,7 +112,7 @@ bool Coins::PostUpdate()
 {
 
 	SDL_Rect rectCoins;
-	rectCoins = entityData->currentAnimation->GetCurrentFrame();
+	rectCoins = entityData.currentAnimation->GetCurrentFrame();
 	app->render->DrawTexture(texCoin, position.x, position.y, &rectCoins);
 
 	return true;
@@ -138,14 +138,14 @@ bool Coins::CleanUp()
 }
 void Coins::CurrentCoinAnimation()
 {
-	switch (entityData->state)
+	switch (entityData.state)
 	{
 	case IDLE:
-		entityData->currentAnimation = coinAnimation;
+		entityData.currentAnimation = coinAnimation;
 		break;
 
 	case DEADING:
-		entityData->currentAnimation = particleAnimation;
+		entityData.currentAnimation = particleAnimation;
 		break;
 
 	default:

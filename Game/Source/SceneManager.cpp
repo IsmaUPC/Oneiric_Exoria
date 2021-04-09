@@ -23,8 +23,6 @@
 
 SceneManager::SceneManager(Input* input, Render* render, Textures* tex) : Module()
 {
-
-
 	name.Create("scene_manager");
 
 	sceneLogo = new SceneLogo();

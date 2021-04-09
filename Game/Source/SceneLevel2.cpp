@@ -57,24 +57,6 @@ bool SceneLevel2::Start()
 	app->map->active = true;
 	// Positions initials
 	app->player->positionInitial = new iPoint(576,1534);
-	app->entityManager->Start();
-	app->entityManager->AddEntity(GROUND_ENEMY, 34, 31);
-	app->entityManager->AddEntity(GROUND_ENEMY, 57, 25);
-	app->entityManager->AddEntity(GROUND_ENEMY, 77, 8);
-	app->entityManager->AddEntity(GROUND_ENEMY, 119, 10);
-	app->entityManager->AddEntity(GROUND_ENEMY, 149, 8);
-	app->entityManager->AddEntity(GROUND_ENEMY, 130, 8);
-	app->entityManager->AddEntity(GROUND_ENEMY, 168, 8);
-	app->entityManager->AddEntity(GROUND_ENEMY, 198, 6);
-	app->entityManager->AddEntity(GROUND_ENEMY, 77, 29);
-	app->entityManager->AddEntity(GROUND_ENEMY, 127, 29);
-	app->entityManager->AddEntity(GROUND_ENEMY, 145, 29);
-	app->entityManager->AddEntity(GROUND_ENEMY, 163, 23);
-	app->entityManager->AddEntity(GROUND_ENEMY, 203, 15);
-	app->entityManager->AddEntity(AIR_ENEMY, 53, 20);
-	app->entityManager->AddEntity(AIR_ENEMY, 66, 10);
-	app->entityManager->AddEntity(AIR_ENEMY, 189, 11);
-	app->entityManager->AddEntity(AIR_ENEMY, 201, 9);
 
 	app->player->Init();
 	app->player->Start();
@@ -190,7 +172,6 @@ bool SceneLevel2::CleanUp()
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(animationFather.texture);
 	app->player->CleanUp();
-	app->entityManager->CleanUp();
 
 	app->sceneManager->SetPause(false);
 
