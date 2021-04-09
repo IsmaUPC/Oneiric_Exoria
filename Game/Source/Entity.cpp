@@ -100,8 +100,8 @@ iPoint Entity::MapToWorld(iPoint position)
 int Entity::CheckCollision(iPoint positionMap)
 {
 	uint typeTilePlayer = app->map->data.layers.At(0)->data->Get(positionMap.x, positionMap.y);
-	uint firstgidLayerCollisions = app->map->data.tilesets.At(1)->data->firstgid;
-	//uint firstgidLayerCollisions = app->map->data.tilesets.At(5)->data->firstgid;
+	//uint firstgidLayerCollisions = app->map->data.tilesets.At(1)->data->firstgid;
+	uint firstgidLayerCollisions = app->map->data.tilesets.At(5)->data->firstgid;
 	typeTilePlayer -= firstgidLayerCollisions;
 
 	if (app->player->godMode == false) 
