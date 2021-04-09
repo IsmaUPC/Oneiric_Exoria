@@ -272,9 +272,9 @@ void Map::Draw()
 		{
 			if (layerDrawUp->Count()>0)
 			{
-				if(layerDrawUp->Find(layer->data)==false )layerDrawUp->Add(layer->data);
+				if(layerDrawUp->Find(layer->data)== -1 )layerDrawUp->Add(layer->data);
 			}else layerDrawUp->Add(layer->data);
-		}
+		}else
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
