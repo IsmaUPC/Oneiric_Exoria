@@ -47,6 +47,10 @@ bool Player::Start()
 	playerData.direction = WALK_R;
 	lastDirection = playerData.direction;
 
+	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
+	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
+	playerData.centerPoint.y = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[3]) / 2;
+
 	bonfireFx = app->audio->LoadFx("Assets/Audio/Fx/bonfire.wav");
 	damageFx = app->audio->LoadFx("Assets/Audio/Fx/damage.wav");
 

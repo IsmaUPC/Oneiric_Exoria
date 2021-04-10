@@ -27,7 +27,7 @@ public:
 
 	bool Start();
 
-	bool CheckCollisionEnemy(iPoint nextPosition);
+	bool CheckCollisionEnemy(fPoint nextPosition);
 
 	bool PreUpdate();
 
@@ -41,7 +41,7 @@ public:
 
 private:
 
-	bool Radar(iPoint origin);
+	bool Radar(iPoint origin, int range);
 	void CreatePathEnemy(iPoint origin, iPoint destination);
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
 	void MoveEnemy();
@@ -49,12 +49,14 @@ private:
 
 private:
 
-	int range = 500;
+	int range = 150;
+	int rangeMax = 200;
 	bool isDetected = false;
-	bool returning;
+	bool returning = false;
+	int radiusCollision = 0;
 	
 	iPoint destination;
-	iPoint tmp;
+	fPoint tmp;
 
 	// We store the created path here
 	DynArray<iPoint>* lastPath;

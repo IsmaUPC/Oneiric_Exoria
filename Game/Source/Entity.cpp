@@ -93,6 +93,10 @@ iPoint Entity::MapToWorld(iPoint position)
 	ret.y = position.y * app->entityManager->mapDimensions.y;
 	return ret;
 }
+int Entity::CalculateDistance(iPoint origin, iPoint destination)
+{
+	return abs(origin.x - destination.x) + abs(origin.y - destination.y);;
+}
 // Comprove position player in array of tiles in mapLayer collision
 int Entity::CheckCollision(iPoint positionMap)
 {
