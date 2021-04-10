@@ -72,8 +72,8 @@ struct EntityData
 	SDL_Texture* texture;
 	int level = 0;
 	float velocity = 1;
-	int numPoints = 0;
-	iPoint* pointsCollision;
+	int numPoints = 4;
+	iPoint* pointsCollision = new iPoint[numPoints];
 
 public:
 	EntityData(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) :

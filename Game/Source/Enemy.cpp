@@ -32,6 +32,15 @@ bool Enemy::Start()
 	// Enemy Path
 	destination = entityData.positionInitial;
 
+	// Collisons
+	if (entityData.type == BANDIT)
+	{
+		entityData.pointsCollision[0] = { 6, 18 };
+		entityData.pointsCollision[1] = { 24, 18 };
+		entityData.pointsCollision[2] = { 24, 32 };
+		entityData.pointsCollision[3] = { 6, 32 };
+	}
+	
 	return true;
 }
 
@@ -56,20 +65,7 @@ void Enemy::CreatePathEnemy(iPoint mapPositionEnemy, iPoint mapPositionDestinati
 {
 	// Create the path for enemies
 }
-bool Enemy::CheckAllPoints(iPoint& mapPositionDestination, TypeCollision typeCollision)
-{
-	int y = mapPositionDestination.y;
-	int x = mapPositionDestination.x;
-	iPoint positionMapEntity;
 
-	for (int i = 0; i < entityData.numPoints; i++)
-	{
-		// Concvert position player WorldToMap 
-		positionMapEntity = app->map->WorldToMap(x + entityData.pointsCollision[i].x, y + entityData.pointsCollision[i].y);
-		if (CheckCollision(positionMapEntity) == typeCollision) return true;
-	}
-	return false;
-}
 int Enemy::GetCurrentPositionInPath(iPoint mapPositionEnemy)
 {
 	int i;
@@ -84,12 +80,23 @@ void Enemy::CheckCollisionEnemyToPlayer()
 {
 
 }
-void Enemy::CheckCollisions()
+bool Enemy::CheckCollisionEnemy(iPoint nextPosition)
 {
+	iPoint positionMapEnemy;
+	int y = nextPosition.y;
+	int x = nextPosition.x;
 
+	for (int i = 0; i < entityData.numPoints; i++)
+	{
+		// Convert position player WorldToMap 
+		positionMapEnemy = app->map->WorldToMap(x + entityData.pointsCollision[i].x, y + entityData.pointsCollision[i].y);
+		if (CheckCollision(positionMapEnemy) == COLLISION) return true;
+	}
+	return false;
 }
 void Enemy::MoveEnemy()
 {
+	tmp = entityData.position;
 	if (id == 0)
 	{
 		int numTiles = 5;
@@ -112,8 +119,10 @@ void Enemy::MoveEnemy()
 			if(destination.x == entityData.positionInitial.x)
 				destination.x = entityData.positionInitial.x + numTiles * app->map->data.tileWidth;
 			else destination.x = entityData.positionInitial.x;
-		}			
+		}	
 	}
+	if (CheckCollisionEnemy(entityData.position)) entityData.position = tmp;
+	
 }
 bool Enemy::PreUpdate()
 {
@@ -123,7 +132,6 @@ bool Enemy::PreUpdate()
 bool Enemy::Update(float dt)
 {
 	entityData.velocity = floor(1000 * dt) / 16;
-	// CheckCollisions();
 	MoveEnemy();
 		
 	entityData.currentAnimation->Update();
@@ -150,6 +158,7 @@ bool Enemy::CleanUp()
 	if (!active)
 		return true;
 
+	delete entityData.pointsCollision;
 	pendingToDelete = true;
 	active = false;
 
