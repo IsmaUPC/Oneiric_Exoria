@@ -6,6 +6,7 @@
 struct PlayerData
 {
 	iPoint position;
+	iPoint centerPoint;
 	State state;
 	MoveDirection direction;
 	Animation* currentAnimation;
@@ -102,6 +103,7 @@ private:
 public:
 
 	PlayerData playerData;
+	int radiusCollision;
 	bool godMode = false;
 	iPoint* positionInitial= new iPoint(0,0);	
 	bool win= false;

@@ -64,6 +64,7 @@ enum TypeCollision {
 struct EntityData
 {
 	fPoint position;
+	iPoint centerPoint;
 	iPoint positionInitial;
 	State state = IDLE;
 	MoveDirection direction = WALK_R;
@@ -115,6 +116,7 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
+	int CalculateDistance(iPoint origin, iPoint destination);
 	
 public:
 
