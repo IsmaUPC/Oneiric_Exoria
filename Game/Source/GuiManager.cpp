@@ -78,7 +78,7 @@ bool GuiManager::Update(float dt)
 
 bool GuiManager::PostUpdate()
 {
-
+	if (app->sceneManager->GetIsPause())menu->PostUpdate();
 	for (int i = 0; i < buttons.Count(); i++)
 	{
 		if (buttons.At(i)->data->active)
