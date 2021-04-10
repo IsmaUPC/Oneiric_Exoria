@@ -33,8 +33,15 @@ bool EntityManager::Start()
 	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
 	texLive = app->tex->Load("Assets/Textures/lives.png");
 	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
+	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit_idle.png");
 
 	// Animations
+	idleAnim->loop = true;
+
+	for (int i = 0; i < 4; i++)
+	{
+		idleAnim->PushBack({ 32 * i, 0, 32, 32 });
+	}
 
 
 	return true;
@@ -118,8 +125,8 @@ void EntityManager::CheckSpawnEntities()
 		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
 			a = spawnEntity->data->entityData.position;
-			if ((a.x > b.x - SPAWN_MARGIN && a.x < b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > b.y - SPAWN_MARGIN && a.y < b.y + b.h + SPAWN_MARGIN))
+			if ((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
 				SpawnEntity(spawnEntity->data);
 		}
 	}
@@ -133,8 +140,8 @@ void EntityManager::CheckDespawnEntities()
 		for (ListItem<Entity*>* despawnEntity = entities.start; despawnEntity; despawnEntity = despawnEntity->next)
 		{
 			a = despawnEntity->data->entityData.position;
-			if (!((a.x > b.x - SPAWN_MARGIN && a.x < b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > b.y - SPAWN_MARGIN && a.y < b.y + b.h + SPAWN_MARGIN)))
+			if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)))
 				DespawnEntity(despawnEntity->data);
 		}
 	}
@@ -143,11 +150,13 @@ void EntityManager::CheckDespawnEntities()
 bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int level)
 {
 	Entity* b = new Entity;
-	iPoint positionSpawn = { pX, pY };
+	iPoint positionSpawn = app->map->MapToWorld(pX, pY);
 	b->entityData.type = pType;
 	b->entityData.position = positionSpawn;
+	b->entityData.positionInitial = positionSpawn;
 	b->entityData.level = level;
-	b->entityData.channel = app->audio->SetChannel();
+	b->channel = app->audio->SetChannel();
+	if (pType != HUD && pType != NPC) b->id = numEnemies, numEnemies++;
 
 	spawnQueue.Add(b);
 
@@ -170,7 +179,7 @@ void EntityManager::SpawnEntity(Entity* info)
 	case LICAN:
 	case EESAAC:
 	case HEADACHE:
-		entities.Add(new Enemy(info, texCoin)); // Change texture for atlasEnemy
+		entities.Add(new Enemy(info, texBandit)); // Change texture for atlasEnemy
 		break;
 
 	case HUD:
@@ -201,7 +210,7 @@ void EntityManager::DeleteEntity(Entity* entity)
 		if (item->data == entity)
 		{
 			// Notify the audio manager that a channel can be released 
-			app->audio->DeleteChannel(item->data->entityData.channel);
+			app->audio->DeleteChannel(item->data->channel);
 			entities.Del(item);
 			break;
 		}

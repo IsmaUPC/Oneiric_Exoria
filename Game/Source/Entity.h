@@ -64,13 +64,13 @@ enum TypeCollision {
 struct EntityData
 {
 	iPoint position;
+	iPoint positionInitial;
 	State state = IDLE;
 	MoveDirection direction = WALK_R;
 	Animation* currentAnimation = nullptr;
 	TypeEntity type;
 	SDL_Texture* texture;
 	int level = 0;
-	int channel = -1;
 	float velocity = 1;
 	int numPoints = 0;
 	iPoint* pointsCollision;
@@ -122,6 +122,8 @@ public:
 	bool pendingToDelete = false;
 
 	EntityData entityData;
+	int id = 0;
+	int channel = -1;
 	Collisions collision;
 };
 

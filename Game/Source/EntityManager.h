@@ -58,6 +58,7 @@ public:
 	List<Entity*> spawnQueue;
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
+	int numEnemies = 0;
 
 	uint chickenFx;
 	uint batFx;
@@ -66,9 +67,8 @@ public:
 	// Textures
 	SDL_Texture* texCoin;
 	SDL_Texture* texLive;
-	SDL_Texture* texChicken;
-	SDL_Texture* texBat;
 	SDL_Texture* texHead;
+	SDL_Texture* texBandit;
 
 	// Animations
 	Animation* idleAnim = new Animation();

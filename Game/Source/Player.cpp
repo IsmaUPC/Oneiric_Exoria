@@ -108,11 +108,14 @@ bool Player::Start()
 	}
 
 	// Camera follow the player
-	int followPositionPalyerX = (WINDOW_W / 2) + (playerData.position.x * -1);
-	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1);
+	iPoint posCamera;
+	posCamera.x = playerData.position.x - (WINDOW_W / 2);
+	posCamera.y = playerData.position.y - (WINDOW_H / 2);
 
-	app->render->camera.x = followPositionPalyerX;
-	app->render->camera.y = followPositionPalyerY;
+	posCamera = app->map->WorldToMap(posCamera);
+
+	app->render->camera.x = -posCamera.x;
+	app->render->camera.y = -posCamera.y;
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y);
 	
@@ -307,11 +310,11 @@ void Player::MoveBetweenCheckPoints()
 void Player::CameraPlayer()
 {
 	// Camera follow the player
-	int followPositionPalyerX = (WINDOW_W / 2) + (playerData.position.x * -1);
-	int followPositionPalyerY = (WINDOW_H / 2) + (playerData.position.y * -1);
+	int followPositionPalyerX = playerData.position.x - (WINDOW_W / 2);
+	int followPositionPalyerY = playerData.position.y - (WINDOW_H / 2);
 
-	app->render->camera.x = followPositionPalyerX;
-	app->render->camera.y = followPositionPalyerY;
+	app->render->camera.x = -followPositionPalyerX;
+	app->render->camera.y = -followPositionPalyerY;
 	/*if (playerData.position.x < (WINDOW_W/2))
 		if (app->render->camera.x < 48) followPositionPalyerX = 0;*/
 

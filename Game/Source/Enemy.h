@@ -45,7 +45,7 @@ private:
 	void CreatePathEnemy(iPoint origin, iPoint destination);
 	bool CheckAllPoints(iPoint& mapPositionDestination, TypeCollision typeCollision);
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
-	void MoveEnemy(iPoint nextAuxPositionEenemy, iPoint mapPositionEnemy, TypeEntity type);
+	void MoveEnemy();
 	int CalculateDistance(iPoint origin, iPoint destination);
 
 private:
@@ -54,12 +54,11 @@ private:
 	bool isDetected = false;
 	bool returning;
 	
-	iPoint positionInitial;
 	iPoint destination;
 	// We store the created path here
 	DynArray<iPoint>* lastPath;
 
 	// Stats
-	Stats stats;		
+	Stats stats;
 };
 #endif // _ENEMY_H_
