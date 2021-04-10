@@ -246,6 +246,7 @@ void SceneIntro::CloaseMenuSettings()
 		btnContinue->state = GuiControlState::NORMAL;
 		btnRemove->state = GuiControlState::NORMAL;
 	}
+	menuSettings->btnBack->state = GuiControlState::NORMAL;
 	menuSettings->AbleDisableSetting();
 	app->SaveConfigRequested();
 }

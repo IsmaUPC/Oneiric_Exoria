@@ -158,16 +158,27 @@ void EntityManager::SpawnEntity(Entity* info)
 	switch (info->entityData.type)
 	{
 	case BANDIT:
-		entities.Add(new Enemy(info, texCoin));
-		break;
-
 	case FIGHTER:
-		entities.Add(new Enemy(info, texCoin));
+	case SAPLING:
+	case TRUNK:
+	case PERRY:
+	case ALENS:
+	case LIAM:
+	case NAN_:
+	case BIN:
+	case LICAN:
+	case EESAAC:
+	case HEADACHE:
+		entities.Add(new Enemy(info, texCoin)); // Change texture for atlasEnemy
 		break;
 
 	case HUD:
 		entities.Add(new GUI(info, texHead));
 		break;
+
+		/*case NPC:
+			entities.Add(new GUI(info, texHead));
+			break;*/
 	}
 
 	entities.end->data->Start();
