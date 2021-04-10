@@ -119,9 +119,8 @@ bool SceneManager::Update(float dt)
 				next = nullptr;
 
 				// Menu pause
-				delete app->guiManager->GetMenuPause();
-				app->guiManager->SetMenuPause(nullptr);
-				app->guiManager->SetMenuPause(new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, app->guiManager->btnTextureAtlas));
+				app->guiManager->CreatMenuPause(current);
+
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;
 			}

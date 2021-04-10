@@ -2,6 +2,7 @@
 #define __GUIMANAGER_H__
 
 #include "Module.h"
+
 #include "GuiControl.h"
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
@@ -49,6 +50,8 @@ public:
 	void AddGuiSlider(GuiSlider* slider);
 
 	void DestroyGuiControl(GuiControl* entity);
+
+	void CreatMenuPause(SceneControl* current);
 	GuiMenuPause* GetMenuPause() 
 	{
 		return menu;

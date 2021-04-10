@@ -30,6 +30,15 @@ public:
 
 	void DefinePositionAtlas();
 	void PressButtonSound();
+	int GetTexButtonW()
+	{
+		return rectTexW;
+	}
+	int GetTexButtonH()
+	{
+		return rectTexH;
+
+	}
 
 private:
 	bool mouseIn = false;

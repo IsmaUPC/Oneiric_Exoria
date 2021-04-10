@@ -5,6 +5,8 @@
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, TypeButton typeButton, SDL_Texture* texture ) : GuiControl(GuiControlType::BUTTON, id)
 {
 	this->bounds = bounds;
+	//this->bounds.x = this->bounds.x - (rectTexW / 2);
+
 	this->text = text;
 	this->texture = texture;
 	this->typeButton = typeButton;

@@ -23,6 +23,8 @@ GuiManager::~GuiManager()
 bool GuiManager::Awake(pugi::xml_node&)
 {
 	LOG("Loading GUI manager");
+
+	//gui= new GUI(info, texHead);
 	bool ret = true;
 	return ret;
 }
@@ -304,4 +306,16 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 	if (controls.At(i)->data->state == GuiControlState::DISABLED && controls.At(i)->data->active)
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			app->audio->PlayFx(btnDisabled);
+}
+
+void GuiManager::CreatMenuPause(SceneControl* current)
+{
+
+	// Menu pause
+	delete menu;
+	menu=nullptr;
+	menu= (new GuiMenuPause({ WINDOW_W / 2, WINDOW_H / 4 }, current, btnTextureAtlas));
+
+
+
 }
