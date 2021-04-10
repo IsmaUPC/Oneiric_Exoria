@@ -96,8 +96,8 @@ bool GUI::Update(float dt)
 	miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
 	coinHudAnim->Update();
 	Chronometer();
-	entityData.position.x = app->render->camera.x;
-	entityData.position.y = app->render->camera.y;
+	entityData.position.x = -app->render->camera.x;
+	entityData.position.y = -app->render->camera.y;
 
 	return true;
 }

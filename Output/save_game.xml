@@ -6,7 +6,7 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="357" y="70" />
+		<camera x="340" y="60" />
 	</renderer>
 	<player>
 		<position x="300" y="300" />
@@ -26,7 +26,8 @@
 		<score value="0" />
 		<time value="0" />
 		<entities>
-			<entity type="13" x="357" y="70" state="0" />
+			<entity type="13" x="-10" y="-1" state="0" />
+			<entity type="1" x="288" y="224" state="0" />
 		</entities>
 	</entity_manager>
 </save_state>

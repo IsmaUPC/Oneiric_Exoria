@@ -29,8 +29,9 @@ bool Enemy::Start()
 
 	entityData.currentAnimation = app->entityManager->idleAnim;
 
-	// Enemy Path, change the destination!
-	destination = app->player->playerData.position;
+	// Enemy Path
+	destination = entityData.positionInitial;
+
 	return true;
 }
 
@@ -78,18 +79,41 @@ int Enemy::GetCurrentPositionInPath(iPoint mapPositionEnemy)
 	}
 	return i;
 }
-void Enemy::MoveEnemy(iPoint nextAuxPositionEenemy, iPoint mapPositionEnemy, TypeEntity type)
-{
-	
-}
+
 void Enemy::CheckCollisionEnemyToPlayer()
 {
 
 }
-
 void Enemy::CheckCollisions()
 {
 
+}
+void Enemy::MoveEnemy()
+{
+	if (id == 0)
+	{
+		int numTiles = 5;
+		
+		if (entityData.position.x < destination.x)
+		{
+			entityData.position.x += entityData.velocity;
+			entityData.direction = WALK_R;
+			LOG("Velocity R: %f", entityData.velocity);
+		}
+		else if (entityData.position.x > destination.x)
+		{
+			entityData.position.x -= entityData.velocity;
+			entityData.direction = WALK_L;
+			LOG("Velocity L: %f", entityData.velocity);
+		}
+			
+		if (app->map->WorldToMap(entityData.position).x == app->map->WorldToMap(destination).x)
+		{
+			if(destination.x == entityData.positionInitial.x)
+				destination.x = entityData.positionInitial.x + numTiles * app->map->data.tileWidth;
+			else destination.x = entityData.positionInitial.x;
+		}			
+	}
 }
 bool Enemy::PreUpdate()
 {
@@ -98,8 +122,9 @@ bool Enemy::PreUpdate()
 
 bool Enemy::Update(float dt)
 {
-	entityData.velocity = floor(1000 * dt) / 8;
-	CheckCollisions();
+	entityData.velocity = floor(1000 * dt) / 16;
+	// CheckCollisions();
+	MoveEnemy();
 		
 	entityData.currentAnimation->Update();
 	return true;
@@ -111,9 +136,9 @@ bool Enemy::PostUpdate()
 	rectEnemy = entityData.currentAnimation->GetCurrentFrame();
 
 	// Draw player in correct direction
-	if (entityData.direction == MoveDirection::WALK_L)
+	if (entityData.direction == MoveDirection::WALK_R)
 		app->render->DrawTexture(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
-	else if (entityData.direction == MoveDirection::WALK_R)
+	else if (entityData.direction == MoveDirection::WALK_L)
 		app->render->DrawTextureFlip(entityData.texture, entityData.position.x - (rectEnemy.w - app->entityManager->idleAnim->frames->w), entityData.position.y, &rectEnemy);
 
 	return true;
