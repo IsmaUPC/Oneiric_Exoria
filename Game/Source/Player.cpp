@@ -664,9 +664,6 @@ bool Player::CleanUp()
 {
 	if (!active)
 		return true;
-
-	app->audio->Unload1Fx(bonfireFx);
-	app->audio->Unload1Fx(damageFx);
 	
 	app->tex->UnLoad(playerData.texture);
 	active = false;
@@ -684,6 +681,7 @@ bool Player::CleanUp()
 
 	checkPoints.Clear();
 	path.Clear();
+	app->entityManager->DeleteHUD();
 
 	app->input->ShakeController(0, 60, 0);
 

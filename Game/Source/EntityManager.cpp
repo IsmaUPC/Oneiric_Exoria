@@ -206,6 +206,18 @@ void EntityManager::DeleteEntity(Entity* entity)
 		}
 	}
 }
+void EntityManager::DeleteHUD()
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->entityData.type == HUD)
+		{
+			DeleteEntity(item->data);
+		}
+	}
+}
 void EntityManager::DeleteSpawnEntity(Entity* entity)
 {
 	ListItem<Entity*>* item;

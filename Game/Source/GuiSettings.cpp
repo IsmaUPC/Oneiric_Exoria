@@ -14,12 +14,12 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
-	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 91 }, "MUSIC", 0, 100, btnTextureAtlas);
+	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 91 }, "MUSIC", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
 	sldMusic->active = false;
 	app->guiManager->AddGuiSlider(sldMusic);
 
-	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 91 }, "FX", 0, 100, btnTextureAtlas);
+	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 91 }, "FX", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldFx->SetObserver(moduleObserver);
 	sldFx->active = false;
 	app->guiManager->AddGuiSlider(sldFx);

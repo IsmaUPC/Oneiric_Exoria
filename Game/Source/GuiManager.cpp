@@ -298,8 +298,3 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			app->audio->PlayFx(btnDisabled);
 }
-
-//void GuiManager::DrawRectanglePause() 
-//{
-//
-//}

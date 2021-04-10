@@ -40,6 +40,7 @@ public:
 	bool AddEntity(TypeEntity pType, int pX, int pY, int level = 0);
 
 	void DeleteEntity(Entity* entity);
+	void DeleteHUD();
 	void DeleteSpawnEntity(Entity* entity);
 
 	void SpawnEntity(Entity* spawnEntity);

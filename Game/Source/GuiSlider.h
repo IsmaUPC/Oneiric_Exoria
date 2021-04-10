@@ -7,11 +7,13 @@
 #include "Point.h"
 #include "SString.h"
 
+#define MIX_MAX_VOLUME 128
+
 class GuiSlider : public GuiControl
 {
 public:
 
-	 GuiSlider(uint32 id, SDL_Rect bounds, const char* text, int min=0, int max=100, SDL_Texture* texture = NULL);
+	 GuiSlider(uint32 id, SDL_Rect bounds, const char* text, int min=0, int max= MIX_MAX_VOLUME, SDL_Texture* texture = NULL);
 	 virtual ~GuiSlider();
 
 	 bool Update(float dt);

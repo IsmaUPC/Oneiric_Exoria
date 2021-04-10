@@ -34,7 +34,7 @@ bool SceneLogo::Start()
 
 	img = app->tex->Load("Assets/Textures/scene_logo.png");
 	introFx = app->audio->LoadFx("Assets/Audio/Fx/intro.wav");
-	app->audio->PlayFx(introFx,100);
+	app->audio->PlayFx(introFx);
 
 	SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -113,7 +113,7 @@ bool SceneLogo::CleanUp()
 
 	LOG("Freeing scene");
 	app->tex->UnLoad(img);
-	app->audio->Unload1Fx(introFx);
+	//app->audio->Unload1Fx(introFx);
 	img = nullptr;
 	active = false;
 	return true;

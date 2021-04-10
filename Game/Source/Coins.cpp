@@ -124,9 +124,6 @@ bool Coins::CleanUp()
 	if (!active)
 		return true;
 
-	app->audio->Unload1Fx(coinFx);
-
-
 	delete coinAnimation;
 	delete particleAnimation;
 	delete pointsCollision;
