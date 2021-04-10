@@ -53,7 +53,6 @@ bool Audio::Awake(pugi::xml_node& config)
 	}
 
 	// Initialize SDL_mixer
-	// TODO 1: Activate stereo mode
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		LOG("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
@@ -61,7 +60,6 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
-	// TODO 2: Create as many channels as you need 
 	Mix_AllocateChannels(maxNumChannels);
 
 	return ret;
@@ -82,7 +80,6 @@ bool Audio::CleanUp()
 
 	UnloadFxs();
 
-	// TODO 2: Free all channels
 	Mix_AllocateChannels(0);
 	channels.Clear();
 
@@ -199,10 +196,9 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 	if (id > 0 && id <= fx.Count())
 	{
 		// If Mix_Playing(-1) check all channels
-		// TODO 4: Check if the channel isn't playing
 		if (Mix_Playing(channel) == 0 || channel == -1)
 		{
-			// TODO 4: Check if volume is hardcoded and 
+			// Check if volume is hardcoded and 
 			// lower the volume if the channel volume is higher than the maximum volume  
 			if (volume != -1) Mix_Volume(channel, volume);
 			if (channel == -1) Mix_Volume(channel, volumeFx);
@@ -215,7 +211,7 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 	return ret;
 }
 
-// TODO 3: Assign a different channel to each entity and when all available channels 
+// Assign a different channel to each entity and when all available channels 
 // are assigned the function must create 10 new ones
 int Audio::SetChannel()
 {
@@ -244,7 +240,7 @@ int Audio::SetChannel()
 	return ret;
 }
 
-// TODO 5: Assign the distance and direction to which the entity of the listener is located 
+// Assign the distance and direction to which the entity of the listener is located 
 // 0 = very close, 254 = far away, 255 = out of range (Volume = 0)
 void Audio::SetDistanceFx(int channel, int angle, uint distance, uint maxDistance)
 {
@@ -253,7 +249,7 @@ void Audio::SetDistanceFx(int channel, int angle, uint distance, uint maxDistanc
 	Mix_SetPosition(channel, angle, distance);
 }
 
-// TODO 6: Activate the boolean variable 
+// Activate the boolean variable 
 void Audio::DeleteChannel(int channel)
 {
 	channels.Add(channel);
@@ -288,7 +284,7 @@ void Audio::SetVolumeMusic(int volume)
 	Mix_VolumeMusic(volumeMusic);
 }
 
-// TODO 7: Up/Down Music volume 
+// Up/Down Music volume 
 void Audio::ChangeMusicVolume(int volume)
 {
 	volumeMusic += volume;
@@ -296,7 +292,7 @@ void Audio::ChangeMusicVolume(int volume)
 	if (volumeMusic < 0) volumeMusic = 0;
 	Mix_VolumeMusic(volumeMusic);
 }
-// TODO 7: Up/Down Fx volume 
+// Up/Down Fx volume 
 void Audio::ChangeFxVolume(int volume)
 {
 	volumeFx += volume;
