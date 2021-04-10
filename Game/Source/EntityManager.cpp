@@ -120,7 +120,7 @@ void EntityManager::CheckSpawnEntities()
 {
 	if (spawnQueue.Count() != 0)
 	{
-		iPoint a;
+		fPoint a;
 		SDL_Rect b = app->render->camera;
 		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
@@ -135,7 +135,7 @@ void EntityManager::CheckDespawnEntities()
 {
 	if (entities.Count() != 0)
 	{
-		iPoint a;
+		fPoint a;
 		SDL_Rect b = app->render->camera;
 		for (ListItem<Entity*>* despawnEntity = entities.start; despawnEntity; despawnEntity = despawnEntity->next)
 		{
@@ -152,7 +152,8 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int level)
 	Entity* b = new Entity;
 	iPoint positionSpawn = app->map->MapToWorld(pX, pY);
 	b->entityData.type = pType;
-	b->entityData.position = positionSpawn;
+	b->entityData.position.x = positionSpawn.x;
+	b->entityData.position.y = positionSpawn.y;
 	b->entityData.positionInitial = positionSpawn;
 	b->entityData.level = level;
 	b->channel = app->audio->SetChannel();

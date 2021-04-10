@@ -63,7 +63,7 @@ enum TypeCollision {
 
 struct EntityData
 {
-	iPoint position;
+	fPoint position;
 	iPoint positionInitial;
 	State state = IDLE;
 	MoveDirection direction = WALK_R;
@@ -76,7 +76,7 @@ struct EntityData
 	iPoint* pointsCollision = new iPoint[numPoints];
 
 public:
-	EntityData(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
+	EntityData(TypeEntity pTypeEntity, fPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
 		position(pPosition), state(IDLE), direction(WALK_R), velocity(pVelocity),
 		texture(pTexture), type(pTypeEntity)
 	{};

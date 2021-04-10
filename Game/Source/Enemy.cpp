@@ -51,12 +51,7 @@ bool Enemy::Awake(pugi::xml_node& config)
 	
 	return ret;
 }
-bool Enemy::Radar(iPoint distance)
-{
-	if (entityData.position.DistanceManhattan(distance) < range) return true;
 
-	return false;
-}
 int Enemy::CalculateDistance(iPoint origin, iPoint destination)
 {
 	return abs(origin.x - destination.x) + abs(origin.y - destination.y);;
@@ -80,7 +75,7 @@ void Enemy::CheckCollisionEnemyToPlayer()
 {
 
 }
-bool Enemy::CheckCollisionEnemy(iPoint nextPosition)
+bool Enemy::CheckCollisionEnemy(fPoint nextPosition)
 {
 	iPoint positionMapEnemy;
 	int y = nextPosition.y;
@@ -94,33 +89,66 @@ bool Enemy::CheckCollisionEnemy(iPoint nextPosition)
 	}
 	return false;
 }
+bool Enemy::Radar(iPoint distance, int range)
+{
+	fPoint distanceToPlayer;
+	distanceToPlayer.x = distance.x;
+	distanceToPlayer.y = distance.y;
+	if (entityData.position.DistanceManhattan(distanceToPlayer) < range) return true;
+
+	return false;
+}
 void Enemy::MoveEnemy()
 {
 	tmp = entityData.position;
-	if (id == 0)
+	if (returning)
 	{
-		int numTiles = 5;
-		
-		if (entityData.position.x < destination.x)
-		{
-			entityData.position.x += entityData.velocity;
-			entityData.direction = WALK_R;
-			LOG("Velocity R: %f", entityData.velocity);
-		}
-		else if (entityData.position.x > destination.x)
-		{
-			entityData.position.x -= entityData.velocity;
-			entityData.direction = WALK_L;
-			LOG("Velocity L: %f", entityData.velocity);
-		}
-			
-		if (app->map->WorldToMap(entityData.position).x == app->map->WorldToMap(destination).x)
-		{
-			if(destination.x == entityData.positionInitial.x)
-				destination.x = entityData.positionInitial.x + numTiles * app->map->data.tileWidth;
-			else destination.x = entityData.positionInitial.x;
-		}	
+		float angle = atan2(entityData.positionInitial.y - entityData.position.y, entityData.positionInitial.x - entityData.position.x);
+		entityData.position.x += entityData.velocity * cos(angle);
+		entityData.position.y += entityData.velocity * sin(angle);
+
+		iPoint enemyPosition;
+		enemyPosition.x = entityData.position.x;
+		enemyPosition.y = entityData.position.y;
+		if (app->map->WorldToMap(enemyPosition).x == app->map->WorldToMap(entityData.positionInitial).x)
+			returning = false;
 	}
+	else if (isDetected)
+	{
+		float angle = atan2(app->player->playerData.position.y - entityData.position.y, app->player->playerData.position.x - entityData.position.x);
+		entityData.position.x += entityData.velocity * cos(angle);
+		entityData.position.y += entityData.velocity * sin(angle);
+	}
+	else
+	{
+		if (id == 0)
+		{
+			int numTiles = 5;
+
+			if (entityData.position.x < destination.x)
+			{
+				entityData.position.x += entityData.velocity;
+				entityData.direction = WALK_R;
+				LOG("Velocity R: %f", entityData.velocity);
+			}
+			else if (entityData.position.x > destination.x)
+			{
+				entityData.position.x -= entityData.velocity;
+				entityData.direction = WALK_L;
+				LOG("Velocity L: %f", entityData.velocity);
+			}
+			iPoint enemyPosition;
+			enemyPosition.x = entityData.position.x;
+			enemyPosition.y = entityData.position.y;
+			if (app->map->WorldToMap(enemyPosition).x == app->map->WorldToMap(destination).x)
+			{
+				if (destination.x == entityData.positionInitial.x)
+					destination.x = entityData.positionInitial.x + numTiles * app->map->data.tileWidth;
+				else destination.x = entityData.positionInitial.x;
+			}
+		}
+	}
+	
 	if (CheckCollisionEnemy(entityData.position)) entityData.position = tmp;
 	
 }
@@ -132,6 +160,13 @@ bool Enemy::PreUpdate()
 bool Enemy::Update(float dt)
 {
 	entityData.velocity = floor(1000 * dt) / 16;
+
+	if (Radar(app->player->playerData.position, range)) isDetected = true;
+	else isDetected = false;
+
+	if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
+	else if (isDetected == true && app->player->playerData.state !=IDLE) returning = false;
+
 	MoveEnemy();
 		
 	entityData.currentAnimation->Update();
