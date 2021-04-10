@@ -1,4 +1,5 @@
 #include "GuiManager.h"
+#include "SceneManager.h"
 
 #include "GuiMenuPause.h"
 #include "GuiSettings.h"
@@ -43,6 +44,9 @@ bool GuiManager::Update(float dt)
 	bool ret = true;
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
+
+	// MENU
+	if (app->sceneManager->GetIsPause()) menu->Update(dt);
 
 	if (doLogic == true)
 	{
@@ -98,6 +102,9 @@ bool GuiManager::CleanUp()
 {
 	app->tex->UnLoad(btnTextureAtlas);
 	DeleteList();
+
+	delete menu;
+	menu = nullptr;
 
 	return true;
 }

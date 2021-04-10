@@ -5,6 +5,7 @@
 #include "GuiControl.h"
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
+#include "GuiMenuPause.h"
 #include "GuiSlider.h"
 
 #include "List.h"
@@ -48,6 +49,15 @@ public:
 	void AddGuiSlider(GuiSlider* slider);
 
 	void DestroyGuiControl(GuiControl* entity);
+	GuiMenuPause* GetMenuPause() 
+	{
+		return menu;
+	};
+	void SetMenuPause(GuiMenuPause* pMenu)
+	{
+		 menu= pMenu;
+	};
+
 public:
 
 	List<GuiControl*> controls;
@@ -71,5 +81,7 @@ public:
 private:
 	Input* input;
 	Render* render;
+	GuiMenuPause* menu;
+
 };
 #endif // __GUIMANAGER_H__

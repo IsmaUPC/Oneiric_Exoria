@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 #include "Pathfinding.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
@@ -56,7 +57,8 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->player->positionInitial = new iPoint(300,300);	
+	app->entityManager->Start();
+	app->player->positionInitial = new iPoint(300,300 );	
 
 	// Active calls
 	app->player->Init();
@@ -145,6 +147,7 @@ bool Scene::CleanUp()
 	Mix_HaltMusic();
 	app->map->CleanUp();
 	app->player->CleanUp();
+	app->entityManager->CleanUp();
 
 	app->sceneManager->SetPause(false);
 
@@ -182,7 +185,7 @@ void Scene::DebugKeys()
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-	return app->sceneManager->menu->Event(control);
+	return app->guiManager->GetMenuPause()->Event(control);
 }
 
 bool Scene::LoadState(pugi::xml_node& data)

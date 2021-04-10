@@ -3,7 +3,6 @@
 
 #include "Module.h"
 #include "SceneControl.h"
-#include "GuiMenuPause.h"
 #include "Window.h"
 
 class GuiButton;
@@ -62,7 +61,6 @@ public:
 
 	bool GetViewRectangle() { return ViewRectangles; };
 
-	GuiMenuPause* menu;
 
 private:
 

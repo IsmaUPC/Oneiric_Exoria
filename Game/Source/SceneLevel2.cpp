@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 #include "Pathfinding.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
@@ -240,7 +241,7 @@ void SceneLevel2::DebugKeys()
 }
 bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 {
-	return app->sceneManager->menu->Event(control);
+	return app->guiManager->GetMenuPause()->Event(control);
 }
 
 bool SceneLevel2::LoadState(pugi::xml_node& data)

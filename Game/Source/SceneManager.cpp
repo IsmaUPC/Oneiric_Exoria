@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "GuiManager.h"
 
 #include "SceneLogo.h"
 #include "SceneIntro.h"
@@ -86,7 +87,7 @@ bool SceneManager::Update(float dt)
 {
 	bool ret = true;
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (current->name == "scene" || current->name == "sceneLevel2"))
-		pause = !pause, menu->AbleDisableMenu();
+		pause = !pause, app->guiManager->GetMenuPause()->AbleDisableMenu();
 
 	if (!onTransition)
 	{
@@ -118,9 +119,9 @@ bool SceneManager::Update(float dt)
 				next = nullptr;
 
 				// Menu pause
-				delete menu;
-				menu = nullptr;
-				menu = new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, app->guiManager->btnTextureAtlas);
+				delete app->guiManager->GetMenuPause();
+				app->guiManager->SetMenuPause(nullptr);
+				app->guiManager->SetMenuPause(new GuiMenuPause({ 40, WINDOW_H / 2 - 120 }, current, app->guiManager->btnTextureAtlas));
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;
 			}
@@ -168,8 +169,7 @@ bool SceneManager::Update(float dt)
 		current->TransitionToScene(SceneType::LEVEL2);
 		lastLevel =2;
 	}
-	// MENU
-	if(pause) menu->Update(dt);
+
 
 	return ret;
 }
@@ -201,9 +201,6 @@ bool SceneManager::CleanUp()
 	LOG("Freeing scene");
 	app->fonts->UnLoad(guiFont);
 	if (current != nullptr) current->CleanUp();
-
-	delete menu;
-	menu = nullptr;
 
 	return true;
 }
