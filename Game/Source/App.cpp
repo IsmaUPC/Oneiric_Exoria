@@ -13,6 +13,7 @@
 #include "ModuleFadeToBlack.h"
 #include "Pathfinding.h"
 #include "ModuleFonts.h"
+#include "DialogSystem.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -37,6 +38,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	guiManager = new GuiManager(input, render);
 	pathfinding = new PathFinding();
 	fonts = new ModuleFonts();
+	dialogueSystem = new DialogueSystem();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -51,6 +53,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(guiManager);
 	AddModule(fonts);
 	AddModule(pathfinding);
+	AddModule(dialogueSystem);
 
 	audio->active = true;
 	player->active = false;

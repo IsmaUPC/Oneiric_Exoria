@@ -134,6 +134,9 @@
     <ClCompile Include="Source\SceneBattle.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
     </ClCompile>
+    <ClCompile Include="Source\DialogSystem.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -276,6 +279,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneBattle.h">
       <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DialogSystem.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
