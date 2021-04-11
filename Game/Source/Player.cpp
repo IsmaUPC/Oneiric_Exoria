@@ -154,17 +154,36 @@ bool Player::LoadState(pugi::xml_node& player)
 	bool ret=true;
 	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
 	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
+	playerData.direction = (MoveDirection)player.child("position").attribute("direction").as_int(playerData.direction);
+
+
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
 	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
 
-	pugi::xml_node positionPartners = player.child("partners");
-	partners[0].position.x = positionPartners.child("partner_1").attribute("x").as_int(partners[0].position.x);
-	partners[1].position.x = positionPartners.child("partner_2").attribute("x").as_int(partners[1].position.x);
-	partners[2].position.x = positionPartners.child("partner_3").attribute("x").as_int(partners[2].position.x);
+	pugi::xml_node positionPartners = player.child("partners").child("partner");
+	int i = 0;
+	while(positionPartners)
+	{
+		partners[i].position.x = positionPartners.attribute("x").as_int();
+		partners[i].position.y = positionPartners.attribute("y").as_int();
+		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
+		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
+	
+		positionPartners = positionPartners.next_sibling();
+		i++;
+	}
 
-	partners[0].position.y = positionPartners.child("partner_1").attribute("y").as_int(partners[0].position.y);
-	partners[1].position.y = positionPartners.child("partner_2").attribute("y").as_int(partners[1].position.y);
-	partners[2].position.y = positionPartners.child("partner_3").attribute("y").as_int(partners[2].position.y);
+	path.Clear();
+	pugi::xml_node breadcrumbs = player.child("path").first_child();
+	while (breadcrumbs)
+	{
+		iPoint* pos = new iPoint;
+		pos->x = breadcrumbs.attribute("x").as_int();
+		pos->y = breadcrumbs.attribute("y").as_int();
+		path.Add(pos);
+
+		breadcrumbs = breadcrumbs.next_sibling();
+	}
 
 	return ret;
 }
@@ -172,9 +191,15 @@ bool Player::LoadState(pugi::xml_node& player)
 bool Player::SaveState(pugi::xml_node& player) const
 {
 	pugi::xml_node positionPlayer = player.child("position");
-	pugi::xml_node positionPartners = player.child("partners");
 	pugi::xml_node coinsPlayer = player.child("coins");
 	pugi::xml_node respawnsPlayer = player.child("lives");
+
+	player.remove_child("path");
+	player.append_child("path").set_value(0);
+	player.remove_child("partners");
+	player.append_child("partners").set_value(0);
+
+	pugi::xml_node partnersData = player.child("partners");
 
 	if (app->removeGame)
 	{
@@ -187,6 +212,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 		{
 			positionPlayer.attribute("x").set_value(576);
 			positionPlayer.attribute("y").set_value(1534);
+			positionPlayer.attribute("direction").set_value(0);
 		}
 		coinsPlayer.attribute("count").set_value(0);
 		respawnsPlayer.attribute("num_respawns").set_value(3);
@@ -195,16 +221,24 @@ bool Player::SaveState(pugi::xml_node& player) const
 	{
 		positionPlayer.attribute("x").set_value(playerData.position.x);
 		positionPlayer.attribute("y").set_value(playerData.position.y);
+		positionPlayer.attribute("direction").set_value(playerData.direction);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
-		positionPartners.child("partner_1").attribute("x").set_value(partners[0].position.x);
-		positionPartners.child("partner_2").attribute("x").set_value(partners[1].position.x);
-		positionPartners.child("partner_3").attribute("x").set_value(partners[2].position.x);
+		for (int i = 0; i < numPartners; i++)
+		{
+			partnersData.append_child("partner").append_attribute("x").set_value(partners[i].position.x);
+			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
+			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
+			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
+		}
 
-		positionPartners.child("partner_1").attribute("y").set_value(partners[0].position.y);
-		positionPartners.child("partner_2").attribute("y").set_value(partners[1].position.y);
-		positionPartners.child("partner_3").attribute("y").set_value(partners[2].position.y);
+		partnersData = player.child("path");
+		for (int i = 0; i < path.Count(); i++)
+		{
+			partnersData.append_child("breadcrumb").append_attribute("x").set_value(path.At(i)->data->x);
+			partnersData.last_child().append_attribute("y").set_value(path.At(i)->data->y);
+		}		
 	}
 
 	return true;
@@ -434,13 +468,7 @@ void Player::PlayerControls(float dt)
 {
 	diagonal = 0;
 	GamePad& pad = app->input->pads[0];
-	// Player Run
-	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
-		&& (playerData.state == State::WALK || playerData.state == State::RUN))
-	{
-		vel = playerData.velocity * 1.5;
-		playerData.state = State::RUN;
-	}
+	
 	// Comprobamos si las tecas están pulsadas al mismo tiempo
 	if ((!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)) 
@@ -469,6 +497,13 @@ void Player::PlayerControls(float dt)
 		}
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || pad.l_y < -0.2f || pad.up) MovePlayer(MoveDirection::WALK_UP, dt);
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || pad.l_y > 0.2f || pad.down) MovePlayer(MoveDirection::WALK_DOWN, dt);
+	}
+	// Player Run
+	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
+		&& (playerData.state == State::WALK || playerData.state == State::RUN))
+	{
+		vel = playerData.velocity * 2;
+		playerData.state = State::RUN;
 	}
 	
 
@@ -717,12 +752,11 @@ bool Player::CleanUp()
 	// Partners
 	for (int i = 0; i < numPartners; i++)
 	{
-		app->tex->UnLoad(partners[i].texture);
-
 		// Animations of each partner
 		// ...
 	}
 
+	textures.Clear();
 	checkPoints.Clear();
 	path.Clear();
 	app->entityManager->DeleteHUD();

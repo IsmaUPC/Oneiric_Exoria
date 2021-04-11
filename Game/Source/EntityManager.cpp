@@ -160,6 +160,9 @@ void EntityManager::CheckDespawnEntities()
 			if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
 				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)))
 				DespawnEntity(despawnEntity->data);
+
+			if (despawnEntity->data->entityData.state == DEAD)
+				DeleteEntity(despawnEntity->data);
 		}
 	}
 }
@@ -281,18 +284,13 @@ bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
 	score = entityManagerNode.child("score").attribute("value").as_int(0);
 	if (entitiesNode != NULL)
 	{
-		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
-		{
-			if (entiti->data->entityData.type == TypeEntity::HUD)entiti->data->LoadState(entityManagerNode);
-			entiti->data->CleanUp();
-		}
-		entities.Clear();
+		ClearList(ret);
 
 		entityManagerNode.next_sibling();
 		while (entitiesNode)
 		{
 			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(),
-				entitiesNode.attribute("level").as_int(), entitiesNode.attribute("id").as_int(), (State)entitiesNode.attribute("state").as_int());
+				entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), (State)entitiesNode.attribute("state").as_int());
 			entitiesNode = entitiesNode.next_sibling();
 		}
 	}
@@ -311,12 +309,16 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 	{
 		pugi::xml_node entitiesNode = entityManagerNode.child("entities");
 		pugi::xml_node entity_node = entitiesNode;
-
+		iPoint positionSpawn;
 		for (entiti; entiti; entiti = entiti->next)
 		{
+			positionSpawn = app->map->WorldToMap(entiti->data->entityData.positionInitial.x, entiti->data->entityData.positionInitial.y);
+			if(entiti->data->entityData.type == HUD) 
+				positionSpawn = app->map->WorldToMap(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
+			
 			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData.type);
-			entitiesNode.last_child().append_attribute("x").set_value(entiti->data->entityData.position.x);
-			entitiesNode.last_child().append_attribute("y").set_value(entiti->data->entityData.position.y);
+			entitiesNode.last_child().append_attribute("x").set_value(positionSpawn.x);
+			entitiesNode.last_child().append_attribute("y").set_value(positionSpawn.y);
 			entitiesNode.last_child().append_attribute("id").set_value(entiti->data->entityData.id);
 			entitiesNode.last_child().append_attribute("level").set_value(entiti->data->entityData.level);
 			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData.state);

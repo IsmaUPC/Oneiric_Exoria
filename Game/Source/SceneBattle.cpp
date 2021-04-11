@@ -42,7 +42,11 @@ bool SceneBattle::Start()
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     if (id == 1)
     {
+        // Load textures
        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+       // Add Enemies
+
     }
     //-----------------------
     int padding = 90;
@@ -74,8 +78,9 @@ bool SceneBattle::PreUpdate()
 
 bool SceneBattle::Update(float dt)
 {
-    /*if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
-        TransitionToScene(SceneType::LEVEL1);*/
+	//Condicion de victoria
+    //app->entityManager->GetCurrentEntity()->entityData.state == DEAD;
+
     return true;
 }
 
@@ -100,6 +105,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         }
         else if (control->id == 23)
         {
+			isContinue = true;
             TransitionToScene(SceneType::LEVEL1);
         }
 	}
@@ -118,7 +124,6 @@ bool SceneBattle::PostUpdate()
 bool SceneBattle::CleanUp()
 {
     app->tex->UnLoad(img);
-    isContinue = true;
 
     return true;
 }
