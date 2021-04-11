@@ -1,8 +1,10 @@
+#include "App.h"
 #include "Enemy.h"
 #include "Player.h"
 #include "GUI.H"
 #include "EntityManager.h"
 #include "Pathfinding.h"
+#include "SceneManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -81,8 +83,13 @@ void Enemy::CheckCollisionEnemyToPlayer()
 	playerCenter.x = app->player->playerData.position.x + app->player->playerData.centerPoint.x;
 	playerCenter.y = app->player->playerData.position.y + app->player->playerData.centerPoint.y;
 
-	if (radiusCollision + app->player->radiusCollision > app->entity->CalculateDistance(playerCenter, enemyCenter))
-		LOG("Collision Detection");
+	if (radiusCollision + app->player->radiusCollision > app->entity->CalculateDistance(playerCenter, enemyCenter) 
+		&& !app->sceneManager->GetEnemeyDetected())
+	{
+		app->sceneManager->SetEnemeyDetected(true);
+		LOG("Collision Detected");
+	}
+		
 }
 bool Enemy::CheckCollisionEnemy(fPoint nextPosition)
 {
@@ -203,6 +210,11 @@ bool Enemy::CleanUp()
 		return true;
 
 	delete entityData.pointsCollision;
+	entityData.pointsCollision = nullptr;
+
+	delete lastPath;
+	lastPath = nullptr;
+
 	pendingToDelete = true;
 	active = false;
 

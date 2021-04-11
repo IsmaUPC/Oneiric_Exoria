@@ -131,6 +131,9 @@
     <ClCompile Include="Source\Collisions.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneBattle.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -270,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="Source\Collisions.h">
       <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneBattle.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

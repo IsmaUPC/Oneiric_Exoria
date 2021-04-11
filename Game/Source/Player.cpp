@@ -676,6 +676,10 @@ bool Player::CleanUp()
 	active = false;
 	pendingToDelete = true;
 
+	// Player
+	delete positionInitial;
+	positionInitial = nullptr;
+
 	delete idleAnimL;
 	delete idleAnimR;
 	delete idleAnimUp;
@@ -685,6 +689,25 @@ bool Player::CleanUp()
 	delete walkAnimR;
 	delete walkAnimUp;
 	delete walkAnimDown;
+
+	idleAnimL = nullptr;
+	idleAnimR = nullptr;
+	idleAnimUp = nullptr;
+	idleAnimDown = nullptr;
+
+	walkAnimL = nullptr;
+	walkAnimR = nullptr;
+	walkAnimUp = nullptr;
+	walkAnimDown = nullptr;
+
+	// Partners
+	for (int i = 0; i < numPartners; i++)
+	{
+		app->tex->UnLoad(partners[i].texture);
+
+		// Animations of each partner
+		// ...
+	}
 
 	checkPoints.Clear();
 	path.Clear();

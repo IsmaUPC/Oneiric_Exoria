@@ -87,6 +87,36 @@ bool EntityManager::CleanUp()
 	LOG("Destroying EntityManager");
 
 	bool ret = true;
+	ClearList(ret);
+
+	// Unload Fx
+
+	// Unload Tx
+	app->tex->UnLoad(texCoin);
+	app->tex->UnLoad(texHead);
+	app->tex->UnLoad(texLive);
+	app->tex->UnLoad(texBandit);
+
+	// Unload Animations
+	delete idleAnim;
+	delete isDetectedAnim;
+	delete walkAnim;
+	delete deadAnim;
+
+	idleAnim = nullptr;
+	isDetectedAnim = nullptr;
+	walkAnim = nullptr;
+	deadAnim = nullptr;
+
+	score = 0;
+	timeSave = 0;
+	active = false;
+
+	return ret;
+}
+
+void EntityManager::ClearList(bool& ret)
+{
 	ListItem<Entity*>* item;
 	item = entities.start;
 
@@ -98,22 +128,9 @@ bool EntityManager::CleanUp()
 		item = item->next;
 	}
 
-	// Unload Fx
-
-	// Unload Tx
-	app->tex->UnLoad(texCoin);
-	app->tex->UnLoad(texHead);
-	app->tex->UnLoad(texLive);
-	// Unload Animations
-
 	// Clear list
 	entities.Clear();
-
-	score = 0;
-	timeSave = 0;
-	active = false;
-
-	return ret;
+	spawnQueue.Clear();
 }
 
 void EntityManager::CheckSpawnEntities()

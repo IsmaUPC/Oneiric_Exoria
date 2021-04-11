@@ -116,6 +116,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
+    <ClCompile Include="Source\SceneBattle.cpp" />
     <ClCompile Include="Source\SceneIntro.cpp" />
     <ClCompile Include="Source\SceneLevel2.cpp" />
     <ClCompile Include="Source\SceneLogo.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Source\App.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
+    <ClInclude Include="Source\SceneBattle.h" />
     <ClInclude Include="Source\SceneControl.h" />
     <ClInclude Include="Source\SceneIntro.h" />
     <ClInclude Include="Source\SceneLevel2.h" />

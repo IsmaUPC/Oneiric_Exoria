@@ -32,6 +32,8 @@ public:
 	// Called before quitting
 	 bool CleanUp();
 
+	 void ClearList(bool& ret);
+
 	// Virtual method to Load state
 	bool LoadState(pugi::xml_node&);
 	// Virtual method to Save state

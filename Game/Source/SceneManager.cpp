@@ -7,6 +7,7 @@
 #include "SceneLevel2.h"
 #include "SceneLose.h"
 #include "SceneWin.h"
+#include "SceneBattle.h"
 
 #include "Input.h"
 #include "Render.h"
@@ -25,20 +26,6 @@
 SceneManager::SceneManager(Input* input, Render* render, Textures* tex) : Module()
 {
 	name.Create("scene_manager");
-
-	sceneLogo = new SceneLogo();
-	sceneIntro = new SceneIntro();
-	scene = new Scene();
-	sceneLevel2 = new SceneLevel2();
-	sceneWin = new SceneWin();
-	sceneLose = new SceneLose();
-
-	AddScene(sceneLogo, false);
-	AddScene(sceneIntro, false);
-	AddScene(scene, false);
-	AddScene(sceneLevel2, false);
-	AddScene(sceneWin, false);
-	AddScene(sceneLose, false);
 
 	onTransition = false;
 	fadeOutCompleted = false;
@@ -78,6 +65,7 @@ bool SceneManager::Start()
 bool SceneManager::PreUpdate()
 {
 	if (input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) ViewRectangles = !ViewRectangles;
+	if (enemyDetected && !onTransition)	current->TransitionToScene(SceneType::BATTLE);
 
 	return true;
 }
@@ -152,6 +140,7 @@ bool SceneManager::Update(float dt)
 		case SceneType::LEVEL2: next = new SceneLevel2(); break;
 		case SceneType::WIN: next = new SceneWin(); break;
 		case SceneType::LOSE: next = new SceneLose(); break;
+		case SceneType::BATTLE: next = new SceneBattle(); break;
 		default: break;
 		}
 

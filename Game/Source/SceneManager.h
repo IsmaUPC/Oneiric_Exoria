@@ -17,6 +17,7 @@ class SceneIntro;
 class SceneWin;
 class SceneLose;
 class SceneLevel2;
+class SceneBattle;
 
 class SceneManager : public Module
 {
@@ -60,6 +61,10 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 
 	bool GetViewRectangle() { return ViewRectangles; };
+	bool GetEnemyId() { return enemyId; };
+
+	int GetEnemeyDetected() { return enemyDetected; }
+	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
 
 private:
@@ -76,8 +81,11 @@ private:
 	bool fadeOutCompleted;
 	float transitionAlpha;
 	bool pause = false;
-	List<SceneControl*> scenes;
 
+	int enemyId = 0;
+	bool enemyDetected = false;
+
+	List<SceneControl*> scenes;
 	bool ViewRectangles = false;
 
 public:
@@ -87,6 +95,7 @@ public:
 	SceneWin* sceneWin;
 	SceneLose* sceneLose;
 	SceneLevel2* sceneLevel2;
+	SceneBattle* sceneBattle;
 
 	SceneControl* sceneControl;
 

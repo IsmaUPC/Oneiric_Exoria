@@ -46,7 +46,7 @@ public:
 
 	int GetNumThisScene()
 	{
-		return 0;
+		return numThisScene;
 	};
 	bool OnGuiMouseClickEvent(GuiControl* control);
 	// Load state game

@@ -111,7 +111,6 @@ public:
 private:
 	
 	int levelScene;
-
 	float vel = 0;
 
 	// Partners

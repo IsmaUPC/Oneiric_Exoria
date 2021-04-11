@@ -59,9 +59,6 @@ bool Entity::CleanUp()
 	LOG("Destroying Entity");
 	active = false;
 
-	delete entityData.currentAnimation;
-	delete entityData.pointsCollision;
-
 	return true;
 }
 

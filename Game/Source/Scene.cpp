@@ -57,7 +57,6 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->entityManager->Start();
 	app->player->positionInitial = new iPoint(300,300 );	
 
 	// Active calls
@@ -143,6 +142,7 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
+	bool ret = true;
 	if (!active)
 		return true;
 
@@ -150,12 +150,12 @@ bool Scene::CleanUp()
 	Mix_HaltMusic();
 	app->map->CleanUp();
 	app->player->CleanUp();
-	app->entityManager->CleanUp();
+	app->entityManager->ClearList(ret);
 
 	app->sceneManager->SetPause(false);
 
 	active = false;
-	return true;
+	return ret;
 }
 
 void Scene::DebugKeys()
