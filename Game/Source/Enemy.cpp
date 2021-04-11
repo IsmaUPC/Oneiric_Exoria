@@ -37,10 +37,10 @@ bool Enemy::Start()
 	// Collisons
 	if (entityData.type == BANDIT)
 	{
-		entityData.pointsCollision[0] = { 6, 18 };
-		entityData.pointsCollision[1] = { 24, 18 };
-		entityData.pointsCollision[2] = { 24, 32 };
-		entityData.pointsCollision[3] = { 6, 32 };
+		entityData.pointsCollision[0] = { 14, 36 };
+		entityData.pointsCollision[1] = { 48, 36 };
+		entityData.pointsCollision[2] = { 48, 64 };
+		entityData.pointsCollision[3] = { 14, 64 };
 	}
 
 	radiusCollision = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[2]) / 2;
@@ -117,9 +117,17 @@ bool Enemy::Radar(iPoint distance, int range)
 void Enemy::MoveEnemy()
 {
 	tmp = entityData.position;
+	iPoint enemyCenter;
+	enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+	enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
+
+	iPoint playerCenter;
+	playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+	playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+
 	if (returning)
 	{
-		float angle = atan2(entityData.positionInitial.y - entityData.position.y, entityData.positionInitial.x - entityData.position.x);
+		float angle = atan2(entityData.positionInitial.y - enemyCenter.y, entityData.positionInitial.x - enemyCenter.x);
 		entityData.position.x += entityData.velocity * cos(angle);
 		entityData.position.y += entityData.velocity * sin(angle);
 
@@ -131,7 +139,7 @@ void Enemy::MoveEnemy()
 	}
 	else if (isDetected)
 	{
-		float angle = atan2(app->player->playerData.position.y - entityData.position.y, app->player->playerData.position.x - entityData.position.x);
+		float angle = atan2(playerCenter.y - enemyCenter.y, playerCenter.x - enemyCenter.x);
 		entityData.position.x += entityData.velocity * cos(angle);
 		entityData.position.y += entityData.velocity * sin(angle);
 	}
@@ -141,20 +149,18 @@ void Enemy::MoveEnemy()
 		{
 			int numTiles = 5;
 
-			if (entityData.position.x < destination.x)
+			if (enemyCenter.x < destination.x)
 			{
 				entityData.position.x += entityData.velocity;
 				entityData.direction = WALK_R;
 			}
-			else if (entityData.position.x > destination.x)
+			else if (enemyCenter.x > destination.x)
 			{
 				entityData.position.x -= entityData.velocity;
 				entityData.direction = WALK_L;
 			}
-			iPoint enemyPosition;
-			enemyPosition.x = entityData.position.x;
-			enemyPosition.y = entityData.position.y;
-			if (app->map->WorldToMap(enemyPosition).x == app->map->WorldToMap(destination).x)
+			
+			if (app->map->WorldToMap(enemyCenter).x == app->map->WorldToMap(destination).x)
 			{
 				if (destination.x == entityData.positionInitial.x)
 					destination.x = entityData.positionInitial.x + numTiles * app->map->data.tileWidth;
@@ -199,6 +205,17 @@ bool Enemy::PostUpdate()
 		app->render->DrawTexture(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
 	else if (entityData.direction == MoveDirection::WALK_L)
 		app->render->DrawTextureFlip(entityData.texture, entityData.position.x - (rectEnemy.w - app->entityManager->idleAnim->frames->w), entityData.position.y, &rectEnemy);
+
+	// Debug Mode (add F key)
+	iPoint enemyCenter;
+	enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+	enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
+
+	iPoint playerCenter;
+	playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+	playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+
+	app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
 
 	return true;
 }

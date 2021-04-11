@@ -33,14 +33,14 @@ bool EntityManager::Start()
 	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
 	texLive = app->tex->Load("Assets/Textures/lives.png");
 	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
-	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit_idle.png");
+	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit.png");
 
 	// Animations
 	idleAnim->loop = true;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		idleAnim->PushBack({ 32 * i, 0, 32, 32 });
+		idleAnim->PushBack({ 64 * i, 64, 64, 64 });
 	}
 
 
