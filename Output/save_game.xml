@@ -27,7 +27,7 @@
 		<time value="0" />
 		<entities>
 			<entity type="13" x="-340" y="-60" state="0" />
-			<entity type="1" x="287" y="128" state="0" />
+			<entity type="1" x="286.9375" y="128" state="0" />
 		</entities>
 	</entity_manager>
 </save_state>

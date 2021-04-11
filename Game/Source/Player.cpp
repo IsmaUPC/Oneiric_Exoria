@@ -79,23 +79,23 @@ bool Player::Start()
 
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimL->PushBack({ (32 * i) + (32 * 12), 82, 32, 48 });
-		walkAnimL->PushBack({ (32 * i) + (32 * 12), 146, 32, 48 });
+		idleAnimL->PushBack({ (32 * i) + (32 * 12), 78, 32, 50 });
+		walkAnimL->PushBack({ (32 * i) + (32 * 12), 142, 32, 50 });
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimR->PushBack({ (32 * i) , 82, 32, 48 });
-		walkAnimR->PushBack({ (32 * i) , 146, 32, 48 });
+		idleAnimR->PushBack({ (32 * i) , 78, 32, 50 });
+		walkAnimR->PushBack({ (32 * i) , 142, 32, 50 });
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimUp->PushBack({ (32 * i) + (32*6), 82, 32, 48 });
-		walkAnimUp->PushBack({ (32 * i) + (32 * 6), 146, 32, 48 });
+		idleAnimUp->PushBack({ (32 * i) + (32*6), 78, 32, 50 });
+		walkAnimUp->PushBack({ (32 * i) + (32 * 6), 142, 32, 50 });
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimDown->PushBack({ (32*i) + (32 * 18), 82, 32, 48 });
-		walkAnimDown->PushBack({ (32 * i) + (32 * 18), 146, 32, 48 });
+		idleAnimDown->PushBack({ (32*i) + (32 * 18), 78, 32, 50 });
+		walkAnimDown->PushBack({ (32 * i) + (32 * 18), 142, 32, 50 });
 	}
 	   
 	playerData.currentAnimation = idleAnimR;
@@ -103,7 +103,7 @@ bool Player::Start()
 	//Init position partner
 	for (int i = 0; i < numPartners; i++)
 	{
-		partners[i].texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
+		partners[i].texture = app->tex->Load("Assets/Textures/Characters/brenda.png");
 		partners[i].position.x = playerData.position.x - (40 * i) - 40;
 		partners[i].position.y = playerData.position.y;
 		partners[i].direction = WALK_R;
