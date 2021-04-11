@@ -31,6 +31,7 @@ private:
 	GuiButton* btnResume;
 	GuiButton* btnSettings;
 	GuiButton* btnBackToTitle;
+	GuiButton* btnSave;
 	GuiButton* btnExit;
 
 	GuiSettings* menuSettings;

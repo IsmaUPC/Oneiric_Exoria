@@ -313,5 +313,5 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 	// Menu pause
 	delete menu;
 	menu=nullptr;
-	menu= (new GuiMenuPause({ WINDOW_W / 2, WINDOW_H / 4 }, current, btnTextureAtlas));
+	menu= (new GuiMenuPause({ WINDOW_W / 2 - 100, WINDOW_H / 4 }, current, btnTextureAtlas));
 }
