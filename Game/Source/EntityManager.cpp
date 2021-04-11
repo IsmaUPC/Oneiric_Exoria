@@ -312,7 +312,9 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 		iPoint positionSpawn;
 		for (entiti; entiti; entiti = entiti->next)
 		{
-			positionSpawn = app->map->WorldToMap(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
+			positionSpawn = app->map->WorldToMap(entiti->data->entityData.positionInitial.x, entiti->data->entityData.positionInitial.y);
+			if(entiti->data->entityData.type == HUD) 
+				positionSpawn = app->map->WorldToMap(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
 			
 			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData.type);
 			entitiesNode.last_child().append_attribute("x").set_value(positionSpawn.x);

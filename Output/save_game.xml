@@ -6,29 +6,27 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="320" y="160" />
+		<camera x="438" y="128" />
 	</renderer>
 	<player>
-		<position x="320" y="200" direction="1" />
+		<position x="204" y="230" direction="2" />
 		<coins count="0" />
 		<lives num_respawns="3" />
 		<path>
-			<breadcrumb x="300" y="300" />
-			<breadcrumb x="302" y="218" />
-			<breadcrumb x="304" y="216" />
-			<breadcrumb x="306" y="214" />
-			<breadcrumb x="308" y="212" />
-			<breadcrumb x="310" y="210" />
-			<breadcrumb x="312" y="208" />
-			<breadcrumb x="314" y="206" />
-			<breadcrumb x="316" y="204" />
-			<breadcrumb x="318" y="202" />
-			<breadcrumb x="318" y="200" />
+			<breadcrumb x="368" y="300" />
+			<breadcrumb x="366" y="242" />
+			<breadcrumb x="366" y="240" />
+			<breadcrumb x="168" y="240" />
+			<breadcrumb x="196" y="240" />
+			<breadcrumb x="198" y="238" />
+			<breadcrumb x="200" y="236" />
+			<breadcrumb x="202" y="234" />
+			<breadcrumb x="204" y="232" />
 		</path>
 		<partners>
-			<partner x="302" y="238" breadcrumb="1" direction="2" />
-			<partner x="302" y="278" breadcrumb="1" direction="2" />
-			<partner x="282" y="300" breadcrumb="0" direction="1" />
+			<partner x="367" y="300" breadcrumb="0" direction="0" />
+			<partner x="367" y="300" breadcrumb="0" direction="0" />
+			<partner x="367" y="300" breadcrumb="0" direction="0" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -37,10 +35,10 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="13990" />
 		<entities>
-			<entity type="13" x="-10" y="-5" id="0" level="0" state="0" />
-			<entity type="1" x="9" y="5" id="1" level="1" state="0" />
+			<entity type="13" x="-13" y="-4" id="0" level="0" state="0" />
+			<entity type="1" x="9" y="4" id="1" level="1" state="0" />
 		</entities>
 	</entity_manager>
 </save_state>

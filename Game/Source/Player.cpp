@@ -468,13 +468,7 @@ void Player::PlayerControls(float dt)
 {
 	diagonal = 0;
 	GamePad& pad = app->input->pads[0];
-	// Player Run
-	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
-		&& (playerData.state == State::WALK || playerData.state == State::RUN))
-	{
-		vel = playerData.velocity * 1.5;
-		playerData.state = State::RUN;
-	}
+	
 	// Comprobamos si las tecas están pulsadas al mismo tiempo
 	if ((!(app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		&& (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)) 
@@ -503,6 +497,13 @@ void Player::PlayerControls(float dt)
 		}
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || pad.l_y < -0.2f || pad.up) MovePlayer(MoveDirection::WALK_UP, dt);
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || pad.l_y > 0.2f || pad.down) MovePlayer(MoveDirection::WALK_DOWN, dt);
+	}
+	// Player Run
+	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
+		&& (playerData.state == State::WALK || playerData.state == State::RUN))
+	{
+		vel = playerData.velocity * 2;
+		playerData.state = State::RUN;
 	}
 	
 
