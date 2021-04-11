@@ -47,7 +47,7 @@ bool GuiManager::Update(float dt)
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
 
-	// MENU
+	// Menu pause
 	if (app->sceneManager->GetIsPause()) menu->Update(dt);
 
 	if (doLogic == true)

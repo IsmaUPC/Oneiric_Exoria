@@ -150,6 +150,14 @@ private:
 
 	State lastState;
 	MoveDirection hitDirection;
+
+
+	SDL_Texture* texBrenda;
+	SDL_Texture* texIsrra;
+	SDL_Texture* texKenzie;
+	SDL_Texture* texKeiler;
+	List<SDL_Texture*> textures;
+
 };
 
 #endif // _PLAYER_H_

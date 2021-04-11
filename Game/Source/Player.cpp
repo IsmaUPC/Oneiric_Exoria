@@ -39,8 +39,9 @@ bool Player::Start()
 	iPoint pathInit = app->map->WorldToMap(positionInitial->x, positionInitial->y);
 	app->map->ResetPath(pathInit);
 
-	//playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
+	// Load textures of Characters
+	LoadTexCharacters();
+
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
@@ -89,27 +90,18 @@ bool Player::Start()
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimUp->PushBack({ (32 * i) + (32*6), 78, 32, 50 });
+		idleAnimUp->PushBack({ (32 * i) + (32 * 6), 78, 32, 50 });
 		walkAnimUp->PushBack({ (32 * i) + (32 * 6), 142, 32, 50 });
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		idleAnimDown->PushBack({ (32*i) + (32 * 18), 78, 32, 50 });
+		idleAnimDown->PushBack({ (32 * i) + (32 * 18), 78, 32, 50 });
 		walkAnimDown->PushBack({ (32 * i) + (32 * 18), 142, 32, 50 });
 	}
 	   
 	playerData.currentAnimation = idleAnimR;
 
-	//Init position partner
-	for (int i = 0; i < numPartners; i++)
-	{
-		partners[i].texture = app->tex->Load("Assets/Textures/Characters/brenda.png");
-		partners[i].position.x = playerData.position.x - (40 * i) - 40;
-		partners[i].position.y = playerData.position.y;
-		partners[i].direction = WALK_R;
-		partners[i].currentAnimation = idleAnimR;
-		partners[i].breadcrumb = 0;
-	}
+	LoadPartners();
 
 	// Camera follow the player
 	iPoint posCamera;
@@ -124,6 +116,28 @@ bool Player::Start()
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y);
 	
 	return true;
+}
+
+void Player::LoadTexCharacters()
+{
+	playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
+	textures.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
+	textures.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
+	textures.Add(app->tex->Load("Assets/Textures/Characters/kenzie.png"));
+}
+
+void Player::LoadPartners()
+{
+	//Init position partner
+	for (int i = 0; i < numPartners; i++)
+	{
+		partners[i].texture = textures.At(i)->data;
+		partners[i].position.x = playerData.position.x - (40 * i) - 40;
+		partners[i].position.y = playerData.position.y;
+		partners[i].direction = WALK_R;
+		partners[i].currentAnimation = idleAnimR;
+		partners[i].breadcrumb = 0;
+	}
 }
 
 bool Player::Awake(pugi::xml_node& config)
