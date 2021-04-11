@@ -19,7 +19,7 @@ struct PlayerData
 	static const int numPoints = 4;
 
 	//iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32,44 },{ 0, 44 } };
-	iPoint pointsCollision[numPoints] =  { { 0,30 },{ 32, 30 },{ 32, 46 },{ 0, 46 } };
+	iPoint pointsCollision[numPoints] =  { { 0,30 },{ 30, 30 },{ 30, 46 },{ 0, 46 } };
 
 };
 struct Partner 
@@ -44,6 +44,10 @@ public:
 	bool Awake(pugi::xml_node&);
 
 	bool Start();
+
+	void LoadTexCharacters();
+
+	void LoadPartners();
 
 	bool PreUpdate();
 
