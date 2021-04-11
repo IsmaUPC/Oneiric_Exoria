@@ -35,7 +35,11 @@ bool SceneBattle::Start()
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     if (id == 1)
     {
+        // Load textures
        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+       // Add Enemies
+
     }
     return true;
 }
@@ -48,7 +52,11 @@ bool SceneBattle::PreUpdate()
 bool SceneBattle::Update(float dt)
 {
     if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+    {
+        app->entityManager->GetCurrentEntity()->entityData.state == DEAD;
+        isContinue = true;
         TransitionToScene(SceneType::LEVEL1);
+    }
     return true;
 }
 
@@ -61,7 +69,6 @@ bool SceneBattle::PostUpdate()
 bool SceneBattle::CleanUp()
 {
     app->tex->UnLoad(img);
-    isContinue = true;
 
     return true;
 }
