@@ -10,7 +10,7 @@ struct Stats
 	int attack = 0;
 	int defense = 0;
 	int speed = 0;
-	int Health = 0;
+	int health = 0;
 	int mana = 0;
 	float exp = 0;
 };
@@ -60,7 +60,7 @@ private:
 
 	// We store the created path here
 	DynArray<iPoint>* lastPath;
-
+public:
 	// Stats
 	Stats stats;
 };

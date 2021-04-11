@@ -121,7 +121,7 @@ bool Player::Start()
 	app->render->camera.x = -posCamera.x;
 	app->render->camera.y = -posCamera.y;
 
-	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y);
+	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 	
 	return true;
 }

@@ -87,6 +87,8 @@ void Enemy::CheckCollisionEnemyToPlayer()
 		&& !app->sceneManager->GetEnemeyDetected())
 	{
 		app->sceneManager->SetEnemeyDetected(true);
+		app->SaveGameRequest();
+		app->entityManager->SetCurrentEntity(this);
 		LOG("Collision Detected");
 	}
 		
@@ -145,7 +147,7 @@ void Enemy::MoveEnemy()
 	}
 	else
 	{
-		if (id == 0)
+		if (entityData.id == 1)
 		{
 			int numTiles = 5;
 
@@ -206,16 +208,19 @@ bool Enemy::PostUpdate()
 	else if (entityData.direction == MoveDirection::WALK_L)
 		app->render->DrawTextureFlip(entityData.texture, entityData.position.x - (rectEnemy.w - app->entityManager->idleAnim->frames->w), entityData.position.y, &rectEnemy);
 
-	// Debug Mode (add F key)
-	iPoint enemyCenter;
-	enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
-	enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+	{
+		iPoint enemyCenter;
+		enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+		enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
 
-	iPoint playerCenter;
-	playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
-	playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+		iPoint playerCenter;
+		playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+		playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
 
-	app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+		app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+	}
+	
 
 	return true;
 }

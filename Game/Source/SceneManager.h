@@ -61,7 +61,6 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 
 	bool GetViewRectangle() { return ViewRectangles; };
-	bool GetEnemyId() { return enemyId; };
 
 	int GetEnemeyDetected() { return enemyDetected; }
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
@@ -82,7 +81,6 @@ private:
 	float transitionAlpha;
 	bool pause = false;
 
-	int enemyId = 0;
 	bool enemyDetected = false;
 
 	List<SceneControl*> scenes;

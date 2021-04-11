@@ -71,10 +71,12 @@ struct EntityData
 	Animation* currentAnimation = nullptr;
 	TypeEntity type;
 	SDL_Texture* texture;
-	int level = 0;
 	float velocity = 1;
 	int numPoints = 4;
 	iPoint* pointsCollision = new iPoint[numPoints];
+	int level = 0;
+	int id = 0;
+	int channel = -1;
 
 public:
 	EntityData(TypeEntity pTypeEntity, fPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
@@ -124,8 +126,6 @@ public:
 	bool pendingToDelete = false;
 
 	EntityData entityData;
-	int id = 0;
-	int channel = -1;
 	Collisions collision;
 };
 

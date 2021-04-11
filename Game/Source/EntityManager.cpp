@@ -38,7 +38,7 @@ bool EntityManager::Start()
 	// Animations
 	idleAnim->loop = true;
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		idleAnim->PushBack({ 64 * i, 64, 64, 64 });
 	}
@@ -88,7 +88,7 @@ bool EntityManager::CleanUp()
 
 	bool ret = true;
 	ClearList(ret);
-
+	current = nullptr;
 	// Unload Fx
 
 	// Unload Tx
@@ -164,19 +164,22 @@ void EntityManager::CheckDespawnEntities()
 	}
 }
 
-bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int level)
+bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int level, State state)
 {
-	Entity* b = new Entity;
-	iPoint positionSpawn = app->map->MapToWorld(pX, pY);
-	b->entityData.type = pType;
-	b->entityData.position.x = positionSpawn.x;
-	b->entityData.position.y = positionSpawn.y;
-	b->entityData.positionInitial = positionSpawn;
-	b->entityData.level = level;
-	b->channel = app->audio->SetChannel();
-	if (pType != HUD && pType != NPC) b->id = numEnemies, numEnemies++;
+	if (state == IDLE)
+	{
+		Entity* b = new Entity;
+		iPoint positionSpawn = app->map->MapToWorld(pX, pY);
+		b->entityData.type = pType;
+		b->entityData.position.x = positionSpawn.x;
+		b->entityData.position.y = positionSpawn.y;
+		b->entityData.positionInitial = positionSpawn;
+		b->entityData.level = level;
+		b->entityData.channel = app->audio->SetChannel();
+		b->entityData.id = id;
 
-	spawnQueue.Add(b);
+		spawnQueue.Add(b);
+	}
 
 	return true;
 }
@@ -228,7 +231,7 @@ void EntityManager::DeleteEntity(Entity* entity)
 		if (item->data == entity)
 		{
 			// Notify the audio manager that a channel can be released 
-			app->audio->DeleteChannel(item->data->channel);
+			app->audio->DeleteChannel(item->data->entityData.channel);
 			entities.Del(item);
 			break;
 		}
@@ -282,13 +285,14 @@ bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
 		{
 			if (entiti->data->entityData.type == TypeEntity::HUD)entiti->data->LoadState(entityManagerNode);
 			entiti->data->CleanUp();
-			entities.Clear();
 		}
+		entities.Clear();
 
 		entityManagerNode.next_sibling();
 		while (entitiesNode)
 		{
-			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(), 0);
+			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(),
+				entitiesNode.attribute("level").as_int(), entitiesNode.attribute("id").as_int(), (State)entitiesNode.attribute("state").as_int());
 			entitiesNode = entitiesNode.next_sibling();
 		}
 	}
@@ -313,6 +317,8 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData.type);
 			entitiesNode.last_child().append_attribute("x").set_value(entiti->data->entityData.position.x);
 			entitiesNode.last_child().append_attribute("y").set_value(entiti->data->entityData.position.y);
+			entitiesNode.last_child().append_attribute("id").set_value(entiti->data->entityData.id);
+			entitiesNode.last_child().append_attribute("level").set_value(entiti->data->entityData.level);
 			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData.state);
 			if (entiti->data->entityData.type == TypeEntity::HUD)
 				entiti->data->SaveState(entityManagerNode);
