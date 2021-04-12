@@ -60,6 +60,17 @@ enum TypeCollision {
 	CHECK_POINT=2,
 	AIR,
 };
+struct Stats
+{
+	int attack = 0;
+	int defense = 0;
+	int speed = 0;
+	float health = 0;
+	int maxHealth = 0;
+	int mana = 0;
+	float exp = 0;
+};
+
 
 struct EntityData
 {
@@ -71,10 +82,12 @@ struct EntityData
 	Animation* currentAnimation = nullptr;
 	TypeEntity type;
 	SDL_Texture* texture;
-	int level = 0;
 	float velocity = 1;
 	int numPoints = 4;
 	iPoint* pointsCollision = new iPoint[numPoints];
+	int level = 0;
+	int id = 0;
+	int channel = -1;
 
 public:
 	EntityData(TypeEntity pTypeEntity, fPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
@@ -124,9 +137,8 @@ public:
 	bool pendingToDelete = false;
 
 	EntityData entityData;
-	int id = 0;
-	int channel = -1;
 	Collisions collision;
+	Stats stats;
 };
 
 #endif // __MODULE_H__

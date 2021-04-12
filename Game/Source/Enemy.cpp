@@ -18,6 +18,7 @@ Enemy::Enemy(Entity* entity, SDL_Texture* tex)
 {
 	entityData = entity->entityData;
 	entityData.texture = tex;
+	stats = entity->stats;
 
 	name.Create("Enemy");
 }
@@ -34,18 +35,7 @@ bool Enemy::Start()
 	// Enemy Path
 	destination = entityData.positionInitial;
 
-	// Collisons
-	if (entityData.type == BANDIT)
-	{
-		entityData.pointsCollision[0] = { 14, 36 };
-		entityData.pointsCollision[1] = { 48, 36 };
-		entityData.pointsCollision[2] = { 48, 64 };
-		entityData.pointsCollision[3] = { 14, 64 };
-	}
-
 	radiusCollision = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[2]) / 2;
-	entityData.centerPoint.x = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[1]) / 2;
-	entityData.centerPoint.y = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[3]) / 2;
 
 	return true;
 }
@@ -87,6 +77,9 @@ void Enemy::CheckCollisionEnemyToPlayer()
 		&& !app->sceneManager->GetEnemeyDetected())
 	{
 		app->sceneManager->SetEnemeyDetected(true);
+		entityData.state = DEAD;
+		app->SaveGameRequest();
+		app->entityManager->SetCurrentEntity(this);
 		LOG("Collision Detected");
 	}
 		
@@ -145,7 +138,7 @@ void Enemy::MoveEnemy()
 	}
 	else
 	{
-		if (id == 0)
+		if (entityData.id == 1)
 		{
 			int numTiles = 5;
 
@@ -179,18 +172,21 @@ bool Enemy::PreUpdate()
 
 bool Enemy::Update(float dt)
 {
-	entityData.velocity = floor(1000 * dt) / 16;
+	if (entityData.id != 0)
+	{
+		entityData.velocity = floor(1000 * dt) / 16;
 
-	if (Radar(app->player->playerData.position, range)) isDetected = true;
-	else isDetected = false;
+		if (Radar(app->player->playerData.position, range)) isDetected = true;
+		else isDetected = false;
 
-	if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
-	else if (isDetected == true && app->player->playerData.state !=IDLE) returning = false;
+		if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
+		else if (isDetected == true && app->player->playerData.state != IDLE) returning = false;
 
-	MoveEnemy();
+		MoveEnemy();
 
-	if (isDetected) CheckCollisionEnemyToPlayer();
-		
+		if (isDetected) CheckCollisionEnemyToPlayer();
+	}
+	entityData.currentAnimation->speed = dt;
 	entityData.currentAnimation->Update();
 	return true;
 }
@@ -206,16 +202,19 @@ bool Enemy::PostUpdate()
 	else if (entityData.direction == MoveDirection::WALK_L)
 		app->render->DrawTextureFlip(entityData.texture, entityData.position.x - (rectEnemy.w - app->entityManager->idleAnim->frames->w), entityData.position.y, &rectEnemy);
 
-	// Debug Mode (add F key)
-	iPoint enemyCenter;
-	enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
-	enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+	{
+		iPoint enemyCenter;
+		enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+		enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
 
-	iPoint playerCenter;
-	playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
-	playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+		iPoint playerCenter;
+		playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+		playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
 
-	app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+		app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+	}
+	
 
 	return true;
 }

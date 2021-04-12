@@ -56,8 +56,6 @@ bool SceneManager::Start()
 	current->Start();
 	next = nullptr;
 
-	guiFont = app->fonts->Load("Assets/Textures/GUI/font_gui.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZ ", 2, 195, 48);
-
 	return true;
 }
 
@@ -187,7 +185,6 @@ void SceneManager::AddScene(SceneControl* scene, bool active)
 bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
-	app->fonts->UnLoad(guiFont);
 	if (current != nullptr) current->CleanUp();
 
 	return true;

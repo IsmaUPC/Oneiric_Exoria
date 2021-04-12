@@ -120,7 +120,7 @@ int Entity::CheckCollision(iPoint positionMap)
 		case CHECK_POINT:
 			// Checkpoint
 			if (positionMap == app->map->WorldToMap(app->player->playerData.position))
-			app->player->ActiveCheckpoint(positionMap);
+			//app->player->ActiveCheckpoint(positionMap);
 			return CHECK_POINT;
 			break;
 

@@ -10,6 +10,7 @@
 
 #define CONFIG_FILENAME		"config.xml"
 #define SAVE_STATE_FILENAME "save_game.xml"
+#define DIALOGUE_TREE_FILENAME "dialogue_tree.xml"
 	
 // Modules
 class Window;
@@ -24,7 +25,7 @@ class SceneManager;
 class GuiManager;
 class Entity;
 class PathFinding;
-class ModuleFonts;
+class DialogueSystem;
 
 class App
 {
@@ -112,7 +113,7 @@ public:
 	GuiManager* guiManager;
 	Entity* entity;
 	PathFinding* pathfinding;
-	ModuleFonts* fonts;
+	DialogueSystem* dialogueSystem;
 
 	bool fullScreen=0;
 	bool removeGame = false;

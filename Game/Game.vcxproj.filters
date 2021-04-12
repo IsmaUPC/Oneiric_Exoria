@@ -62,9 +62,6 @@
     <ClCompile Include="Source\GUI.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ModuleFonts.cpp">
-      <Filter>Modules\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GuiManager.cpp">
       <Filter>Modules\Managers</Filter>
     </ClCompile>
@@ -133,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="Source\SceneBattle.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DialogSystem.cpp">
+      <Filter>Modules\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,9 +220,6 @@
     <ClInclude Include="Source\GUI.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ModuleFonts.h">
-      <Filter>Modules\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GuiManager.h">
       <Filter>Modules\Managers</Filter>
     </ClInclude>
@@ -276,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneBattle.h">
       <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DialogSystem.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

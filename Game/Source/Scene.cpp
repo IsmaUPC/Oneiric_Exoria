@@ -66,7 +66,7 @@ bool Scene::Start()
 	app->audio->active = true;
 
 	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 9, 4, 1);
+	app->entityManager->AddEntity(BANDIT, 9, 4, 1, 1);
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");

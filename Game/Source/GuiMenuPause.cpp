@@ -29,7 +29,12 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 	btnBackToTitle->active = false;
 	app->guiManager->AddGuiButton(btnBackToTitle);
 
-	btnExit = new GuiButton(4, { Position.x, Position.y + padding * 3, 88, 88 }, "", EXIT, textureAtlas);
+	btnSave = new GuiButton(4, { Position.x, Position.y + padding * 3, 183, 91 }, "SAVE", RECTANGLE, textureAtlas);
+	btnSave->SetObserver(moduleObserver);
+	btnSave->active = false;
+	app->guiManager->AddGuiButton(btnSave);
+
+	btnExit = new GuiButton(5, { Position.x, Position.y + padding * 4, 88, 88 }, "", EXIT, textureAtlas);
 	btnExit->SetObserver(moduleObserver);
 	btnExit->active = false;
 	app->guiManager->AddGuiButton(btnExit);
@@ -114,17 +119,23 @@ bool GuiMenuPause::Event(GuiControl* control)
 			btnResume->state = GuiControlState::DISABLED;
 			btnSettings->state = GuiControlState::DISABLED;
 			btnBackToTitle->state = GuiControlState::DISABLED;
+			btnSave->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
 
 			menuSettings->MovePosition();
 			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
 			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
+
 		}
 		else if (control->id == 3)
 		{
 			observer->TransitionToScene(SceneType::INTRO);
 		}
 		else if (control->id == 4)
+		{
+			app->SaveGameRequest();
+		}
+		else if (control->id == 5)
 		{
 			return false;
 		}
@@ -178,6 +189,7 @@ void GuiMenuPause::AbleDisableMenu()
 	btnResume->active = active;
 	btnSettings->active = active;
 	btnBackToTitle->active = active;
+	btnSave->active = active;
 	btnExit->active = active;
 	
 	btnResume->PressButtonSound();
@@ -195,7 +207,9 @@ void GuiMenuPause::CloaseMenuSettings()
 	btnResume->state = GuiControlState::NORMAL;
 	btnSettings->state = GuiControlState::NORMAL;
 	btnBackToTitle->state = GuiControlState::NORMAL;
+	btnSave->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
+	menuSettings->btnBack->state = GuiControlState::NORMAL;
 	AbleDisableSetting();
 	app->SaveConfigRequested();
 }
@@ -213,8 +227,11 @@ void GuiMenuPause::MovePosition()
 
 	btnBackToTitle->bounds.x = x;
 	btnBackToTitle->bounds.y = y + padding * 2;
+	
+	btnSave->bounds.x = x;
+	btnSave->bounds.y = y + padding * 3;
 		
 	btnExit->bounds.x = x;
-	btnExit->bounds.y = y + padding * 3;
+	btnExit->bounds.y = y + padding * 4;
 		
 }

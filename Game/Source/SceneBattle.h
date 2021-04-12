@@ -2,6 +2,8 @@
 #define __SCENE_BATTLE_H__
 
 #include "SceneControl.h"
+#include "GuiButton.h"
+
 struct SDL_Texture;
 
 class SceneBattle : public SceneControl
@@ -29,7 +31,27 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+	int CalculateExp(int level);
+	void AssignEntities();
+
+
 private:
+
+	SDL_Rect rec;
+	SDL_Rect live;
+	SDL_Color green;
+	SDL_Color yellow;
+	SDL_Color red;
+
+	GuiButton* btnAttack;
+	GuiButton* btnMagic;
+	GuiButton* btnDefense;
+	GuiButton* btnExit;
+
 	SDL_Texture* img;
+
+	List<Entity*> enemies;
+	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__

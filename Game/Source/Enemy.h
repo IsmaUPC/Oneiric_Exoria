@@ -5,16 +5,6 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "Audio.h"
 
-struct Stats
-{
-	int attack = 0;
-	int defense = 0;
-	int speed = 0;
-	int Health = 0;
-	int mana = 0;
-	float exp = 0;
-};
-
 class Enemy : public Entity
 {
 public:
@@ -60,8 +50,5 @@ private:
 
 	// We store the created path here
 	DynArray<iPoint>* lastPath;
-
-	// Stats
-	Stats stats;
 };
 #endif // _ENEMY_H_
