@@ -5,6 +5,7 @@
 #include "ModuleFadeToBlack.h"
 #include "GuiMenuPause.h"
 #include "SceneManager.h"
+#include "DialogSystem.h"
 
 Player::Player() : Entity()
 {
@@ -521,6 +522,12 @@ void Player::PlayerControls(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)playerData.position.y += vel;
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)playerData.position.x -= vel;
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)playerData.position.x += vel;
+	}
+
+	//DialogSystem Interaction
+	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+	{
+		app->dialogueSystem->PerformDialogue(1);
 	}
 
 }
