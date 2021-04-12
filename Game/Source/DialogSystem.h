@@ -80,7 +80,6 @@ private:
 	DialogueNode* currentNode;
 	pugi::xml_document	dialogues;
 
-	ModuleFonts* font;
 	Input* input;
 	Render* render;
 	Textures* tex;
