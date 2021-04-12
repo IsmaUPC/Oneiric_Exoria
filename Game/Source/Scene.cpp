@@ -58,7 +58,7 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->player->positionInitial = new iPoint(300,300 );	
+	app->player->positionInitial = new iPoint(550, 270);	
 
 	// Active calls
 	app->player->Init();
@@ -66,7 +66,8 @@ bool Scene::Start()
 	app->audio->active = true;
 
 	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 9, 4, 1, 1);
+	app->entityManager->AddEntity(BANDIT, 16, 3, 1, 1);
+	app->entityManager->AddEntity(BANDIT, 24, 8, 2, 1);
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");

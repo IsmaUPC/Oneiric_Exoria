@@ -50,6 +50,33 @@ bool SceneBattle::Start()
        app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
        app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
     }
+    if (id == 2)
+    {
+        // Load textures
+        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+        // Add Enemies
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
+    }
+
+    // Partners
+    int num = app->player->GetNumPartners();
+    for (int i = 0; i < num; i++)
+    {
+        switch (app->player->GetPartners()[i].type)
+        {
+        case KEILER:
+            break;
+        case ISRRA:
+            break;
+        case BRENDA:
+            break;
+        default:
+            break;
+        }
+    }
+
     enemies = app->entityManager->spawnQueue;
 
     // Inicialize the stats

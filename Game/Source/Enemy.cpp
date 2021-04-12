@@ -120,21 +120,32 @@ void Enemy::MoveEnemy()
 
 	if (returning)
 	{
-		float angle = atan2(entityData.positionInitial.y - enemyCenter.y, entityData.positionInitial.x - enemyCenter.x);
+		float angle = atan2(entityData.positionInitial.y - entityData.position.y, entityData.positionInitial.x - entityData.position.x);
+		float direction = entityData.velocity * cos(angle);
+
 		entityData.position.x += entityData.velocity * cos(angle);
 		entityData.position.y += entityData.velocity * sin(angle);
+
+		if (direction < 0) entityData.direction = WALK_L;
+		else entityData.direction = WALK_R;
 
 		iPoint enemyPosition;
 		enemyPosition.x = entityData.position.x;
 		enemyPosition.y = entityData.position.y;
+
 		if (app->map->WorldToMap(enemyPosition).x == app->map->WorldToMap(entityData.positionInitial).x)
 			returning = false;
 	}
 	else if (isDetected)
 	{
 		float angle = atan2(playerCenter.y - enemyCenter.y, playerCenter.x - enemyCenter.x);
+		float direction = entityData.velocity * cos(angle);
+
 		entityData.position.x += entityData.velocity * cos(angle);
 		entityData.position.y += entityData.velocity * sin(angle);
+
+		if (direction < 0) entityData.direction = WALK_L;
+		else entityData.direction = WALK_R;
 	}
 	else
 	{

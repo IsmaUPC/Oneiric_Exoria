@@ -40,7 +40,7 @@ bool Player::Start()
 	iPoint pathInit = app->map->WorldToMap(positionInitial->x, positionInitial->y);
 	app->map->ResetPath(pathInit);
 
-	// Load texturesPartners of Characters
+	// Load texPartners of Characters
 	LoadTexCharacters();
 
 	playerData.position = *positionInitial;
@@ -121,10 +121,11 @@ bool Player::Start()
 
 void Player::LoadTexCharacters()
 {
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
-	texturesPartners.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
-	texturesPartners.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
-	texturesPartners.Add(app->tex->Load("Assets/Textures/Characters/kenzie.png"));
+
+	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
 }
 
 void Player::LoadPartners()
@@ -132,12 +133,15 @@ void Player::LoadPartners()
 	//Init position partner
 	for (int i = 0; i < numPartners; i++)
 	{
-		partners[i].texture = texturesPartners.At(i)->data;
+		partners[i].texture = texPartners.At(i)->data;
 		partners[i].position.x = playerData.position.x - (40 * i) - 40;
 		partners[i].position.y = playerData.position.y;
 		partners[i].direction = WALK_R;
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
+		if (i == 0)partners[i].type = KEILER;
+		else if (i == 1)partners[i].type = ISRRA;
+		else partners[i].type = BRENDA;		
 	}
 }
 
@@ -274,6 +278,10 @@ bool Player::Update(float dt)
 		else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
+		for (int i = 0; i < numPartners; i++)
+		{
+			PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
+		}
 		OffsetPartners();
 	}
 	
@@ -582,7 +590,6 @@ void Player::MovePartners()
 			PartnerDirection(i);
 			NextBreadcrumb(i);
 		}
-		PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
 	}
 	playerCollision = true;
 }
@@ -763,7 +770,7 @@ bool Player::CleanUp()
 		// ...
 	}
 
-	texturesPartners.Clear();
+	texPartners.Clear();
 	checkPoints.Clear();
 	path.Clear();
 	app->entityManager->DeleteHUD();

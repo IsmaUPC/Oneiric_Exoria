@@ -16,21 +16,25 @@
 
 enum TypeEntity {
 
-	UNKNOWN=0,
-	BANDIT=1,
-	FIGHTER=2,
-	SAPLING=3,
-	TRUNK=4,
-	PERRY=5,
-	ALENS=6,
-	LIAM=7,
-	NAN_=8,
-	BIN=9,
-	LICAN=10,
-	EESAAC=11,
-	HEADACHE=12,
-	HUD=13,
-	NPC=14
+	UNKNOWN = 0,
+	BANDIT = 1,
+	FIGHTER = 2,
+	SAPLING = 3,
+	TRUNK = 4,
+	PERRY = 5,
+	ALENS = 6,
+	LIAM = 7,
+	NAN_ = 8,
+	BIN = 9,
+	LICAN = 10,
+	EESAAC = 11,
+	HEADACHE = 12,
+	HUD = 13,
+	NPC = 14,
+	KENZIE = 15,
+	KEILER_ = 16,
+	ISRRA_ = 17,
+	BRENDA_ = 18
 };
 
 

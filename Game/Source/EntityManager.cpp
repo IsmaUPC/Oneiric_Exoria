@@ -33,6 +33,7 @@ bool EntityManager::Start()
 	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
 	texLive = app->tex->Load("Assets/Textures/lives.png");
 	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
+	texPalyers = app->tex->Load("Assets/Textures/Characters/player_and_partners_idle_big.png");
 	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit.png");
 
 	// Animations
@@ -95,6 +96,7 @@ bool EntityManager::CleanUp()
 	app->tex->UnLoad(texCoin);
 	app->tex->UnLoad(texHead);
 	app->tex->UnLoad(texLive);
+	app->tex->UnLoad(texPalyers);
 	app->tex->UnLoad(texBandit);
 
 	// Unload Animations
