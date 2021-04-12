@@ -9,7 +9,7 @@ class Enemy : public Entity
 {
 public:
 	Enemy();
-	Enemy(Entity* entity, SDL_Texture* tex);
+	Enemy(Entity* entity, SDL_Texture* tex = nullptr);
 
 	virtual ~Enemy();
 

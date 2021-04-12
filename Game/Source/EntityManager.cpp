@@ -33,7 +33,6 @@ bool EntityManager::Start()
 	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
 	texLive = app->tex->Load("Assets/Textures/lives.png");
 	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
-	texPalyers = app->tex->Load("Assets/Textures/Characters/player_and_partners_idle_big.png");
 	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit.png");
 
 	// Animations
@@ -69,6 +68,8 @@ bool EntityManager::Update(float dt)
 
 		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next) 
 			entity->data->Update(dt);
+		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
+			partner->data->Update(dt);
 	}
 
 	return true;
@@ -78,6 +79,8 @@ bool EntityManager::PostUpdate()
 {
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 		entiti->data->PostUpdate();
+	for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
+		partner->data->PostUpdate();
 	
 	return true;
 }
@@ -96,7 +99,6 @@ bool EntityManager::CleanUp()
 	app->tex->UnLoad(texCoin);
 	app->tex->UnLoad(texHead);
 	app->tex->UnLoad(texLive);
-	app->tex->UnLoad(texPalyers);
 	app->tex->UnLoad(texBandit);
 
 	// Unload Animations
@@ -132,6 +134,7 @@ void EntityManager::ClearList(bool& ret)
 
 	// Clear list
 	entities.Clear();
+	partners.Clear();
 	spawnQueue.Clear();
 }
 
@@ -164,7 +167,18 @@ void EntityManager::CheckDespawnEntities()
 				DespawnEntity(despawnEntity->data);
 
 			if (despawnEntity->data->entityData.state == DEAD)
-				DeleteEntity(despawnEntity->data);
+			{
+				app->audio->DeleteChannel(despawnEntity->data->entityData.channel);
+				entities.Del(despawnEntity);
+			}
+		}
+		for (ListItem<Entity*>* despawnPartner = partners.start; despawnPartner; despawnPartner = despawnPartner->next)
+		{
+			if (despawnPartner->data->entityData.state == DEAD)
+			{
+				app->audio->DeleteChannel(despawnPartner->data->entityData.channel);
+				partners.Del(despawnPartner);
+			}
 		}
 	}
 }
@@ -190,6 +204,13 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 			b->entityData.pointsCollision[1] = { 48, 36 };
 			b->entityData.pointsCollision[2] = { 48, 64 };
 			b->entityData.pointsCollision[3] = { 14, 64 };
+		}
+		if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
+		{
+			b->entityData.pointsCollision[0] = { 0, 0 };
+			b->entityData.pointsCollision[1] = { 56, 0 };
+			b->entityData.pointsCollision[2] = { 56, 92 };
+			b->entityData.pointsCollision[3] = { 0, 92 };
 		}
 
 		b->entityData.centerPoint.x = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[1]) / 2;
@@ -218,10 +239,19 @@ void EntityManager::SpawnEntity(Entity* info)
 	case EESAAC:
 	case HEADACHE:
 		entities.Add(new Enemy(info, texBandit)); // Change texture for atlasEnemy
+		entities.end->data->Start();
+		break;
+
+	case KENZIE_:
+	case KEILER_:
+	case ISRRA_:
+	case BRENDA_:
+		partners.Add(new Enemy(info, info->entityData.texture));
 		break;
 
 	case HUD:
 		entities.Add(new GUI(info, texHead));
+		entities.end->data->Start();
 		break;
 
 	/*case NPC:
@@ -229,7 +259,6 @@ void EntityManager::SpawnEntity(Entity* info)
 		break;*/
 	}
 
-	entities.end->data->Start();
 	DeleteSpawnEntity(info);
 }
 
@@ -274,8 +303,6 @@ void EntityManager::DeleteSpawnEntity(Entity* entity)
 	{
 		if (item->data == entity)
 		{
-			// TODO 6: Notify the audio manager that a channel can be released 
-			//app->audio->DeleteChannel(item->data->channel);
 			spawnQueue.Del(item);
 			break;
 		}

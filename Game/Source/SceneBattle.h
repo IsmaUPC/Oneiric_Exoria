@@ -3,6 +3,7 @@
 
 #include "SceneControl.h"
 #include "GuiButton.h"
+#include "Animation.h"
 
 struct SDL_Texture;
 
@@ -19,6 +20,10 @@ public:
 
 	// Called before the first frame
 	bool Start();
+	void AddBattleMenu(SDL_Texture* btnTextureAtlas);
+	void InicializeStats();
+	void AddPartners();
+	void AddEntities();
 	// Called before all Updates
 	bool PreUpdate();
 
@@ -50,8 +55,15 @@ private:
 	GuiButton* btnExit;
 
 	SDL_Texture* img;
+	SDL_Texture* texPalyers;
+
+	Animation* idleKenzie;
+	Animation* idleKeiler;
+	Animation* idleIsrra;
+	Animation* idleBrenda;
 
 	List<Entity*> enemies;
+	List<Entity*> partners;
 	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__

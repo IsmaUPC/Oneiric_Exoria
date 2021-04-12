@@ -31,7 +31,7 @@ enum TypeEntity {
 	HEADACHE = 12,
 	HUD = 13,
 	NPC = 14,
-	KENZIE = 15,
+	KENZIE_ = 15,
 	KEILER_ = 16,
 	ISRRA_ = 17,
 	BRENDA_ = 18

@@ -159,7 +159,7 @@ bool Player::LoadState(pugi::xml_node& player)
 	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
 	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
 	playerData.direction = (MoveDirection)player.child("position").attribute("direction").as_int(playerData.direction);
-
+	playerData.level = player.child("level").attribute("velue").as_int(playerData.level);
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
 	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
@@ -172,6 +172,7 @@ bool Player::LoadState(pugi::xml_node& player)
 		partners[i].position.y = positionPartners.attribute("y").as_int();
 		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
 		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
+		partners[i].level = positionPartners.attribute("level").as_int();
 	
 		positionPartners = positionPartners.next_sibling();
 		i++;
@@ -197,6 +198,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 	pugi::xml_node positionPlayer = player.child("position");
 	pugi::xml_node coinsPlayer = player.child("coins");
 	pugi::xml_node respawnsPlayer = player.child("lives");
+	pugi::xml_node levelPlayer = player.child("level");
 
 	player.remove_child("path");
 	player.append_child("path").set_value(0);
@@ -220,6 +222,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 		}
 		coinsPlayer.attribute("count").set_value(0);
 		respawnsPlayer.attribute("num_respawns").set_value(3);
+		levelPlayer.attribute("value").set_value(1);
 	}
 	else
 	{
@@ -228,6 +231,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 		positionPlayer.attribute("direction").set_value(playerData.direction);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
+		levelPlayer.attribute("value").set_value(playerData.level);
 
 		for (int i = 0; i < numPartners; i++)
 		{
@@ -235,6 +239,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
 			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
 			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
+			partnersData.last_child().append_attribute("level").set_value(partners[i].level);
 		}
 
 		partnersData = player.child("path");

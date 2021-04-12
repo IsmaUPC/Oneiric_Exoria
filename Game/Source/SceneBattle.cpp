@@ -37,18 +37,69 @@ bool SceneBattle::Start()
     app->render->camera.x = app->render->camera.y = 0;
 
     app->sceneManager->SetEnemeyDetected(false);
+    texPalyers = app->tex->Load("Assets/Textures/Characters/player_and_partners_idle_big.png");
 
+    // Load Animations
+    idleKenzie = new Animation;
+    idleKeiler = new Animation;
+    idleIsrra = new Animation;
+    idleBrenda = new Animation;
+
+    idleKenzie->loop = true;
+    idleKeiler->loop = true;
+    idleIsrra->loop = true;
+    idleBrenda->loop = true;
+
+    for (int i = 0; i < 6; i++)
+    {
+        idleKenzie->PushBack({ 64 * i, 0, 64, 92 });
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        idleKeiler->PushBack({ 64 * i, 92, 64, 92 });
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        idleIsrra->PushBack({ 64 * i, 184, 64, 92 });
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        idleBrenda->PushBack({ 64 * i, 276, 64, 92 });
+    }
+
+    AddEntities();
+    AddPartners();
+
+    enemies = app->entityManager->spawnQueue;
+
+    // Inicialize the stats
+    InicializeStats();
+    app->entityManager->spawnQueue = enemies;
+
+    // Gui Buttons
+    AddBattleMenu(btnTextureAtlas);
+
+    // Colors
+    green.r = 0; green.g = 187; green.b = 45;
+    yellow.r = 229; yellow.g = 190; yellow.b = 1;
+    red.r = 203; red.g = 50; red.b = 52;
+
+    return true;
+}
+
+void SceneBattle::AddEntities()
+{
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     if (id == 1)
     {
         // Load textures
-       img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
-       // Add Enemies
-       app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
-       app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
-       app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
-       app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
+        // Add Enemies
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
+        app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
+        app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
     }
     if (id == 2)
     {
@@ -59,33 +110,40 @@ bool SceneBattle::Start()
         app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
         app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
     }
-
-    // Partners
+}
+void SceneBattle::AddPartners()
+{
+    // Partners and Player
     int num = app->player->GetNumPartners();
+    app->entityManager->AddEntity(KENZIE_, 26, 16, 0, app->player->playerData.level);
+
     for (int i = 0; i < num; i++)
     {
         switch (app->player->GetPartners()[i].type)
         {
         case KEILER:
+            app->entityManager->AddEntity(KEILER_, 29, 14, 0, app->player->GetPartners()[i].level);
             break;
         case ISRRA:
+            app->entityManager->AddEntity(ISRRA_, 29, 18, 0, app->player->GetPartners()[i].level);
             break;
         case BRENDA:
+            app->entityManager->AddEntity(BRENDA_, 31, 16, 0, app->player->GetPartners()[i].level);
             break;
         default:
             break;
         }
     }
-
-    enemies = app->entityManager->spawnQueue;
-
-    // Inicialize the stats
+}
+void SceneBattle::InicializeStats()
+{
     float strong = 1;
     for (int i = 0; i < enemies.Count(); i++)
     {
         int level = enemies.At(i)->data->entityData.level;
         // Add switch for assign strong, if is a type enemy strong = x, if is other type strong = y
-        switch (enemies.At(i)->data->entityData.type)
+        TypeEntity pType = enemies.At(i)->data->entityData.type;
+        switch (pType)
         {
         case BANDIT:
             strong = 1;
@@ -99,17 +157,66 @@ bool SceneBattle::Start()
         default:
             break;
         }
-        enemies.At(i)->data->stats.attack = ((2 * level + 7) * 0.75)* strong;
-        enemies.At(i)->data->stats.defense = ((2 * level + 7) * 0.8) * strong;
-        enemies.At(i)->data->stats.health = ((2.5 * level + 7.5) * 1.5) * strong;
-        enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
-        enemies.At(i)->data->stats.mana = (enemies.At(i)->data->stats.health / 2) * strong;
-        enemies.At(i)->data->stats.speed = ((2.5 * level + 7.5) * 0.9) * strong;
-        enemies.At(i)->data->stats.exp = (sqrt(CalculateExp(level)) / 3) * strong;
-    }
-    app->entityManager->spawnQueue = enemies;
+        if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
+        {
+            switch (pType)
+            {
+            case KENZIE_ :
+                enemies.At(i)->data->stats.attack = 3.5 * level + 9.5;
+                enemies.At(i)->data->stats.defense = 1.5 * level + 6.5;
+                enemies.At(i)->data->stats.health = 2 * level + 6;
+                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.mana = 3 * level +8;
+                enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+                enemies.At(i)->data->entityData.currentAnimation = idleKenzie;
+                break;
+            case KEILER_:
+                enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
+                enemies.At(i)->data->stats.defense = 1.5 * level + 5.5;
+                enemies.At(i)->data->stats.health = 4 * level + 10;
+                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.mana = 2.5 * level + 7.5;
+                enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
+                enemies.At(i)->data->entityData.currentAnimation = idleKeiler;
+                break;
+            case ISRRA_:
+                enemies.At(i)->data->stats.attack = 2 * level + 7;
+                enemies.At(i)->data->stats.defense = 2 * level + 7;
+                enemies.At(i)->data->stats.health = 2.5 * level + 7.5;
+                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.mana = 3.5 * level + 8.5;
+                enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+                enemies.At(i)->data->entityData.currentAnimation = idleIsrra;
+                break;
+            case BRENDA_:
+                enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
+                enemies.At(i)->data->stats.defense = 3.5 * level + 9.5;
+                enemies.At(i)->data->stats.health = 3.5 * level + 9.5;
+                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.mana = 1.5 * level + 6.5;
+                enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
+                enemies.At(i)->data->entityData.currentAnimation = idleBrenda;
+                break;
 
-    // Gui Buttons
+            default:
+                break;
+            }
+            enemies.At(i)->data->entityData.texture = texPalyers;
+        }
+        else
+        {
+            enemies.At(i)->data->stats.attack = ((2 * level + 7) * 0.75) * strong;
+            enemies.At(i)->data->stats.defense = ((2 * level + 7) * 0.8) * strong;
+            enemies.At(i)->data->stats.health = ((2.5 * level + 7.5) * 1.5) * strong;
+            enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+            enemies.At(i)->data->stats.mana = (enemies.At(i)->data->stats.health / 2) * strong;
+            enemies.At(i)->data->stats.speed = ((2.5 * level + 7.5) * 0.9) * strong;
+            enemies.At(i)->data->stats.exp = (sqrt(CalculateExp(level)) / 3) * strong;
+        }
+    }
+}
+void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
+{
     int padding = 90;
     int yPosition = 20;
     btnAttack = new GuiButton(20, { WINDOW_W - 200 ,yPosition + (padding * 0),  183, 91 }, "ATTACK", RECTANGLE, btnTextureAtlas);
@@ -127,14 +234,6 @@ bool SceneBattle::Start()
     btnExit = new GuiButton(23, { WINDOW_W - 200, yPosition + (padding * 3),  183, 91 }, "EXIT", RECTANGLE, btnTextureAtlas);
     btnExit->SetObserver(this);
     app->guiManager->AddGuiButton(btnExit);
-    //-----------------------
-
-    // Colors
-    green.r = 0; green.g = 187; green.b = 45;
-    yellow.r = 229; yellow.g = 190; yellow.b = 1;
-    red.r = 203; red.g = 50; red.b = 52;
-
-    return true;
 }
 
 bool SceneBattle::PreUpdate()
@@ -155,6 +254,7 @@ bool SceneBattle::Update(float dt)
 void SceneBattle::AssignEntities()
 {
     enemies = app->entityManager->entities;
+    partners = app->entityManager->partners;
     assigneDone = true;
 }
 bool SceneBattle::PostUpdate()
@@ -186,9 +286,16 @@ bool SceneBattle::CleanUp()
 {
     bool ret = true;
     app->tex->UnLoad(img);
-    app->entityManager->ClearList(ret);
+    app->tex->UnLoad(texPalyers);
 
+    RELEASE(idleKenzie);
+    RELEASE(idleKeiler);
+    RELEASE(idleIsrra);
+    RELEASE(idleBrenda);
+
+    app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
+    partners = app->entityManager->partners;
 
     return ret;
 }

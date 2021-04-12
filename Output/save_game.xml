@@ -6,17 +6,53 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="90" y="90" />
+		<camera x="-62" y="118" />
 	</renderer>
 	<player>
-		<position x="550" y="270" direction="1" />
+		<position x="704" y="242" direction="1" />
 		<coins count="0" />
 		<lives num_respawns="3" />
-		<path />
+		<level value="1" />
+		<path>
+			<breadcrumb x="614" y="176" />
+			<breadcrumb x="616" y="178" />
+			<breadcrumb x="618" y="180" />
+			<breadcrumb x="620" y="182" />
+			<breadcrumb x="622" y="184" />
+			<breadcrumb x="624" y="186" />
+			<breadcrumb x="626" y="188" />
+			<breadcrumb x="628" y="190" />
+			<breadcrumb x="630" y="192" />
+			<breadcrumb x="632" y="194" />
+			<breadcrumb x="634" y="196" />
+			<breadcrumb x="636" y="198" />
+			<breadcrumb x="638" y="200" />
+			<breadcrumb x="640" y="202" />
+			<breadcrumb x="642" y="204" />
+			<breadcrumb x="644" y="206" />
+			<breadcrumb x="646" y="208" />
+			<breadcrumb x="648" y="210" />
+			<breadcrumb x="650" y="212" />
+			<breadcrumb x="652" y="214" />
+			<breadcrumb x="654" y="216" />
+			<breadcrumb x="656" y="218" />
+			<breadcrumb x="658" y="220" />
+			<breadcrumb x="660" y="222" />
+			<breadcrumb x="662" y="224" />
+			<breadcrumb x="664" y="226" />
+			<breadcrumb x="666" y="228" />
+			<breadcrumb x="668" y="230" />
+			<breadcrumb x="670" y="232" />
+			<breadcrumb x="672" y="234" />
+			<breadcrumb x="674" y="236" />
+			<breadcrumb x="676" y="238" />
+			<breadcrumb x="678" y="240" />
+			<breadcrumb x="678" y="242" />
+		</path>
 		<partners>
-			<partner x="510" y="270" breadcrumb="0" direction="1" />
-			<partner x="470" y="270" breadcrumb="0" direction="1" />
-			<partner x="430" y="270" breadcrumb="0" direction="1" />
+			<partner x="664" y="226" breadcrumb="26" direction="3" level="1" />
+			<partner x="624" y="186" breadcrumb="6" direction="3" level="1" />
+			<partner x="584" y="176" breadcrumb="0" direction="1" level="1" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -25,11 +61,10 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="1560" />
 		<entities>
-			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" />
-			<entity type="1" x="16" y="3" id="1" level="1" state="0" />
-			<entity type="1" x="24" y="8" id="2" level="1" state="0" />
+			<entity type="13" x="1" y="-3" id="0" level="0" state="0" />
+			<entity type="1" x="24" y="8" id="2" level="1" state="6" />
 		</entities>
 	</entity_manager>
 </save_state>

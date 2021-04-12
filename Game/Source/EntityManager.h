@@ -59,6 +59,7 @@ public:
 public:
 	uint timeSave = 0;
 	List<Entity*> entities;
+	List<Entity*> partners;
 	List<Entity*> spawnQueue;
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
@@ -78,7 +79,6 @@ private:
 	SDL_Texture* texCoin;
 	SDL_Texture* texLive;
 	SDL_Texture* texHead;
-	SDL_Texture* texPalyers;
 	SDL_Texture* texBandit;
 
 	Enemy* current;
