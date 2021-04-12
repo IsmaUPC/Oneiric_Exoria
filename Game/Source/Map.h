@@ -250,6 +250,7 @@ private:
 
 	List<MapLayer*>* layerDrawUp;
 
+	iPoint vec;
 };
 
 #endif // __MAP_H__

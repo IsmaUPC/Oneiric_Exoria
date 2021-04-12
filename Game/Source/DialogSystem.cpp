@@ -3,7 +3,6 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
-#include "ModuleFonts.h"
 
 #include "SDL/include/SDL.h"
 
@@ -17,7 +16,6 @@ bool DialogueSystem::Start()
 	LoadDialogue("dialogue_tree.xml");
 	currentNode = dialogueTrees[Id]->dialogueNodes[0];
 	//PerformDialogue(Id);
-	//font = new ModuleFonts("Assets/Fonts/londrina.xml", tex);
 	return true;
 }
 

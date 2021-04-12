@@ -25,7 +25,6 @@ class SceneManager;
 class GuiManager;
 class Entity;
 class PathFinding;
-class ModuleFonts;
 class DialogueSystem;
 
 class App
@@ -114,7 +113,6 @@ public:
 	GuiManager* guiManager;
 	Entity* entity;
 	PathFinding* pathfinding;
-	ModuleFonts* fonts;
 	DialogueSystem* dialogueSystem;
 
 	bool fullScreen=0;

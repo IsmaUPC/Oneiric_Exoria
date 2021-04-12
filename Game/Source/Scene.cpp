@@ -44,7 +44,8 @@ bool Scene::Start()
 	victory=false;
 	app->player->win = false;
 
-	if (app->map->Load("level.tmx") == true)
+	if (app->map->Load("school_1.tmx") == true)
+	//if (app->map->Load("level.tmx") == true)
 	//if (app->map->Load("room.tmx") == true)
 	{
 		int w, h;

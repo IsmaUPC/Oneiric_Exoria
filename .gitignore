@@ -28,7 +28,7 @@
 !Game/Source/External/SDL/libx86/SDL2main.lib
 !Game/Source/External/SDL_image/libx86/SDL2_image.lib
 !Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib
-
+!Game/Source/External/SDL_ttf/libx86/SDL2_ttf.lib
 # Executables
 *.exe
 *.out

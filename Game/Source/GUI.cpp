@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
-#include "ModuleFonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -69,9 +68,6 @@ bool GUI::Start()
 	respawn = &app->player->playerData.respawns;
 	coins = &app->player->playerData.coins;
 
-	// Text
-	hudFont = app->fonts->Load("Assets/Textures/GUI/hud_font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,0123456789им?!*$%&()+-/:;<=>@_      ", 5, 705, 225);
-
 	activeFPS = false;
 	timer.Start();
 	minuts = app->entityManager->timeSave / 60000;
@@ -136,8 +132,8 @@ bool GUI::PostUpdate()
 	point0.x = point0.x + 50;
 	point0.y = point0.y + 100;
 	
-	sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
-	app->fonts->BlitText(point0.x, point0.y, hudFont, scoreText);
+	/*sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
+	app->fonts->BlitText(point0.x, point0.y, hudFont, scoreText);*/
 
 	// Coin HUD
 	point0.x = point0.x - 20;
@@ -147,8 +143,8 @@ bool GUI::PostUpdate()
 	rectCoins = coinHudAnim->GetCurrentFrame();
 	app->render->DrawTexture(imgCoin, point0.x, point0.y, &rectCoins);
 
-	sprintf_s(coinText, 9, "x%d", *coins);
-	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
+	//sprintf_s(coinText, 9, "x%d", *coins);
+	//app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
 
 	// Time
 	point0.x = -app->render->camera.x;
@@ -168,7 +164,7 @@ bool GUI::PostUpdate()
 	}
 	point0.x = point0.x - 100;
 	sprintf_s(timeText, 10, "%d:%02d:%02d", minuts, miliseconds / 100, miliseconds2);
-	app->fonts->BlitText(point0.x, point0.y, hudFont, timeText);
+	/*app->fonts->BlitText(point0.x, point0.y, hudFont, timeText);*/
 
 	if (activeFPS)
 	{
@@ -176,7 +172,7 @@ bool GUI::PostUpdate()
 		point0.y += WINDOW_H - 100;
 		sprintf_s(coinText, 10, "%3d", app->GetFramesOnLastSecond());
 
-		app->fonts->BlitText(point0.x, point0.y, hudFont, coinText);
+		/*app->fonts->BlitText(point0.x, point0.y, hudFont, coinText);*/
 
 	}
 	return true;
@@ -207,7 +203,6 @@ bool GUI::CleanUp()
 
 	app->tex->UnLoad(arrowTex);
 	app->tex->UnLoad(imgCoin);
-	app->fonts->UnLoad(hudFont);
 
 	delete headAnim;
 	delete arrowAnim;
