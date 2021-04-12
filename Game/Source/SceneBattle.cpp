@@ -117,8 +117,6 @@ bool SceneBattle::PreUpdate()
 
 bool SceneBattle::Update(float dt)
 {
-	//Condicion de victoria
-    //app->entityManager->GetCurrentEntity()->entityData.state == DEAD;
     //for (int i = 0; i < enemies.Count(); i++)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
@@ -159,9 +157,13 @@ bool SceneBattle::PostUpdate()
 
 bool SceneBattle::CleanUp()
 {
+    bool ret = true;
     app->tex->UnLoad(img);
+    app->entityManager->ClearList(ret);
 
-    return true;
+    enemies = app->entityManager->entities;
+
+    return ret;
 }
 
 bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
