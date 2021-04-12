@@ -78,6 +78,7 @@ private:
 	SDL_Texture* texCoin;
 	SDL_Texture* texLive;
 	SDL_Texture* texHead;
+	SDL_Texture* texPalyers;
 	SDL_Texture* texBandit;
 
 	Enemy* current;

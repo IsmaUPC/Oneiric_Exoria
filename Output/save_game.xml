@@ -6,44 +6,17 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="216" y="232" />
+		<camera x="90" y="90" />
 	</renderer>
 	<player>
-		<position x="422" y="126" direction="2" />
+		<position x="550" y="270" direction="1" />
 		<coins count="0" />
 		<lives num_respawns="3" />
-		<path>
-			<breadcrumb x="438" y="70" />
-			<breadcrumb x="440" y="72" />
-			<breadcrumb x="442" y="74" />
-			<breadcrumb x="444" y="76" />
-			<breadcrumb x="446" y="78" />
-			<breadcrumb x="448" y="80" />
-			<breadcrumb x="450" y="82" />
-			<breadcrumb x="452" y="84" />
-			<breadcrumb x="454" y="86" />
-			<breadcrumb x="456" y="88" />
-			<breadcrumb x="458" y="90" />
-			<breadcrumb x="460" y="92" />
-			<breadcrumb x="458" y="132" />
-			<breadcrumb x="456" y="134" />
-			<breadcrumb x="454" y="136" />
-			<breadcrumb x="452" y="138" />
-			<breadcrumb x="450" y="140" />
-			<breadcrumb x="448" y="142" />
-			<breadcrumb x="446" y="144" />
-			<breadcrumb x="444" y="146" />
-			<breadcrumb x="442" y="148" />
-			<breadcrumb x="440" y="150" />
-			<breadcrumb x="440" y="152" />
-			<breadcrumb x="426" y="152" />
-			<breadcrumb x="424" y="130" />
-			<breadcrumb x="422" y="128" />
-		</path>
+		<path />
 		<partners>
-			<partner x="442" y="148" breadcrumb="21" direction="3" />
-			<partner x="458" y="108" breadcrumb="12" direction="3" />
-			<partner x="436" y="68" breadcrumb="0" direction="3" />
+			<partner x="510" y="270" breadcrumb="0" direction="1" />
+			<partner x="470" y="270" breadcrumb="0" direction="1" />
+			<partner x="430" y="270" breadcrumb="0" direction="1" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -52,10 +25,11 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="10100" />
+		<time value="0" />
 		<entities>
-			<entity type="13" x="-6" y="-7" id="0" level="0" state="0" />
-			<entity type="1" x="9" y="4" id="1" level="1" state="6" />
+			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" />
+			<entity type="1" x="16" y="3" id="1" level="1" state="0" />
+			<entity type="1" x="24" y="8" id="2" level="1" state="0" />
 		</entities>
 	</entity_manager>
 </save_state>

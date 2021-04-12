@@ -11,6 +11,7 @@ struct PlayerData
 	MoveDirection direction;
 	Animation* currentAnimation;
 	float velocity ;
+	int level = 1;
 	uint lives = 0;
 	uint respawns = 0;
 	uint coins = 0;
@@ -36,6 +37,7 @@ struct Partner
 	Animation* currentAnimation;
 	SDL_Texture* texture;
 	TypePartner type;
+	int level = 1;
 	int breadcrumb = 0;
 };
 
@@ -89,6 +91,7 @@ public:
 	iPoint IPointMapToWorld(iPoint ipoint);
 
 	Partner* GetPartners() { return partners; };
+	int GetNumPartners() { return numPartners; };
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
 
