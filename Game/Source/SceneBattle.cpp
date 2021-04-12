@@ -41,7 +41,7 @@ bool SceneBattle::Start()
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     if (id == 1)
     {
-        // Load textures
+        // Load texturesPartners
        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
        // Add Enemies
