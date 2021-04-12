@@ -97,7 +97,7 @@ int Entity::CalculateDistance(iPoint origin, iPoint destination)
 // Comprove position player in array of tiles in mapLayer collision
 int Entity::CheckCollision(iPoint positionMap)
 {
-	uint typeTilePlayer = app->map->data.layers.At(0)->data->Get(positionMap.x, positionMap.y);
+	uint typeTilePlayer = app->map->data.layers.At(6)->data->Get(positionMap.x, positionMap.y);
 	uint firstgidLayerCollisions = app->map->data.tilesets.At(0)->data->firstgid;
 	typeTilePlayer -= firstgidLayerCollisions;
 

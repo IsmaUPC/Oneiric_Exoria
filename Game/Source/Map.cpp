@@ -282,15 +282,13 @@ void Map::Draw()
 				int tileId = layer->data->Get(x, y);
 				if (tileId > 0)
 				{
-				
-					iPoint vec = MapToWorld(x, y);
+					vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
 						if (layer->data->properties.GetProperty("Nodraw", 0) == 0)//|| drawColl)
 							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 						//else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0)// || drawColl2)
 							//app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
-
 					}
 				}
 			}
