@@ -1,8 +1,8 @@
 #include "App.h"
-
 #include "Defs.h"
 #include "Log.h"
 
+#include <time.h>
 // NOTE: SDL redefines main function
 #include "SDL/include/SDL.h"
 
@@ -27,7 +27,7 @@ int main(int argc, char* args[])
 
 	MainState state = CREATE;
 	int result = EXIT_FAILURE;
-
+	srand(time(NULL));
 	while(state != EXIT)
 	{
 		switch(state)

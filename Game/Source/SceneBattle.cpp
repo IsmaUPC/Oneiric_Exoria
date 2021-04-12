@@ -90,46 +90,54 @@ bool SceneBattle::Start()
 void SceneBattle::AddEntities()
 {
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
+    int level = app->entityManager->GetCurrentEntity()->entityData.level;
+    int randomLvl = 1;
     if (id == 1)
     {
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
-
+        
         // Add Enemies
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
+        while (randomLvl < 0) randomLvl = level + (rand() %3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
     }
-    if (id == 2)
+    else if (id == 2)
     {
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
         // Add Enemies
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
     }
 }
 void SceneBattle::AddPartners()
 {
     // Partners and Player
     int num = app->player->GetNumPartners();
-    app->entityManager->AddEntity(KENZIE_, 26, 16, 0, app->player->playerData.level);
+    app->entityManager->AddEntity(KENZIE_, 26, 13, 0, app->player->playerData.level);
 
     for (int i = 0; i < num; i++)
     {
         switch (app->player->GetPartners()[i].type)
         {
         case KEILER:
-            app->entityManager->AddEntity(KEILER_, 30, 14, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(KEILER_, 29, 15, 0, app->player->GetPartners()[i].level);
             break;
         case ISRRA:
-            app->entityManager->AddEntity(ISRRA_, 30, 18, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(ISRRA_, 29, 19, 0, app->player->GetPartners()[i].level);
             break;
         case BRENDA:
-            app->entityManager->AddEntity(BRENDA_, 33, 16, 0, app->player->GetPartners()[i].level);
-            break;
+            app->entityManager->AddEntity(BRENDA_, 26, 17, 0, app->player->GetPartners()[i].level);
+            break; 
         default:
             break;
         }
