@@ -181,6 +181,18 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 		b->entityData.channel = app->audio->SetChannel();
 		b->entityData.id = id;
 
+		// Collisons
+		if (pType == BANDIT)
+		{
+			b->entityData.pointsCollision[0] = { 14, 36 };
+			b->entityData.pointsCollision[1] = { 48, 36 };
+			b->entityData.pointsCollision[2] = { 48, 64 };
+			b->entityData.pointsCollision[3] = { 14, 64 };
+		}
+
+		b->entityData.centerPoint.x = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[1]) / 2;
+		b->entityData.centerPoint.y = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[3]) / 2;
+
 		spawnQueue.Add(b);
 	}
 
@@ -210,9 +222,9 @@ void EntityManager::SpawnEntity(Entity* info)
 		entities.Add(new GUI(info, texHead));
 		break;
 
-		/*case NPC:
-			entities.Add(new GUI(info, texHead));
-			break;*/
+	/*case NPC:
+		entities.Add(new GUI(info, texHead));
+		break;*/
 	}
 
 	entities.end->data->Start();

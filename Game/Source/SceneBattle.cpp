@@ -33,10 +33,9 @@ bool SceneBattle::Awake()
 
 bool SceneBattle::Start()
 {
-    //
     SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
     app->render->camera.x = app->render->camera.y = 0;
-    //
+
     app->sceneManager->SetEnemeyDetected(false);
 
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
@@ -46,9 +45,44 @@ bool SceneBattle::Start()
        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
        // Add Enemies
-
+       app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
+       app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
+       app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
+       app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
     }
-    //-----------------------
+    enemies = app->entityManager->spawnQueue;
+
+    // Inicialize the stats
+    float strong;
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        int level = enemies.At(i)->data->entityData.level;
+        // Add switch for assign strong, if is a type enemy strong = x, if is other type strong = y
+        switch (enemies.At(i)->data->entityData.type)
+        {
+        case BANDIT:
+            strong = 1;
+            break;
+        case FIGHTER:
+            strong = 1.1;
+            break;
+        case SAPLING:
+            strong = 1.2;
+            break;
+        default:
+            break;
+        }
+        enemies.At(i)->data->stats.attack = ((2 * level + 7) * 0.75)* strong;
+        enemies.At(i)->data->stats.defense = ((2 * level + 7) * 0.8) * strong;
+        enemies.At(i)->data->stats.health = ((2.5 * level + 7.5) * 1.5) * strong;
+        enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+        enemies.At(i)->data->stats.mana = (enemies.At(i)->data->stats.health / 2) * strong;
+        enemies.At(i)->data->stats.speed = ((2.5 * level + 7.5) * 0.9) * strong;
+        enemies.At(i)->data->stats.exp = (sqrt(CalculateExp(level)) / 3) * strong;
+    }
+    app->entityManager->spawnQueue = enemies;
+
+    // Gui Buttons
     int padding = 90;
     int yPosition = 20;
     btnAttack = new GuiButton(20, { WINDOW_W - 200 ,yPosition + (padding * 0),  183, 91 }, "ATTACK", RECTANGLE, btnTextureAtlas);
@@ -68,6 +102,11 @@ bool SceneBattle::Start()
     app->guiManager->AddGuiButton(btnExit);
     //-----------------------
 
+    // Colors
+    green.r = 0; green.g = 187; green.b = 45;
+    yellow.r = 229; yellow.g = 190; yellow.b = 1;
+    red.r = 203; red.g = 50; red.b = 52;
+
     return true;
 }
 
@@ -80,44 +119,33 @@ bool SceneBattle::Update(float dt)
 {
 	//Condicion de victoria
     //app->entityManager->GetCurrentEntity()->entityData.state == DEAD;
-
+    //for (int i = 0; i < enemies.Count(); i++)
+    //{
+    //    enemies.At(i)->data->stats.health -= dt*2;
+    //}
     return true;
 }
-
-bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
-{
-	switch (control->type)
-	{
-	case GuiControlType::BUTTON:
-	{
-
-		if (control->id == 20)
-		{
-			
-		}
-		else if (control->id == 21)
-		{
-			
-        }
-        else if (control->id == 22)
-        {
-
-        }
-        else if (control->id == 23)
-        {
-			isContinue = true;
-            TransitionToScene(SceneType::LEVEL1);
-        }
-	}
-    default: break;
-    }
-    return true;
-}
-
 
 bool SceneBattle::PostUpdate()
 {
-    app->render->DrawTexture(img, -app->render->camera.x, -app->render->camera.y);
+    app->render->DrawTexture(img, 0, 0);
+
+    // Draw Bar lives
+    
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
+        rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
+        live = rec;
+        live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
+
+        if(live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
+        if(live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+        if(live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+
+        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+    }
+
     return true;
 }
 
@@ -128,3 +156,37 @@ bool SceneBattle::CleanUp()
     return true;
 }
 
+bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
+{
+    switch (control->type)
+    {
+    case GuiControlType::BUTTON:
+    {
+
+        if (control->id == 20)
+        {
+
+        }
+        else if (control->id == 21)
+        {
+
+        }
+        else if (control->id == 22)
+        {
+
+        }
+        else if (control->id == 23)
+        {
+            isContinue = true;
+            TransitionToScene(SceneType::LEVEL1);
+        }
+    }
+    default: break;
+    }
+    return true;
+}
+
+int SceneBattle::CalculateExp(int level)
+{
+    return (0.04 * (level * level * level) + 0.8 * (level * level) + 2 * level) * 3.5;
+}

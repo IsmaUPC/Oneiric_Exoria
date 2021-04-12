@@ -499,12 +499,12 @@ void Player::PlayerControls(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || pad.l_y > 0.2f || pad.down) MovePlayer(MoveDirection::WALK_DOWN, dt);
 	}
 	// Player Run
-	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
+	/*if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT
 		&& (playerData.state == State::WALK || playerData.state == State::RUN))
 	{
 		vel = playerData.velocity * 2;
 		playerData.state = State::RUN;
-	}
+	}*/
 	
 
 	// If player change direction active boolean

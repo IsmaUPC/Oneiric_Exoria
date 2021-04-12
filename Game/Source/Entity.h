@@ -60,6 +60,17 @@ enum TypeCollision {
 	CHECK_POINT=2,
 	AIR,
 };
+struct Stats
+{
+	int attack = 0;
+	int defense = 0;
+	int speed = 0;
+	float health = 0;
+	int maxHealth = 0;
+	int mana = 0;
+	float exp = 0;
+};
+
 
 struct EntityData
 {
@@ -127,6 +138,7 @@ public:
 
 	EntityData entityData;
 	Collisions collision;
+	Stats stats;
 };
 
 #endif // __MODULE_H__

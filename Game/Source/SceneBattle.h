@@ -32,9 +32,16 @@ public:
 	bool CleanUp();
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
+	int CalculateExp(int level);
 
 
 private:
+
+	SDL_Rect rec;
+	SDL_Rect live;
+	SDL_Color green;
+	SDL_Color yellow;
+	SDL_Color red;
 
 	GuiButton* btnAttack;
 	GuiButton* btnMagic;
@@ -42,5 +49,7 @@ private:
 	GuiButton* btnExit;
 
 	SDL_Texture* img;
+
+	List<Entity*> enemies;
 };
 #endif //__SCENE_BATTLE_H__

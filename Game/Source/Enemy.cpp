@@ -18,6 +18,7 @@ Enemy::Enemy(Entity* entity, SDL_Texture* tex)
 {
 	entityData = entity->entityData;
 	entityData.texture = tex;
+	stats = entity->stats;
 
 	name.Create("Enemy");
 }
@@ -34,18 +35,7 @@ bool Enemy::Start()
 	// Enemy Path
 	destination = entityData.positionInitial;
 
-	// Collisons
-	if (entityData.type == BANDIT)
-	{
-		entityData.pointsCollision[0] = { 14, 36 };
-		entityData.pointsCollision[1] = { 48, 36 };
-		entityData.pointsCollision[2] = { 48, 64 };
-		entityData.pointsCollision[3] = { 14, 64 };
-	}
-
 	radiusCollision = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[2]) / 2;
-	entityData.centerPoint.x = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[1]) / 2;
-	entityData.centerPoint.y = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[3]) / 2;
 
 	return true;
 }
@@ -87,6 +77,7 @@ void Enemy::CheckCollisionEnemyToPlayer()
 		&& !app->sceneManager->GetEnemeyDetected())
 	{
 		app->sceneManager->SetEnemeyDetected(true);
+		entityData.state = DEAD;
 		app->SaveGameRequest();
 		app->entityManager->SetCurrentEntity(this);
 		LOG("Collision Detected");
@@ -181,18 +172,21 @@ bool Enemy::PreUpdate()
 
 bool Enemy::Update(float dt)
 {
-	entityData.velocity = floor(1000 * dt) / 16;
+	if (entityData.id != 0)
+	{
+		entityData.velocity = floor(1000 * dt) / 16;
 
-	if (Radar(app->player->playerData.position, range)) isDetected = true;
-	else isDetected = false;
+		if (Radar(app->player->playerData.position, range)) isDetected = true;
+		else isDetected = false;
 
-	if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
-	else if (isDetected == true && app->player->playerData.state !=IDLE) returning = false;
+		if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
+		else if (isDetected == true && app->player->playerData.state != IDLE) returning = false;
 
-	MoveEnemy();
+		MoveEnemy();
 
-	if (isDetected) CheckCollisionEnemyToPlayer();
-		
+		if (isDetected) CheckCollisionEnemyToPlayer();
+	}
+	entityData.currentAnimation->speed = dt;
 	entityData.currentAnimation->Update();
 	return true;
 }
