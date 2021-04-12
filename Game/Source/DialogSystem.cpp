@@ -16,7 +16,7 @@ bool DialogueSystem::Start()
 {
 	LoadDialogue("dialogue_tree.xml");
 	currentNode = dialogueTrees[Id]->dialogueNodes[0];
-	PerformDialogue(Id);
+	//PerformDialogue(Id);
 	//font = new ModuleFonts("Assets/Fonts/londrina.xml", tex);
 	return true;
 }
@@ -90,8 +90,6 @@ void DialogueSystem::PerformDialogue(int treeId)
 				break;
 			}
 	}
-
-	//BlitDialog();
 }
 
 bool DialogueSystem::LoadDialogue(const char* file)
