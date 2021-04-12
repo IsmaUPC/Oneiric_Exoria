@@ -170,7 +170,7 @@ private:
 	SDL_Texture* texIsrra;
 	SDL_Texture* texKenzie;
 	SDL_Texture* texKeiler;
-	List<SDL_Texture*> texturesPartners;
+	List<SDL_Texture*> texPartners;
 
 };
 
