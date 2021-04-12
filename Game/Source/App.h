@@ -26,6 +26,7 @@ class GuiManager;
 class Entity;
 class PathFinding;
 class DialogueSystem;
+class Fonts;
 
 class App
 {
@@ -114,6 +115,7 @@ public:
 	Entity* entity;
 	PathFinding* pathfinding;
 	DialogueSystem* dialogueSystem;
+	Fonts* fonts;
 
 	bool fullScreen=0;
 	bool removeGame = false;
