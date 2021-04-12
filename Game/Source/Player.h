@@ -20,7 +20,7 @@ struct PlayerData
 	static const int numPoints = 4;
 
 	//iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32,44 },{ 0, 44 } };
-	iPoint pointsCollision[numPoints] =  { { 0,30 },{ 30, 30 },{ 30, 48 },{ 0, 48 } };
+	iPoint pointsCollision[numPoints] =  { { 2,30 },{ 28, 30 },{ 28,50 },{ 2, 50 } };
 
 };
 enum TypePartner
@@ -170,7 +170,7 @@ private:
 	SDL_Texture* texIsrra;
 	SDL_Texture* texKenzie;
 	SDL_Texture* texKeiler;
-	List<SDL_Texture*> textures;
+	List<SDL_Texture*> texPartners;
 
 };
 

@@ -40,7 +40,7 @@ bool Player::Start()
 	iPoint pathInit = app->map->WorldToMap(positionInitial->x, positionInitial->y);
 	app->map->ResetPath(pathInit);
 
-	// Load textures of Characters
+	// Load texPartners of Characters
 	LoadTexCharacters();
 
 	playerData.position = *positionInitial;
@@ -121,10 +121,11 @@ bool Player::Start()
 
 void Player::LoadTexCharacters()
 {
+
 	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
-	textures.Add(app->tex->Load("Assets/Textures/Characters/keiler.png")); 
-	textures.Add(app->tex->Load("Assets/Textures/Characters/isrra.png")); 
-	textures.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
 }
 
 void Player::LoadPartners()
@@ -132,7 +133,7 @@ void Player::LoadPartners()
 	//Init position partner
 	for (int i = 0; i < numPartners; i++)
 	{
-		partners[i].texture = textures.At(i)->data;
+		partners[i].texture = texPartners.At(i)->data;
 		partners[i].position.x = playerData.position.x - (40 * i) - 40;
 		partners[i].position.y = playerData.position.y;
 		partners[i].direction = WALK_R;
@@ -768,13 +769,13 @@ bool Player::CleanUp()
 	walkAnimDown = nullptr;
 
 	// Partners
-	for (int i = 0; i < numPartners; i++)
+	for (int i = 3; i < numPartners; i++)
 	{
 		// Animations of each partner
 		// ...
 	}
 
-	textures.Clear();
+	texPartners.Clear();
 	checkPoints.Clear();
 	path.Clear();
 	app->entityManager->DeleteHUD();
