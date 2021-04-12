@@ -122,13 +122,13 @@ void SceneBattle::AddPartners()
         switch (app->player->GetPartners()[i].type)
         {
         case KEILER:
-            app->entityManager->AddEntity(KEILER_, 29, 14, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(KEILER_, 30, 14, 0, app->player->GetPartners()[i].level);
             break;
         case ISRRA:
-            app->entityManager->AddEntity(ISRRA_, 29, 18, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(ISRRA_, 30, 18, 0, app->player->GetPartners()[i].level);
             break;
         case BRENDA:
-            app->entityManager->AddEntity(BRENDA_, 31, 16, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(BRENDA_, 33, 16, 0, app->player->GetPartners()[i].level);
             break;
         default:
             break;
@@ -247,8 +247,16 @@ bool SceneBattle::Update(float dt)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
-    
+    SpeedAnimationCheck(dt);
+
     return true;
+}
+void SceneBattle::SpeedAnimationCheck(float dt)
+{
+    idleKenzie->speed = dt * 6;
+    idleKeiler->speed = dt * 6;
+    idleIsrra->speed = dt * 6;
+    idleBrenda->speed = dt * 6;
 }
 
 void SceneBattle::AssignEntities()
@@ -266,7 +274,6 @@ bool SceneBattle::PostUpdate()
     // Draw Bar lives
     for (int i = 0; i < enemies.Count(); i++)
     {
-        app->entityManager->entities;
         int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
         rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
         live = rec;
@@ -275,6 +282,22 @@ bool SceneBattle::PostUpdate()
         if(live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
         if(live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
         if(live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+
+        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+
+    }
+    for (int i = 0; i < partners.Count(); i++)
+    {
+        int posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
+        
+        int posY = (int)partners.At(i)->data->entityData.position.y - 30;
+        rec = { posX - 40, posY, 80, 16 };
+        live = rec;
+        live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
+
+        if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
+        if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+        if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
 
         app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
     }

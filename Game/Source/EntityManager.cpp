@@ -311,10 +311,10 @@ void EntityManager::DeleteSpawnEntity(Entity* entity)
 
 void EntityManager::SpeedAnimationCheck(float dt)
 {
-	idleAnim->speed = (dt * 5);
-	walkAnim->speed = (dt * 9);
-	deadAnim->speed = (dt * 5);
-	isDetectedAnim->speed = (dt * 9);
+	idleAnim->speed = (dt * 1);
+	walkAnim->speed = (dt * 1);
+	deadAnim->speed = (dt * 1);
+	isDetectedAnim->speed = (dt * 1);
 }
 
 bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
