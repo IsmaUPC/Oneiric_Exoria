@@ -22,6 +22,12 @@ struct PlayerData
 	iPoint pointsCollision[numPoints] =  { { 0,30 },{ 30, 30 },{ 30, 46 },{ 0, 46 } };
 
 };
+enum TypePartner
+{
+	KEILER,
+	ISRRA,
+	BRENDA
+};
 struct Partner 
 {
 	iPoint position;
@@ -29,6 +35,7 @@ struct Partner
 	MoveDirection direction;
 	Animation* currentAnimation;
 	SDL_Texture* texture;
+	TypePartner type;
 	int breadcrumb = 0;
 };
 
@@ -81,7 +88,7 @@ public:
 
 	iPoint IPointMapToWorld(iPoint ipoint);
 
-
+	Partner* GetPartners() { return partners; };
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
 

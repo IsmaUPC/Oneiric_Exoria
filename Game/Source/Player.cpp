@@ -121,10 +121,10 @@ bool Player::Start()
 
 void Player::LoadTexCharacters()
 {
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/keiler.png");
+	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
+	textures.Add(app->tex->Load("Assets/Textures/Characters/keiler.png")); 
+	textures.Add(app->tex->Load("Assets/Textures/Characters/isrra.png")); 
 	textures.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
-	textures.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
-	textures.Add(app->tex->Load("Assets/Textures/Characters/kenzie.png"));
 }
 
 void Player::LoadPartners()
@@ -138,6 +138,9 @@ void Player::LoadPartners()
 		partners[i].direction = WALK_R;
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
+		if (i == 0)partners[i].type = KEILER;
+		else if (i == 1)partners[i].type = ISRRA;
+		else partners[i].type = BRENDA;		
 	}
 }
 
@@ -274,6 +277,10 @@ bool Player::Update(float dt)
 		else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
+		for (int i = 0; i < numPartners; i++)
+		{
+			PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
+		}
 		OffsetPartners();
 	}
 	
@@ -582,7 +589,6 @@ void Player::MovePartners()
 			PartnerDirection(i);
 			NextBreadcrumb(i);
 		}
-		PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
 	}
 	playerCollision = true;
 }
