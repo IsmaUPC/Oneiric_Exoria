@@ -53,7 +53,7 @@ bool SceneBattle::Start()
     enemies = app->entityManager->spawnQueue;
 
     // Inicialize the stats
-    float strong;
+    float strong = 1;
     for (int i = 0; i < enemies.Count(); i++)
     {
         int level = enemies.At(i)->data->entityData.level;
@@ -123,17 +123,25 @@ bool SceneBattle::Update(float dt)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
+    
     return true;
 }
 
+void SceneBattle::AssignEntities()
+{
+    enemies = app->entityManager->entities;
+    assigneDone = true;
+}
 bool SceneBattle::PostUpdate()
 {
+    if (!assigneDone)AssignEntities();
+
     app->render->DrawTexture(img, 0, 0);
 
     // Draw Bar lives
-    
     for (int i = 0; i < enemies.Count(); i++)
     {
+        app->entityManager->entities;
         int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
         rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
         live = rec;

@@ -33,6 +33,7 @@ public:
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
 	int CalculateExp(int level);
+	void AssignEntities();
 
 
 private:
@@ -51,5 +52,6 @@ private:
 	SDL_Texture* img;
 
 	List<Entity*> enemies;
+	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__
