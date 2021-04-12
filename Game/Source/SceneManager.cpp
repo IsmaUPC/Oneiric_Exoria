@@ -8,6 +8,7 @@
 #include "SceneLose.h"
 #include "SceneWin.h"
 #include "SceneBattle.h"
+#include "Fonts.h"
 
 #include "Input.h"
 #include "Render.h"
@@ -54,6 +55,7 @@ bool SceneManager::Start()
 {
 	current = new SceneLogo();
 	current->Start();
+	guiFont = app->fonts->Load("Assets/Fonts/Garrick_Bold.ttf", 25);
 	next = nullptr;
 
 	return true;
@@ -186,6 +188,8 @@ bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
 	if (current != nullptr) current->CleanUp();
+
+	app->fonts->UnLoad(1);
 
 	return true;
 }

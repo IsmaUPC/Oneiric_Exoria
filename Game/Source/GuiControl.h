@@ -9,6 +9,7 @@
 #include "SString.h"
 
 #include "SDL/include/SDL.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 enum class GuiControlType
 {
@@ -90,7 +91,7 @@ public:
 	SDL_Texture* texture;   // Texture atlas reference
 	SDL_Rect section;	   // Texture atlas base section
 
-	int font;			// Text font
+	TTF_Font* font;			// Text font
 	bool active = true;
 
 	SceneControl* observer;		// Observer module (it should probably be an array/list)
