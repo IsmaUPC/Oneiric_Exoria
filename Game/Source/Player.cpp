@@ -540,7 +540,23 @@ void Player::PlayerControls(float dt)
 	//DialogSystem Interaction
 	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
 	{
-		app->dialogueSystem->PerformDialogue(1);
+		app->dialogueSystem->PerformDialogue(0, 7);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		app->dialogueSystem->PerformDialogue(0, 0);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+	
+		app->dialogueSystem->PerformDialogue(0, 1);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		app->dialogueSystem->PerformDialogue(0, 2);
 	}
 
 }
