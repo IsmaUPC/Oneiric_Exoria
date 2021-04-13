@@ -39,6 +39,7 @@ public:
 	bool OnGuiMouseClickEvent(GuiControl* control);
 	int CalculateExp(int level);
 	void AssignEntities();
+	void SpeedAnimationCheck(float dt);
 
 
 private:

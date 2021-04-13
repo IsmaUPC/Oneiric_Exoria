@@ -197,7 +197,7 @@ bool Enemy::Update(float dt)
 
 		if (isDetected) CheckCollisionEnemyToPlayer();
 	}
-	entityData.currentAnimation->speed = dt;
+
 	entityData.currentAnimation->Update();
 	return true;
 }

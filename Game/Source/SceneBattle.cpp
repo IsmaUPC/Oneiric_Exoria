@@ -90,46 +90,54 @@ bool SceneBattle::Start()
 void SceneBattle::AddEntities()
 {
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
+    int level = app->entityManager->GetCurrentEntity()->entityData.level;
+    int randomLvl = 1;
     if (id == 1)
     {
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
-
+        
         // Add Enemies
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 19, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, 1);
+        while (randomLvl < 0) randomLvl = level + (rand() %3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
     }
-    if (id == 2)
+    else if (id == 2)
     {
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
         // Add Enemies
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, 1);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, 1);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
     }
 }
 void SceneBattle::AddPartners()
 {
     // Partners and Player
     int num = app->player->GetNumPartners();
-    app->entityManager->AddEntity(KENZIE_, 26, 16, 0, app->player->playerData.level);
+    app->entityManager->AddEntity(KENZIE_, 26, 13, 0, app->player->playerData.level);
 
     for (int i = 0; i < num; i++)
     {
         switch (app->player->GetPartners()[i].type)
         {
         case KEILER:
-            app->entityManager->AddEntity(KEILER_, 29, 14, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(KEILER_, 29, 15, 0, app->player->GetPartners()[i].level);
             break;
         case ISRRA:
-            app->entityManager->AddEntity(ISRRA_, 29, 18, 0, app->player->GetPartners()[i].level);
+            app->entityManager->AddEntity(ISRRA_, 29, 19, 0, app->player->GetPartners()[i].level);
             break;
         case BRENDA:
-            app->entityManager->AddEntity(BRENDA_, 31, 16, 0, app->player->GetPartners()[i].level);
-            break;
+            app->entityManager->AddEntity(BRENDA_, 26, 17, 0, app->player->GetPartners()[i].level);
+            break; 
         default:
             break;
         }
@@ -247,8 +255,16 @@ bool SceneBattle::Update(float dt)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
-    
+    SpeedAnimationCheck(dt);
+
     return true;
+}
+void SceneBattle::SpeedAnimationCheck(float dt)
+{
+    idleKenzie->speed = dt * 6;
+    idleKeiler->speed = dt * 6;
+    idleIsrra->speed = dt * 6;
+    idleBrenda->speed = dt * 6;
 }
 
 void SceneBattle::AssignEntities()
@@ -266,7 +282,6 @@ bool SceneBattle::PostUpdate()
     // Draw Bar lives
     for (int i = 0; i < enemies.Count(); i++)
     {
-        app->entityManager->entities;
         int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
         rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
         live = rec;
@@ -275,6 +290,22 @@ bool SceneBattle::PostUpdate()
         if(live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
         if(live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
         if(live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+
+        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+
+    }
+    for (int i = 0; i < partners.Count(); i++)
+    {
+        int posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
+        
+        int posY = (int)partners.At(i)->data->entityData.position.y - 30;
+        rec = { posX - 40, posY, 80, 16 };
+        live = rec;
+        live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
+
+        if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
+        if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+        if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
 
         app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
     }

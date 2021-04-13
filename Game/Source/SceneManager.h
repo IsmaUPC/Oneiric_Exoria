@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "SceneControl.h"
 #include "Window.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 class GuiButton;
 
@@ -50,7 +51,7 @@ public:
 	bool GetIsPause() { return pause; };
 	void SetPause(bool statePause) { pause = statePause; };
 
-	int GetGuiFont() { return guiFont; };
+	TTF_Font* GetGuiFont() { return guiFont; };
 
 	// Called before quitting
 	bool CleanUp();
@@ -98,7 +99,7 @@ public:
 	SceneControl* sceneControl;
 
 	int lastLevel = 0;
-	int guiFont;
+	TTF_Font* guiFont = nullptr;
 };
 
 #endif // __SCENEMANAGER_H__
