@@ -37,7 +37,7 @@ bool SceneBattle::Start()
     app->render->camera.x = app->render->camera.y = 0;
 
     app->sceneManager->SetEnemeyDetected(false);
-    texPalyers = app->tex->Load("Assets/Textures/Characters/player_and_partners_idle_big.png");
+    texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 
     // Load Animations
     idleKenzie = new Animation;
@@ -66,6 +66,18 @@ bool SceneBattle::Start()
     {
         idleBrenda->PushBack({ 64 * i, 276, 64, 92 });
     }
+    // Load Animation Bar Turn
+    for (int i = 0; i < 4; i++)
+    {
+        Animation* b = new Animation;
+        b->loop = true;
+        for (int j = 0; j < 3; j++)
+        {
+            b->PushBack({ 384,32 * j + (96 * i), 32, 32 });
+        }
+        spritesBarTurn.Add(b);
+    }
+
 
     AddEntities();
     AddPartners();
@@ -86,6 +98,8 @@ bool SceneBattle::Start()
     green.r = 0; green.g = 187; green.b = 45;
     yellow.r = 229; yellow.g = 190; yellow.b = 1;
     red.r = 203; red.g = 50; red.b = 52;
+    violet.r = 147; violet.g = 112; violet.b = 219;
+    orange.r = 255; orange.g = 136; orange.b = 18;
 
     return true;
 }
@@ -258,6 +272,7 @@ bool SceneBattle::Update(float dt)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
+    
     SpeedAnimationCheck(dt);
 
     return true;
@@ -276,12 +291,7 @@ bool SceneBattle::PostUpdate()
         live = rec;
         live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
 
-        if(live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-        if(live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
-        if(live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-
-        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
-
+        DrawBarLives();
     }
     for (int i = 0; i < partners.Count(); i++)
     {
@@ -292,14 +302,69 @@ bool SceneBattle::PostUpdate()
         live = rec;
         live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
 
-        if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-        if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
-        if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-
-        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+        DrawBarLives();
     }
-
+    // Draw turn bar
+    app->render->DrawRectangle({20, 30, 48, 64*tam-16},violet.r, violet.g, violet.b, 100);
+    DrawTurnBar();
+    app->render->DrawRectangle({ 20, 30, 48, 64 * tam - 16 }, orange.r, orange.g, orange.b, 255, false);
     return true;
+}
+
+void SceneBattle::DrawBarLives()
+{
+    if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
+    if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+    if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+
+    app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+}
+
+void SceneBattle::DrawTurnBar()
+{
+    for (int i = 0; i < tam; i++)
+    {
+        switch (turnSort[i].entityData.type)
+        {
+        case KENZIE_:
+            if (i == 0) {
+                spritesBarTurn.At(0)->data->Update();
+                face = spritesBarTurn.At(0)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(0)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case KEILER_:
+            if (i == 0) {
+                spritesBarTurn.At(1)->data->Update();
+                face = spritesBarTurn.At(1)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(1)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case ISRRA_:
+            if (i == 0) {
+                spritesBarTurn.At(2)->data->Update();
+                face = spritesBarTurn.At(2)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(2)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case BRENDA_:
+            if (i == 0) {
+                spritesBarTurn.At(3)->data->Update();
+                face = spritesBarTurn.At(3)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(3)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        default:
+            //app->render->DrawTexture(turnSort[i].entityData.texture, 28, 64 * i + 38, &turnSort[i].entityData.currentAnimation->GetCurrentFrame());
+            break;
+        }
+        face = { 416,0, 32,14 };
+        if (i < tam - 1)app->render->DrawTexture(texPalyers, 28, 64 * i + 78, &face);
+    }
 }
 
 bool SceneBattle::CleanUp()
@@ -312,6 +377,7 @@ bool SceneBattle::CleanUp()
     RELEASE(idleKeiler);
     RELEASE(idleIsrra);
     RELEASE(idleBrenda);
+    spritesBarTurn.Clear();
     delete[] turnSort;
 
     app->entityManager->ClearList(ret);
@@ -326,6 +392,11 @@ void SceneBattle::SpeedAnimationCheck(float dt)
     idleKeiler->speed = dt * 6;
     idleIsrra->speed = dt * 6;
     idleBrenda->speed = dt * 6;
+    for (int i = 0; i < spritesBarTurn.Count(); i++)
+    {
+        spritesBarTurn.At(i)->data->speed = dt * 6;
+    }
+    
 }
 
 void SceneBattle::AssignEntities()
