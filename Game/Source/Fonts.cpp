@@ -120,7 +120,7 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
 		app->render->DrawTexture(tex, x, y);
 		SDL_FreeSurface(sur);
-		SDL_DestroyTexture(tex); // este de aquí es un hijo de puta de mucho cuidao, id con ojo
+		SDL_DestroyTexture(tex);
 	}
 
 }

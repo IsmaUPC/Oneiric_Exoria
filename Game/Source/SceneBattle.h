@@ -45,6 +45,8 @@ public:
 
 	// Called before all Updates
 	bool PostUpdate();
+	void DrawBarLives();
+	void DrawTurnBar();
 
 	// Called before quitting
 	bool CleanUp();
@@ -63,9 +65,13 @@ private:
 
 	SDL_Rect rec;
 	SDL_Rect live;
+	SDL_Rect face;
+
 	SDL_Color green;
 	SDL_Color yellow;
 	SDL_Color red;
+	SDL_Color violet;
+	SDL_Color orange;
 
 	GuiButton* btnAttack;
 	GuiButton* btnMagic;
@@ -79,6 +85,7 @@ private:
 	Animation* idleKeiler;
 	Animation* idleIsrra;
 	Animation* idleBrenda;
+	List<Animation*> spritesBarTurn;
 
 	List<Entity*> enemies;
 	List<Entity*> partners;

@@ -785,11 +785,11 @@ bool Player::CleanUp()
 	walkAnimDown = nullptr;
 
 	// Partners
-	for (int i = 3; i < numPartners; i++)
-	{
-		// Animations of each partner
-		// ...
-	}
+	//for (int i = 3; i < numPartners; i++)
+	//{
+	//	// Animations of each partner
+	//	// ...
+	//}
 
 	texPartners.Clear();
 	checkPoints.Clear();
