@@ -4,8 +4,20 @@
 #include "SceneControl.h"
 #include "GuiButton.h"
 #include "Animation.h"
+#include "PugiXml\src\pugixml.hpp"
+#include <string>
 
 struct SDL_Texture;
+
+struct Magic
+{
+	int ID=0;
+	int level =0;
+	SString name = "";
+	int damage=0;
+	int mana=0;
+	SString description = "";
+};
 
 class SceneBattle : public SceneControl
 {
@@ -42,6 +54,8 @@ public:
 	void AssignEntities();
 	void SpeedAnimationCheck(float dt);
 
+	bool loadMagics(const char*);
+
 	void BubbleSort();
 	void DisplaceToLeft();
 
@@ -69,6 +83,11 @@ private:
 	List<Entity*> enemies;
 	List<Entity*> partners;
 	Entity* turnSort;
+
+	pugi::xml_document magicDoc;
+	List<Magic*> magics;
+
+	int turn = 0;
 	int tam = 0;
 	bool assigneDone = false;
 };

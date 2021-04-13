@@ -87,7 +87,9 @@ bool SceneBattle::Start()
     yellow.r = 229; yellow.g = 190; yellow.b = 1;
     red.r = 203; red.g = 50; red.b = 52;
 
-    return true;
+    bool ret;
+    ret = loadMagics("magicList.xml");
+    return ret;
 }
 
 void SceneBattle::AddEntities()
@@ -328,6 +330,37 @@ void SceneBattle::SpeedAnimationCheck(float dt)
     idleBrenda->speed = dt * 6;
 }
 
+bool SceneBattle::loadMagics(const char* file)
+{
+    pugi::xml_parse_result result = magicDoc.load_file(file);
+
+    if (result == NULL)
+    {
+        LOG("Could not load the file %s. pugi error: %s", file, result.description());
+        return false;
+    }
+    else
+    {
+        pugi::xml_node character = magicDoc.first_child().child("character");
+
+        for (character; character != NULL; character = character.next_sibling("character"))
+        {
+            for (pugi::xml_node n = character.child("magic"); n != NULL; n = n.next_sibling("magic"))
+            {
+                Magic* magic = new Magic;
+                magic->ID = character.attribute("ID").as_int();
+                magic->level = n.attribute("level").as_int();
+                magic->name = n.attribute("name").as_string("");
+                magic->damage = n.attribute("damage").as_int();
+                magic->mana = n.attribute("mana").as_int();
+                magic->description = n.attribute("description").as_string("");
+                magics.Add(magic);
+            }
+        }
+    }
+    return true;
+}
+
 void SceneBattle::AssignEntities()
 {
     enemies = app->entityManager->entities;
@@ -356,19 +389,59 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
     {
     case GuiControlType::BUTTON:
     {
-
+        //ATTACK
         if (control->id == 20)
         {
+            //Next turn
+            while (turnSort[turn + 1].isAlive == false)
+            {
+                turn += 1;
+                if (turn >= tam) turn = 0;
+            }
+            if (turn < tam-1)
+            {
+                turn++;
+            }
+            else
+            {
+                turn = 0;
+            }
+           // DisplaceToLeft();
 
         }
+        //MAGIC
         else if (control->id == 21)
         {
-
+            for (int i = 0; i < magics.Count(); i++)
+            {
+                if (magics.At(i)->data->ID == turnSort[turn].entityData.type)
+                {
+                    LOG("%s",magics.At(i)->data->name.GetString());
+                }
+            }
         }
+        //DEFENSE
         else if (control->id == 22)
         {
-
+            switch (turnSort[turn].entityData.type)
+            {
+            case 15:
+                LOG("Kenzie");
+                break;
+            case 16:
+                LOG("Keiler");
+                break;
+            case 17:
+                LOG("Isrra");
+                break;
+            case 18:
+                LOG("Brenda");
+                break;
+            default:
+                break;
+            }
         }
+        //EXIT
         else if (control->id == 23)
         {
             isContinue = true;
