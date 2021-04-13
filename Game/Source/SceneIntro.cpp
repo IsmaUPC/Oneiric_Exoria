@@ -40,11 +40,11 @@ bool SceneIntro::Start()
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { WINDOW_W / 2 - 200 / 2,yPosition + (padding * 2),  183, 91 }, "PLAY", RECTANGLE, btnTextureAtlas);
+	btnPlay = new GuiButton(1, { WINDOW_W / 2 - 200 / 2,yPosition + (padding * 2),  183, 91 }, "Play", RECTANGLE, btnTextureAtlas);
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { WINDOW_W / 2 + 90 , yPosition + (padding * 2),  183, 91 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(2, { WINDOW_W / 2 + 90 , yPosition + (padding * 2),  183, 91 }, "Continue", RECTANGLE, btnTextureAtlas);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -60,7 +60,7 @@ bool SceneIntro::Start()
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 
-	btnSettings = new GuiButton(6, { WINDOW_W / 2 - 290, yPosition + (padding * 2), 183, 91 }, "SETTINGS", RECTANGLE, btnTextureAtlas);
+	btnSettings = new GuiButton(6, { WINDOW_W / 2 - 290, yPosition + (padding * 2), 183, 91 }, "Settings", RECTANGLE, btnTextureAtlas);
 	btnSettings->SetObserver(this);
 	app->guiManager->AddGuiButton(btnSettings);
 	

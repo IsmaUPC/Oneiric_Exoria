@@ -33,6 +33,8 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+	bool Start();
+
 	bool CleanUp();
 
 	// Loads a font file from a texture
@@ -48,13 +50,14 @@ public:
 	void UnLoad(int font);
 
 	// Create a surface from text
-	void BlitText(int x, int y, int fontIndex, const char* text, SDL_Color color) const;
+	void BlitText(int x, int y, int fontIndex, const char* text, SDL_Color color);
 
 
 private:
 	// An array to keep track and store all loaded fonts
 	List<TTF_Font*> fonts;
-
+	SDL_Surface* sur = nullptr;
+	SDL_Texture* tex = nullptr;
 };
 
 

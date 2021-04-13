@@ -6,41 +6,18 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="48" y="150" />
+		<camera x="90" y="90" />
 	</renderer>
 	<player>
-		<position x="592" y="210" direction="2" />
+		<position x="550" y="270" direction="1" />
 		<coins count="0" />
 		<lives num_respawns="3" />
 		<level value="1" />
-		<path>
-			<breadcrumb x="550" y="270" />
-			<breadcrumb x="552" y="266" />
-			<breadcrumb x="554" y="264" />
-			<breadcrumb x="556" y="262" />
-			<breadcrumb x="558" y="260" />
-			<breadcrumb x="560" y="258" />
-			<breadcrumb x="562" y="256" />
-			<breadcrumb x="564" y="254" />
-			<breadcrumb x="566" y="252" />
-			<breadcrumb x="568" y="250" />
-			<breadcrumb x="570" y="248" />
-			<breadcrumb x="572" y="246" />
-			<breadcrumb x="574" y="244" />
-			<breadcrumb x="576" y="242" />
-			<breadcrumb x="578" y="240" />
-			<breadcrumb x="580" y="238" />
-			<breadcrumb x="582" y="236" />
-			<breadcrumb x="584" y="234" />
-			<breadcrumb x="586" y="232" />
-			<breadcrumb x="588" y="230" />
-			<breadcrumb x="590" y="228" />
-			<breadcrumb x="592" y="226" />
-		</path>
+		<path />
 		<partners>
-			<partner x="568" y="250" breadcrumb="10" direction="2" level="1" />
-			<partner x="530" y="270" breadcrumb="0" direction="1" level="1" />
-			<partner x="490" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="510" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="470" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="430" y="270" breadcrumb="0" direction="1" level="1" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -49,10 +26,10 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="1910" />
+		<time value="0" />
 		<entities>
-			<entity type="13" x="-1" y="-4" id="0" level="0" state="0" />
-			<entity type="1" x="16" y="3" id="1" level="1" state="6" />
+			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" />
+			<entity type="1" x="16" y="3" id="1" level="1" state="0" />
 			<entity type="1" x="24" y="8" id="2" level="1" state="0" />
 		</entities>
 	</entity_manager>
