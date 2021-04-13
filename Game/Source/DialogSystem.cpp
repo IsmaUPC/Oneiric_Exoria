@@ -77,7 +77,7 @@ bool DialogueSystem::CleanUp()
 	return true;
 }
 
-void DialogueSystem::PerformDialogue(int treeId)
+void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 {
 	if (playerInput >= 0 && playerInput < currentNode->dialogueOptions.size())
 	{

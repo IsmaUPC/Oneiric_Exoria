@@ -31,6 +31,13 @@ bool Fonts::Awake(pugi::xml_node& config)
 	return ret;
 }
 
+bool Fonts::Start()
+{
+	bool ret = true;
+
+	return ret;
+}
+
 bool Fonts::CleanUp()
 {
 
@@ -100,7 +107,7 @@ void Fonts::UnLoad(int font_id)
 	}
 }
 
-void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color color) const
+void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color color)
 {
 	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts.At(font_id)->data == NULL)
 	{
@@ -109,9 +116,11 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 	}
 	else
 	{
-		SDL_Surface* sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
-		SDL_Texture* tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
+		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
+		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
 		app->render->DrawTexture(tex, x, y);
+		SDL_FreeSurface(sur);
+		SDL_DestroyTexture(tex); // este de aquí es un hijo de puta de mucho cuidao, id con ojo
 	}
 
 }
