@@ -76,6 +76,9 @@ bool SceneBattle::Start()
     InicializeStats();
     app->entityManager->spawnQueue = enemies;
 
+    int num = enemies.Count();
+    turnSort = new Entity[num];
+
     // Gui Buttons
     AddBattleMenu(btnTextureAtlas);
 
@@ -259,20 +262,6 @@ bool SceneBattle::Update(float dt)
 
     return true;
 }
-void SceneBattle::SpeedAnimationCheck(float dt)
-{
-    idleKenzie->speed = dt * 6;
-    idleKeiler->speed = dt * 6;
-    idleIsrra->speed = dt * 6;
-    idleBrenda->speed = dt * 6;
-}
-
-void SceneBattle::AssignEntities()
-{
-    enemies = app->entityManager->entities;
-    partners = app->entityManager->partners;
-    assigneDone = true;
-}
 bool SceneBattle::PostUpdate()
 {
     if (!assigneDone)AssignEntities();
@@ -323,6 +312,7 @@ bool SceneBattle::CleanUp()
     RELEASE(idleKeiler);
     RELEASE(idleIsrra);
     RELEASE(idleBrenda);
+    delete[] turnSort;
 
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
@@ -330,7 +320,36 @@ bool SceneBattle::CleanUp()
 
     return ret;
 }
+void SceneBattle::SpeedAnimationCheck(float dt)
+{
+    idleKenzie->speed = dt * 6;
+    idleKeiler->speed = dt * 6;
+    idleIsrra->speed = dt * 6;
+    idleBrenda->speed = dt * 6;
+}
 
+void SceneBattle::AssignEntities()
+{
+    enemies = app->entityManager->entities;
+    partners = app->entityManager->partners;
+
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        turnSort[i].entityData = enemies.At(i)->data->entityData;
+        turnSort[i].stats = enemies.At(i)->data->stats;
+    }
+    int j = 0;
+    tam = enemies.Count() + partners.Count();
+    for (int i = enemies.Count(); i < tam; i++)
+    {
+        turnSort[i].entityData = partners.At(j)->data->entityData;
+        turnSort[i].stats = partners.At(j)->data->stats;
+        j++;
+    }
+    BubbleSort();
+
+    assigneDone = true;
+}
 bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 {
     switch (control->type)
@@ -364,4 +383,32 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 int SceneBattle::CalculateExp(int level)
 {
     return (0.04 * (level * level * level) + 0.8 * (level * level) + 2 * level) * 3.5;
+}
+void SceneBattle::BubbleSort()
+{
+    int numSwaps = -1;
+    while (numSwaps != 0)
+    {
+        numSwaps = 0;
+        for (int i = 0; i < tam - 1; i++)
+        {
+            Entity aux;
+            if (turnSort[i].stats.speed < turnSort[i + 1].stats.speed)
+            {
+                aux = turnSort[i];
+                turnSort[i] = turnSort[i + 1];
+                turnSort[i + 1] = aux;
+                numSwaps++;
+            }
+        }
+    }
+}
+void SceneBattle::DisplaceToLeft()
+{
+    Entity aux = turnSort[0];
+    for (int i = 0; i < tam; i++)
+    {
+        turnSort[i] = turnSort[i + 1];
+    }
+    turnSort[tam - 1] = aux;
 }

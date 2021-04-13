@@ -24,6 +24,7 @@ public:
 	void InicializeStats();
 	void AddPartners();
 	void AddEntities();
+
 	// Called before all Updates
 	bool PreUpdate();
 
@@ -41,6 +42,8 @@ public:
 	void AssignEntities();
 	void SpeedAnimationCheck(float dt);
 
+	void BubbleSort();
+	void DisplaceToLeft();
 
 private:
 
@@ -65,6 +68,8 @@ private:
 
 	List<Entity*> enemies;
 	List<Entity*> partners;
+	Entity* turnSort;
+	int tam = 0;
 	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__
