@@ -20,8 +20,8 @@
    <property name="Nodraw" type="int" value="0"/>
   </properties>
   <data>
-   <tile/>
-   <tile/>
+   <tile gid="5278"/>
+   <tile gid="4734"/>
    <tile/>
    <tile/>
    <tile/>
