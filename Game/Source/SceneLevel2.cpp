@@ -46,7 +46,7 @@ bool SceneLevel2::Start()
 	app->SetLastScene((Module*)this);
 	victory = false;
 	app->player->win = false;
-	if (app->map->Load("map_2.tmx") == true)
+	if (app->map->Load("school_2.tmx") == true)
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -57,7 +57,7 @@ bool SceneLevel2::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(576,1534);
+	app->player->positionInitial = new iPoint(100,534);
 
 	app->player->Init();
 	app->player->Start();

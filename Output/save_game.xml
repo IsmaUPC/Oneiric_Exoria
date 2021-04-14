@@ -6,31 +6,27 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="70" y="90" />
+		<camera x="540" y="-174" />
 	</renderer>
 	<player>
-		<position x="570" y="270" direction="1" />
+		<position x="100" y="534" direction="1" />
 		<coins count="0" />
 		<lives num_respawns="3" />
 		<level value="1" />
 		<path />
 		<partners>
-			<partner x="530" y="270" breadcrumb="0" direction="1" level="1" />
-			<partner x="490" y="270" breadcrumb="0" direction="1" level="1" />
-			<partner x="450" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="60" y="534" breadcrumb="0" direction="1" level="1" />
+			<partner x="20" y="534" breadcrumb="0" direction="1" level="1" />
+			<partner x="-20" y="534" breadcrumb="0" direction="1" level="1" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="1" />
+		<level lvl="2" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
 		<time value="0" />
-		<entities>
-			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" />
-			<entity type="1" x="16" y="3" id="1" level="1" state="0" />
-			<entity type="1" x="24" y="8" id="2" level="1" state="0" />
-		</entities>
+		<entities />
 	</entity_manager>
 </save_state>
