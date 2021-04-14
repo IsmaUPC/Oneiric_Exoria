@@ -216,10 +216,10 @@ bool GUI::CleanUp()
 	app->tex->UnLoad(arrowTex);
 	app->tex->UnLoad(imgCoin);
 
-	delete headAnim;
-	delete arrowAnim;
-	delete buttonEAnim;
-	delete coinHudAnim;
+	RELEASE(headAnim);
+	RELEASE(arrowAnim);
+	RELEASE(buttonEAnim);
+	RELEASE(coinHudAnim);
 
 	active = false;
 

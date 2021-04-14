@@ -764,25 +764,15 @@ bool Player::CleanUp()
 	delete positionInitial;
 	positionInitial = nullptr;
 
-	delete idleAnimL;
-	delete idleAnimR;
-	delete idleAnimUp;
-	delete idleAnimDown;
+	RELEASE(idleAnimL);
+	RELEASE(idleAnimR);
+	RELEASE (idleAnimUp);
+	RELEASE (idleAnimDown);
 
-	delete walkAnimL;
-	delete walkAnimR;
-	delete walkAnimUp;
-	delete walkAnimDown;
-
-	idleAnimL = nullptr;
-	idleAnimR = nullptr;
-	idleAnimUp = nullptr;
-	idleAnimDown = nullptr;
-
-	walkAnimL = nullptr;
-	walkAnimR = nullptr;
-	walkAnimUp = nullptr;
-	walkAnimDown = nullptr;
+	RELEASE(walkAnimL);
+	RELEASE(walkAnimR);
+	RELEASE(walkAnimUp);
+	RELEASE(walkAnimDown);
 
 	// Partners
 	//for (int i = 3; i < numPartners; i++)
@@ -791,6 +781,10 @@ bool Player::CleanUp()
 	//	// ...
 	//}
 
+	for (int i = 0; i < texPartners.Count(); i++)
+	{
+		app->tex->UnLoad(texPartners.At(i)->data);
+	}
 	texPartners.Clear();
 	checkPoints.Clear();
 	path.Clear();

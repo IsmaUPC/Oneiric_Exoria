@@ -139,6 +139,7 @@ bool SceneIntro::CleanUp()
 	bgIntro = nullptr;
 	logoIntro = nullptr;
 	active = false;
+
 	return true;
 }
 

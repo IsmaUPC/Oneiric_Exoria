@@ -78,7 +78,6 @@ bool SceneBattle::Start()
         spritesBarTurn.Add(b);
     }
 
-
     AddEntities();
     AddPartners();
 
@@ -98,7 +97,7 @@ bool SceneBattle::Start()
     green.r = 0; green.g = 187; green.b = 45;
     yellow.r = 229; yellow.g = 190; yellow.b = 1;
     red.r = 203; red.g = 50; red.b = 52;
-    violet.r = 147; violet.g = 112; violet.b = 219;
+    violet.r = 37; violet.g = 40; violet.b = 80;
     orange.r = 255; orange.g = 136; orange.b = 18;
 
     bool ret;
@@ -111,23 +110,9 @@ void SceneBattle::AddEntities()
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     int level = app->entityManager->GetCurrentEntity()->entityData.level;
     int randomLvl = 1;
-    if (id == 1)
+    switch (id)
     {
-        // Load textures
-        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
-        
-        // Add Enemies
-        while (randomLvl < 0) randomLvl = level + (rand() %3);
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
-    }
-    else if (id == 2)
-    {
+    case 1:
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
@@ -136,6 +121,25 @@ void SceneBattle::AddEntities()
         app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
+        break;
+
+    case 2:
+        // Load textures
+        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+        // Add Enemies
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        break;
+
+    default:
+        break;
     }
 }
 void SceneBattle::AddPartners()
