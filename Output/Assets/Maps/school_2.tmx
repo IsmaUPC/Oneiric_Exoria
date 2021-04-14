@@ -10292,7 +10292,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="collisions" width="43" height="34">
+ <layer id="2" name="collisions" width="43" height="34" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="1"/>
   </properties>
