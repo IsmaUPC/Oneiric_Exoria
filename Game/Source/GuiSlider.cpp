@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
+#include "Fonts.h"
 
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds,const char* text = "SLIDER", int min, int max, SDL_Texture* texture) : GuiControl(GuiControlType::SLIDER, id)
 {
@@ -149,7 +150,7 @@ bool GuiSlider::Draw()
 	centradoX = (bounds.w / 2) - (((float)(text.Length() / 2) + 0.5f) * 14);	
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centradoY = (bounds.h / 2) - (48 / 4);
-	//app->fonts->BlitText(bounds.x + centradoX, bounds.y + centradoY, font, text.GetString());
+	app->fonts->BlitText(bounds.x + centradoX, bounds.y + centradoY, 0, text.GetString(), { 255, 255, 255 });
 
 	return false;
 }

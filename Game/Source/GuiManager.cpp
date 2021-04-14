@@ -31,11 +31,11 @@ bool GuiManager::Awake(pugi::xml_node&)
 
 bool GuiManager::Start()
 {
-	btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_selected.wav");
-	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
-	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
+	//btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_selected.wav");
+	//btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
+	//btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
-	btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
+	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
 	press = false;
 	return true;
 }
