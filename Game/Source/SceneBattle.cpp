@@ -401,6 +401,31 @@ void SceneBattle::DrawTurnBar()
             else face = spritesBarTurn.At(3)->data->frames[0];
             app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
             break;
+
+        case BANDIT:
+            if (i == 0) {
+                spritesBarTurn.At(4)->data->Update();
+                face = spritesBarTurn.At(4)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(4)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
+        case FIGHTER:
+            if (i == 0) {
+                spritesBarTurn.At(5)->data->Update();
+                face = spritesBarTurn.At(5)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(5)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
+        case SAPLING:
+            if (i == 0) {
+                spritesBarTurn.At(6)->data->Update();
+                face = spritesBarTurn.At(6)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(6)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
         default:
             //app->render->DrawTexture(turnSort[i].entityData.texture, 28, 64 * i + 38, &turnSort[i].entityData.currentAnimation->GetCurrentFrame());
             break;
