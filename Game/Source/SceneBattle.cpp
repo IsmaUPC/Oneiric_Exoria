@@ -100,11 +100,12 @@ void SceneBattle::LoadAnimations()
     {
         Animation* b = new Animation;
         b->loop = true;
-        if (i % 1) numSprites = 4;
-        else if (i % 2) numSprites = 2;
-        else if (i == 7) numSprites = 5;
-        else if (i == 8) numSprites = 6;
-        if (i % 4)
+        if (i % 2) numSprites = 2;
+        else numSprites = 4;
+        if (i == 6) numSprites = 5;
+        else if (i == 8) numSprites = 5;
+        else if (i == 10) numSprites = 6;
+        if ((i+1) % 4 == 0 && i != 0)
         {
             for (int j = 0; j < 4; j++)
             {
@@ -142,7 +143,7 @@ void SceneBattle::AddEntities()
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 8, 17, 0, randomLvl);
         break;
 
     case 2:
@@ -154,6 +155,8 @@ void SceneBattle::AddEntities()
         app->entityManager->AddEntity(FIGHTER, 14, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(SAPLING, 11, 19, 0, randomLvl);
         break;
 
     case 3:
@@ -202,20 +205,6 @@ void SceneBattle::InicializeStats()
         int level = enemies.At(i)->data->entityData.level;
         // Add switch for assign strong, if is a type enemy strong = x, if is other type strong = y
         TypeEntity pType = enemies.At(i)->data->entityData.type;
-        switch (pType)
-        {
-        case BANDIT:
-            strong = 1;
-            break;
-        case FIGHTER:
-            strong = 1.1;
-            break;
-        case SAPLING:
-            strong = 1.2;
-            break;
-        default:
-            break;
-        }
         if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
         {
             switch (pType)
@@ -264,6 +253,23 @@ void SceneBattle::InicializeStats()
         }
         else
         {
+            switch (pType)
+            {
+            case BANDIT:
+                strong = 1;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+                break;
+            case FIGHTER:
+                strong = 1.1;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+                break;
+            case SAPLING:
+                strong = 1.2;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+                break;
+            default:
+                break;
+            }
             enemies.At(i)->data->stats.attack = ((2 * level + 7) * 0.75) * strong;
             enemies.At(i)->data->stats.defense = ((2 * level + 7) * 0.8) * strong;
             enemies.At(i)->data->stats.health = ((2.5 * level + 7.5) * 1.5) * strong;
@@ -271,6 +277,8 @@ void SceneBattle::InicializeStats()
             enemies.At(i)->data->stats.mana = (enemies.At(i)->data->stats.health / 2) * strong;
             enemies.At(i)->data->stats.speed = ((2.5 * level + 7.5) * 0.9) * strong;
             enemies.At(i)->data->stats.exp = (sqrt(CalculateExp(level)) / 3) * strong;
+
+            enemies.At(i)->data->entityData.texture = texEnemies;
         }
     }
 }
@@ -320,8 +328,9 @@ bool SceneBattle::PostUpdate()
     // Draw Bar lives
     for (int i = 0; i < enemies.Count(); i++)
     {
-        int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
-        rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
+        int posX = (int)enemies.At(i)->data->entityData.position.x + 2*enemies.At(i)->data->entityData.pointsCollision[0].x + 2*enemies.At(i)->data->entityData.centerPoint.x;
+        int posY = (int)enemies.At(i)->data->entityData.position.y - 30;
+        rec = { posX-40, posY, 80, 16};
         live = rec;
         live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
 
@@ -330,7 +339,6 @@ bool SceneBattle::PostUpdate()
     for (int i = 0; i < partners.Count(); i++)
     {
         int posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
-        
         int posY = (int)partners.At(i)->data->entityData.position.y - 30;
         rec = { posX - 40, posY, 80, 16 };
         live = rec;
@@ -347,6 +355,7 @@ bool SceneBattle::PostUpdate()
 
 void SceneBattle::DrawBarLives()
 {
+    if (live.w > rec.w) live.w = rec.w;
     if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
     if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
     if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
@@ -410,12 +419,15 @@ bool SceneBattle::CleanUp()
 
     spritesBarTurn.Clear();
     animationsPlayer.Clear();
+    animationsEnemies.Clear();
 
     delete[] turnSort;
 
+    magics.Clear();
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
+
 
     return ret;
 }
@@ -428,6 +440,10 @@ void SceneBattle::SpeedAnimationCheck(float dt)
     for (int i = 0; i < animationsPlayer.Count(); i++)
     {
         animationsPlayer.At(i)->data->speed = dt * 6;
+    }
+    for (int i = 0; i < animationsEnemies.Count(); i++)
+    {
+        animationsEnemies.At(i)->data->speed = dt * 2;
     }
 }
 
@@ -449,7 +465,7 @@ bool SceneBattle::LoadMagics(const char* file)
             for (pugi::xml_node n = character.child("magic"); n != NULL; n = n.next_sibling("magic"))
             {
                 Magic* magic = new Magic;
-                magic->ID = character.attribute("ID").as_int();
+                magic->id = character.attribute("ID").as_int();
                 magic->level = n.attribute("level").as_int();
                 magic->name = n.attribute("name").as_string("");
                 magic->damage = n.attribute("damage").as_int();
@@ -515,7 +531,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         {
             for (int i = 0; i < magics.Count(); i++)
             {
-                if (magics.At(i)->data->ID == turnSort[turn].entityData.type)
+                if (magics.At(i)->data->id == turnSort[turn].entityData.type)
                 {
                     LOG("%s",magics.At(i)->data->name.GetString());
                 }

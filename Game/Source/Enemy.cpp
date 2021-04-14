@@ -31,21 +31,24 @@ bool Enemy::Start()
 {
 	active = true;
 
-	switch (entityData.type)
+	if (entityData.id != 0)
 	{
-	case BANDIT:
-		if(!move) entityData.currentAnimation = app->entityManager->animations.At(0)->data;
-		else entityData.currentAnimation = app->entityManager->animations.At(1)->data;
-		break;
-	case FIGHTER:
-		if (!move) entityData.currentAnimation = app->entityManager->animations.At(2)->data;
-		else entityData.currentAnimation = app->entityManager->animations.At(3)->data;
-		break;
-	case SAPLING:
-		entityData.currentAnimation = app->entityManager->animations.At(4)->data;
-		break;
-	default:
-		break;
+		switch (entityData.type)
+		{
+		case BANDIT:
+			if (!move) entityData.currentAnimation = app->entityManager->animations.At(0)->data;
+			else entityData.currentAnimation = app->entityManager->animations.At(1)->data;
+			break;
+		case FIGHTER:
+			if (!move) entityData.currentAnimation = app->entityManager->animations.At(2)->data;
+			else entityData.currentAnimation = app->entityManager->animations.At(3)->data;
+			break;
+		case SAPLING:
+			entityData.currentAnimation = app->entityManager->animations.At(4)->data;
+			break;
+		default:
+			break;
+		}
 	}
 
 	// Enemy Path

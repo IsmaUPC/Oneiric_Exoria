@@ -239,7 +239,9 @@ void EntityManager::SpawnEntity(Entity* info)
 	case LICAN:
 	case EESAAC:
 	case HEADACHE:
-		entities.Add(new Enemy(info, texEnemies)); // Change texture for atlasEnemy
+		if(info->entityData.texture == nullptr)
+			entities.Add(new Enemy(info, texEnemies));
+		else entities.Add(new Enemy(info, info->entityData.texture));
 		entities.end->data->Start();
 		break;
 

@@ -11,7 +11,7 @@ struct SDL_Texture;
 
 struct Magic
 {
-	int ID=0;
+	int id=0;
 	int level =0;
 	SString name = "";
 	int damage=0;
