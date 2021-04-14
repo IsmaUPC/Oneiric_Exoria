@@ -302,3 +302,33 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	return ret;
 }
+
+bool Render::DrawTextBox(int x, int y, int w, int h, SDL_Color base, SDL_Color interiorBorder, SDL_Color exteriorBorder, SDL_Texture* cornerTex, Uint8 a) const
+{
+	bool ret = true;
+	
+	//Base rectangle
+	DrawRectangle({ x + 10, y + 10, w - 20, h - 20}, base.r, base.g, base.b, a);
+
+	//Interior border
+	DrawRectangle({ x + 5, y + 5, 5, h - 10 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + w - 10, y + 5, 5, h - 10 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + 10, y + 5, w - 20, 5 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + 10, y + h - 10, w - 20, 5 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+
+	//Exterior border
+	DrawRectangle({ x, y, 5, h }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + w - 5, y, 5, h}, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + 5, y, w - 10, 5 }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + 5, y + h - 5, w - 10, 5 }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+
+	//Corner draw
+	uint texW, texH;
+	app->tex->GetSize(cornerTex, texW, texH);
+	DrawTexture(cornerTex, x + 15, y + 15);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + 15, 0, 1.0f, 90);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + h - 15 - texH, 0, 1.0f, 180);
+	DrawTexture(cornerTex, x + 15, y + h - 15 - texH, 0, 1.0f, 270);
+
+	return ret;
+}
