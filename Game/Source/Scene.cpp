@@ -58,7 +58,7 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->player->positionInitial = new iPoint(550, 270);	
+	app->player->positionInitial = new iPoint(570, 270);	
 
 	// Active calls
 	app->player->Init();

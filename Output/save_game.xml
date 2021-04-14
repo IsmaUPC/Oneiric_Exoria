@@ -6,18 +6,18 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="90" y="90" />
+		<camera x="70" y="90" />
 	</renderer>
 	<player>
-		<position x="550" y="270" direction="1" />
+		<position x="570" y="270" direction="1" />
 		<coins count="0" />
 		<lives num_respawns="3" />
 		<level value="1" />
 		<path />
 		<partners>
-			<partner x="510" y="270" breadcrumb="0" direction="1" level="1" />
-			<partner x="470" y="270" breadcrumb="0" direction="1" level="1" />
-			<partner x="430" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="530" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="490" y="270" breadcrumb="0" direction="1" level="1" />
+			<partner x="450" y="270" breadcrumb="0" direction="1" level="1" />
 		</partners>
 	</player>
 	<scene_manager>

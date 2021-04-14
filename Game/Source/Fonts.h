@@ -59,6 +59,4 @@ private:
 	SDL_Surface* sur = nullptr;
 	SDL_Texture* tex = nullptr;
 };
-
-
 #endif // __ModuleFonts_H__

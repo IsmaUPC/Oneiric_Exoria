@@ -98,7 +98,6 @@ void Fonts::UnLoad(int font_id)
 {
 	LOG("Freeing a font texture\n");
 
-
 	if (font_id >= 0 && font_id < MAX_FONTS && fonts.At(font_id) != NULL)
 	{
 		TTF_CloseFont(fonts.At(font_id)->data);
@@ -118,9 +117,9 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 	{
 		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
 		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
-		app->render->DrawTexture(tex, x, y);
+		if(tex != NULL)app->render->DrawTexture(tex, x, y);
 		SDL_FreeSurface(sur);
-		SDL_DestroyTexture(tex); // este de aquí es un hijo de puta de mucho cuidao, id con ojo
+		SDL_DestroyTexture(tex);
 	}
 
 }

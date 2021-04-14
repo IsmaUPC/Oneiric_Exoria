@@ -37,7 +37,7 @@ bool SceneBattle::Start()
     app->render->camera.x = app->render->camera.y = 0;
 
     app->sceneManager->SetEnemeyDetected(false);
-    texPalyers = app->tex->Load("Assets/Textures/Characters/player_and_partners_idle_big.png");
+    texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 
     // Load Animations
     idleKenzie = new Animation;
@@ -66,6 +66,17 @@ bool SceneBattle::Start()
     {
         idleBrenda->PushBack({ 64 * i, 276, 64, 92 });
     }
+    // Load Animation Bar Turn
+    for (int i = 0; i < 4; i++)
+    {
+        Animation* b = new Animation;
+        b->loop = true;
+        for (int j = 0; j < 3; j++)
+        {
+            b->PushBack({ 384,32 * j + (96 * i), 32, 32 });
+        }
+        spritesBarTurn.Add(b);
+    }
 
     AddEntities();
     AddPartners();
@@ -76,6 +87,9 @@ bool SceneBattle::Start()
     InicializeStats();
     app->entityManager->spawnQueue = enemies;
 
+    int num = enemies.Count();
+    turnSort = new Entity[num];
+
     // Gui Buttons
     AddBattleMenu(btnTextureAtlas);
 
@@ -83,8 +97,12 @@ bool SceneBattle::Start()
     green.r = 0; green.g = 187; green.b = 45;
     yellow.r = 229; yellow.g = 190; yellow.b = 1;
     red.r = 203; red.g = 50; red.b = 52;
+    violet.r = 37; violet.g = 40; violet.b = 80;
+    orange.r = 255; orange.g = 136; orange.b = 18;
 
-    return true;
+    bool ret;
+    ret = loadMagics("magicList.xml");
+    return ret;
 }
 
 void SceneBattle::AddEntities()
@@ -92,23 +110,9 @@ void SceneBattle::AddEntities()
     int id = app->entityManager->GetCurrentEntity()->entityData.id;
     int level = app->entityManager->GetCurrentEntity()->entityData.level;
     int randomLvl = 1;
-    if (id == 1)
+    switch (id)
     {
-        // Load textures
-        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
-        
-        // Add Enemies
-        while (randomLvl < 0) randomLvl = level + (rand() %3);
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
-        while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
-    }
-    else if (id == 2)
-    {
+    case 1:
         // Load textures
         img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
 
@@ -117,6 +121,25 @@ void SceneBattle::AddEntities()
         app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
+        break;
+
+    case 2:
+        // Load textures
+        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+        // Add Enemies
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        break;
+
+    default:
+        break;
     }
 }
 void SceneBattle::AddPartners()
@@ -255,23 +278,10 @@ bool SceneBattle::Update(float dt)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
+    
     SpeedAnimationCheck(dt);
 
     return true;
-}
-void SceneBattle::SpeedAnimationCheck(float dt)
-{
-    idleKenzie->speed = dt * 6;
-    idleKeiler->speed = dt * 6;
-    idleIsrra->speed = dt * 6;
-    idleBrenda->speed = dt * 6;
-}
-
-void SceneBattle::AssignEntities()
-{
-    enemies = app->entityManager->entities;
-    partners = app->entityManager->partners;
-    assigneDone = true;
 }
 bool SceneBattle::PostUpdate()
 {
@@ -287,12 +297,7 @@ bool SceneBattle::PostUpdate()
         live = rec;
         live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
 
-        if(live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-        if(live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
-        if(live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-
-        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
-
+        DrawBarLives();
     }
     for (int i = 0; i < partners.Count(); i++)
     {
@@ -303,14 +308,69 @@ bool SceneBattle::PostUpdate()
         live = rec;
         live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
 
-        if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-        if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
-        if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-
-        app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+        DrawBarLives();
     }
-
+    // Draw turn bar
+    app->render->DrawRectangle({20, 30, 48, 64*tam-16},violet.r, violet.g, violet.b, 100);
+    DrawTurnBar();
+    app->render->DrawRectangle({ 20, 30, 48, 64 * tam - 16 }, orange.r, orange.g, orange.b, 255, false);
     return true;
+}
+
+void SceneBattle::DrawBarLives()
+{
+    if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
+    if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+    if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+
+    app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+}
+
+void SceneBattle::DrawTurnBar()
+{
+    for (int i = 0; i < tam; i++)
+    {
+        switch (turnSort[i].entityData.type)
+        {
+        case KENZIE_:
+            if (i == 0) {
+                spritesBarTurn.At(0)->data->Update();
+                face = spritesBarTurn.At(0)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(0)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case KEILER_:
+            if (i == 0) {
+                spritesBarTurn.At(1)->data->Update();
+                face = spritesBarTurn.At(1)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(1)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case ISRRA_:
+            if (i == 0) {
+                spritesBarTurn.At(2)->data->Update();
+                face = spritesBarTurn.At(2)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(2)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        case BRENDA_:
+            if (i == 0) {
+                spritesBarTurn.At(3)->data->Update();
+                face = spritesBarTurn.At(3)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(3)->data->frames[0];
+            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            break;
+        default:
+            //app->render->DrawTexture(turnSort[i].entityData.texture, 28, 64 * i + 38, &turnSort[i].entityData.currentAnimation->GetCurrentFrame());
+            break;
+        }
+        face = { 416,0, 32,14 };
+        if (i < tam - 1)app->render->DrawTexture(texPalyers, 28, 64 * i + 78, &face);
+    }
 }
 
 bool SceneBattle::CleanUp()
@@ -323,6 +383,8 @@ bool SceneBattle::CleanUp()
     RELEASE(idleKeiler);
     RELEASE(idleIsrra);
     RELEASE(idleBrenda);
+    spritesBarTurn.Clear();
+    delete[] turnSort;
 
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
@@ -330,26 +392,131 @@ bool SceneBattle::CleanUp()
 
     return ret;
 }
+void SceneBattle::SpeedAnimationCheck(float dt)
+{
+    idleKenzie->speed = dt * 6;
+    idleKeiler->speed = dt * 6;
+    idleIsrra->speed = dt * 6;
+    idleBrenda->speed = dt * 6;
+    for (int i = 0; i < spritesBarTurn.Count(); i++)
+    {
+        spritesBarTurn.At(i)->data->speed = dt * 6;
+    }
+    
+}
 
+bool SceneBattle::loadMagics(const char* file)
+{
+    pugi::xml_parse_result result = magicDoc.load_file(file);
+
+    if (result == NULL)
+    {
+        LOG("Could not load the file %s. pugi error: %s", file, result.description());
+        return false;
+    }
+    else
+    {
+        pugi::xml_node character = magicDoc.first_child().child("character");
+
+        for (character; character != NULL; character = character.next_sibling("character"))
+        {
+            for (pugi::xml_node n = character.child("magic"); n != NULL; n = n.next_sibling("magic"))
+            {
+                Magic* magic = new Magic;
+                magic->ID = character.attribute("ID").as_int();
+                magic->level = n.attribute("level").as_int();
+                magic->name = n.attribute("name").as_string("");
+                magic->damage = n.attribute("damage").as_int();
+                magic->mana = n.attribute("mana").as_int();
+                magic->description = n.attribute("description").as_string("");
+                magics.Add(magic);
+            }
+        }
+    }
+    return true;
+}
+
+void SceneBattle::AssignEntities()
+{
+    enemies = app->entityManager->entities;
+    partners = app->entityManager->partners;
+
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        turnSort[i].entityData = enemies.At(i)->data->entityData;
+        turnSort[i].stats = enemies.At(i)->data->stats;
+    }
+    int j = 0;
+    tam = enemies.Count() + partners.Count();
+    for (int i = enemies.Count(); i < tam; i++)
+    {
+        turnSort[i].entityData = partners.At(j)->data->entityData;
+        turnSort[i].stats = partners.At(j)->data->stats;
+        j++;
+    }
+    BubbleSort();
+
+    assigneDone = true;
+}
 bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 {
     switch (control->type)
     {
     case GuiControlType::BUTTON:
     {
-
+        //ATTACK
         if (control->id == 20)
         {
+            //Next turn
+            while (turnSort[turn + 1].isAlive == false)
+            {
+                turn += 1;
+                if (turn >= tam) turn = 0;
+            }
+            if (turn < tam-1)
+            {
+                turn++;
+            }
+            else
+            {
+                turn = 0;
+            }
+           // DisplaceToLeft();
 
         }
+        //MAGIC
         else if (control->id == 21)
         {
-
+            for (int i = 0; i < magics.Count(); i++)
+            {
+                if (magics.At(i)->data->ID == turnSort[turn].entityData.type)
+                {
+                    LOG("%s",magics.At(i)->data->name.GetString());
+                }
+            }
         }
+        //DEFENSE
         else if (control->id == 22)
         {
-
+            switch (turnSort[turn].entityData.type)
+            {
+            case 15:
+                LOG("Kenzie");
+                break;
+            case 16:
+                LOG("Keiler");
+                break;
+            case 17:
+                LOG("Isrra");
+                break;
+            case 18:
+                LOG("Brenda");
+                break;
+            default:
+                break;
+            }
         }
+        //EXIT
         else if (control->id == 23)
         {
             isContinue = true;
@@ -364,4 +531,32 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 int SceneBattle::CalculateExp(int level)
 {
     return (0.04 * (level * level * level) + 0.8 * (level * level) + 2 * level) * 3.5;
+}
+void SceneBattle::BubbleSort()
+{
+    int numSwaps = -1;
+    while (numSwaps != 0)
+    {
+        numSwaps = 0;
+        for (int i = 0; i < tam - 1; i++)
+        {
+            Entity aux;
+            if (turnSort[i].stats.speed < turnSort[i + 1].stats.speed)
+            {
+                aux = turnSort[i];
+                turnSort[i] = turnSort[i + 1];
+                turnSort[i + 1] = aux;
+                numSwaps++;
+            }
+        }
+    }
+}
+void SceneBattle::DisplaceToLeft()
+{
+    Entity aux = turnSort[0];
+    for (int i = 0; i < tam; i++)
+    {
+        turnSort[i] = turnSort[i + 1];
+    }
+    turnSort[tam - 1] = aux;
 }

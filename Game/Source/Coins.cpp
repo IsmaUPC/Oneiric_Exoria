@@ -124,9 +124,9 @@ bool Coins::CleanUp()
 	if (!active)
 		return true;
 
-	delete coinAnimation;
-	delete particleAnimation;
-	delete pointsCollision;
+	RELEASE(coinAnimation);
+	RELEASE(particleAnimation);
+	RELEASE(pointsCollision);
 
 	pendingToDelete = true;
 	active = false;

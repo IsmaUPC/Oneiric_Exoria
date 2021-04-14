@@ -120,7 +120,8 @@ public:
 	int radiusCollision;
 	bool godMode = false;
 	iPoint* positionInitial= new iPoint(0,0);	
-	bool win= false;
+	bool win = false;
+	bool onDialog = false;
 
 private:
 	
@@ -164,12 +165,6 @@ private:
 
 	State lastState;
 	MoveDirection hitDirection;
-
-
-	SDL_Texture* texBrenda;
-	SDL_Texture* texIsrra;
-	SDL_Texture* texKenzie;
-	SDL_Texture* texKeiler;
 	List<SDL_Texture*> texPartners;
 
 };

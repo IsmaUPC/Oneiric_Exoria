@@ -102,15 +102,10 @@ bool EntityManager::CleanUp()
 	app->tex->UnLoad(texBandit);
 
 	// Unload Animations
-	delete idleAnim;
-	delete isDetectedAnim;
-	delete walkAnim;
-	delete deadAnim;
-
-	idleAnim = nullptr;
-	isDetectedAnim = nullptr;
-	walkAnim = nullptr;
-	deadAnim = nullptr;
+	RELEASE(idleAnim);
+	RELEASE(isDetectedAnim);
+	RELEASE(walkAnim);
+	RELEASE(deadAnim);
 
 	score = 0;
 	timeSave = 0;
