@@ -147,16 +147,20 @@ bool GUI::PostUpdate()
 
 	//sprintf_s(coinText, 9, "x%d", *coins);
 	//app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
-	char NPCdialogue[64] = { 0 };
-	sprintf_s(NPCdialogue, 64, app->dialogueSystem->currentNode->text.c_str(), 56);
-	app->fonts->BlitText(20, 20, 0, NPCdialogue, { 255, 255, 255 });
-
-	char response[64] = { 0 };
-	for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
+	if (app->player->onDialog == true)
 	{
-		sprintf_s(response, 64, app->dialogueSystem->currentNode->answersList.At(i)->data.c_str(), 56);
-		app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
+		char NPCdialogue[64] = { 0 };
+		sprintf_s(NPCdialogue, 64, app->dialogueSystem->currentNode->text.c_str(), 56);
+		app->fonts->BlitText(20, 20, 0, NPCdialogue, { 255, 255, 255 });
+
+		char response[64] = { 0 };
+		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
+		{
+			sprintf_s(response, 64, app->dialogueSystem->currentNode->answersList.At(i)->data.c_str(), 56);
+			app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
+		}
 	}
+	
 
 	// Time
 	point0.x = -app->render->camera.x;
