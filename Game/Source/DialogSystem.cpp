@@ -14,7 +14,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue("dialogue_tree.xml");
-	currentNode = dialogueTrees[Id]->dialogueNodes[0];
+	//currentNode = dialogueTrees[Id]->dialogueNodes[0];
 	//PerformDialogue(Id);
 	return true;
 }

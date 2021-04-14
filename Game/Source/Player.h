@@ -120,7 +120,8 @@ public:
 	int radiusCollision;
 	bool godMode = false;
 	iPoint* positionInitial= new iPoint(0,0);	
-	bool win= false;
+	bool win = false;
+	bool onDialog = false;
 
 private:
 	
