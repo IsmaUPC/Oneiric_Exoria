@@ -143,6 +143,7 @@ public:
 	EntityData entityData;
 	Collisions collision;
 	Stats stats;
+	bool move = true;
 };
 
 #endif // __MODULE_H__

@@ -11,7 +11,7 @@ struct SDL_Texture;
 
 struct Magic
 {
-	int ID=0;
+	int id=0;
 	int level =0;
 	SString name = "";
 	int damage=0;
@@ -33,6 +33,7 @@ public:
 	// Called before the first frame
 	bool Start();
 	void AddBattleMenu(SDL_Texture* btnTextureAtlas);
+	void LoadAnimations();
 	void InicializeStats();
 	void AddPartners();
 	void AddEntities();
@@ -56,7 +57,7 @@ public:
 	void AssignEntities();
 	void SpeedAnimationCheck(float dt);
 
-	bool loadMagics(const char*);
+	bool LoadMagics(const char*);
 
 	void BubbleSort();
 	void DisplaceToLeft();
@@ -70,7 +71,7 @@ private:
 	SDL_Color green;
 	SDL_Color yellow;
 	SDL_Color red;
-	SDL_Color violet;
+	SDL_Color blue;
 	SDL_Color orange;
 
 	GuiButton* btnAttack;
@@ -80,12 +81,11 @@ private:
 
 	SDL_Texture* img;
 	SDL_Texture* texPalyers;
+	SDL_Texture* texEnemies;
 
-	Animation* idleKenzie;
-	Animation* idleKeiler;
-	Animation* idleIsrra;
-	Animation* idleBrenda;
 	List<Animation*> spritesBarTurn;
+	List<Animation*> animationsPlayer;
+	List<Animation*> animationsEnemies;
 
 	List<Entity*> enemies;
 	List<Entity*> partners;

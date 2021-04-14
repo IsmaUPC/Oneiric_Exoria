@@ -38,46 +38,12 @@ bool SceneBattle::Start()
 
     app->sceneManager->SetEnemeyDetected(false);
     texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+    texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
 
     // Load Animations
-    idleKenzie = new Animation;
-    idleKeiler = new Animation;
-    idleIsrra = new Animation;
-    idleBrenda = new Animation;
+    LoadAnimations();
 
-    idleKenzie->loop = true;
-    idleKeiler->loop = true;
-    idleIsrra->loop = true;
-    idleBrenda->loop = true;
-
-    for (int i = 0; i < 6; i++)
-    {
-        idleKenzie->PushBack({ 64 * i, 0, 64, 92 });
-    }
-    for (int i = 0; i < 6; i++)
-    {
-        idleKeiler->PushBack({ 64 * i, 92, 64, 92 });
-    }
-    for (int i = 0; i < 6; i++)
-    {
-        idleIsrra->PushBack({ 64 * i, 184, 64, 92 });
-    }
-    for (int i = 0; i < 6; i++)
-    {
-        idleBrenda->PushBack({ 64 * i, 276, 64, 92 });
-    }
-    // Load Animation Bar Turn
-    for (int i = 0; i < 4; i++)
-    {
-        Animation* b = new Animation;
-        b->loop = true;
-        for (int j = 0; j < 3; j++)
-        {
-            b->PushBack({ 384,32 * j + (96 * i), 32, 32 });
-        }
-        spritesBarTurn.Add(b);
-    }
-
+    // Add Enemies and Players
     AddEntities();
     AddPartners();
 
@@ -97,12 +63,65 @@ bool SceneBattle::Start()
     green.r = 0; green.g = 187; green.b = 45;
     yellow.r = 229; yellow.g = 190; yellow.b = 1;
     red.r = 203; red.g = 50; red.b = 52;
-    violet.r = 37; violet.g = 40; violet.b = 80;
+    blue.r = 37; blue.g = 40; blue.b = 80;
     orange.r = 255; orange.g = 136; orange.b = 18;
 
     bool ret;
-    ret = loadMagics("magicList.xml");
+    ret = LoadMagics("magicList.xml");
     return ret;
+}
+
+void SceneBattle::LoadAnimations()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        Animation* b = new Animation;
+        b->loop = true;
+        for (int j = 0; j < 6; j++)
+        {
+            b->PushBack({ 64 * j,92 * i, 64, 92 });
+        }
+        animationsPlayer.Add(b);
+    }
+    // Load Animation Bar Turn
+    for (int i = 0; i < 4; i++)
+    {
+        Animation* b = new Animation;
+        b->loop = true;
+        for (int j = 0; j < 3; j++)
+        {
+            b->PushBack({ 384,32 * j + (96 * i), 32, 32 });
+        }
+        spritesBarTurn.Add(b);
+    }
+    // Load Animations Enemies
+    int numSprites = 1;
+    for (int i = 0; i < 12; i++)
+    {
+        Animation* b = new Animation;
+        b->loop = true;
+        if (i % 2) numSprites = 2;
+        else numSprites = 4;
+        if (i == 6) numSprites = 5;
+        else if (i == 8) numSprites = 5;
+        else if (i == 10) numSprites = 6;
+        if ((i+1) % 4 == 0 && i != 0)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                b->PushBack({ 32 * j,64 * i, 32, 32 });
+            }
+            spritesBarTurn.Add(b);
+        }
+        else
+        {
+            for (int j = 0; j < numSprites; j++)
+            {
+                b->PushBack({ 128 * j,64 * i, 128, 64 });
+            }
+            animationsEnemies.Add(b);
+        }
+    }
 }
 
 void SceneBattle::AddEntities()
@@ -124,7 +143,7 @@ void SceneBattle::AddEntities()
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 9, 17, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 8, 17, 0, randomLvl);
         break;
 
     case 2:
@@ -133,11 +152,23 @@ void SceneBattle::AddEntities()
 
         // Add Enemies
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        app->entityManager->AddEntity(FIGHTER, 14, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
         app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(SAPLING, 11, 19, 0, randomLvl);
         break;
 
+    case 3:
+        // Load textures
+        img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+        // Add Enemies
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(SAPLING, 14, 17, 0, randomLvl);
+        while (randomLvl < 0) randomLvl = level + (rand() % 3);
+        app->entityManager->AddEntity(FIGHTER, 11, 15, 0, randomLvl);
+        break;
     default:
         break;
     }
@@ -174,20 +205,6 @@ void SceneBattle::InicializeStats()
         int level = enemies.At(i)->data->entityData.level;
         // Add switch for assign strong, if is a type enemy strong = x, if is other type strong = y
         TypeEntity pType = enemies.At(i)->data->entityData.type;
-        switch (pType)
-        {
-        case BANDIT:
-            strong = 1;
-            break;
-        case FIGHTER:
-            strong = 1.1;
-            break;
-        case SAPLING:
-            strong = 1.2;
-            break;
-        default:
-            break;
-        }
         if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
         {
             switch (pType)
@@ -199,7 +216,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 3 * level +8;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
-                enemies.At(i)->data->entityData.currentAnimation = idleKenzie;
+                enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(0)->data;
                 break;
             case KEILER_:
                 enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
@@ -208,7 +225,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
-                enemies.At(i)->data->entityData.currentAnimation = idleKeiler;
+                enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(1)->data;
                 break;
             case ISRRA_:
                 enemies.At(i)->data->stats.attack = 2 * level + 7;
@@ -217,7 +234,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 3.5 * level + 8.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
-                enemies.At(i)->data->entityData.currentAnimation = idleIsrra;
+                enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(2)->data;
                 break;
             case BRENDA_:
                 enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
@@ -226,7 +243,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
-                enemies.At(i)->data->entityData.currentAnimation = idleBrenda;
+                enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(3)->data;
                 break;
 
             default:
@@ -236,6 +253,23 @@ void SceneBattle::InicializeStats()
         }
         else
         {
+            switch (pType)
+            {
+            case BANDIT:
+                strong = 1;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+                break;
+            case FIGHTER:
+                strong = 1.1;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+                break;
+            case SAPLING:
+                strong = 1.2;
+                enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+                break;
+            default:
+                break;
+            }
             enemies.At(i)->data->stats.attack = ((2 * level + 7) * 0.75) * strong;
             enemies.At(i)->data->stats.defense = ((2 * level + 7) * 0.8) * strong;
             enemies.At(i)->data->stats.health = ((2.5 * level + 7.5) * 1.5) * strong;
@@ -243,6 +277,8 @@ void SceneBattle::InicializeStats()
             enemies.At(i)->data->stats.mana = (enemies.At(i)->data->stats.health / 2) * strong;
             enemies.At(i)->data->stats.speed = ((2.5 * level + 7.5) * 0.9) * strong;
             enemies.At(i)->data->stats.exp = (sqrt(CalculateExp(level)) / 3) * strong;
+
+            enemies.At(i)->data->entityData.texture = texEnemies;
         }
     }
 }
@@ -292,8 +328,9 @@ bool SceneBattle::PostUpdate()
     // Draw Bar lives
     for (int i = 0; i < enemies.Count(); i++)
     {
-        int posX = (int)enemies.At(i)->data->entityData.position.x + enemies.At(i)->data->entityData.pointsCollision[0].x + enemies.At(i)->data->entityData.centerPoint.x;
-        rec = { posX - 40, (int)enemies.At(i)->data->entityData.position.y, 80, 16};
+        int posX = (int)enemies.At(i)->data->entityData.position.x + 2*enemies.At(i)->data->entityData.pointsCollision[0].x + 2*enemies.At(i)->data->entityData.centerPoint.x;
+        int posY = (int)enemies.At(i)->data->entityData.position.y - 30;
+        rec = { posX-40, posY, 80, 16};
         live = rec;
         live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
 
@@ -302,7 +339,6 @@ bool SceneBattle::PostUpdate()
     for (int i = 0; i < partners.Count(); i++)
     {
         int posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
-        
         int posY = (int)partners.At(i)->data->entityData.position.y - 30;
         rec = { posX - 40, posY, 80, 16 };
         live = rec;
@@ -311,7 +347,7 @@ bool SceneBattle::PostUpdate()
         DrawBarLives();
     }
     // Draw turn bar
-    app->render->DrawRectangle({20, 30, 48, 64*tam-16},violet.r, violet.g, violet.b, 100);
+    app->render->DrawRectangle({20, 30, 48, 64*tam-16}, blue.r, blue.g, blue.b, 100);
     DrawTurnBar();
     app->render->DrawRectangle({ 20, 30, 48, 64 * tam - 16 }, orange.r, orange.g, orange.b, 255, false);
     return true;
@@ -319,6 +355,7 @@ bool SceneBattle::PostUpdate()
 
 void SceneBattle::DrawBarLives()
 {
+    if (live.w > rec.w) live.w = rec.w;
     if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
     if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
     if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
@@ -364,6 +401,31 @@ void SceneBattle::DrawTurnBar()
             else face = spritesBarTurn.At(3)->data->frames[0];
             app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
             break;
+
+        case BANDIT:
+            if (i == 0) {
+                spritesBarTurn.At(4)->data->Update();
+                face = spritesBarTurn.At(4)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(4)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
+        case FIGHTER:
+            if (i == 0) {
+                spritesBarTurn.At(5)->data->Update();
+                face = spritesBarTurn.At(5)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(5)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
+        case SAPLING:
+            if (i == 0) {
+                spritesBarTurn.At(6)->data->Update();
+                face = spritesBarTurn.At(6)->data->GetCurrentFrame();
+            }
+            else face = spritesBarTurn.At(6)->data->frames[1];
+            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            break;
         default:
             //app->render->DrawTexture(turnSort[i].entityData.texture, 28, 64 * i + 38, &turnSort[i].entityData.currentAnimation->GetCurrentFrame());
             break;
@@ -378,34 +440,39 @@ bool SceneBattle::CleanUp()
     bool ret = true;
     app->tex->UnLoad(img);
     app->tex->UnLoad(texPalyers);
+    app->tex->UnLoad(texEnemies);
 
-    RELEASE(idleKenzie);
-    RELEASE(idleKeiler);
-    RELEASE(idleIsrra);
-    RELEASE(idleBrenda);
     spritesBarTurn.Clear();
+    animationsPlayer.Clear();
+    animationsEnemies.Clear();
+
     delete[] turnSort;
 
+    magics.Clear();
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
+
 
     return ret;
 }
 void SceneBattle::SpeedAnimationCheck(float dt)
 {
-    idleKenzie->speed = dt * 6;
-    idleKeiler->speed = dt * 6;
-    idleIsrra->speed = dt * 6;
-    idleBrenda->speed = dt * 6;
     for (int i = 0; i < spritesBarTurn.Count(); i++)
     {
         spritesBarTurn.At(i)->data->speed = dt * 6;
     }
-    
+    for (int i = 0; i < animationsPlayer.Count(); i++)
+    {
+        animationsPlayer.At(i)->data->speed = dt * 6;
+    }
+    for (int i = 0; i < animationsEnemies.Count(); i++)
+    {
+        animationsEnemies.At(i)->data->speed = dt * 2;
+    }
 }
 
-bool SceneBattle::loadMagics(const char* file)
+bool SceneBattle::LoadMagics(const char* file)
 {
     pugi::xml_parse_result result = magicDoc.load_file(file);
 
@@ -423,7 +490,7 @@ bool SceneBattle::loadMagics(const char* file)
             for (pugi::xml_node n = character.child("magic"); n != NULL; n = n.next_sibling("magic"))
             {
                 Magic* magic = new Magic;
-                magic->ID = character.attribute("ID").as_int();
+                magic->id = character.attribute("ID").as_int();
                 magic->level = n.attribute("level").as_int();
                 magic->name = n.attribute("name").as_string("");
                 magic->damage = n.attribute("damage").as_int();
@@ -489,7 +556,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         {
             for (int i = 0; i < magics.Count(); i++)
             {
-                if (magics.At(i)->data->ID == turnSort[turn].entityData.type)
+                if (magics.At(i)->data->id == turnSort[turn].entityData.type)
                 {
                     LOG("%s",magics.At(i)->data->name.GetString());
                 }

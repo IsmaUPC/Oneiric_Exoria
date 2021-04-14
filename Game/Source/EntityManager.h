@@ -39,7 +39,7 @@ public:
 	// Virtual method to Save state
 	bool SaveState(pugi::xml_node&) const;
 
-	bool AddEntity(TypeEntity pType, int pX, int pY, int id, int level = 0, State state = IDLE);
+	bool AddEntity(TypeEntity pType, int pX, int pY, int id, int level = 0, bool move = true, State state = IDLE);
 
 	void DeleteEntity(Entity* entity);
 	void DeleteHUD();
@@ -69,17 +69,16 @@ public:
 	uint liveFx;
 
 	// Animations
-	Animation* idleAnim = new Animation();
-	Animation* isDetectedAnim = new Animation();
-	Animation* walkAnim = new Animation();
-	Animation* deadAnim = new Animation();
+	List<Animation*> animations;
+	// Animation exclamation when enemy detected you, with Pokemon
+	//Animation* isDetectedAnim = new Animation();
 
 private:
 	// Textures
 	SDL_Texture* texCoin;
 	SDL_Texture* texLive;
 	SDL_Texture* texHead;
-	SDL_Texture* texBandit;
+	SDL_Texture* texEnemies;
 
 	Enemy* current;
 };

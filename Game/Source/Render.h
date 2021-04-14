@@ -44,6 +44,7 @@ public:
 	bool DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool useCamera = true) const;
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
+	bool DrawTextBox(int x, int y, int w, int h, SDL_Color base, SDL_Color border1, SDL_Color border2, SDL_Texture* cornerTex, Uint8 a = 255) const;
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);

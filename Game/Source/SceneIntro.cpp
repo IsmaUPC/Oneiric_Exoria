@@ -74,6 +74,7 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
+	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -115,6 +116,9 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
 	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 30);
+
+	app->render->DrawTextBox(0, 0, 200, 200, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
+	app->render->DrawTextBox(400, 400, 700, 300, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
 
 	menuSettings->Draw();
 
