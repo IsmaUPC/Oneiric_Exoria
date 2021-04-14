@@ -89,6 +89,7 @@ public:
 	SDL_Color color;		// Tint color
 
 	SDL_Texture* texture;   // Texture atlas reference
+	SDL_Texture* handCursor; // Hand cursor texture
 	SDL_Rect section;	   // Texture atlas base section
 
 	TTF_Font* font;			// Text font

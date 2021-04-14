@@ -55,7 +55,7 @@ bool SceneManager::Start()
 {
 	current = new SceneLogo();
 	current->Start();
-	guiFont = app->fonts->Load("Assets/Fonts/Garrick_Bold.ttf", 25);
+	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
 	next = nullptr;
 
 	return true;

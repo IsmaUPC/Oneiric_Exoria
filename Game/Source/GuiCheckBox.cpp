@@ -1,6 +1,7 @@
 #include "GuiCheckBox.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
+#include "Fonts.h"
 
 GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* text, bool initState, SDL_Texture* texture) : GuiControl(GuiControlType::CHECKBOX, id)
 {
@@ -122,7 +123,7 @@ bool GuiCheckBox::Draw()
 	centradoX = (bounds.w / 2) - (((float)(text.Length() / 2) + 0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centradoY = (bounds.h / 2) - (48 / 4);
-	/*app->fonts->BlitText(bounds.x + centradoX, bounds.y + centradoY, font, text.GetString(), textDisable);*/
+	app->fonts->BlitText(bounds.x + centradoX, bounds.y + centradoY, 0, text.GetString(), { 255, 255, 255 });
 
 
 	return false;
