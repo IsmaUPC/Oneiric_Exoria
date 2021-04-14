@@ -19,6 +19,7 @@ Enemy::Enemy(Entity* entity, SDL_Texture* tex)
 	entityData = entity->entityData;
 	entityData.texture = tex;
 	stats = entity->stats;
+	move = entity->move;
 
 	name.Create("Enemy");
 }
@@ -30,7 +31,22 @@ bool Enemy::Start()
 {
 	active = true;
 
-	entityData.currentAnimation = app->entityManager->idleAnim;
+	switch (entityData.type)
+	{
+	case BANDIT:
+		if(!move) entityData.currentAnimation = app->entityManager->animations.At(0)->data;
+		else entityData.currentAnimation = app->entityManager->animations.At(1)->data;
+		break;
+	case FIGHTER:
+		if (!move) entityData.currentAnimation = app->entityManager->animations.At(2)->data;
+		else entityData.currentAnimation = app->entityManager->animations.At(3)->data;
+		break;
+	case SAPLING:
+		entityData.currentAnimation = app->entityManager->animations.At(4)->data;
+		break;
+	default:
+		break;
+	}
 
 	// Enemy Path
 	destination = entityData.positionInitial;
@@ -66,13 +82,13 @@ int Enemy::GetCurrentPositionInPath(iPoint mapPositionEnemy)
 void Enemy::CheckCollisionEnemyToPlayer()
 {
 	iPoint enemyCenter;
-	enemyCenter.x = entityData.position.x + entityData.centerPoint.x;
-	enemyCenter.y = entityData.position.y + entityData.centerPoint.y;
+	enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+	enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
 
 	iPoint playerCenter;
-	playerCenter.x = app->player->playerData.position.x + app->player->playerData.centerPoint.x;
-	playerCenter.y = app->player->playerData.position.y + app->player->playerData.centerPoint.y;
-
+	playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+	playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+	
 	if (radiusCollision + app->player->radiusCollision > app->entity->CalculateDistance(playerCenter, enemyCenter) 
 		&& !app->sceneManager->GetEnemeyDetected())
 	{
@@ -193,7 +209,7 @@ bool Enemy::Update(float dt)
 		if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
 		else if (isDetected == true && app->player->playerData.state != IDLE) returning = false;
 
-		MoveEnemy();
+		if(move)MoveEnemy();
 
 		if (isDetected) CheckCollisionEnemyToPlayer();
 	}
@@ -211,7 +227,7 @@ bool Enemy::PostUpdate()
 	if (entityData.direction == MoveDirection::WALK_R)
 		app->render->DrawTexture(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
 	else if (entityData.direction == MoveDirection::WALK_L)
-		app->render->DrawTextureFlip(entityData.texture, entityData.position.x - (rectEnemy.w - app->entityManager->idleAnim->frames->w), entityData.position.y, &rectEnemy);
+		app->render->DrawTextureFlip(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
 
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
 	{

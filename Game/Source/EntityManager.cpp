@@ -33,16 +33,23 @@ bool EntityManager::Start()
 	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
 	texLive = app->tex->Load("Assets/Textures/lives.png");
 	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
-	texBandit = app->tex->Load("Assets/Textures/Enemies/bandit.png");
+	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");
 
 	// Animations
-	idleAnim->loop = true;
-
-	for (int i = 0; i < 4; i++)
+	int numEnemies = 3;
+	int numSprites = 1;
+	for (int i = 0; i < numEnemies * 2; i++)
 	{
-		idleAnim->PushBack({ 64 * i, 64, 64, 64 });
+		Animation* b = new Animation;
+		b->loop = true;
+		if (i % 2) numSprites = 6;
+		else numSprites = 4;
+		for (int j = 0; j < numSprites; j++)
+		{
+			b->PushBack({ 64 * j, 32 * i, 64, 32 });
+		}
+		animations.Add(b);
 	}
-
 
 	return true;
 }
@@ -99,13 +106,11 @@ bool EntityManager::CleanUp()
 	app->tex->UnLoad(texCoin);
 	app->tex->UnLoad(texHead);
 	app->tex->UnLoad(texLive);
-	app->tex->UnLoad(texBandit);
+	app->tex->UnLoad(texEnemies);
 
 	// Unload Animations
-	RELEASE(idleAnim);
-	RELEASE(isDetectedAnim);
-	RELEASE(walkAnim);
-	RELEASE(deadAnim);
+	animations.Clear();
+	//RELEASE(isDetectedAnim);
 
 	score = 0;
 	timeSave = 0;
@@ -178,7 +183,7 @@ void EntityManager::CheckDespawnEntities()
 	}
 }
 
-bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int level, State state)
+bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int level, bool move_, State state)
 {
 	if (state == IDLE)
 	{
@@ -191,21 +196,22 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 		b->entityData.level = level;
 		b->entityData.channel = app->audio->SetChannel();
 		b->entityData.id = id;
+		b->move = move_;
 
 		// Collisons
-		if (pType == BANDIT)
-		{
-			b->entityData.pointsCollision[0] = { 14, 36 };
-			b->entityData.pointsCollision[1] = { 48, 36 };
-			b->entityData.pointsCollision[2] = { 48, 64 };
-			b->entityData.pointsCollision[3] = { 14, 64 };
-		}
 		if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
 		{
 			b->entityData.pointsCollision[0] = { 0, 0 };
 			b->entityData.pointsCollision[1] = { 56, 0 };
 			b->entityData.pointsCollision[2] = { 56, 92 };
 			b->entityData.pointsCollision[3] = { 0, 92 };
+		}
+		else
+		{
+			b->entityData.pointsCollision[0] = { 18, 4 };
+			b->entityData.pointsCollision[1] = { 48, 4 };
+			b->entityData.pointsCollision[2] = { 48, 32 };
+			b->entityData.pointsCollision[3] = { 18, 32 };
 		}
 
 		b->entityData.centerPoint.x = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[1]) / 2;
@@ -233,7 +239,7 @@ void EntityManager::SpawnEntity(Entity* info)
 	case LICAN:
 	case EESAAC:
 	case HEADACHE:
-		entities.Add(new Enemy(info, texBandit)); // Change texture for atlasEnemy
+		entities.Add(new Enemy(info, texEnemies)); // Change texture for atlasEnemy
 		entities.end->data->Start();
 		break;
 
@@ -306,10 +312,11 @@ void EntityManager::DeleteSpawnEntity(Entity* entity)
 
 void EntityManager::SpeedAnimationCheck(float dt)
 {
-	idleAnim->speed = (dt * 1);
-	walkAnim->speed = (dt * 1);
-	deadAnim->speed = (dt * 1);
-	isDetectedAnim->speed = (dt * 1);
+	for (int i = 0; i < animations.Count(); i++)
+	{
+		animations.At(i)->data->speed = dt * 6;
+	}
+	//isDetectedAnim->speed = (dt * 1);
 }
 
 bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
@@ -326,7 +333,7 @@ bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
 		while (entitiesNode)
 		{
 			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(),
-				entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), (State)entitiesNode.attribute("state").as_int());
+				entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), entitiesNode.attribute("move").as_bool(), (State)entitiesNode.attribute("state").as_int());
 			entitiesNode = entitiesNode.next_sibling();
 		}
 	}
@@ -358,6 +365,7 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 			entitiesNode.last_child().append_attribute("id").set_value(entiti->data->entityData.id);
 			entitiesNode.last_child().append_attribute("level").set_value(entiti->data->entityData.level);
 			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData.state);
+			entitiesNode.last_child().append_attribute("move").set_value(entiti->data->move);
 			if (entiti->data->entityData.type == TypeEntity::HUD)
 				entiti->data->SaveState(entityManagerNode);
 		}
