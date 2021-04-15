@@ -96,6 +96,10 @@ private:
 
 	int turn = 0;
 	int tam = 0;
+	int numArrows = 0;
+	float dt = 0;
+	float offset = 38;
+	bool moveBarTurn = true;
 	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__

@@ -308,14 +308,14 @@ bool SceneBattle::PreUpdate()
     return true;
 }
 
-bool SceneBattle::Update(float dt)
+bool SceneBattle::Update(float dt_)
 {
     //for (int i = 0; i < enemies.Count(); i++)
     //{
     //    enemies.At(i)->data->stats.health -= dt*2;
     //}
-    
-    SpeedAnimationCheck(dt);
+    dt = dt_;
+    SpeedAnimationCheck(dt_);
 
     return true;
 }
@@ -365,6 +365,8 @@ void SceneBattle::DrawBarLives()
 
 void SceneBattle::DrawTurnBar()
 {
+    if (moveBarTurn) offset -= dt * 30, numArrows = 0;
+    else offset = 38, numArrows = 1;
     for (int i = 0; i < tam; i++)
     {
         switch (turnSort[i].entityData.type)
@@ -375,7 +377,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(0)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(0)->data->frames[0];
-            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0) 
+            {
+                face = spritesBarTurn.At(0)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         case KEILER_:
             if (i == 0) {
@@ -383,7 +390,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(1)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(1)->data->frames[0];
-            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(1)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         case ISRRA_:
             if (i == 0) {
@@ -391,7 +403,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(2)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(2)->data->frames[0];
-            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(2)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         case BRENDA_:
             if (i == 0) {
@@ -399,7 +416,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(3)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(3)->data->frames[0];
-            app->render->DrawTexture(texPalyers, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(3)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
 
         case BANDIT:
@@ -408,7 +430,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(4)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(4)->data->frames[1];
-            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texEnemies, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(4)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         case FIGHTER:
             if (i == 0) {
@@ -416,7 +443,12 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(5)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(5)->data->frames[1];
-            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texEnemies, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(5)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         case SAPLING:
             if (i == 0) {
@@ -424,15 +456,27 @@ void SceneBattle::DrawTurnBar()
                 face = spritesBarTurn.At(6)->data->GetCurrentFrame();
             }
             else face = spritesBarTurn.At(6)->data->frames[1];
-            app->render->DrawTexture(texEnemies, 28, 64 * i + 38, &face);
+            app->render->DrawTexture(texEnemies, 28, 64 * i + offset, &face);
+            if (moveBarTurn && i == 0)
+            {
+                face = spritesBarTurn.At(6)->data->frames[0];
+                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+            }
             break;
         default:
-            //app->render->DrawTexture(turnSort[i].entityData.texture, 28, 64 * i + 38, &turnSort[i].entityData.currentAnimation->GetCurrentFrame());
             break;
         }
         face = { 416,0, 32,14 };
-        if (i < tam - 1)app->render->DrawTexture(texPalyers, 28, 64 * i + 78, &face);
+        if (i < tam - numArrows)app->render->DrawTexture(texPalyers, 28, 64 * i + 40 + offset, &face);
     }
+    if (moveBarTurn)
+    {
+        face = {20,0,48,30};
+        app->render->DrawTexture(img, 20, 0, &face);
+        face = { 20,64 * tam - 16 +30,48,64 };
+        app->render->DrawTexture(img, 20, 64 * tam - 16+30, &face);
+    }
+    if (offset < -64 + 38)moveBarTurn = false, DisplaceToLeft();
 }
 
 bool SceneBattle::CleanUp()
@@ -621,7 +665,7 @@ void SceneBattle::BubbleSort()
 void SceneBattle::DisplaceToLeft()
 {
     Entity aux = turnSort[0];
-    for (int i = 0; i < tam; i++)
+    for (int i = 0; i < tam-1; i++)
     {
         turnSort[i] = turnSort[i + 1];
     }
