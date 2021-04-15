@@ -12,7 +12,6 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, TypeButton ty
 	this->texture = texture;
 	this->typeButton = typeButton;
 	this->font = app->sceneManager->GetGuiFont();
-
 }
 
 GuiButton::~GuiButton()
@@ -63,23 +62,24 @@ bool GuiButton::Draw()
 	{
 	case GuiControlState::DISABLED: 
 		rect.x+= 3 * rect.w;
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 
 		textDisable = true;
 		if (drawRectangles)app->render->DrawRectangle(bounds, 100, 100, 100, 190);
 		break;
 	case GuiControlState::NORMAL: 
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 0, 255, 0, 190);
 		break;
 	case GuiControlState::FOCUSED: 
 		rect.x+= 1*rect.w;
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 255, 255, 0, 190);
+		app->render->DrawRectangle({ bounds.x, bounds.y, bounds.w, bounds.h }, 255, 0, 0, 150);
 		break;
 	case GuiControlState::PRESSED:
 		rect.x+= 2 * rect.w;
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 0, 255, 255, 190);
 		break;
 	case GuiControlState::SELECTED:
@@ -93,7 +93,7 @@ bool GuiButton::Draw()
 	centerX = (bounds.w / 2) - (((float)(text.Length() / 2)+0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centerY = (bounds.h/2)-(48/4);
-	app->fonts->BlitText(bounds.x + centerX, bounds.y + centerY, 0, text.GetString(), {255, 255, 255});
+	app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), {255, 255, 255});
 
 	return true;
 }

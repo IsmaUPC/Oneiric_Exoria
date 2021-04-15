@@ -67,6 +67,7 @@ public:
 
 	bool Start();
 	bool Update(float dt);
+	bool PostUpdate();
 	bool CleanUp();
 	void PerformDialogue(int treeId, int playerInput);
 	bool LoadDialogue(const char*);
@@ -74,11 +75,15 @@ public:
 	bool LoadOptions(pugi::xml_node& text_node, DialogueNode* npc);
 	DialogueNode* currentNode;
 	std::vector <DialogueTree*> dialogueTrees;
+	bool onDialog = false;
+	SDL_Texture* moonCorner;
+	void SetId(int id_) { id = id_; };
 
 private:
 	//int playerInput = 7;
-	int Id = 0;
+	int id = 0;
 	//DialogueNode* currentNode;
+	iPoint point = { 0,0 };
 	pugi::xml_document	dialogues;
 
 	Input* input;

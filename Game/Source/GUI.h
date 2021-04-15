@@ -61,7 +61,6 @@ private:
 
 	// Text
 	uint* coins = 0;
-	int hudFont = 0;
 	char coinText[10] = { "\0" };
 
 	bool activeFPS;

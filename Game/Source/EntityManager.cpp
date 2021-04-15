@@ -257,9 +257,12 @@ void EntityManager::SpawnEntity(Entity* info)
 		entities.end->data->Start();
 		break;
 
-	/*case NPC:
-		entities.Add(new GUI(info, texHead));
-		break;*/
+	case NPC:
+		if (info->entityData.texture == nullptr)
+			entities.Add(new Enemy(info));
+		else entities.Add(new Enemy(info, info->entityData.texture));
+		entities.end->data->Start();
+		break;
 	}
 
 	DeleteSpawnEntity(info);

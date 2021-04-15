@@ -5,7 +5,7 @@
 #include "Render.h"
 #include "SceneIntro.h"
 #include "SceneManager.h"
-#include "GuiManager.h"
+#include "GuiManager.h"	
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -40,29 +40,29 @@ bool SceneIntro::Start()
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { WINDOW_W / 2 - 200 / 2,yPosition + (padding * 2),  183, 91 }, "Play", RECTANGLE, btnTextureAtlas);
+	btnPlay = new GuiButton(1, { 1053 - 25, 470,  50, 25 }, "Play", RECTANGLE, btnTextureAtlas); 
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { WINDOW_W / 2 + 90 , yPosition + (padding * 2),  183, 91 }, "Continue", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(2, { 1053 - 85/2 , 510,  85, 25 }, "Continue", RECTANGLE, btnTextureAtlas);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
-	btnRemove = new GuiButton(3, { WINDOW_W / 2 + 280 ,yPosition + (padding * 2), 88, 88 }, "", REMOVE, btnTextureAtlas);
+	/*btnRemove = new GuiButton(3, { WINDOW_W / 2 + 280 ,yPosition + (padding * 2), 88, 88 }, "", REMOVE, btnTextureAtlas);
 	btnRemove->SetObserver(this);
-	app->guiManager->AddGuiButton(btnRemove);
+	app->guiManager->AddGuiButton(btnRemove);*/
 
-	btnCredits = new GuiButton(4, { 20 , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
+	/*btnCredits = new GuiButton(4, { 20 , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
 	btnCredits->SetObserver(this);
-	app->guiManager->AddGuiButton(btnCredits);
+	app->guiManager->AddGuiButton(btnCredits);*/
 
-	btnExit = new GuiButton(5, { WINDOW_W / 2 - 390 ,yPosition + (padding * 2),  88, 88 }, "", EXIT, btnTextureAtlas);
-	btnExit->SetObserver(this);
-	app->guiManager->AddGuiButton(btnExit);
-
-	btnSettings = new GuiButton(6, { WINDOW_W / 2 - 290, yPosition + (padding * 2), 183, 91 }, "Settings", RECTANGLE, btnTextureAtlas);
+	btnSettings = new GuiButton(3, { 1053 - 75/2, 550,  75, 25 }, "Settings", RECTANGLE, btnTextureAtlas);
 	btnSettings->SetObserver(this);
 	app->guiManager->AddGuiButton(btnSettings);
+
+	btnExit = new GuiButton(4, { 1053 - 35/2 , 590,  35, 25 }, "Exit", EXIT, btnTextureAtlas);
+	btnExit->SetObserver(this);
+	app->guiManager->AddGuiButton(btnExit);
 	
 	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, yPosition - (padding * 2) - 50 }, this);
 
@@ -75,6 +75,15 @@ bool SceneIntro::Start()
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
+	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
+
+	handAnim = new Animation();
+	handAnim->speed = 0.1f;
+	handAnim->loop = true;
+	for (int i = 0; i < 9; i++)
+	{
+		handAnim->PushBack({ i*32, 0, 32, 32 });
+	}
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -84,7 +93,7 @@ bool SceneIntro::Start()
 	if (lastLevel == 0)
 	{
 		btnContinue->state = GuiControlState::DISABLED;
-		btnRemove->state = GuiControlState::DISABLED;
+		//btnRemove->state = GuiControlState::DISABLED;
 	}
 	app->sceneManager->SetPause(false);
 	
@@ -107,6 +116,9 @@ bool SceneIntro::Update(float dt)
 
 	menuSettings->Update(dt);
 
+	handAnim->speed = (dt * 8);
+	handAnim->Update();
+
 	return ret;
 }
 
@@ -115,10 +127,34 @@ bool SceneIntro::PostUpdate()
 	bool ret = true;
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
-	app->render->DrawTexture(logoIntro, WINDOW_W / 2 - imgW  / 2 - 20, 30);
+	app->render->DrawTexture(logoIntro, 108, 33);
 
-	app->render->DrawTextBox(0, 0, 200, 200, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
-	app->render->DrawTextBox(400, 400, 700, 300, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
+	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
+
+	if (btnPlay->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnPlay->bounds.x - 35, btnPlay->bounds.y - 5, &handAnim->GetCurrentFrame());
+	}
+	if (btnContinue->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnContinue->bounds.x - 35, btnContinue->bounds.y - 5, &handAnim->GetCurrentFrame());
+	}
+	/*if (btnRemove->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnRemove->bounds.x - 10, btnRemove->bounds.y + 20);
+	}*/
+	/*if (btnCredits->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnCredits->bounds.x - 10, btnCredits->bounds.y + 20);
+	}*/
+	if (btnExit->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnExit->bounds.x - 35, btnExit->bounds.y - 5, &handAnim->GetCurrentFrame());
+	}
+	if (btnSettings->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(handCursor, btnSettings->bounds.x - 35, btnSettings->bounds.y - 5, &handAnim->GetCurrentFrame());
+	}
 
 	menuSettings->Draw();
 
@@ -134,6 +170,7 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
+	app->tex->UnLoad(moonCorner);
 
 	app->guiManager->DeleteList();
 
@@ -169,23 +206,35 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		else if (control->id == 3)
 		{
-			app->removeGame = true;
+			/*app->removeGame = true;
 			app->SaveGameRequest();
 			lastLevel = 0;
 			btnContinue->state = GuiControlState::DISABLED;
-			btnRemove->state = GuiControlState::DISABLED;
+			btnRemove->state = GuiControlState::DISABLED;*/
+			btnPlay->state = GuiControlState::DISABLED;
+			btnContinue->state = GuiControlState::DISABLED;
+			//btnRemove->state = GuiControlState::DISABLED;
+			btnSettings->state = GuiControlState::DISABLED;
+			//btnCredits->state = GuiControlState::DISABLED;
+			btnExit->state = GuiControlState::DISABLED;
+
+			menuSettings->MovePosition();
+			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
+			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
+			menuSettings->AbleDisableSetting();
 		}
 		else if (control->id == 4)
 		{
-			TransitionToScene(SceneType::LOGO);
+			//TransitionToScene(SceneType::LOGO);
+			return false;
 		}
 		else if (control->id == 5)
 		{
-			return false;
+			//return false;
 		}
 		else if (control->id == 6)
 		{
-			btnPlay->state = GuiControlState::DISABLED;
+		/*	btnPlay->state = GuiControlState::DISABLED;
 			btnContinue->state = GuiControlState::DISABLED;
 			btnRemove->state = GuiControlState::DISABLED;
 			btnSettings->state = GuiControlState::DISABLED;
@@ -195,7 +244,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			menuSettings->MovePosition();
 			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
 			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
-			menuSettings->AbleDisableSetting();
+			menuSettings->AbleDisableSetting();*/
 		}
 		else if (control->id == 10)
 		{
@@ -244,12 +293,12 @@ void SceneIntro::CloaseMenuSettings()
 {
 	btnPlay->state = GuiControlState::NORMAL;
 	btnSettings->state = GuiControlState::NORMAL;
-	btnCredits->state = GuiControlState::NORMAL;
+	//btnCredits->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
 	if (lastLevel != 0)
 	{
 		btnContinue->state = GuiControlState::NORMAL;
-		btnRemove->state = GuiControlState::NORMAL;
+		//btnRemove->state = GuiControlState::NORMAL;
 	}
 	menuSettings->btnBack->state = GuiControlState::NORMAL;
 	menuSettings->AbleDisableSetting();

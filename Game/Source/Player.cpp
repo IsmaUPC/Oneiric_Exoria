@@ -538,12 +538,6 @@ void Player::PlayerControls(float dt)
 	}
 
 	//DialogSystem Interaction
-	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
-	{
-		app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[1]->dialogueNodes[0];
-		app->dialogueSystem->PerformDialogue(1, 7);
-		onDialog = true;
-	}
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{

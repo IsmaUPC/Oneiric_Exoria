@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
-#include "DialogSystem.h"
 #include "Fonts.h"
 
 #include "Defs.h"
@@ -108,7 +107,6 @@ bool GUI::PostUpdate()
 	point0.x = point0.x + headPositionX;
 	point0.y = point0.y + headPositionY;
 
-
 	// Respawns
 	SDL_Rect rectGUI;
 	rectGUI = headAnim->GetCurrentFrame();
@@ -134,8 +132,8 @@ bool GUI::PostUpdate()
 	point0.x = point0.x + 50;
 	point0.y = point0.y + 100;
 	
-	/*sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
-	app->fonts->BlitText(point0.x, point0.y, hudFont, scoreText);*/
+	sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
+	app->fonts->BlitText(point0.x, point0.y, 0, scoreText, { 255, 255, 255 });
 
 	// Coin HUD
 	point0.x = point0.x - 20;
@@ -145,21 +143,8 @@ bool GUI::PostUpdate()
 	rectCoins = coinHudAnim->GetCurrentFrame();
 	app->render->DrawTexture(imgCoin, point0.x, point0.y, &rectCoins);
 
-	//sprintf_s(coinText, 9, "x%d", *coins);
-	//app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
-	if (app->player->onDialog == true)
-	{
-		char NPCdialogue[64] = { 0 };
-		sprintf_s(NPCdialogue, 64, app->dialogueSystem->currentNode->text.c_str(), 56);
-		app->fonts->BlitText(20, 20, 0, NPCdialogue, { 255, 255, 255 });
-
-		char response[64] = { 0 };
-		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
-		{
-			sprintf_s(response, 64, app->dialogueSystem->currentNode->answersList.At(i)->data.c_str(), 56);
-			app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
-		}
-	}
+	sprintf_s(coinText, 9, "x%d", *coins);
+	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, 0, coinText, { 255, 255, 255 });
 	
 
 	// Time
@@ -180,7 +165,7 @@ bool GUI::PostUpdate()
 	}
 	point0.x = point0.x - 100;
 	sprintf_s(timeText, 10, "%d:%02d:%02d", minuts, miliseconds / 100, miliseconds2);
-	/*app->fonts->BlitText(point0.x, point0.y, hudFont, timeText);*/
+	app->fonts->BlitText(point0.x, point0.y, 0, timeText, { 255, 255, 255 });
 
 	if (activeFPS)
 	{
@@ -188,9 +173,10 @@ bool GUI::PostUpdate()
 		point0.y += WINDOW_H - 100;
 		sprintf_s(coinText, 10, "%3d", app->GetFramesOnLastSecond());
 
-		/*app->fonts->BlitText(point0.x, point0.y, hudFont, coinText);*/
+		app->fonts->BlitText(point0.x, point0.y, 0, coinText, { 255, 255, 255 });
 
 	}
+
 	return true;
 }
 
