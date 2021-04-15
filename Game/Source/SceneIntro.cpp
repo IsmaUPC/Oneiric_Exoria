@@ -170,6 +170,7 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
+	app->tex->UnLoad(moonCorner);
 
 	app->guiManager->DeleteList();
 

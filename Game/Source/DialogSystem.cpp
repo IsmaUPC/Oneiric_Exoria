@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
+#include "Fonts.h"
 
 #include "SDL/include/SDL.h"
 
@@ -14,6 +15,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue("dialogue_tree.xml");
+	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	//currentNode = dialogueTrees[Id]->dialogueNodes[0];
 	//PerformDialogue(Id);
 	return true;
@@ -59,6 +61,32 @@ bool DialogueSystem::Update(float dt)
 		render->DrawText(font, response, 10, 200 + (60 * (i + 1)), 80, 0, { 0, 255, 255, 255 });
 	}*/
 
+
+	return true;
+}
+
+bool DialogueSystem::PostUpdate()
+{
+
+	point.x = -app->render->camera.x;
+	point.y = -app->render->camera.y;
+
+	if (onDialog == true)
+	{
+		char NPCdialogue[64] = { 0 };
+		sprintf_s(NPCdialogue, 64, currentNode->text.c_str(), 56);
+		app->fonts->BlitText(point.x + WINDOW_W/2 - 250, point.y + 550, 0, NPCdialogue, { 255, 255, 255 });
+		//app->render->DrawTextBox(50, 50, 1000, 800, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
+
+		char response[64] = { 0 };
+		for (int i = 0; i < currentNode->answersList.Count(); i++)
+		{
+			sprintf_s(response, 64, currentNode->answersList.At(i)->data.c_str(), 56);
+			//app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
+			app->fonts->BlitText(point.x + WINDOW_W / 2 - 425 + (175 * (i + 1)), point.y + 675, 0, response, { 255, 255, 255 });
+		}
+	}
+
 	return true;
 }
 
@@ -73,6 +101,8 @@ bool DialogueSystem::CleanUp()
 		delete dialogueTrees[i];
 	}
 	dialogueTrees.clear();
+
+	app->tex->UnLoad(moonCorner);
 
 	return true;
 }

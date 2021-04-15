@@ -5,6 +5,7 @@
 #include "EntityManager.h"
 #include "Pathfinding.h"
 #include "SceneManager.h"
+#include "DialogSystem.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -206,11 +207,23 @@ bool Enemy::Update(float dt)
 	{
 		entityData.velocity = floor(1000 * dt) / 16;
 
-		if (Radar(app->player->playerData.position, range)) isDetected = true;
-		else isDetected = false;
+		if(entityData.type != NPC)
+		{
+			if (Radar(app->player->playerData.position, range)) isDetected = true;
+			else isDetected = false;
 
-		if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
-		else if (isDetected == true && app->player->playerData.state != IDLE) returning = false;
+			if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
+			else if (isDetected == true && app->player->playerData.state != IDLE) returning = false;
+		}
+		else
+		{
+			if (Radar(app->player->playerData.position, 500) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].a == true))
+			{
+				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
+				app->dialogueSystem->PerformDialogue(entityData.id, 7);
+				app->dialogueSystem->onDialog = true;
+			}
+		}
 
 		if(move)MoveEnemy();
 

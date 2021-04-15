@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
-#include "DialogSystem.h"
 #include "Fonts.h"
 
 #include "Defs.h"
@@ -108,7 +107,6 @@ bool GUI::PostUpdate()
 	point0.x = point0.x + headPositionX;
 	point0.y = point0.y + headPositionY;
 
-
 	// Respawns
 	SDL_Rect rectGUI;
 	rectGUI = headAnim->GetCurrentFrame();
@@ -147,20 +145,6 @@ bool GUI::PostUpdate()
 
 	sprintf_s(coinText, 9, "x%d", *coins);
 	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, 0, coinText, { 255, 255, 255 });
-
-	if (app->player->onDialog == true)
-	{
-		char NPCdialogue[64] = { 0 };
-		sprintf_s(NPCdialogue, 64, app->dialogueSystem->currentNode->text.c_str(), 56);
-		app->fonts->BlitText(20, 20, 0, NPCdialogue, { 255, 255, 255 });
-
-		char response[64] = { 0 };
-		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
-		{
-			sprintf_s(response, 64, app->dialogueSystem->currentNode->answersList.At(i)->data.c_str(), 56);
-			app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
-		}
-	}
 	
 
 	// Time
@@ -192,6 +176,7 @@ bool GUI::PostUpdate()
 		app->fonts->BlitText(point0.x, point0.y, 0, coinText, { 255, 255, 255 });
 
 	}
+
 	return true;
 }
 
