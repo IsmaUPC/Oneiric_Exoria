@@ -99,7 +99,7 @@ private:
 	int numArrows = 0;
 	float dt = 0;
 	float offset = 38;
-	bool moveBarTurn = true;
+	bool moveBarTurn = false;
 	bool assigneDone = false;
 };
 #endif //__SCENE_BATTLE_H__

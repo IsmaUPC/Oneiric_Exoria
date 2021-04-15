@@ -310,12 +310,27 @@ bool SceneBattle::PreUpdate()
 
 bool SceneBattle::Update(float dt_)
 {
-    //for (int i = 0; i < enemies.Count(); i++)
-    //{
-    //    enemies.At(i)->data->stats.health -= dt*2;
-    //}
+    /*for (int i = 0; i < enemies.Count(); i++)
+    {
+        enemies.At(i)->data->stats.health -= dt*2;
+    }*/
     dt = dt_;
     SpeedAnimationCheck(dt_);
+
+    // Win Condition
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        if (enemies.At(i)->data->stats.health > 0) break;
+        if (i == enemies.Count() - 1) 
+            TransitionToScene(SceneType::WIN);
+    }
+    // Lose Condition
+    for (int i = 0; i < partners.Count(); i++)
+    {
+        if (partners.At(i)->data->stats.health > 0) break;
+        if (i == partners.Count() - 1)
+            TransitionToScene(SceneType::LOSE);
+    }
 
     return true;
 }
@@ -356,9 +371,10 @@ bool SceneBattle::PostUpdate()
 void SceneBattle::DrawBarLives()
 {
     if (live.w > rec.w) live.w = rec.w;
+    if (live.w < 0)live.w = 0;
     if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-    if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
-    if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+    else if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
+    else if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
 
     app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
 }
@@ -491,12 +507,12 @@ bool SceneBattle::CleanUp()
     animationsEnemies.Clear();
 
     delete[] turnSort;
+    turnSort = nullptr;
 
     magics.Clear();
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
-
 
     return ret;
 }
