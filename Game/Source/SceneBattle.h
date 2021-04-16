@@ -19,6 +19,15 @@ struct Magic
 	SString description = "";
 };
 
+enum FaseAttack
+{
+	SELECT_ACTION,
+	SELECT_ENEMI,
+	DO_ACITON,
+	END_ACTION,
+	ENEMY_ATTACK
+};
+
 struct SDL_Texture;
 class SceneBattle : public SceneControl
 {
@@ -101,6 +110,10 @@ private:
 	int numArrows = 0;
 	float dt = 0;
 	float offset = 38;
+
+	int faseAction;
+	int enemiSelected;
+
 	bool moveBarTurn = false;
 	bool assigneDone = false;
 };
