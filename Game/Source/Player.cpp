@@ -196,10 +196,9 @@ bool Player::LoadState(pugi::xml_node& player)
 
 bool Player::SaveState(pugi::xml_node& player) const
 {
-	pugi::xml_node positionPlayer = player.child("position");
+	pugi::xml_node positionPlayer = player.child("data");
 	pugi::xml_node coinsPlayer = player.child("coins");
 	pugi::xml_node respawnsPlayer = player.child("lives");
-	pugi::xml_node levelPlayer = player.child("level");
 
 	player.remove_child("path");
 	player.append_child("path").set_value(0);
@@ -223,7 +222,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 		}
 		coinsPlayer.attribute("count").set_value(0);
 		respawnsPlayer.attribute("num_respawns").set_value(3);
-		levelPlayer.attribute("value").set_value(1);
 	}
 	else
 	{
@@ -232,7 +230,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 		positionPlayer.attribute("direction").set_value(playerData.direction);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
-		levelPlayer.attribute("value").set_value(playerData.level);
 
 		for (int i = 0; i < numPartners; i++)
 		{
@@ -240,8 +237,9 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
 			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
 			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
-			partnersData.last_child().append_attribute("level").set_value(partners[i].level);
 		}
+
+		SaveLevel(player);
 
 		partnersData = player.child("path");
 		for (int i = 0; i < path.Count(); i++)
@@ -249,6 +247,26 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.append_child("breadcrumb").append_attribute("x").set_value(path.At(i)->data->x);
 			partnersData.last_child().append_attribute("y").set_value(path.At(i)->data->y);
 		}		
+	}
+
+	return true;
+}
+bool Player::SaveLevel(pugi::xml_node& player) const
+{
+	pugi::xml_node levelPlayer = player.child("data");
+	pugi::xml_node partnersData = player.child("partners").child("partner");
+
+	if (app->removeGame) levelPlayer.attribute("value").set_value(1);
+	else
+	{
+		levelPlayer.attribute("level").set_value(playerData.level);
+		levelPlayer.attribute("exp").set_value(playerData.exp);
+		for (int i = 0; i < numPartners; i++)
+		{
+			partnersData.append_attribute("level").set_value(partners[i].level);
+			partnersData.append_attribute("exp").set_value(partners[i].exp);
+			partnersData = partnersData.next_sibling();
+		}
 	}
 
 	return true;

@@ -289,6 +289,9 @@
     <ClInclude Include="Source\GuiMenuMagic.h">
       <Filter>Modules\GuiControls</Filter>
     </ClInclude>
+    <ClInclude Include="Source\easings.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

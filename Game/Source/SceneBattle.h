@@ -57,6 +57,7 @@ public:
 	// Called before all Updates
 	bool PostUpdate();
 	void DrawBarLives();
+	void DrawBarExperience();
 	void DrawTurnBar();
 
 	// Called before quitting
@@ -69,6 +70,7 @@ public:
 
 	void BubbleSort();
 	void DisplaceToLeft();
+	void AbleDisableButtons();
 
 private:
 
@@ -80,12 +82,15 @@ private:
 	SDL_Color yellow;
 	SDL_Color red;
 	SDL_Color blue;
+	SDL_Color cyan;
 	SDL_Color orange;
+	SDL_Color white;
 
 	GuiButton* btnAttack;
 	GuiButton* btnMagic;
 	GuiButton* btnDefense;
 	GuiButton* btnExit;
+	GuiButton* btnContinue;
 
 	SDL_Texture* img;
 	SDL_Texture* texPalyers;
@@ -99,7 +104,6 @@ private:
 	List<Entity*> partners;
 	Entity* turnSort;
 
-	//GuiMenuMagic* menuMagic;
 	GuiMenuMagic* menuMagic;
 	
 	Magic* magicInUse;
@@ -110,11 +114,18 @@ private:
 	int numArrows = 0;
 	float dt = 0;
 	float offset = 38;
+	char textLive[8] = { "\0" };
+	char textLevel[7] = { "\0" };
+	char textExperience[14] = { "\0" };
 
 	int faseAction;
 	int enemiSelected;
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;
+	bool win = true;
+
+	int posX = 0;
+	int posY = 0;
 };
 #endif //__SCENE_BATTLE_H__

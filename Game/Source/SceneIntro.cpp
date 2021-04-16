@@ -120,23 +120,6 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
-	/*if (btnPlay->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnPlay->bounds.x - 35, btnPlay->bounds.y - 5, &handAnim->GetCurrentFrame());
-	}
-	else if (btnContinue->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnContinue->bounds.x - 35, btnContinue->bounds.y - 5, &handAnim->GetCurrentFrame());
-	}
-	else if (btnExit->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnExit->bounds.x - 35, btnExit->bounds.y - 5, &handAnim->GetCurrentFrame());
-	}
-	else if (btnSettings->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnSettings->bounds.x - 35, btnSettings->bounds.y - 5, &handAnim->GetCurrentFrame());
-	}*/
-
 	if (menuSettings->active)
 	{
 		menuSettings->Draw();

@@ -188,7 +188,7 @@ bool SceneManager::CleanUp()
 	LOG("Freeing scene");
 	if (current != nullptr) current->CleanUp();
 
-	app->fonts->UnLoad(1);
+	app->fonts->UnLoad(0);
 
 	return true;
 }

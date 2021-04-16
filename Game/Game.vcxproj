@@ -133,6 +133,7 @@
     <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\Collisions.h" />
     <ClInclude Include="Source\DialogSystem.h" />
+    <ClInclude Include="Source\easings.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
