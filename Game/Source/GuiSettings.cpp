@@ -14,22 +14,22 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
-	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 40 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
+	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 80, 20 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
 	sldMusic->active = false;
 	app->guiManager->AddGuiSlider(sldMusic);
 
-	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 40 }, "Fx", 0, MIX_MAX_VOLUME, btnTextureAtlas);
+	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 80, 20 }, "Fx", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldFx->SetObserver(moduleObserver);
 	sldFx->active = false;
 	app->guiManager->AddGuiSlider(sldFx);
 
-	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 183, 40 }, "FullScreen", app->fullScreen, btnTextureAtlas);
+	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 80, 40 }, "FullScreen", app->fullScreen, btnTextureAtlas);
 	chBxFullScreen->SetObserver(moduleObserver);
 	chBxFullScreen->active = false;
 	app->guiManager->AddGuiCheckBox(chBxFullScreen);
 
-	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 183, 40 }, "V-Sync",false, btnTextureAtlas);
+	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 80, 40 }, "V-Sync",false, btnTextureAtlas);
 	chBxVSync->SetObserver(moduleObserver);
 	chBxVSync->state = GuiControlState::DISABLED;
 	chBxVSync->active = false;
@@ -55,7 +55,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	app->render->DrawTextBox(initialPos.x, initialPos.y, 307, 320, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(initialPos.x, initialPos.y, 307, 350, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	return true;
 }
@@ -78,13 +78,13 @@ void GuiSettings::AbleDisableSetting()
 void GuiSettings::MovePosition()
 {
 	
-	int x = initialPos.x - app->render->camera.x;
-	int y = initialPos.y - app->render->camera.y;
+	int x = initialPos.x - app->render->camera.x + 110;
+	int y = initialPos.y - app->render->camera.y + 125;
 
-	sldMusic->bounds.x = x;
+	sldMusic->bounds.x = x - 55;
 	sldMusic->bounds.y = y;
 
-	sldFx->bounds.x = x;
+	sldFx->bounds.x = x - 70;
 	sldFx->bounds.y = y + padding * 1;
 
 	chBxFullScreen->bounds.x = x;
@@ -93,7 +93,7 @@ void GuiSettings::MovePosition()
 	chBxVSync->bounds.x = x;
 	chBxVSync->bounds.y = y + padding * 3;
 
-	btnBack->bounds.x = x+(183/4);
+	btnBack->bounds.x = x;
 	btnBack->bounds.y = y + padding * 4;
 
 }

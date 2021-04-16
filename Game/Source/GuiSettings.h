@@ -38,7 +38,7 @@ public:
 	bool active;
 
 private:
-	int padding = 40;
+	int padding = 60;
 
 	iPoint initialPos;
 
