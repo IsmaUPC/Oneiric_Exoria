@@ -424,9 +424,13 @@ bool SceneBattle::Update(float dt_)
     // Win Condition
     if (!win)
     {
-        if (enemies.At(i)->data->stats.health > 0) break;
-        if (i == enemies.Count()) 
-            TransitionToScene(SceneType::WIN);
+        for (int i = 0; i < enemies.Count(); i++)
+        {
+            if (enemies.At(i)->data->stats.health > 0) break;
+            if (i == enemies.Count() - 1)
+                win = true;
+            AbleDisableButtons();
+        }
     }
    
     // Lose Condition

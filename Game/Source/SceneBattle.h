@@ -123,7 +123,7 @@ private:
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;
-	bool win = true;
+	bool win = false;
 
 	int posX = 0;
 	int posY = 0;
