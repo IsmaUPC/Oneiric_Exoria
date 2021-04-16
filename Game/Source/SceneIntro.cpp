@@ -39,11 +39,11 @@ bool SceneIntro::Start()
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { 1053 - 25, 470,  50, 25 }, "Play", RECTANGLE); 
+	btnPlay = new GuiButton(1, { 1053 - 25, 470,  0, 0 }, "Play", RECTANGLE);
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { 1053 - 85/2 , 510,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue = new GuiButton(2, { 1053 - 85 / 2 , 510,  85, 25 }, "Continue", RECTANGLE);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -63,7 +63,7 @@ bool SceneIntro::Start()
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	
-	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, yPosition - (padding * 2) - 50 }, this);
+	menuSettings = new GuiSettings({ 900, 100 }, this);
 
 	app->SetLastScene((Module*)this);
 	transition = false;
@@ -73,15 +73,6 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
-	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
-
-	handAnim = new Animation();
-	handAnim->speed = 0.1f;
-	handAnim->loop = true;
-	for (int i = 0; i < 9; i++)
-	{
-		handAnim->PushBack({ i*32, 0, 32, 32 });
-	}
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -112,10 +103,10 @@ bool SceneIntro::Update(float dt)
 		CloaseMenuSettings();
 	}
 
-	menuSettings->Update(dt);
-
-	handAnim->speed = (dt * 8);
-	handAnim->Update();
+	if (menuSettings->active)
+	{
+		menuSettings->Update(dt);
+	}
 
 	return ret;
 }
@@ -129,7 +120,7 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
-	if (btnPlay->state == GuiControlState::FOCUSED)
+	/*if (btnPlay->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnPlay->bounds.x - 35, btnPlay->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
@@ -137,14 +128,6 @@ bool SceneIntro::PostUpdate()
 	{
 		app->render->DrawTexture(handCursor, btnContinue->bounds.x - 35, btnContinue->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
-	/*if (btnRemove->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnRemove->bounds.x - 10, btnRemove->bounds.y + 20);
-	}*/
-	/*if (btnCredits->state == GuiControlState::FOCUSED)
-	{
-		app->render->DrawTexture(handCursor, btnCredits->bounds.x - 10, btnCredits->bounds.y + 20);
-	}*/
 	else if (btnExit->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnExit->bounds.x - 35, btnExit->bounds.y - 5, &handAnim->GetCurrentFrame());
@@ -152,9 +135,12 @@ bool SceneIntro::PostUpdate()
 	else if (btnSettings->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnSettings->bounds.x - 35, btnSettings->bounds.y - 5, &handAnim->GetCurrentFrame());
-	}
+	}*/
 
-	menuSettings->Draw();
+	if (menuSettings->active)
+	{
+		menuSettings->Draw();
+	}
 
 	return ret;
 }
@@ -168,7 +154,6 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
-	app->tex->UnLoad(handCursor);
 
 	app->guiManager->DeleteList();
 

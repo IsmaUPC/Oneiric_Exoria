@@ -57,7 +57,7 @@ bool SceneLevel2::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(100,534);
+	app->player->positionInitial = new iPoint(400,700);
 
 	app->player->Init();
 	app->player->Start();

@@ -48,6 +48,7 @@ bool SceneBattle::Start()
     AddPartners();
 
     enemies = app->entityManager->spawnQueue;
+    enemiSelected = 0;
 
     // Inicialize the stats
     InicializeStats();
@@ -331,6 +332,78 @@ bool SceneBattle::Update(float dt_)
     dt = dt_;
     SpeedAnimationCheck(dt_);
 
+    //*******************
+    switch (faseAction)
+    {
+    case SELECT_ACTION:
+        if (turnSort[turn].entityData.type < 15)
+        {
+            faseAction = ENEMY_ATTACK;
+        }
+        break;
+
+    case SELECT_ENEMI:
+        btnAttack->state = GuiControlState::DISABLED;
+        btnMagic->state = GuiControlState::DISABLED;
+        btnDefense->state = GuiControlState::DISABLED;
+        btnExit->state = GuiControlState::DISABLED;
+
+        if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) {
+            btnAttack->state = GuiControlState::NORMAL;
+            btnMagic->state = GuiControlState::NORMAL;
+            btnDefense->state = GuiControlState::NORMAL;
+            btnExit->state = GuiControlState::NORMAL;
+            faseAction = SELECT_ACTION;
+        }
+
+        if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+            faseAction = DO_ACITON;
+        }
+
+        break;
+
+    case DO_ACITON:
+
+        if (magicInUse == nullptr)
+        {
+            float health = enemies.At(enemiSelected)->data->stats.health;
+            float attack = turnSort[turn].stats.attack;
+
+            enemies.At(enemiSelected)->data->stats.health -= turnSort[turn].stats.attack;
+
+        }
+        else
+        {
+            enemies.At(enemiSelected)->data->stats.health -= magicInUse->damage;
+        }
+
+        if (enemies.At(enemiSelected)->data->stats.health <= 0)
+        {
+            //TODO. ELIMINAR A LOS ENEMIGOS MUERTOS
+            //enemies.At(enemiSelected)->data->entityData.state = DEAD;
+            //app->entityManager->entities.At(enemiSelected)->data->entityData.state = DEAD;
+        }
+
+        faseAction = END_ACTION;
+        break;
+
+    case END_ACTION:
+        moveBarTurn = true;
+        btnAttack->state = GuiControlState::NORMAL;
+        btnMagic->state = GuiControlState::NORMAL;
+        btnDefense->state = GuiControlState::NORMAL;
+        btnExit->state = GuiControlState::NORMAL;
+        faseAction = SELECT_ACTION;
+        break;
+
+    case ENEMY_ATTACK:
+        moveBarTurn = true;
+        faseAction = SELECT_ACTION;
+        break;
+    default:
+        break;
+    }
+    //*******************
     // Win Condition
     for (int i = 0; i < enemies.Count(); i++)
     {
@@ -366,6 +439,24 @@ bool SceneBattle::PostUpdate()
 
         DrawBarLives();
     }
+    //Icon Enemy selected
+    if (faseAction == SELECT_ENEMI) {
+
+        if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) { 
+            enemiSelected--; 
+            if (enemiSelected < 0) enemiSelected = enemies.Count()-1;
+        }
+        if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) { 
+            enemiSelected++; 
+            if (enemiSelected >= enemies.Count()) enemiSelected = 0;
+        }
+
+        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 60;
+        int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 60;
+        app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 100);
+    }
+
+
     for (int i = 0; i < partners.Count(); i++)
     {
         int posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
@@ -406,7 +497,7 @@ void SceneBattle::DrawBarLives()
 
 void SceneBattle::DrawTurnBar()
 {
-    if (moveBarTurn) offset -= dt * 30, numArrows = 0;
+    if (moveBarTurn) offset -= dt * 60, numArrows = 0;
     else offset = 38, numArrows = 1;
     for (int i = 0; i < tam; i++)
     {
@@ -517,7 +608,7 @@ void SceneBattle::DrawTurnBar()
         face = { 20,64 * tam - 16 +30,48,64 };
         app->render->DrawTexture(img, 20, 64 * tam - 16+30, &face);
     }
-    if (offset < -64 + 38)moveBarTurn = false, DisplaceToLeft();
+    if (offset < -64 + 38)moveBarTurn = false, DisplaceToLeft(), faseAction = SELECT_ACTION;
 }
 
 bool SceneBattle::CleanUp()
@@ -589,22 +680,8 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //ATTACK
         if (control->id == 20)
         {
-            //Next turn
-            /*while (turnSort[turn + 1].isAlive == false)
-            {
-                turn += 1;
-                if (turn >= tam) turn = 0;
-            }
-            if (turn < tam-1)
-            {
-                turn++;
-            }
-            else
-            {
-                turn = 0;
-            }*/
-            moveBarTurn = true;
-
+            magicInUse = nullptr;
+            faseAction = SELECT_ENEMI;
         }
         //MAGIC
         else if (control->id == 21)
@@ -670,6 +747,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             }
             else {
                 // Use magicInUse
+                faseAction = SELECT_ENEMI;
             }
         }
         //Magic2
@@ -681,6 +759,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             }
             else {
                 // Use magicInUse
+                faseAction = SELECT_ENEMI;
             }
         }
         //Magic3
@@ -692,6 +771,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             }
             else {
                 // Use magicInUse
+                faseAction = SELECT_ENEMI;
             }
         }
         //Magic4
@@ -703,6 +783,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             }
             else {
                 // Use magicInUse
+                faseAction = SELECT_ENEMI;
             }
         }
     }

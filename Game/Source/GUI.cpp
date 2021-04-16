@@ -110,7 +110,7 @@ bool GUI::PostUpdate()
 	point0.y = point0.y + headPositionY;
 
 	//text box
-	if (app->dialogueSystem->onDialog == true) app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 515, 600, 200, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	if (app->dialogueSystem->onDialog == true) app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565, 600, 150, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	// Respawns
 	SDL_Rect rectGUI;

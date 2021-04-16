@@ -35,12 +35,12 @@ public:
 
 	GuiButton* btnBack;
 
+	bool active;
+
 private:
-	int padding = 98;
+	int padding = 40;
 
 	iPoint initialPos;
-
-	bool active;
 
 };
 #endif // __GUISETTINGS_H__
