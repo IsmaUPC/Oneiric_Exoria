@@ -221,6 +221,7 @@ bool Enemy::Update(float dt)
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
+				app->dialogueSystem->SetId(entityData.id);
 				app->dialogueSystem->onDialog = true;
 			}
 			else if (Radar(app->player->playerData.position, 50)!= true) app->dialogueSystem->onDialog = false;

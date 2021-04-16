@@ -71,6 +71,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
 	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
+	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
