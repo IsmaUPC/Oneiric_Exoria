@@ -357,22 +357,12 @@ bool SceneBattle::Update(float dt_)
 
         if (magicInUse == nullptr)
         {
-            float health = enemies.At(enemiSelected)->data->stats.health;
             float attack = turnSort[turn].stats.attack;
-
-            enemies.At(enemiSelected)->data->stats.health -= turnSort[turn].stats.attack;
-
+            enemies.At(enemiSelected)->data->stats.health -= attack;
         }
         else
         {
             enemies.At(enemiSelected)->data->stats.health -= magicInUse->damage;
-        }
-
-        if (enemies.At(enemiSelected)->data->stats.health <= 0)
-        {
-            //TODO. ELIMINAR A LOS ENEMIGOS MUERTOS
-            //enemies.At(enemiSelected)->data->entityData.state = DEAD;
-            //app->entityManager->entities.At(enemiSelected)->data->entityData.state = DEAD;
         }
 
         faseAction = END_ACTION;
@@ -388,6 +378,30 @@ bool SceneBattle::Update(float dt_)
         break;
 
     case ENEMY_ATTACK:
+
+        int ally;
+        if (magicInUse == nullptr)
+        {
+            ally = (rand() % partners.Count());
+            for (int i = 0; i < partners.Count(); i++)
+            {
+                //TODO que recorra todo el array desde una posicion random
+            }
+
+            /*do{
+                ally = (rand() % partners.Count());
+            } while (partners.At(ally)->data->stats.health <= 0);*/
+            float attack = turnSort[turn].stats.attack;
+            partners.At(ally)->data->stats.health -= attack;
+        }
+        else
+        {
+            do{
+                ally = (rand() % partners.Count());
+            } while (partners.At(ally)->data->stats.health <= 0);
+            partners.At((rand() % partners.Count()))->data->stats.health -= magicInUse->damage;
+        }
+
         moveBarTurn = true;
         faseAction = SELECT_ACTION;
         break;
@@ -399,14 +413,14 @@ bool SceneBattle::Update(float dt_)
     for (int i = 0; i < enemies.Count(); i++)
     {
         if (enemies.At(i)->data->stats.health > 0) break;
-        if (i == enemies.Count() - 1) 
+        if (i == enemies.Count()) 
             TransitionToScene(SceneType::WIN);
     }
     // Lose Condition
     for (int i = 0; i < partners.Count(); i++)
     {
         if (partners.At(i)->data->stats.health > 0) break;
-        if (i == partners.Count() - 1)
+        if (i == partners.Count())
             TransitionToScene(SceneType::LOSE);
     }
 
@@ -434,12 +448,16 @@ bool SceneBattle::PostUpdate()
     if (faseAction == SELECT_ENEMI) {
 
         if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) { 
-            enemiSelected--; 
-            if (enemiSelected < 0) enemiSelected = enemies.Count()-1;
+            do{
+                enemiSelected--; 
+                if (enemiSelected < 0) enemiSelected = enemies.Count()-1;
+            } while (enemies.At(enemiSelected)->data->stats.health <= 0);
         }
         if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) { 
-            enemiSelected++; 
-            if (enemiSelected >= enemies.Count()) enemiSelected = 0;
+            do {
+                enemiSelected++;
+                if (enemiSelected >= enemies.Count()) enemiSelected = 0;
+            } while (enemies.At(enemiSelected)->data->stats.health <= 0);   
         }
 
         int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 60;
