@@ -49,19 +49,19 @@ bool GUI::Start()
 	//headTex = entityData.texture;
 	SDL_QueryTexture(headTex, NULL, NULL, &headW, &imgH);
 
-	headAnim->PushBack({0,0,headW,imgH });
+	//headAnim->PushBack({0,0,headW,imgH });
 
 	imgH = 0;
 	imgW = 0;
-	arrowTex = app->tex->Load("Assets/Textures/GUI/arrows.png");
-	SDL_QueryTexture(arrowTex, NULL, NULL, &imgW, &imgH);
+	//arrowTex = app->tex->Load("Assets/Textures/GUI/arrows.png");
+	//SDL_QueryTexture(arrowTex, NULL, NULL, &imgW, &imgH);
 	imgW = imgW / 2;
 
-	arrowAnim->PushBack({ 0,0,imgW,imgH });
-	buttonEAnim->PushBack({ imgW,0,imgW,imgH });
+	//arrowAnim->PushBack({ 0,0,imgW,imgH });
+	//buttonEAnim->PushBack({ imgW,0,imgW,imgH });
 
 
-	imgCoin = app->tex->Load("Assets/Textures/GUI/coin.png");
+	//imgCoin = app->tex->Load("Assets/Textures/GUI/coin.png");
 	coinHudAnim->loop = true;
 	coinHudAnim->speed = 0.20f;
 
@@ -138,7 +138,7 @@ bool GUI::PostUpdate()
 	point0.y = point0.y + 100;
 	
 	sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
-	app->fonts->BlitText(point0.x, point0.y, 0, scoreText, { 255, 255, 255 });
+	//app->fonts->BlitText(point0.x, point0.y, 0, scoreText, { 255, 255, 255 });
 
 	// Coin HUD
 	point0.x = point0.x - 20;
@@ -146,10 +146,10 @@ bool GUI::PostUpdate()
 
 	SDL_Rect rectCoins;
 	rectCoins = coinHudAnim->GetCurrentFrame();
-	app->render->DrawTexture(imgCoin, point0.x, point0.y, &rectCoins);
+	//app->render->DrawTexture(imgCoin, point0.x, point0.y, &rectCoins);
 
 	sprintf_s(coinText, 9, "x%d", *coins);
-	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, 0, coinText, { 255, 255, 255 });
+	//app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, 0, coinText, { 255, 255, 255 });
 	
 
 	// Time
@@ -170,7 +170,7 @@ bool GUI::PostUpdate()
 	}
 	point0.x = point0.x - 100;
 	sprintf_s(timeText, 10, "%d:%02d:%02d", minuts, miliseconds / 100, miliseconds2);
-	app->fonts->BlitText(point0.x, point0.y, 0, timeText, { 255, 255, 255 });
+	//app->fonts->BlitText(point0.x, point0.y, 0, timeText, { 255, 255, 255 });
 
 	if (activeFPS)
 	{
