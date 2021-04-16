@@ -73,15 +73,15 @@ bool DialogueSystem::PostUpdate()
 
 	if (onDialog == true) 
 	{
-		char NPCdialogue[64] = { 0 };
-		sprintf_s(NPCdialogue, 64, currentNode->text.c_str(), 56);
+		char NPCdialogue[128] = { 0 };
+		sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
 		app->fonts->BlitText(point.x + WINDOW_W/2 - 250, point.y + 550, 0, NPCdialogue, { 255, 255, 255 });
 		//app->render->DrawTextBox(50, 50, 1000, 800, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
 
-		char response[64] = { 0 };
+		char response[128] = { 0 };
 		for (int i = 0; i < currentNode->answersList.Count(); i++)
 		{
-			sprintf_s(response, 64, currentNode->answersList.At(i)->data.c_str(), 56);
+			sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
 			//app->fonts->BlitText(20, 200 + (60 * (i + 1)), 0, response, { 255, 255, 255 });
 			app->fonts->BlitText(point.x + WINDOW_W / 2 - 425 + (175 * (i + 1)), point.y + 675, 0, response, { 255, 255, 255 });
 		}
