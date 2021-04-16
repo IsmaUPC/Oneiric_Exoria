@@ -8,6 +8,7 @@
 #include "GuiCheckBox.h"
 #include "GuiMenuPause.h"
 #include "GuiSlider.h"
+#include "Animation.h"
 
 #include "List.h"
 
@@ -79,6 +80,8 @@ public:
 
 	SDL_Texture* btnTextureAtlas;
 	SDL_Texture* moonCorner;
+	SDL_Texture* handCursor;
+	Animation* handAnim;
 
 	bool press;
 

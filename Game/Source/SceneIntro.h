@@ -48,8 +48,6 @@ private:
 
 	SDL_Texture* bgIntro;
 	SDL_Texture* logoIntro;
-	SDL_Texture* handCursor;
-	Animation* handAnim;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	bool transition;
 

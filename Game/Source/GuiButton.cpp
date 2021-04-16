@@ -70,6 +70,7 @@ bool GuiButton::Draw()
 		break;
 	case GuiControlState::FOCUSED: 
 		rect.x+= 1*rect.w;
+		app->render->DrawTexture(app->guiManager->handCursor, bounds.x - 35, bounds.y - 5, &app->guiManager->handAnim->GetCurrentFrame());
 		if (drawRectangles)app->render->DrawRectangle(bounds, 255, 255, 0, 190);
 		break;
 	case GuiControlState::PRESSED:
