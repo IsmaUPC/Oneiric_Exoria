@@ -62,6 +62,7 @@ private:
 	GuiButton* btnExit;
 
 	GuiSettings* menuSettings;
+	uint startFx;
 };
 
 #endif // __SCENEINTRO_H__
