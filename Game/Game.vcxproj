@@ -102,6 +102,7 @@
     <ClCompile Include="Source\GuiButton.cpp" />
     <ClCompile Include="Source\GuiCheckBox.cpp" />
     <ClCompile Include="Source\GuiManager.cpp" />
+    <ClCompile Include="Source\GuiMenuMagic.cpp" />
     <ClCompile Include="Source\GuiMenuPause.cpp" />
     <ClCompile Include="Source\GuiSettings.cpp" />
     <ClCompile Include="Source\GuiSlider.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="Source\GuiCheckBox.h" />
     <ClInclude Include="Source\GuiControl.h" />
     <ClInclude Include="Source\GuiManager.h" />
+    <ClInclude Include="Source\GuiMenuMagic.h" />
     <ClInclude Include="Source\GuiMenuPause.h" />
     <ClInclude Include="Source\GuiSettings.h" />
     <ClInclude Include="Source\GuiSlider.h" />

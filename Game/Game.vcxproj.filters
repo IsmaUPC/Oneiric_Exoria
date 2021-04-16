@@ -137,6 +137,9 @@
     <ClCompile Include="Source\Fonts.cpp">
       <Filter>Modules\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GuiMenuMagic.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -282,6 +285,9 @@
     </ClInclude>
     <ClInclude Include="Source\Fonts.h">
       <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiMenuMagic.h">
+      <Filter>Modules\GuiControls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -66,9 +66,7 @@ bool SceneBattle::Start()
     blue.r = 37; blue.g = 40; blue.b = 80;
     orange.r = 255; orange.g = 136; orange.b = 18;
 
-    bool ret;
-    ret = LoadMagics("magicList.xml");
-    return ret;
+    return true;
 }
 
 void SceneBattle::LoadAnimations()
@@ -173,6 +171,7 @@ void SceneBattle::AddEntities()
         break;
     }
 }
+
 void SceneBattle::AddPartners()
 {
     // Partners and Player
@@ -197,6 +196,7 @@ void SceneBattle::AddPartners()
         }
     }
 }
+
 void SceneBattle::InicializeStats()
 {
     float strong = 1;
@@ -282,6 +282,7 @@ void SceneBattle::InicializeStats()
         }
     }
 }
+
 void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 {
     int padding = 90;
@@ -301,10 +302,14 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
     btnExit = new GuiButton(23, { WINDOW_W - 200, yPosition + (padding * 3),  183, 91 }, "EXIT", RECTANGLE, btnTextureAtlas);
     btnExit->SetObserver(this);
     app->guiManager->AddGuiButton(btnExit);
+
+    //MenuMagic
+    menuMagic = new GuiMenuMagic({ WINDOW_W / 2 -200, yPosition}, this);
+    activeMenuMagic = false;
 }
 
 bool SceneBattle::PreUpdate()
-{
+{ 
     return true;
 }
 
@@ -334,6 +339,7 @@ bool SceneBattle::Update(float dt_)
 
     return true;
 }
+
 bool SceneBattle::PostUpdate()
 {
     if (!assigneDone)AssignEntities();
@@ -509,13 +515,13 @@ bool SceneBattle::CleanUp()
     delete[] turnSort;
     turnSort = nullptr;
 
-    magics.Clear();
     app->entityManager->ClearList(ret);
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
 
     return ret;
 }
+
 void SceneBattle::SpeedAnimationCheck(float dt)
 {
     for (int i = 0; i < spritesBarTurn.Count(); i++)
@@ -530,37 +536,6 @@ void SceneBattle::SpeedAnimationCheck(float dt)
     {
         animationsEnemies.At(i)->data->speed = dt * 2;
     }
-}
-
-bool SceneBattle::LoadMagics(const char* file)
-{
-    pugi::xml_parse_result result = magicDoc.load_file(file);
-
-    if (result == NULL)
-    {
-        LOG("Could not load the file %s. pugi error: %s", file, result.description());
-        return false;
-    }
-    else
-    {
-        pugi::xml_node character = magicDoc.first_child().child("character");
-
-        for (character; character != NULL; character = character.next_sibling("character"))
-        {
-            for (pugi::xml_node n = character.child("magic"); n != NULL; n = n.next_sibling("magic"))
-            {
-                Magic* magic = new Magic;
-                magic->id = character.attribute("ID").as_int();
-                magic->level = n.attribute("level").as_int();
-                magic->name = n.attribute("name").as_string("");
-                magic->damage = n.attribute("damage").as_int();
-                magic->mana = n.attribute("mana").as_int();
-                magic->description = n.attribute("description").as_string("");
-                magics.Add(magic);
-            }
-        }
-    }
-    return true;
 }
 
 void SceneBattle::AssignEntities()
@@ -585,6 +560,7 @@ void SceneBattle::AssignEntities()
 
     assigneDone = true;
 }
+
 bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 {
     switch (control->type)
@@ -614,13 +590,18 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //MAGIC
         else if (control->id == 21)
         {
-            for (int i = 0; i < magics.Count(); i++)
-            {
-                if (magics.At(i)->data->id == turnSort[turn].entityData.type)
-                {
-                    LOG("%s",magics.At(i)->data->name.GetString());
-                }
-            }
+            activeMenuMagic = true;
+
+            menuMagic->SetIdTurn(turnSort[turn].entityData.type);
+
+            menuMagic->AbleDisableMagic();
+            menuMagic->MovePosition();
+
+            btnAttack->state = GuiControlState::DISABLED;
+            btnMagic->state = GuiControlState::DISABLED;
+            btnDefense->state = GuiControlState::DISABLED;
+            btnExit->state = GuiControlState::DISABLED;
+
         }
         //DEFENSE
         else if (control->id == 22)
@@ -649,6 +630,61 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             isContinue = true;
             TransitionToScene(SceneType::LEVEL1);
         }
+        else if (control->id == 30)
+        {
+            activeMenuMagic = false;
+            btnAttack->state = GuiControlState::NORMAL;
+            btnMagic->state = GuiControlState::NORMAL;
+            btnDefense->state = GuiControlState::NORMAL;
+            btnExit->state = GuiControlState::NORMAL;
+            menuMagic->AbleDisableMagic();
+
+        }
+        //--MAGICS--
+        //Magic1
+        else if (control->id == 31)
+        {
+            magicInUse = menuMagic->GetMagic(1);
+            if (magicInUse->level == 0) {
+                // not exists magic
+            }
+            else {
+                // Use magicInUse
+            }
+        }
+        //Magic2
+        else if (control->id == 32)
+        {
+            magicInUse = menuMagic->GetMagic(2);
+            if (magicInUse->level == 0) {
+                // not exists magic
+            }
+            else {
+                // Use magicInUse
+            }
+        }
+        //Magic3
+        else if (control->id == 33)
+        {
+            magicInUse = menuMagic->GetMagic(3);
+            if (magicInUse->level == 0) {
+                // not exists magic
+            }
+            else {
+                // Use magicInUse
+            }
+        }
+        //Magic4
+        else if (control->id == 34)
+        {
+            magicInUse = menuMagic->GetMagic(4);
+            if (magicInUse->level == 0) {
+                // not exists magic
+            }
+            else {
+                // Use magicInUse
+            }
+        }
     }
     default: break;
     }
@@ -659,6 +695,7 @@ int SceneBattle::CalculateExp(int level)
 {
     return (0.04 * (level * level * level) + 0.8 * (level * level) + 2 * level) * 3.5;
 }
+
 void SceneBattle::BubbleSort()
 {
     int numSwaps = -1;
@@ -678,6 +715,7 @@ void SceneBattle::BubbleSort()
         }
     }
 }
+
 void SceneBattle::DisplaceToLeft()
 {
     Entity aux = turnSort[0];
