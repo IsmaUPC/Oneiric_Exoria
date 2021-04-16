@@ -27,10 +27,10 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds,const char* text = "SLIDER", int
 	sliderBarInput.h = 20;
 	sliderBarInput.y = bounds.y + (bounds.w / 2) - (sliderBarInput.h / 2);
 
-	sliderBarImage = { 497,2623,183,20 };
-	sliderImage = {696,2632,46,46};
+	sliderBarImage = { 5,103,183,20 };
+	sliderImage = {8,150,17,21};
 
-	button = { rectAtlasPos->x,rectAtlasPos->y,rectTexW + margin,rectTexH };
+	//button = { rectAtlasPos->x,rectAtlasPos->y,rectTexW + margin,rectTexH };
 
 	slider.w = sliderImage.w;
 	slider.h = sliderImage.h;
@@ -75,7 +75,7 @@ bool GuiSlider::Update(float dt)
 				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP 
 				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
 			{
-				if (text == "FX")
+				if (text == "Fx")
 					app->audio->PlayFx(app->guiManager->btnSlider);
 				state = GuiControlState::FOCUSED;
 			}
@@ -96,9 +96,9 @@ bool GuiSlider::Draw()
 	{
 	case GuiControlState::DISABLED:
 		button.x += 3 * button.w;
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		sliderImage.x += 3 * (sliderImage.w + marginSliders);
+		//sliderImage.x += 3 * (sliderImage.w + marginSliders);
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 100, 100, 100, 190);
@@ -106,7 +106,7 @@ bool GuiSlider::Draw()
 
 		break;
 	case GuiControlState::NORMAL:
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
@@ -115,9 +115,9 @@ bool GuiSlider::Draw()
 
 		break;
 	case GuiControlState::FOCUSED:
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		sliderImage.x += 1 * (sliderImage.w + marginSliders);
+		//sliderImage.x += 1 * (sliderImage.w + marginSliders);
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 255, 255, 0, 190);
@@ -125,9 +125,9 @@ bool GuiSlider::Draw()
 
 		break;
 	case GuiControlState::PRESSED:
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		sliderImage.x += 2 * (sliderImage.w + marginSliders);
+		//sliderImage.x += 2 * (sliderImage.w + marginSliders);
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 0, 255, 255, 190);
@@ -142,8 +142,7 @@ bool GuiSlider::Draw()
 	default:
 		break;
 	}
-	button.x = rectAtlasPos->x;
-	sliderImage.x = 696;
+	//button.x = rectAtlasPos->x;
 
 	int centradoY, centradoX;
 	// 14 = a letter's width
@@ -157,14 +156,14 @@ bool GuiSlider::Draw()
 
 void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 {
-	if (((mouseX > sliderBarInput.x) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
+	if (((mouseX > sliderBarInput.x + slider.w/2) && (mouseX < (sliderBarInput.x + sliderBarInput.w)) &&
 		(mouseY > sliderBarInput.y) && (mouseY < (sliderBarInput.y + sliderBarInput.h))) ||
 		((mouseX > slider.x) && (mouseX < (slider.x + slider.w)) &&
 			(mouseY > slider.y) && (mouseY < (slider.y + slider.h))))
 	{
 		slider.x = mouseX - (slider.w / 2);
 
-		value = ((maxValue - minValue) * (mouseX - (float)(sliderBarInput.x + slider.w / 2))) / (float)(sliderBarInput.w - slider.w) + minValue;
+		value = ((maxValue - minValue) * (mouseX - (float)(sliderBarInput.x + slider.w))) / (float)(sliderBarInput.w - slider.w) + minValue;
 
 	}
 	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT || pad.right || pad.l_x > 0.2) value++;
@@ -172,14 +171,15 @@ void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 
 
 	// Limits
-	if (slider.x < sliderBarInput.x)
+	if (slider.x < sliderBarInput.x - slider.w/2 || value < minValue)
 	{
-		slider.x = sliderBarInput.x;
+		slider.x = sliderBarInput.x - slider.w/2;
 		value = minValue;
+		LOG("%d", value);
 	}
 	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w))
 	{
-		slider.x = (sliderBarInput.x + sliderBarInput.w) - slider.w;
+		slider.x = (sliderBarInput.x + sliderBarInput.w) - slider.w/2;
 		value = maxValue;
 	}
 
@@ -197,6 +197,6 @@ void GuiSlider::SetValue(int newValue)
 	i = (((sliderBarInput.w - slider.w) + minValue) * (maxValue - minValue)) * value;
 
 	X = (i / h) + (sliderBarInput.x + (slider.w / 2));
-	slider.x = (int)X-23;
+	slider.x = (int)X;
 	slider.y = sliderBarInput.y+(sliderBarInput.h/2) - (slider.h/2);
 }
