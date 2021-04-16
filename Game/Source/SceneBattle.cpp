@@ -571,7 +571,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         if (control->id == 20)
         {
             //Next turn
-            while (turnSort[turn + 1].isAlive == false)
+            /*while (turnSort[turn + 1].isAlive == false)
             {
                 turn += 1;
                 if (turn >= tam) turn = 0;
@@ -583,8 +583,8 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             else
             {
                 turn = 0;
-            }
-           // DisplaceToLeft();
+            }*/
+            DisplaceToLeft();
 
         }
         //MAGIC
@@ -630,6 +630,8 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             isContinue = true;
             TransitionToScene(SceneType::LEVEL1);
         }
+
+        //--MAGIC MENU--
         else if (control->id == 30)
         {
             activeMenuMagic = false;
@@ -640,12 +642,11 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             menuMagic->AbleDisableMagic();
 
         }
-        //--MAGICS--
         //Magic1
         else if (control->id == 31)
         {
             magicInUse = menuMagic->GetMagic(1);
-            if (magicInUse->level == 0) {
+            if (magicInUse==nullptr) {
                 // not exists magic
             }
             else {
@@ -656,7 +657,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         else if (control->id == 32)
         {
             magicInUse = menuMagic->GetMagic(2);
-            if (magicInUse->level == 0) {
+            if (magicInUse == nullptr) {
                 // not exists magic
             }
             else {
@@ -667,7 +668,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         else if (control->id == 33)
         {
             magicInUse = menuMagic->GetMagic(3);
-            if (magicInUse->level == 0) {
+            if (magicInUse == nullptr) {
                 // not exists magic
             }
             else {
@@ -678,7 +679,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         else if (control->id == 34)
         {
             magicInUse = menuMagic->GetMagic(4);
-            if (magicInUse->level == 0) {
+            if (magicInUse == nullptr) {
                 // not exists magic
             }
             else {

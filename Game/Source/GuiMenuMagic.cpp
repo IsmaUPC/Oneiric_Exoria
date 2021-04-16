@@ -15,7 +15,7 @@ GuiMenuMagic::GuiMenuMagic(iPoint Position, SceneControl* moduleObserver)
 	initialPos = Position;
 	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
-	btnW = 150;
+	btnW = 160;
 	btnH = 50;
 	padding = btnH + 10;
 	magic1 = new GuiButton(31, { initialPos.x, initialPos.y, btnW, btnH }, "magia1", RECTANGLE, btnTextureAtlas);
@@ -86,7 +86,14 @@ void GuiMenuMagic::LoadMagics(const char* file)
 Magic* GuiMenuMagic::GetMagic(int button)
 {
 	button --;
-	return magicsCharacterTurn.At(button)->data;
+	if (magicsCharacterTurn.At(button) == nullptr)
+	{
+		return nullptr;
+	}
+	else
+	{
+		return magicsCharacterTurn.At(button)->data;
+	}
 }
 
 bool GuiMenuMagic::Update(float dt)
@@ -139,13 +146,12 @@ void GuiMenuMagic::MovePosition()
 	close->bounds.y = y + padding * 2;
 }
 
-
 void GuiMenuMagic::SetIdTurn(int turn)
 {
 	IdCharacterTurn = turn;
 	magicsCharacterTurn.Clear();
 	int j = 0;
-	for (int i = 0; i < magics.Count()-1; i++)
+	for (int i = 0; i < magics.Count(); i++)
 	{
 		if (magics.At(i)->data->id == IdCharacterTurn)
 		{
@@ -157,7 +163,7 @@ void GuiMenuMagic::SetIdTurn(int turn)
 	for (int i = 0; i < 4; i++)
 	{
 		if (i >= j) {
-			btns.At(i)->data->text = " ";
+			btns.At(i)->data->text = "   ---";
 		}
 		else
 		{
