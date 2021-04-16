@@ -14,32 +14,32 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 
 	initialPos = Position;
 	
-	btnResume = new GuiButton(1, { Position.x , Position.y + padding*0, 183, 91 }, "RESUME", RECTANGLE, textureAtlas);
+	btnResume = new GuiButton(1, { Position.x, Position.y + padding*0, 183, 91 }, "Resume", RECTANGLE, textureAtlas);
 	btnResume->SetObserver(moduleObserver);
 	btnResume->active = false;
 	app->guiManager->AddGuiButton(btnResume);
 
-	btnSettings = new GuiButton(2, { Position.x, Position.y + padding * 1, 183, 91 }, "SETTINGS",RECTANGLE, textureAtlas);
+	btnSettings = new GuiButton(2, { Position.x, Position.y + padding * 1, 183, 91 }, "Settings",RECTANGLE, textureAtlas);
 	btnSettings->SetObserver(moduleObserver);
 	btnSettings->active = false;
 	app->guiManager->AddGuiButton(btnSettings);
 
-	btnBackToTitle = new GuiButton(3, { Position.x, Position.y + padding * 2, 183, 91 }, "TITLE", RECTANGLE, textureAtlas);
+	btnBackToTitle = new GuiButton(3, { Position.x, Position.y + padding * 2, 183, 91 }, "Title", RECTANGLE, textureAtlas);
 	btnBackToTitle->SetObserver(moduleObserver);
 	btnBackToTitle->active = false;
 	app->guiManager->AddGuiButton(btnBackToTitle);
 
-	btnSave = new GuiButton(4, { Position.x, Position.y + padding * 3, 183, 91 }, "SAVE", RECTANGLE, textureAtlas);
+	btnSave = new GuiButton(4, { Position.x, Position.y + padding * 3, 183, 91 }, "Save", RECTANGLE, textureAtlas);
 	btnSave->SetObserver(moduleObserver);
 	btnSave->active = false;
 	app->guiManager->AddGuiButton(btnSave);
 
-	btnExit = new GuiButton(5, { Position.x, Position.y + padding * 4, 88, 88 }, "", EXIT, textureAtlas);
+	btnExit = new GuiButton(5, { Position.x, Position.y + padding * 4, 88, 88 }, "Exit", EXIT, textureAtlas);
 	btnExit->SetObserver(moduleObserver);
 	btnExit->active = false;
 	app->guiManager->AddGuiButton(btnExit);
 
-	menuSettings = new GuiSettings({ WINDOW_W / 2 + 240, Position.y - padding }, moduleObserver);
+	menuSettings = new GuiSettings({ WINDOW_W / 2 + 80, Position.y - 160}, moduleObserver);
 
 	observer = moduleObserver;
 
@@ -86,7 +86,14 @@ bool GuiMenuPause::PostUpdate()
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
+		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W/2 - 237/2, -app->render->camera.y + WINDOW_H/2 - 237/2, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 	}
+
+	if (menuSettings->active)
+	{
+		menuSettings->Draw();
+	}
+
 	return true;
 }
 
@@ -217,21 +224,21 @@ void GuiMenuPause::CloaseMenuSettings()
 void GuiMenuPause::MovePosition()
 {
 	int x = -app->render->camera.x + initialPos.x;
-	int y = -app->render->camera.y + initialPos.y;
+	int y = -app->render->camera.y + initialPos.y + 30;
 
-	btnResume->bounds.x = x;
+	btnResume->bounds.x = x + 237/2 - btnResume->bounds.w/2;
 	btnResume->bounds.y = y;
 
-	btnSettings->bounds.x = x;
+	btnSettings->bounds.x = x + 237 / 2 - btnSettings->bounds.w / 2;
 	btnSettings->bounds.y = y + padding * 1;
 
-	btnBackToTitle->bounds.x = x;
+	btnBackToTitle->bounds.x = x + 237 / 2 - btnBackToTitle->bounds.w / 2;
 	btnBackToTitle->bounds.y = y + padding * 2;
 	
-	btnSave->bounds.x = x;
+	btnSave->bounds.x = x + 237 / 2 - btnSave->bounds.w / 2;
 	btnSave->bounds.y = y + padding * 3;
 		
-	btnExit->bounds.x = x;
+	btnExit->bounds.x = x + 237 / 2 - btnExit->bounds.w / 2;
 	btnExit->bounds.y = y + padding * 4;
 		
 }
