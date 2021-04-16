@@ -158,7 +158,6 @@ bool SceneManager::Update(float dt)
 		lastLevel =2;
 	}
 
-
 	return ret;
 }
 

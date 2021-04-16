@@ -34,9 +34,19 @@ bool GuiManager::Start()
 	//btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_selected.wav");
 	//btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
 	//btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
+	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
-	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
+	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
+
+	handAnim = new Animation();
+	handAnim->speed = 0.1f;
+	handAnim->loop = true;
+	for (int i = 0; i < 9; i++)
+	{
+		handAnim->PushBack({ i * 32, 0, 32, 32 });
+	}
+
 	press = false;
 	return true;
 }
@@ -47,6 +57,9 @@ bool GuiManager::Update(float dt)
 	bool ret = true;
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
+
+	handAnim->speed = (dt * 8);
+	handAnim->Update();
 
 	// Menu pause
 	if (app->sceneManager->GetIsPause()) menu->Update(dt);
@@ -105,6 +118,7 @@ bool GuiManager::CleanUp()
 {
 	app->tex->UnLoad(btnTextureAtlas);
 	app->tex->UnLoad(moonCorner);
+	app->tex->UnLoad(handCursor);
 	DeleteList();
 
 	delete menu;
