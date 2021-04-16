@@ -115,7 +115,8 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
-				currentNode = dialogueTrees[treeId]->dialogueNodes[i];
+				if (currentNode->dialogueOptions[playerInput]->nextNode == 100) onDialog = false;
+				else currentNode = dialogueTrees[treeId]->dialogueNodes[i];
 				break;
 			}
 	}
