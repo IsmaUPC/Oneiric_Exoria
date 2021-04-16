@@ -258,9 +258,7 @@ void EntityManager::SpawnEntity(Entity* info)
 		break;
 
 	case NPC:
-		if (info->entityData.texture == nullptr)
-			entities.Add(new Enemy(info));
-		else entities.Add(new Enemy(info, info->entityData.texture));
+		entities.Add(new Enemy(info));
 		entities.end->data->Start();
 		break;
 	}

@@ -71,7 +71,7 @@ bool DialogueSystem::PostUpdate()
 	point.x = -app->render->camera.x;
 	point.y = -app->render->camera.y;
 
-	if (onDialog == true)
+	if (onDialog == true) 
 	{
 		char NPCdialogue[64] = { 0 };
 		sprintf_s(NPCdialogue, 64, currentNode->text.c_str(), 56);

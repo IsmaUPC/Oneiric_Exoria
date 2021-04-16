@@ -70,7 +70,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(BANDIT, 16, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
-	app->entityManager->AddEntity(NPC, 31*32, 23*32, 0, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
@@ -141,7 +141,6 @@ bool Scene::PostUpdate()
 		return true;
 	}
 
-	if(app->dialogueSystem->onDialog == true) app->render->DrawTextBox(-app->render->camera.x + WINDOW_W/2 -300, -app->render->camera.y + 515, 600, 200, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->dialogueSystem->moonCorner, 200);
 
 	return ret;
 }

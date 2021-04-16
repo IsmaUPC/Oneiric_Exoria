@@ -217,12 +217,13 @@ bool Enemy::Update(float dt)
 		}
 		else
 		{
-			if (Radar(app->player->playerData.position, 500) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].a == true))
+			if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].a == true))
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
 				app->dialogueSystem->onDialog = true;
 			}
+			else if (Radar(app->player->playerData.position, 50)!= true) app->dialogueSystem->onDialog = false;
 		}
 
 		if(move)MoveEnemy();
@@ -230,35 +231,37 @@ bool Enemy::Update(float dt)
 		if (isDetected) CheckCollisionEnemyToPlayer();
 	}
 
-	entityData.currentAnimation->Update();
+	if (entityData.type != NPC) entityData.currentAnimation->Update();
 	return true;
 }
 
 bool Enemy::PostUpdate()
 {
-	SDL_Rect rectEnemy;
-	rectEnemy = entityData.currentAnimation->GetCurrentFrame();
-
-	// Draw player in correct direction
-	if (entityData.direction == MoveDirection::WALK_R)
-		app->render->DrawTexture(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
-	else if (entityData.direction == MoveDirection::WALK_L)
-		app->render->DrawTextureFlip(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
-
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+	if (entityData.type != NPC)
 	{
-		iPoint enemyCenter;
-		enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
-		enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
 
-		iPoint playerCenter;
-		playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
-		playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+		SDL_Rect rectEnemy;
+		rectEnemy = entityData.currentAnimation->GetCurrentFrame();
 
-		app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+		// Draw player in correct direction
+		if (entityData.direction == MoveDirection::WALK_R)
+			app->render->DrawTexture(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
+		else if (entityData.direction == MoveDirection::WALK_L)
+			app->render->DrawTextureFlip(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
+
+		if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+		{
+			iPoint enemyCenter;
+			enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
+			enemyCenter.y = entityData.position.y + entityData.pointsCollision[0].y + entityData.centerPoint.y;
+
+			iPoint playerCenter;
+			playerCenter.x = app->player->playerData.position.x + app->player->playerData.pointsCollision[0].x + app->player->playerData.centerPoint.x;
+			playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
+
+			app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+		}
 	}
-	
-
 	return true;
 }
 
