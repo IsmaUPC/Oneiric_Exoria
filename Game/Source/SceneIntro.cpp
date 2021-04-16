@@ -39,11 +39,11 @@ bool SceneIntro::Start()
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { 1053 - 25, 470,  50, 25 }, "Play", RECTANGLE); 
+	btnPlay = new GuiButton(1, { 1053 - 25, 470,  0, 0 }, "Play", RECTANGLE);
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { 1053 - 85/2 , 510,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue = new GuiButton(2, { 1053 - 85 / 2 , 510,  85, 25 }, "Continue", RECTANGLE);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -112,7 +112,10 @@ bool SceneIntro::Update(float dt)
 		CloaseMenuSettings();
 	}
 
-	menuSettings->Update(dt);
+	if (menuSettings->active)
+	{
+		menuSettings->Update(dt);
+	}
 
 	handAnim->speed = (dt * 8);
 	handAnim->Update();
@@ -154,7 +157,10 @@ bool SceneIntro::PostUpdate()
 		app->render->DrawTexture(handCursor, btnSettings->bounds.x - 35, btnSettings->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
 
-	menuSettings->Draw();
+	if (menuSettings->active)
+	{
+		menuSettings->Draw();
+	}
 
 	return ret;
 }

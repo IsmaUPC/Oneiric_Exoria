@@ -115,11 +115,11 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 	}
 	else
 	{
+		SDL_FreeSurface(sur);
+		SDL_DestroyTexture(tex);
 		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
 		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
 		if(tex != NULL)app->render->DrawTexture(tex, x, y);
-		SDL_FreeSurface(sur);
-		SDL_DestroyTexture(tex);
 	}
 
 }

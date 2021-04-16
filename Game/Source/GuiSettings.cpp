@@ -55,7 +55,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	//app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(900, 100, 307, 320, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	return true;
 }

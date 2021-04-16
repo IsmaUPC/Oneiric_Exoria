@@ -5,13 +5,12 @@
 
 GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, TypeButton typeButton, SDL_Texture* texture ) : GuiControl(GuiControlType::BUTTON, id)
 {
-	this->bounds = bounds;
-	//this->bounds.x = this->bounds.x - (rectTexW / 2);
-
-	this->text = text;
 	this->texture = texture;
 	this->typeButton = typeButton;
 	this->font = app->sceneManager->GetGuiFont();
+	this->bounds = bounds;
+	TTF_SizeText(this->font, text, &this->bounds.w, &this->bounds.h);
+	this->text = text;
 }
 
 GuiButton::~GuiButton()
@@ -62,24 +61,19 @@ bool GuiButton::Draw()
 	{
 	case GuiControlState::DISABLED: 
 		rect.x+= 3 * rect.w;
-		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 
 		textDisable = true;
 		if (drawRectangles)app->render->DrawRectangle(bounds, 100, 100, 100, 190);
 		break;
 	case GuiControlState::NORMAL: 
-		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 0, 255, 0, 190);
 		break;
 	case GuiControlState::FOCUSED: 
 		rect.x+= 1*rect.w;
-		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 255, 255, 0, 190);
-		app->render->DrawRectangle({ bounds.x, bounds.y, bounds.w, bounds.h }, 255, 0, 0, 150);
 		break;
 	case GuiControlState::PRESSED:
 		rect.x+= 2 * rect.w;
-		//app->render->DrawTexture(texture, bounds.x, bounds.y, &rect);
 		if (drawRectangles)app->render->DrawRectangle(bounds, 0, 255, 255, 190);
 		break;
 	case GuiControlState::SELECTED:
