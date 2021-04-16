@@ -135,13 +135,13 @@ void SceneBattle::AddEntities()
 
         // Add Enemies
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 14, 17, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 13, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 10, 15, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 19, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 10, 19, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 8, 17, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 7, 17, 0, randomLvl);
         break;
 
     case 2:
@@ -150,11 +150,11 @@ void SceneBattle::AddEntities()
 
         // Add Enemies
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(FIGHTER, 14, 17, 0, randomLvl);
+        app->entityManager->AddEntity(FIGHTER, 13, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(BANDIT, 11, 15, 0, randomLvl);
+        app->entityManager->AddEntity(BANDIT, 10, 15, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(SAPLING, 11, 19, 0, randomLvl);
+        app->entityManager->AddEntity(SAPLING, 10, 19, 0, randomLvl);
         break;
 
     case 3:
@@ -163,9 +163,9 @@ void SceneBattle::AddEntities()
 
         // Add Enemies
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(SAPLING, 14, 17, 0, randomLvl);
+        app->entityManager->AddEntity(SAPLING, 13, 17, 0, randomLvl);
         while (randomLvl < 0) randomLvl = level + (rand() % 3);
-        app->entityManager->AddEntity(FIGHTER, 11, 15, 0, randomLvl);
+        app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
         break;
     default:
         break;
@@ -216,6 +216,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 3 * level +8;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+                enemies.At(i)->data->stats.exp = app->player->playerData.exp;
                 enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(0)->data;
                 break;
             case KEILER_:
@@ -225,6 +226,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
+                enemies.At(i)->data->stats.exp = app->player->GetPartners()[0].exp;
                 enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(1)->data;
                 break;
             case ISRRA_:
@@ -234,6 +236,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 3.5 * level + 8.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+                enemies.At(i)->data->stats.exp = app->player->GetPartners()[1].exp;
                 enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(2)->data;
                 break;
             case BRENDA_:
@@ -243,6 +246,7 @@ void SceneBattle::InicializeStats()
                 enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
                 enemies.At(i)->data->stats.mana = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
+                enemies.At(i)->data->stats.exp = app->player->GetPartners()[2].exp;
                 enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(3)->data;
                 break;
 
@@ -303,6 +307,11 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
     btnExit->SetObserver(this);
     app->guiManager->AddGuiButton(btnExit);
 
+    btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "Continue", RECTANGLE, btnTextureAtlas);
+    btnContinue->SetObserver(this);
+    btnContinue->active = false;
+    app->guiManager->AddGuiButton(btnContinue);
+
     //MenuMagic
     menuMagic = new GuiMenuMagic({ WINDOW_W / 2 -200, yPosition}, this);
     activeMenuMagic = false;
@@ -326,8 +335,8 @@ bool SceneBattle::Update(float dt_)
     for (int i = 0; i < enemies.Count(); i++)
     {
         if (enemies.At(i)->data->stats.health > 0) break;
-        if (i == enemies.Count() - 1) 
-            TransitionToScene(SceneType::WIN);
+        if (i == enemies.Count() - 1)
+            win = true;
     }
     // Lose Condition
     for (int i = 0; i < partners.Count(); i++)
@@ -371,6 +380,16 @@ bool SceneBattle::PostUpdate()
     app->render->DrawRectangle({20, 30, 48, 64*tam-16}, blue.r, blue.g, blue.b, 100);
     DrawTurnBar();
     app->render->DrawRectangle({ 20, 30, 48, 64 * tam - 16 }, orange.r, orange.g, orange.b, 255, false);
+
+    if (!win)
+    {
+        app->render->DrawTextBox(WINDOW_W/2 - 400, WINDOW_H/2 - 200, 800, 400, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+        for (int i = 0; i < app->player->GetNumPartners() + 1; i++)
+        {
+            app->render->DrawRectangle({ WINDOW_W / 2 - 400 + 40 + (i * 190), WINDOW_H / 2 - 200 + 40, 150, 150},0,33,78, 255, false);
+        }
+    }
+
     return true;
 }
 

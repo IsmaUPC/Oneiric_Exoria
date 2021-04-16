@@ -12,6 +12,7 @@ struct PlayerData
 	Animation* currentAnimation;
 	float velocity ;
 	int level = 1;
+	int exp = 0;
 	uint lives = 0;
 	uint respawns = 0;
 	uint coins = 0;
@@ -38,6 +39,7 @@ struct Partner
 	SDL_Texture* texture;
 	TypePartner type;
 	int level = 1;
+	int exp = 0;
 	int breadcrumb = 0;
 };
 
@@ -101,6 +103,7 @@ private:
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
+	bool SaveLevel(pugi::xml_node& data)const;
 
 	void MoveToDirection(MoveDirection direction, iPoint &position);
 

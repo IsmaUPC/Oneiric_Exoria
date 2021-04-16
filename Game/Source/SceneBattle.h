@@ -77,6 +77,7 @@ private:
 	GuiButton* btnMagic;
 	GuiButton* btnDefense;
 	GuiButton* btnExit;
+	GuiButton* btnContinue;
 
 	SDL_Texture* img;
 	SDL_Texture* texPalyers;
@@ -103,5 +104,6 @@ private:
 	float offset = 38;
 	bool moveBarTurn = false;
 	bool assigneDone = false;
+	bool win = false;
 };
 #endif //__SCENE_BATTLE_H__
