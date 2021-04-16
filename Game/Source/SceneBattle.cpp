@@ -456,7 +456,7 @@ void SceneBattle::DrawTurnBar()
             if (moveBarTurn && i == 0)
             {
                 face = spritesBarTurn.At(4)->data->frames[0];
-                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+                app->render->DrawTexture(texEnemies, 28, 64 * tam + offset, &face);
             }
             break;
         case FIGHTER:
@@ -469,7 +469,7 @@ void SceneBattle::DrawTurnBar()
             if (moveBarTurn && i == 0)
             {
                 face = spritesBarTurn.At(5)->data->frames[0];
-                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+                app->render->DrawTexture(texEnemies, 28, 64 * tam + offset, &face);
             }
             break;
         case SAPLING:
@@ -482,7 +482,7 @@ void SceneBattle::DrawTurnBar()
             if (moveBarTurn && i == 0)
             {
                 face = spritesBarTurn.At(6)->data->frames[0];
-                app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+                app->render->DrawTexture(texEnemies, 28, 64 * tam + offset, &face);
             }
             break;
         default:
@@ -584,7 +584,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             {
                 turn = 0;
             }*/
-            DisplaceToLeft();
+            moveBarTurn = true;
 
         }
         //MAGIC
