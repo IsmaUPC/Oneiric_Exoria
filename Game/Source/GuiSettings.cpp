@@ -14,28 +14,28 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
-	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 91 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
+	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 183, 40 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
 	sldMusic->active = false;
 	app->guiManager->AddGuiSlider(sldMusic);
 
-	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 91 }, "Fx", 0, MIX_MAX_VOLUME, btnTextureAtlas);
+	sldFx = new GuiSlider(12, { initialPos.x, initialPos.y + padding, 183, 40 }, "Fx", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldFx->SetObserver(moduleObserver);
 	sldFx->active = false;
 	app->guiManager->AddGuiSlider(sldFx);
 
-	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 183, 91 }, "FullScreen", app->fullScreen, btnTextureAtlas);
+	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 183, 40 }, "FullScreen", app->fullScreen, btnTextureAtlas);
 	chBxFullScreen->SetObserver(moduleObserver);
 	chBxFullScreen->active = false;
 	app->guiManager->AddGuiCheckBox(chBxFullScreen);
 
-	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 183, 91 }, "V-Sync",false, btnTextureAtlas);
+	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 183, 40 }, "V-Sync",false, btnTextureAtlas);
 	chBxVSync->SetObserver(moduleObserver);
 	chBxVSync->state = GuiControlState::DISABLED;
 	chBxVSync->active = false;
 	app->guiManager->AddGuiCheckBox(chBxVSync);
 
-	btnBack = new GuiButton(10, { initialPos.x, initialPos.y + padding * 4, 88, 88 }, "Back", BACK,btnTextureAtlas);
+	btnBack = new GuiButton(10, { initialPos.x, initialPos.y + padding * 4, 183, 91 }, "Back", BACK,btnTextureAtlas);
 	btnBack->SetObserver(moduleObserver);
 	btnBack->active = false;
 	app->guiManager->AddGuiButton(btnBack);
@@ -55,7 +55,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	app->render->DrawTextBox(900, 100, 307, 320, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(initialPos.x, initialPos.y, 307, 320, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	return true;
 }
