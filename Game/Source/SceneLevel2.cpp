@@ -61,10 +61,6 @@ bool SceneLevel2::Start()
 
 	app->player->Init();
 	app->player->Start();
-	
-
-	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/loki_8bits.ogg");
 
 	//Parallax
 	img = app->tex->Load("Assets/Textures/sky_2.png");

@@ -40,6 +40,7 @@ bool SceneBattle::Start()
     app->sceneManager->SetEnemeyDetected(false);
     texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
     texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
+    app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
 
     // Load Animations
     LoadAnimations();
