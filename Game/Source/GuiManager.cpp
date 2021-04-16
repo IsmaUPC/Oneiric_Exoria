@@ -327,5 +327,5 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 	// Menu pause
 	delete menu;
 	menu=nullptr;
-	menu= (new GuiMenuPause({ WINDOW_W / 2 - 100, WINDOW_H / 4 }, current, btnTextureAtlas));
+	menu= (new GuiMenuPause({ -app->render->camera.x + WINDOW_W / 2 - 237 / 2, -app->render->camera.y + WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
 }
