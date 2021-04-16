@@ -35,6 +35,7 @@ bool GuiManager::Start()
 	//btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_pressed.wav");
 	//btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disable.wav");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
 	press = false;
 	return true;
@@ -103,6 +104,7 @@ bool GuiManager::PostUpdate()
 bool GuiManager::CleanUp()
 {
 	app->tex->UnLoad(btnTextureAtlas);
+	app->tex->UnLoad(moonCorner);
 	DeleteList();
 
 	delete menu;
@@ -167,8 +169,7 @@ void GuiManager::SelectControl()
 			if (controls.At(i)->data->state == GuiControlState::FOCUSED)
 			{
 				isFocused = true;
-				if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || pad.down || pad.l_y > 0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || pad.right || pad.l_x > 0.2) && controls.At(i)->data->type != GuiControlType::SLIDER))
+				if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || pad.down || pad.l_y > 0.2) && controls.At(i)->data->type != GuiControlType::SLIDER)
 				{
 					controls.At(i)->data->state = GuiControlState::NORMAL;
 					int j = i + 1;
@@ -183,8 +184,7 @@ void GuiManager::SelectControl()
 						j++;
 					}
 				}
-				if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || pad.up || pad.l_y < -0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || pad.left || pad.l_x < -0.2) && controls.At(i)->data->type != GuiControlType::SLIDER))
+				if ((app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || pad.up || pad.l_y < -0.2) && controls.At(i)->data->type != GuiControlType::SLIDER)
 				{
 					controls.At(i)->data->state = GuiControlState::NORMAL;
 					int j = i - 1;

@@ -33,18 +33,17 @@ bool SceneIntro::Awake()
 
 bool SceneIntro::Start()
 {
-	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
 
 	// GUI: Initialize required controls for the screen
 	int margin= 7;
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { 1053 - 25, 470,  50, 25 }, "Play", RECTANGLE, btnTextureAtlas); 
+	btnPlay = new GuiButton(1, { 1053 - 25, 470,  50, 25 }, "Play", RECTANGLE); 
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { 1053 - 85/2 , 510,  85, 25 }, "Continue", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(2, { 1053 - 85/2 , 510,  85, 25 }, "Continue", RECTANGLE);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -56,11 +55,11 @@ bool SceneIntro::Start()
 	btnCredits->SetObserver(this);
 	app->guiManager->AddGuiButton(btnCredits);*/
 
-	btnSettings = new GuiButton(3, { 1053 - 75/2, 550,  75, 25 }, "Settings", RECTANGLE, btnTextureAtlas);
+	btnSettings = new GuiButton(3, { 1053 - 75/2, 550,  75, 25 }, "Settings", RECTANGLE);
 	btnSettings->SetObserver(this);
 	app->guiManager->AddGuiButton(btnSettings);
 
-	btnExit = new GuiButton(4, { 1053 - 35/2 , 590,  35, 25 }, "Exit", EXIT, btnTextureAtlas);
+	btnExit = new GuiButton(4, { 1053 - 35/2 , 590,  35, 25 }, "Exit", EXIT);
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	
@@ -74,7 +73,6 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
-	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
 
 	handAnim = new Animation();
@@ -129,13 +127,13 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
 	app->render->DrawTexture(logoIntro, 108, 33);
 
-	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, moonCorner, 200);
+	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	if (btnPlay->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnPlay->bounds.x - 35, btnPlay->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
-	if (btnContinue->state == GuiControlState::FOCUSED)
+	else if (btnContinue->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnContinue->bounds.x - 35, btnContinue->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
@@ -147,11 +145,11 @@ bool SceneIntro::PostUpdate()
 	{
 		app->render->DrawTexture(handCursor, btnCredits->bounds.x - 10, btnCredits->bounds.y + 20);
 	}*/
-	if (btnExit->state == GuiControlState::FOCUSED)
+	else if (btnExit->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnExit->bounds.x - 35, btnExit->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
-	if (btnSettings->state == GuiControlState::FOCUSED)
+	else if (btnSettings->state == GuiControlState::FOCUSED)
 	{
 		app->render->DrawTexture(handCursor, btnSettings->bounds.x - 35, btnSettings->bounds.y - 5, &handAnim->GetCurrentFrame());
 	}
@@ -170,7 +168,7 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
-	app->tex->UnLoad(moonCorner);
+	app->tex->UnLoad(handCursor);
 
 	app->guiManager->DeleteList();
 

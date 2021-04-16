@@ -123,7 +123,7 @@ bool GuiCheckBox::Draw()
 	centradoX = (bounds.w / 2) - (((float)(text.Length() / 2) + 0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centradoY = (bounds.h / 2) - (48 / 4);
-	app->fonts->BlitText(bounds.x + centradoX, bounds.y + centradoY, 0, text.GetString(), { 255, 255, 255 });
+	app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), { 255, 255, 255 });
 
 
 	return false;

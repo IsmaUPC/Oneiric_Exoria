@@ -78,6 +78,7 @@ public:
 	uint btnSlider;
 
 	SDL_Texture* btnTextureAtlas;
+	SDL_Texture* moonCorner;
 
 	bool press;
 
