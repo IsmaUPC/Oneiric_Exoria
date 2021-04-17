@@ -508,7 +508,7 @@ bool SceneBattle::Update(float dt_)
                     partners.At(ally)->data->entityData.state = DEAD;
                     assigneDone = false;
                     for (int i = 0; i < tam; i++) {
-                        if (turnSort[i].entityData.positionInitial == partners.At(enemiSelected)->data->entityData.positionInitial)
+                        if (turnSort[i].entityData.positionInitial == partners.At(ally)->data->entityData.positionInitial)
                         {
                             indexTurnBar = i;
                             break;
