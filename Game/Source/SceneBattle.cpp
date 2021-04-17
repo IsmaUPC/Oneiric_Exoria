@@ -514,7 +514,7 @@ bool SceneBattle::Update(float dt_)
             {
                 win = true;
                 AbleDisableButtons();
-
+                app->sceneManager->SetWinBattle(true);
             }
         }
         // Lose Condition
@@ -895,6 +895,8 @@ bool SceneBattle::CleanUp()
 
     RELEASE(menuMagic);
     magicInUse = nullptr;
+
+    app->sceneManager->SetWinBattle(false);
 
     return ret;
 }
