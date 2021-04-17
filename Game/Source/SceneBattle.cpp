@@ -530,14 +530,6 @@ bool SceneBattle::PostUpdate()
 
     app->render->DrawTexture(img, 0, 0);
 
-    //TODO: Borrar recuadro Azul de parners una vez que se reconozca al que se lleva en el turno
-    if (faseAction == SELECT_ACTION){
-        if (turnSort[turn].entityData.type >= 15) {
-        int posX = (int)turnSort[turn].entityData.position.x + 20;
-        int posY = (int)turnSort[turn].entityData.position.y - 40;
-        app->render->DrawRectangle({ posX, posY, 20, 20 }, blue.r, blue.g, blue.b, 255);
-        }
-    }
     if (god)
     {
         app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
@@ -592,7 +584,7 @@ bool SceneBattle::PostUpdate()
             }
         }
 
-        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 55;
+        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 50;
         int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 65;
         //app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 255);
         app->render->DrawTexture(app->guiManager->handCursor, posX, posY, &app->guiManager->handAnim->GetCurrentFrame(),0,90);

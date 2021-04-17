@@ -39,7 +39,7 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 	btnExit->active = false;
 	app->guiManager->AddGuiButton(btnExit);
 
-	menuSettings = new GuiSettings({ WINDOW_W / 2 + 80, Position.y - 160}, moduleObserver);
+	menuSettings = new GuiSettings({ WINDOW_W / 2 + 140, Position.y - 50}, moduleObserver);
 
 	observer = moduleObserver;
 

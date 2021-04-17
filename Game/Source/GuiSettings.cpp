@@ -14,7 +14,7 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	SDL_Texture* btnTextureAtlas = app->guiManager->uiAtlas;
 
-	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 80, 20 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
+	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 65, 20 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
 	sldMusic->active = false;
 	app->guiManager->AddGuiSlider(sldMusic);
@@ -24,12 +24,12 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 	sldFx->active = false;
 	app->guiManager->AddGuiSlider(sldFx);
 
-	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 80, 40 }, "FullScreen", app->fullScreen, btnTextureAtlas);
+	chBxFullScreen = new GuiCheckBox(13, { initialPos.x, initialPos.y + padding * 2, 120, 95 }, "FullScreen", app->fullScreen, btnTextureAtlas);
 	chBxFullScreen->SetObserver(moduleObserver);
 	chBxFullScreen->active = false;
 	app->guiManager->AddGuiCheckBox(chBxFullScreen);
 
-	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 80, 40 }, "V-Sync",false, btnTextureAtlas);
+	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 120, 95 }, "V-Sync",false, btnTextureAtlas);
 	chBxVSync->SetObserver(moduleObserver);
 	chBxVSync->state = GuiControlState::DISABLED;
 	chBxVSync->active = false;
@@ -78,13 +78,13 @@ void GuiSettings::AbleDisableSetting()
 void GuiSettings::MovePosition()
 {
 	
-	int x = initialPos.x - app->render->camera.x + 110;
-	int y = initialPos.y - app->render->camera.y + 125;
+	int x = initialPos.x - app->render->camera.x + 30;
+	int y = initialPos.y - app->render->camera.y + 45;
 
-	sldMusic->bounds.x = x - 55;
+	sldMusic->bounds.x = x;
 	sldMusic->bounds.y = y;
 
-	sldFx->bounds.x = x - 70;
+	sldFx->bounds.x = x - 15;
 	sldFx->bounds.y = y + padding * 1;
 
 	chBxFullScreen->bounds.x = x;

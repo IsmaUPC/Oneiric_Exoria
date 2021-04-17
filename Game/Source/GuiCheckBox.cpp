@@ -37,7 +37,7 @@ bool GuiCheckBox::Update(float dt)
 {
 	bool ret = true;
 	checkBoxInput.x = bounds.x + bounds.w + (bounds.w / 4);
-	checkBoxInput.y = bounds.y;
+	checkBoxInput.y = bounds.y - 3;
 
 	GamePad& pad = app->input->pads[0];
 	int mouseX, mouseY;
@@ -80,33 +80,53 @@ bool GuiCheckBox::Draw()
 	{
 	case GuiControlState::DISABLED:
 		button.x += 3 * button.w;
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		checkBoxImage.x += 3 * (checkBoxImage.w+marginSquare);
-		app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		//checkBoxImage.x += 3 * (checkBoxImage.w+marginSquare);
+		checkBoxImage = { 160,64,32,32 };
+		app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage); 
 		textDisable = true;
 
 		if (drawRectangles)app->render->DrawRectangle(checkBoxInput, 100, 100, 100, 190);
 		break;
 	case GuiControlState::NORMAL: 
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		if (checked)
+		{
+			checkBoxImage = { 0, 64, 32, 32 };
+			app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		}
+		else
+		{
+			checkBoxImage = { 96, 64, 32, 32 };
+			app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		}
 
 		if (drawRectangles)app->render->DrawRectangle(checkBoxInput, 0, 255, 0, 190);
 		break;
 	case GuiControlState::FOCUSED: 
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		checkBoxImage.x += 1 * (checkBoxImage.w + marginSquare);
-		app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		//checkBoxImage.x += 1 * (checkBoxImage.w + marginSquare);
+		if (checked)
+		{
+			checkBoxImage = { 32, 64, 32, 32 };
+			app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		}
+		else
+		{
+			checkBoxImage = { 64, 64, 32, 32 };
+			app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
+		}
 
 		if (drawRectangles)app->render->DrawRectangle(checkBoxInput, 255, 255, 0, 190);
 		break;
 	case GuiControlState::PRESSED:
-		app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
+		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
-		checkBoxImage.x += 2 * (checkBoxImage.w + marginSquare);
+		//checkBoxImage.x += 2 * (checkBoxImage.w + marginSquare);
+		checkBoxImage = { 128, 64, 32, 32 };
 		app->render->DrawTexture(texture, checkBoxInput.x, checkBoxInput.y, &checkBoxImage);
 
 		if (drawRectangles)app->render->DrawRectangle(checkBoxInput, 0, 255, 255, 190);
