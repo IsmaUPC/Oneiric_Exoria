@@ -80,6 +80,8 @@ bool SceneBattle::Start()
 	black.r = 0; black.g = 0; black.b = 0;
 
     god = false;
+    missClick = false;
+
     return true;
 }
 
@@ -355,13 +357,13 @@ bool SceneBattle::PreUpdate()
 
 bool SceneBattle::Update(float dt_)
 {
-    /*for (int i = 0; i < enemies.Count(); i++)
-    {
-        enemies.At(i)->data->stats.health -= dt*2;
-    }*/
+
     dt = dt_;
     SpeedAnimationCheck(dt_);
-
+    //GamePad& pad = app->input->pads[0];
+    if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right){
+        missClick = false;
+    }
     //*******************
     switch (faseAction)
     {
@@ -390,17 +392,23 @@ bool SceneBattle::Update(float dt_)
         btnMagic->state = GuiControlState::DISABLED;
         btnDefense->state = GuiControlState::DISABLED;
         btnExit->state = GuiControlState::DISABLED;
+        btnGod->state = GuiControlState::DISABLED;
 
-        if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN) {
+
+
+        if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].b) {
             btnAttack->state = GuiControlState::NORMAL;
             btnMagic->state = GuiControlState::NORMAL;
             btnDefense->state = GuiControlState::NORMAL;
             btnExit->state = GuiControlState::NORMAL;
-            faseAction = SELECT_ACTION;
+            btnGod->state = GuiControlState::NORMAL;
 
+            faseAction = SELECT_ACTION;
         }
 
-        if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
+        //TODO. evitar el clik de fonfirmacion de mando
+
+        if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a && !missClick)) {
             faseAction = DO_ACITON;
         }
 
@@ -423,6 +431,7 @@ bool SceneBattle::Update(float dt_)
             btnMagic->state = GuiControlState::DISABLED;
             btnDefense->state = GuiControlState::DISABLED;
             btnExit->state = GuiControlState::DISABLED;
+            btnGod->state = GuiControlState::DISABLED;
         }
         if (enemies.At(enemiSelected)->data->stats.health < 1)
         {
@@ -450,6 +459,7 @@ bool SceneBattle::Update(float dt_)
         btnMagic->state = GuiControlState::DISABLED;
         btnDefense->state = GuiControlState::DISABLED;
         btnExit->state = GuiControlState::DISABLED;
+        btnGod->state = GuiControlState::DISABLED;
         if (!moveBarTurn)
         {
             // Find heald of actual enemy
@@ -563,7 +573,8 @@ bool SceneBattle::PostUpdate()
     //Icon Enemy selected
     if (faseAction == SELECT_ENEMY) {
 
-        if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) { 
+        if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || (app->input->pads[0].left && !missClick)) {
+            missClick = true;
             enemiSelected--;
             if (enemiSelected < 0)
             {
@@ -586,7 +597,8 @@ bool SceneBattle::PostUpdate()
                 }
             }
         }
-        if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) { 
+        if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || (app->input->pads[0].right && !missClick)) {
+            missClick = true;
             enemiSelected++;
             if (enemiSelected >= enemies.Count())
             {
@@ -889,6 +901,7 @@ void SceneBattle::DrawTurnBar()
         btnMagic->state = GuiControlState::DISABLED;
         btnDefense->state = GuiControlState::DISABLED;
         btnExit->state = GuiControlState::DISABLED;
+        btnGod->state = GuiControlState::DISABLED;
     }
 
     if (offset < -64 + 38) {
@@ -897,6 +910,7 @@ void SceneBattle::DrawTurnBar()
         btnMagic->state = GuiControlState::NORMAL;
         btnDefense->state = GuiControlState::NORMAL;
         btnExit->state = GuiControlState::NORMAL;
+        btnGod->state = GuiControlState::NORMAL;
     }
 }
 
@@ -996,6 +1010,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
                     break;
                 }
             }
+            missClick = true;
         }
         //MAGIC
         else if (control->id == 21)
@@ -1011,6 +1026,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             btnMagic->state = GuiControlState::DISABLED;
             btnDefense->state = GuiControlState::DISABLED;
             btnExit->state = GuiControlState::DISABLED;
+            btnGod->state = GuiControlState::DISABLED;
 
         }
         //DEFENSE
@@ -1170,6 +1186,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 
 void SceneBattle::UseAMagic()
 {
+    missClick = true;
     if (magicInUse == nullptr) {
         // not exists magic
     }
