@@ -73,7 +73,14 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
+	bigCloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
+	smallCloud = app->tex->Load("Assets/Textures/GUI/cloud_small.png");
 	startFx = app->audio->LoadFx("Assets/Audio/Music/Good/start_button.wav");
+
+	bCloudPos = { WINDOW_W /2 + 150, WINDOW_H / 3 };
+	bCloudPos2 = { WINDOW_W / 2 + 850, WINDOW_H / 3 - 100 };
+	sCloudPos = {WINDOW_W /2 + 500, WINDOW_H/3 - 50};
+	sCloudPos2 = { WINDOW_W/2, WINDOW_H / 3 + 250 };
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -109,7 +116,33 @@ bool SceneIntro::Update(float dt)
 		menuSettings->Update(dt);
 	}
 
+	CloudsUpdate();
+
 	return ret;
+}
+
+void SceneIntro::CloudsUpdate()
+{
+	bCloudPos.x -= 0.5f;
+	bCloudPos2.x -= 0.5f;
+	sCloudPos.x -= 0.75f;
+	sCloudPos2.x -= 0.75f;
+	if (bCloudPos.x + 585 < 0)
+	{
+		bCloudPos.x = WINDOW_W;
+	}
+	if (bCloudPos2.x + 585 < 0)
+	{
+		bCloudPos2.x = WINDOW_W;
+	}
+	if (sCloudPos.x + 292 < 0)
+	{
+		sCloudPos.x = WINDOW_W;
+	}
+	if (sCloudPos2.x + 292 < 0)
+	{
+		sCloudPos2.x = WINDOW_W;
+	}
 }
 
 bool SceneIntro::PostUpdate()
@@ -118,6 +151,11 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
 	app->render->DrawTexture(logoIntro, 108, 33);
+
+	app->render->DrawTexture(bigCloud, bCloudPos.x, bCloudPos.y);
+	app->render->DrawTexture(bigCloud, bCloudPos2.x, bCloudPos2.y);
+	app->render->DrawTexture(smallCloud, sCloudPos.x, sCloudPos.y);
+	app->render->DrawTexture(smallCloud, sCloudPos2.x, sCloudPos2.y);
 
 	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
