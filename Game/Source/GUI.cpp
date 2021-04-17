@@ -115,8 +115,8 @@ bool GUI::PostUpdate()
 	// Respawns
 	SDL_Rect rectGUI;
 	rectGUI = headAnim->GetCurrentFrame();
-	for (int i = 0; i < *respawn; i++)
-		app->render->DrawTexture(headTex,point0.x +((headW + headSeparation)*i),point0.y,&rectGUI);
+	//for (int i = 0; i < *respawn; i++)
+		//app->render->DrawTexture(headTex,point0.x +((headW + headSeparation)*i),point0.y,&rectGUI);
 	
 	// ChecKPoints HUD
 	rectGUI = buttonEAnim->GetCurrentFrame();

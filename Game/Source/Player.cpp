@@ -46,9 +46,15 @@ bool Player::Start()
 	playerData.position = *positionInitial;
 	playerData.state = IDLE;
 	playerData.velocity = 1;
+	
 	playerData.direction = WALK_R;
 	lastDirection = playerData.direction;
-
+	if (!app->sceneManager->GetCurrentScene()->isContinue)
+	{
+		playerData.level = 1;
+		playerData.exp = 0;
+		playerData.health = 8;
+	}
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
 	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
 	playerData.centerPoint.y = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[3]) / 2;
@@ -138,6 +144,17 @@ void Player::LoadPartners()
 		partners[i].direction = WALK_R;
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
+		if (!app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			partners[i].level = 1;
+			partners[i].exp = 0;
+		}
+		if (!app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			if (i == 0) partners[i].health = 14;
+			if (i == 1) partners[i].health = 10;
+			if (i == 2) partners[i].health = 13;
+		}
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
@@ -155,25 +172,35 @@ bool Player::Awake(pugi::xml_node& config)
 
 bool Player::LoadState(pugi::xml_node& player) 
 {
-	bool ret=true;
-	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
-	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
-	playerData.direction = (MoveDirection)player.child("position").attribute("direction").as_int(playerData.direction);
-	playerData.level = player.child("level").attribute("velue").as_int(playerData.level);
+	bool ret = true;
+	playerData.position.x = player.child("data").attribute("x").as_int(playerData.position.x);
+	playerData.position.y = player.child("data").attribute("y").as_int(playerData.position.y);
+	playerData.direction = (MoveDirection)player.child("data").attribute("direction").as_int(playerData.direction);
+	if (app->sceneManager->GetCurrentScene()->isContinue)
+	{
+		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
+		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
+		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
+	}
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
 	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
 
 	pugi::xml_node positionPartners = player.child("partners").child("partner");
 	int i = 0;
-	while(positionPartners)
+	while (positionPartners)
 	{
 		partners[i].position.x = positionPartners.attribute("x").as_int();
 		partners[i].position.y = positionPartners.attribute("y").as_int();
 		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
 		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
-		partners[i].level = positionPartners.attribute("level").as_int();
-	
+		if (app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			partners[i].level = positionPartners.attribute("level").as_int();
+			partners[i].exp = positionPartners.attribute("exp").as_int();
+			partners[i].health = positionPartners.attribute("health").as_int();
+		}
+
 		positionPartners = positionPartners.next_sibling();
 		i++;
 	}
@@ -297,7 +324,6 @@ bool Player::Update(float dt)
 		// Move player inputs control
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected() && app->dialogueSystem->onDialog == false)PlayerControls(dt);
 		// Move Between CheckPoints
-		else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		for (int i = 0; i < numPartners; i++)
@@ -787,12 +813,6 @@ bool Player::CleanUp()
 	RELEASE(walkAnimUp);
 	RELEASE(walkAnimDown);
 
-	// Partners
-	//for (int i = 3; i < numPartners; i++)
-	//{
-	//	// Animations of each partner
-	//	// ...
-	//}
 
 	for (int i = 0; i < texPartners.Count(); i++)
 	{
