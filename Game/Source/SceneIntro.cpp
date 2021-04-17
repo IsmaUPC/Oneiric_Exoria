@@ -63,7 +63,7 @@ bool SceneIntro::Start()
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	
-	menuSettings = new GuiSettings({ 900, 100 }, this);
+	menuSettings = new GuiSettings({ 900, 70 }, this);
 
 	app->SetLastScene((Module*)this);
 	transition = false;

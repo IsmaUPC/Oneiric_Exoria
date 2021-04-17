@@ -38,8 +38,8 @@ private:
 
 	iPoint* falseAtlasPos = new iPoint(227, 201);
 	iPoint* trueAtlasPos = new iPoint(552, 1407);
-	int squareTexW = 88;
-	int squareTexH = 88;
+	int squareTexW = 32;
+	int squareTexH = 32;
 	int marginSquare = 9;
 
 	bool textDisable = false;

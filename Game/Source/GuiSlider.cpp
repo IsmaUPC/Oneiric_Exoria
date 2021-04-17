@@ -175,7 +175,6 @@ void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 	{
 		slider.x = sliderBarInput.x - slider.w/2;
 		value = minValue;
-		LOG("%d", value);
 	}
 	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w))
 	{
