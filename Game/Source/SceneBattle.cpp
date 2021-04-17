@@ -77,6 +77,7 @@ bool SceneBattle::Start()
     cyan.r = 0; cyan.g = 183; cyan.b = 255;
     orange.r = 255; orange.g = 136; orange.b = 18;
     white.r = 255; white.g = 255; white.b = 255;
+	black.r = 0; black.g = 0; black.b = 0;
 
     god = false;
     return true;
@@ -693,19 +694,30 @@ void SceneBattle::AbleDisableButtons()
 
 void SceneBattle::DrawBarLives()
 {
-    app->render->DrawRectangle(rec, 71, 75, 78, 150);
+	tex = { 160, 32, rec.w, rec.h + 7 };
+	app->render->DrawTexture(app->guiManager->uiAtlas, rec.x, rec.y - 7, &tex);
 
     if (live.w > rec.w) live.w = rec.w;
     if (live.w < 0)live.w = 0;
-    if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
-    else if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-    else if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+	if (live.w > rec.w / 2)
+	{
+		tex = { 160, 0, live.w, rec.h + 7 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
+	}
+    else if (live.w < rec.w / 4)
+	{
+		tex = { 160, 224, live.w, rec.h + 7 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
+	}
+	else if (live.w < rec.w / 2)
+	{
+		tex = { 160, 192, live.w, rec.h + 7 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
+	}
 
     int w = 0,  h = 0;
     TTF_SizeText(app->sceneManager->guiFont, textLive, &w, &h);
-    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textLive, white);
-
-    app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textLive, black);
 }
 
 void SceneBattle::DrawBarExperience()
