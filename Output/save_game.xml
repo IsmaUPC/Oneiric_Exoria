@@ -6,16 +6,57 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="70" y="90" />
+		<camera x="96" y="182" />
 	</renderer>
 	<player>
-		<data x="570" y="270" direction="1" level="1" exp="0" health="8" />
+		<data x="542" y="176" direction="2" level="1" exp="3" health="8" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="620" y="256" />
+			<breadcrumb x="618" y="254" />
+			<breadcrumb x="616" y="252" />
+			<breadcrumb x="614" y="250" />
+			<breadcrumb x="612" y="248" />
+			<breadcrumb x="610" y="246" />
+			<breadcrumb x="608" y="244" />
+			<breadcrumb x="606" y="242" />
+			<breadcrumb x="604" y="240" />
+			<breadcrumb x="602" y="238" />
+			<breadcrumb x="600" y="236" />
+			<breadcrumb x="598" y="234" />
+			<breadcrumb x="596" y="232" />
+			<breadcrumb x="594" y="230" />
+			<breadcrumb x="592" y="228" />
+			<breadcrumb x="590" y="226" />
+			<breadcrumb x="588" y="224" />
+			<breadcrumb x="586" y="222" />
+			<breadcrumb x="584" y="220" />
+			<breadcrumb x="582" y="218" />
+			<breadcrumb x="580" y="216" />
+			<breadcrumb x="578" y="214" />
+			<breadcrumb x="576" y="212" />
+			<breadcrumb x="574" y="210" />
+			<breadcrumb x="572" y="208" />
+			<breadcrumb x="570" y="206" />
+			<breadcrumb x="568" y="204" />
+			<breadcrumb x="566" y="202" />
+			<breadcrumb x="564" y="200" />
+			<breadcrumb x="562" y="198" />
+			<breadcrumb x="560" y="196" />
+			<breadcrumb x="558" y="194" />
+			<breadcrumb x="556" y="192" />
+			<breadcrumb x="554" y="190" />
+			<breadcrumb x="552" y="188" />
+			<breadcrumb x="550" y="186" />
+			<breadcrumb x="548" y="184" />
+			<breadcrumb x="546" y="182" />
+			<breadcrumb x="544" y="180" />
+			<breadcrumb x="542" y="178" />
+		</path>
 		<partners>
-			<partner x="530" y="270" breadcrumb="0" direction="1" health="14" level="1" exp="0" />
-			<partner x="490" y="270" breadcrumb="0" direction="1" health="10" level="1" exp="0" />
-			<partner x="450" y="270" breadcrumb="0" direction="1" health="13" level="1" exp="0" />
+			<partner x="582" y="218" breadcrumb="20" direction="2" health="6" level="1" exp="3" />
+			<partner x="622" y="256" breadcrumb="0" direction="0" health="2" level="1" exp="3" />
+			<partner x="662" y="256" breadcrumb="0" direction="0" health="5" level="1" exp="3" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -24,12 +65,11 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="2320" />
 		<entities>
-			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" move="true" />
+			<entity type="13" x="-3" y="-5" id="0" level="0" state="0" move="true" />
 			<entity type="1" x="16" y="14" id="1" level="1" state="0" move="true" />
-			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
-			<entity type="3" x="16" y="5" id="3" level="2" state="0" move="false" />
+			<entity type="3" x="16" y="5" id="3" level="2" state="6" move="false" />
 			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>

@@ -419,6 +419,8 @@ bool SceneBattle::Update(float dt_)
         if (enemies.At(enemiSelected)->data->stats.health <= 0)
         {
             enemies.At(enemiSelected)->data->stats.health = 0;
+            enemies.At(enemiSelected)->data->entityData.state = DEAD;
+            assigneDone = false;
         }
         faseAction = END_ACTION;
         break;
@@ -488,6 +490,8 @@ bool SceneBattle::Update(float dt_)
                 }
                 if (partners.At(ally)->data->stats.health <= 0){
                     partners.At(ally)->data->stats.health = 0;
+                    partners.At(ally)->data->entityData.state = DEAD;
+                    assigneDone = false;
                 }
             }
             moveBarTurn = true;
@@ -595,26 +599,32 @@ bool SceneBattle::PostUpdate()
     {
         for (int i = 0; i < enemies.Count(); i++)
         {
-            posX = (int)enemies.At(i)->data->entityData.position.x + 2 * enemies.At(i)->data->entityData.pointsCollision[0].x + 2 * enemies.At(i)->data->entityData.centerPoint.x;
-            posY = (int)enemies.At(i)->data->entityData.position.y - 30;
-            rec = { posX - 45, posY, 90, 20 };
-            live = rec;
-            live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
+            if (enemies.At(i)->data->entityData.state != DEAD)
+            {
+                posX = (int)enemies.At(i)->data->entityData.position.x + 2 * enemies.At(i)->data->entityData.pointsCollision[0].x + 2 * enemies.At(i)->data->entityData.centerPoint.x;
+                posY = (int)enemies.At(i)->data->entityData.position.y - 30;
+                rec = { posX - 45, posY, 90, 20 };
+                live = rec;
+                live.w = enemies.At(i)->data->stats.health * rec.w / enemies.At(i)->data->stats.maxHealth;
 
-            sprintf_s(textLive, 8, "%d/%d", (int)enemies.At(i)->data->stats.health, enemies.At(i)->data->stats.maxHealth);
-            DrawBarLives();
+                sprintf_s(textLive, 8, "%d/%d", (int)enemies.At(i)->data->stats.health, enemies.At(i)->data->stats.maxHealth);
+                DrawBarLives();
+            }            
         }
 
         for (int i = 0; i < partners.Count(); i++)
         {
-            posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
-            posY = (int)partners.At(i)->data->entityData.position.y - 30;
-            rec = { posX - 45, posY, 90, 20 };
-            live = rec;
-            live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
+            if (partners.At(i)->data->entityData.state != DEAD)
+            {
+                posX = (int)partners.At(i)->data->entityData.position.x + partners.At(i)->data->entityData.centerPoint.x;
+                posY = (int)partners.At(i)->data->entityData.position.y - 30;
+                rec = { posX - 45, posY, 90, 20 };
+                live = rec;
+                live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
 
-            sprintf_s(textLive, 8, "%d/%d", (int)partners.At(i)->data->stats.health, partners.At(i)->data->stats.maxHealth);
-            DrawBarLives();
+                sprintf_s(textLive, 8, "%d/%d", (int)partners.At(i)->data->stats.health, partners.At(i)->data->stats.maxHealth);
+                DrawBarLives();
+            }
         }
     }
    
@@ -626,7 +636,7 @@ bool SceneBattle::PostUpdate()
     if (win)
     {
         app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200, 800, 400, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
-        for (int i = 0; i < app->player->GetNumPartners() + 1; i++)
+        for (int i = 0; i < partners.Count() ; i++)
         {
             posX = WINDOW_W / 2 - 400 + 40 + (i * 190);
             posY = WINDOW_H / 2 - 200 + 40;
@@ -659,13 +669,16 @@ bool SceneBattle::PostUpdate()
                 currentExp += dt * 5;
                 for (int i = 0; i < partners.Count(); i++)
                 {
-                    partners.At(i)->data->stats.exp += dt*5;
-                    if (partners.At(i)->data->stats.exp > exp)
+                    if (partners.At(i)->data->entityData.state != DEAD)
                     {
-                        partners.At(i)->data->stats.exp = 0;
-                        partners.At(i)->data->entityData.level++;
-                    }
-                }
+                        partners.At(i)->data->stats.exp += dt * 5;
+                        if (partners.At(i)->data->stats.exp > exp)
+                        {
+                            partners.At(i)->data->stats.exp = 0;
+                            partners.At(i)->data->entityData.level++;
+                        }
+                    }                    
+                }                                
             }         
 
             // Draw Level
@@ -699,7 +712,7 @@ void SceneBattle::DrawBarLives()
     if (live.w < 0)live.w = 0;
     if (live.w > rec.w / 2) app->render->DrawRectangle(live, green.r, green.g, green.b);
     else if (live.w < rec.w / 4) app->render->DrawRectangle(live, red.r, red.g, red.b);
-    else if (live.w < rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
+    else if (live.w <= rec.w / 2) app->render->DrawRectangle(live, yellow.r, yellow.g, yellow.b);
 
     int w = 0,  h = 0;
     TTF_SizeText(app->sceneManager->guiFont, textLive, &w, &h);
@@ -973,8 +986,13 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //EXIT
         else if (control->id == 23)
         {
+            app->player->playerData.health = partners.At(0)->data->stats.health;
+            for (int i = 0; i < partners.Count() - 1; i++)
+            {
+                app->player->GetPartners()[i].health = partners.At(i + 1)->data->stats.health;
+            }
             isContinue = true;
-            AbleDisableButtons();
+            TransitionToScene(SceneType::LEVEL1);
         }
         // Continue
         else if (control->id == 24)

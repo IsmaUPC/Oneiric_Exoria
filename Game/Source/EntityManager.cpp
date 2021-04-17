@@ -57,8 +57,6 @@ bool EntityManager::Start()
 // Called each loop iteration
 bool EntityManager::PreUpdate()
 {
-	CheckDespawnEntities();
-
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 		entiti->data->PreUpdate();
 
@@ -69,8 +67,8 @@ bool EntityManager::Update(float dt)
 {
 	if (!app->sceneManager->GetIsPause())
 	{
+		CheckDespawnEntities();
 		SpeedAnimationCheck(dt);
-
 		CheckSpawnEntities();
 
 		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next) 
