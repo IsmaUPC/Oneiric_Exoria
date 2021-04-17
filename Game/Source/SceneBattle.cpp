@@ -90,7 +90,11 @@ void SceneBattle::LoadAnimations()
         b->loop = true;
         for (int j = 0; j < 6; j++)
         {
-            b->PushBack({ 64 * j,92 * i, 64, 92 });
+            if (i == 3)
+            {
+                b->PushBack({ 64 * j,92 * i, 64, 96 });
+            }
+            else b->PushBack({ 64 * j,92 * i, 64, 92 });
         }
         animationsPlayer.Add(b);
     }
@@ -99,9 +103,9 @@ void SceneBattle::LoadAnimations()
     {
         Animation* b = new Animation;
         b->loop = true;
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < 4; j++)
         {
-            b->PushBack({ 384,32 * j + (96 * i), 32, 32 });
+            b->PushBack({ 384,32 * j + (128 * i), 32, 32 });
         }
         spritesBarTurn.Add(b);
     }
@@ -372,7 +376,7 @@ bool SceneBattle::Update(float dt_)
         }
         break;
 
-    case SELECT_ENEMI:
+    case SELECT_ENEMY:
         btnAttack->state = GuiControlState::DISABLED;
         btnMagic->state = GuiControlState::DISABLED;
         btnDefense->state = GuiControlState::DISABLED;
@@ -505,6 +509,7 @@ bool SceneBattle::Update(float dt_)
             {
                 win = true;
                 AbleDisableButtons();
+
             }
         }
         // Lose Condition
@@ -567,7 +572,7 @@ bool SceneBattle::PostUpdate()
         app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
     }
     //Icon Enemy selected
-    if (faseAction == SELECT_ENEMI) {
+    if (faseAction == SELECT_ENEMY) {
 
         if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) { 
             enemiSelected--;
@@ -662,8 +667,13 @@ bool SceneBattle::PostUpdate()
             posX = WINDOW_W / 2 - 400 + 40 + (i * 190);
             posY = WINDOW_H / 2 - 200 + 40;
             app->render->DrawRectangle({ posX, posY , 150, 150},0,33,78);
+
             // Draw Head Players
-             
+            if(i==0)face = { 0,372,145,145 };
+            else if(i==1)face = { 145,372,145,145 };
+            else if(i==2)face = { 0,517,145,145 };
+            else if(i==3)face = { 145,517,145,145 };
+            app->render->DrawTexture(texPalyers, posX+2, posY + 2, &face);
 
             // Draw Bar Lives
             rec = { posX, posY + 200, 150, 25 };
@@ -949,7 +959,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         if (control->id == 20)
         {
             magicInUse = nullptr;
-            faseAction = SELECT_ENEMI;
+            faseAction = SELECT_ENEMY;
             for (int i = 0; i < enemies.Count(); i++)
             {
                 if (enemies.At(i)->data->stats.health > 0) {
@@ -1089,7 +1099,7 @@ void SceneBattle::UseAMagic()
                 break;
             }
         }
-        faseAction = SELECT_ENEMI;
+        faseAction = SELECT_ENEMY;
     }
 }
 

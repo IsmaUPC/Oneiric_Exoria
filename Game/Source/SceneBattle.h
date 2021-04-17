@@ -22,7 +22,7 @@ struct Magic
 enum FaseAttack
 {
 	SELECT_ACTION,
-	SELECT_ENEMI,
+	SELECT_ENEMY,
 	DO_ACITON,
 	END_ACTION,
 	ENEMY_ATTACK
