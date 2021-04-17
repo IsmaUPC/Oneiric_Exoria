@@ -127,7 +127,7 @@ private:
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;
-	bool win = true;
+	bool win = false;
 	bool god = false;
 	int totalExp = 0;
 	float currentExp = 0;

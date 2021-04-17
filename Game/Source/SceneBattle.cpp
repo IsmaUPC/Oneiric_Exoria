@@ -326,7 +326,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 
     btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
     btnContinue->SetObserver(this);
-    //btnContinue->active = false;
+    btnContinue->active = false;
     app->guiManager->AddGuiButton(btnContinue);
 
     btnGod = new GuiButton(25, { WINDOW_W -40, WINDOW_H-30,  10, 20 }, "GOD", RECTANGLE, btnTextureAtlas);
@@ -393,7 +393,6 @@ bool SceneBattle::Update(float dt_)
 
         if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
             faseAction = DO_ACITON;
-
         }
 
         break;
@@ -520,35 +519,6 @@ bool SceneBattle::Update(float dt_)
                 TransitionToScene(SceneType::LOSE);
         }
     }
-                
-
-    //if (!win) 
-    //{
-    //    int kills = 0;
-    //    for (int i = 0; i < enemies.Count(); i++)
-    //    {
-    //        if (enemies.At(i)->data->stats.health <= 0) {
-    //            kills++;
-    //        }
-    //    }
-    //    if (kills == enemies.Count()) 
-    //    {
-    //        //TODO. WHEN YOU WIN??
-    //        win = true;
-    //        AbleDisableButtons();
-    //    }
-    //}
-    //// Lose Condition
-    //int deads = 0;
-    //for (int i = 0; i < partners.Count(); i++)
-    //{
-    //    if (partners.At(i)->data->stats.health <= 0) deads++;
-    //    if (deads == partners.Count()) 
-    //    {
-    //        //TODO. WHEN YOU LOSE??
-    //        TransitionToScene(SceneType::LOSE);
-    //    }
-    //}
 
     return true;
 }
