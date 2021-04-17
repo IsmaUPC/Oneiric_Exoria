@@ -63,7 +63,6 @@ bool DialogueSystem::Update(float dt)
 		render->DrawText(font, response, 10, 200 + (60 * (i + 1)), 80, 0, { 0, 255, 255, 255 });
 	}*/
 
-
 	return true;
 }
 

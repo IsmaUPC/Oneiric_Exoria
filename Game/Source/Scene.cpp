@@ -86,7 +86,6 @@ bool Scene::Start()
 		app->sceneManager->originTpNode = nullptr;
 	}
 
-
 	// Active calls
 	app->player->Init();
 	app->player->Start();
@@ -116,7 +115,6 @@ bool Scene::Start()
 	app->guiManager->AddGuiButton(btn3);
 
 	//app->dialogueSystem->missClick = false;
-
 	return true;
 }
 
@@ -137,9 +135,9 @@ bool Scene::Update(float dt)
 	bool ret = true;
 
 	//GamePad& pad = app->input->pads[0];
-	/*if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
+	if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
 		app->dialogueSystem->missClick = false;
-	}*/
+	}
 
 	// DEBUG KEYS
 	DebugKeys();
@@ -297,19 +295,19 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	case GuiControlType::BUTTON:
 	{
 		//Option 1
-		if (control->id == 40)
+		if (control->id == 40 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
-			//app->dialogueSystem->missClick = true;
+			app->dialogueSystem->missClick = true;
 		}
 		//Option 2
-		else if (control->id == 41)
+		else if (control->id == 41 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
-			//app->dialogueSystem->missClick = true;
+			app->dialogueSystem->missClick = true;
 		}
 		//Option 3
-		else if (control->id == 42)
+		else if (control->id == 42 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
 			app->dialogueSystem->missClick = true;
@@ -318,7 +316,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	default: break;
 	}
 
-	return app->guiManager->GetMenuPause()->Event(control);
+	return true;
 }
 
 bool Scene::LoadState(pugi::xml_node& data)
