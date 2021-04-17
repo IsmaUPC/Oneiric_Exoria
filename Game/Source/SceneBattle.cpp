@@ -721,24 +721,28 @@ void SceneBattle::AbleDisableButtons()
 
 void SceneBattle::DrawBarLives()
 {
-	tex = { 160, 32, rec.w, rec.h + 7 };
+	if (win) tex = { 0, 32, rec.w, rec.h + 7 };
+	else tex = { 160, 32, rec.w, rec.h + 7 };
 	app->render->DrawTexture(app->guiManager->uiAtlas, rec.x, rec.y - 7, &tex);
 
     if (live.w > rec.w) live.w = rec.w;
     if (live.w < 0)live.w = 0;
 	if (live.w > rec.w / 2)
 	{
-		tex = { 160, 0, live.w, rec.h + 7 };
+		if (win) tex = { 0, 0, live.w, rec.h + 7 };
+		else tex = { 160, 0, live.w, rec.h + 7 };
 		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
 	}
     else if (live.w < rec.w / 4)
 	{
-		tex = { 160, 224, live.w, rec.h + 7 };
+		if (win) tex = { 0, 224, live.w, rec.h + 7 };
+		else tex = { 160, 224, live.w, rec.h + 7 };
 		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
 	}
 	else if (live.w <= rec.w / 2)
 	{
-		tex = { 160, 192, live.w, rec.h + 7 };
+		if (win) tex = { 0, 192, live.w, rec.h + 7 };
+		else tex = { 160, 192, live.w, rec.h + 7 };
 		app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
 	}
 
