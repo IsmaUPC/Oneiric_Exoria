@@ -61,13 +61,39 @@ bool Scene::Start()
 	// Positions Initials
 	app->player->positionInitial = new iPoint(570, 270);	
 
+	//Move to TpNode Class
+	  //Spawn Player in Tp Position
+	{
+		if (app->sceneManager->originTpNode != NULL)
+		{
+			int idNode = app->sceneManager->originTpNode->idNode;
+			uint typeNode = app->sceneManager->originTpNode->typeTpNode;//select next node
+
+			//if the type of node is even, it means that it is of type down, if it is odd otherwise, 
+			//to decide the next one it is added or subtracted depending on its origin
+			(typeNode % 2 == 0) ? typeNode += 1 : typeNode -= 1;
+
+			iPoint pos = app->player->FindNodeTpById(typeNode, idNode)->position;
+
+			if (typeNode % 2 == 0)pos.y -= 2;
+			else pos.y += 2;
+
+
+			pos = app->map->MapToWorld(pos);
+
+			app->player->positionInitial = new iPoint(pos.x, pos.y);
+		}
+		app->sceneManager->originTpNode = nullptr;
+	}
+
+
 	// Active calls
 	app->player->Init();
 	app->player->Start();
 	app->audio->active = true;
 
 	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 16, 14, 1, 1);
+	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
 	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
@@ -196,7 +222,7 @@ bool Scene::PostUpdate()
 	if (victory == true)
 	{
 		victory = false;
-		TransitionToScene(SceneType::WIN);
+		TransitionToScene(SceneType::LEVEL2);
 		return true;
 	}
 	if (lose == true)

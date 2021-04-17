@@ -119,6 +119,7 @@ public:
 	Fonts* fonts;
 	TransitionManager* transitionManager;
 
+
 	bool fullScreen=0;
 	bool removeGame = false;
 private:

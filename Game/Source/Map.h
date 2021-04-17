@@ -7,6 +7,7 @@
 #include "PQueue.h"
 #include "DynArray.h"
 #include "Animation.h"
+#include "TeleportNode.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -21,6 +22,8 @@ struct TileSet
 	int	spacing;
 	int	tileWidth;
 	int	tileHeight;
+
+	int idFloor;
 
 	SDL_Texture* texture;
 	int	texWidth;
@@ -64,6 +67,7 @@ struct Properties
 
 	// Method to ask for the value of a custom property
 	int GetProperty(const char* name, int defaultValue = 0) const;
+	int GetPropertyValue(const char* name);
 
 	List<Property*> list;
 };
@@ -165,6 +169,7 @@ public:
 
 	// Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
+	iPoint MapToWorld(iPoint position) const;
 
 	// Translates x,y coordinates from  world positions to map positions 
 	iPoint WorldToMap(int x, int y) const;
@@ -210,6 +215,7 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	int LoadCheckPoint();
 	void LoadCollectable();
+	void LoadTpNodes();
 
 	// Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
@@ -223,7 +229,15 @@ public:
 	MapData data;
 	iPoint tileDestiny;
 	CheckPoints checKpointsMap;
+
+
+	List<TeleportNode*> tpNodeUpLadder;
+	List<TeleportNode*> tpNodeDownLadder;
+	List<TeleportNode*> tpNodeUpHall;
+	List<TeleportNode*> tpNodeDownHall;
 private:
+
+	TeleportNode* nodeTp;
 
 	pugi::xml_document mapFile;
 	SString folder;
@@ -251,6 +265,7 @@ private:
 	List<MapLayer*>* layerDrawUp;
 
 	iPoint vec;
+	int idFloor;
 };
 
 #endif // __MAP_H__

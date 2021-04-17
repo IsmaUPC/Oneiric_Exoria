@@ -171,14 +171,14 @@ void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 
 
 	// Limits
-	if (slider.x < sliderBarInput.x - slider.w/2 || value < minValue)
+	if (slider.x < sliderBarInput.x + slider.w/2 || value < minValue)
 	{
-		slider.x = sliderBarInput.x - slider.w/2;
+		slider.x = sliderBarInput.x + slider.w/2;
 		value = minValue;
 	}
-	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w))
+	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w - slider.w))
 	{
-		slider.x = (sliderBarInput.x + sliderBarInput.w) - slider.w/2;
+		slider.x = (sliderBarInput.x + sliderBarInput.w) - slider.w;
 		value = maxValue;
 	}
 
@@ -188,7 +188,7 @@ void GuiSlider::SetValue(int newValue)
 {
 	this->value = newValue;
 	float X, h, h1, h2, h3, i;
-	h1 = (((sliderBarInput.w - slider.w) + minValue) * (maxValue - minValue));
+	h1 = (((sliderBarInput.w - slider.w/2) + minValue) * (maxValue - minValue));
 	h2 = maxValue - minValue;
 	h3 = (sliderBarInput.w - slider.w) + minValue;
 

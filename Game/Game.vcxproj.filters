@@ -142,6 +142,8 @@
     </ClCompile>
     <ClCompile Include="Source\TransitionManager.cpp">
       <Filter>Modules\Core</Filter>
+    <ClCompile Include="Source\TeleportNode.cpp">
+      <Filter>Modules\Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,8 +294,8 @@
     <ClInclude Include="Source\GuiMenuMagic.h">
       <Filter>Modules\GuiControls</Filter>
     </ClInclude>
-    <ClInclude Include="Source\easings.h">
-      <Filter>Modules\Core</Filter>
+    <ClInclude Include="Source\TeleportNode.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\TransitionManager.h">
       <Filter>Modules\Core</Filter>

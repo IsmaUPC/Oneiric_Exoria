@@ -125,6 +125,7 @@
     <ClCompile Include="Source\SceneLose.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneWin.cpp" />
+    <ClCompile Include="Source\TeleportNode.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
     <ClCompile Include="Source\TransitionManager.cpp" />
@@ -134,7 +135,6 @@
     <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\Collisions.h" />
     <ClInclude Include="Source\DialogSystem.h" />
-    <ClInclude Include="Source\easings.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityManager.h" />
@@ -168,6 +168,7 @@
     <ClInclude Include="Source\SceneLose.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneWin.h" />
+    <ClInclude Include="Source\TeleportNode.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Timer.h" />
     <ClInclude Include="Source\TransitionManager.h" />
