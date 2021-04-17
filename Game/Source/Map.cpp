@@ -264,7 +264,7 @@ bool Map::Awake(pugi::xml_node& config)
 void Map::Draw()
 {
 	if (mapLoaded == false) return;
-
+	int tileId;
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
 	{
@@ -279,7 +279,7 @@ void Map::Draw()
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
-				int tileId = layer->data->Get(x, y);
+				 tileId = layer->data->Get(x, y);
 				if (tileId > 0)
 				{
 					vec = MapToWorld(x, y);
@@ -322,6 +322,29 @@ void Map::DrawUp()
 iPoint Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
+
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		ret.x = x * data.tileWidth;
+		ret.y = y * data.tileHeight;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		ret.x = (x - y) * (data.tileWidth / 2);
+		ret.y = (x + y) * (data.tileHeight / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+
+	return ret;
+}iPoint Map::MapToWorld(iPoint position) const
+{
+	iPoint ret;
+	int x= position.x;
+	int y= position.y;
 
 	if (data.type == MAPTYPE_ORTHOGONAL)
 	{
@@ -517,7 +540,6 @@ bool Map::Load(const char* filenameGame)
 			lay->properties = *property;
 		}
 	}
-
 	// LoadCollectable();
 
 	if(ret == true)
@@ -549,6 +571,7 @@ bool Map::Load(const char* filenameGame)
 		}
 	}
 
+	LoadTpNodes();
 	mapLoaded = ret;
 
 	return ret;
@@ -624,8 +647,10 @@ bool Map::LoadTilesetImage(pugi::xml_node& tilesetNode, TileSet* set)
 bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
-
 	layer->name = node.attribute("name").as_string("");
+	if(layer->name=="IdFloor") idFloor= node.attribute("IdFloor").as_int(1000);
+
+	layer->height = node.attribute("height").as_int(0);
 	layer->width = node.attribute("width").as_int(0);
 	layer->height = node.attribute("height").as_int(0);
 	layer->mapHeight = data.height* data.tileWidth;
@@ -660,13 +685,14 @@ int Map::LoadCheckPoint()
 	
 
 	int checkPointCount = 0;
+	int tileId;
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
 	{
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
-				int tileId = layer->data->Get(x, y);
+				tileId = layer->data->Get(x, y);
 				if (tileId == data.tilesets.At(2)->data->firstgid + 2)
 				{
 					checkPointCount++;
@@ -693,6 +719,63 @@ void Map::LoadCollectable()
 			}
 		}
 	}
+}
+
+void Map::LoadTpNodes()
+{
+
+	tpNodeUpLadder.Clear();
+	tpNodeDownLadder.Clear();
+	tpNodeUpHall.Clear();
+	tpNodeDownHall.Clear();
+	int tileId;
+	uint typeNode;
+	uint firstgidLayerCollisions;
+	MapLayer* layer= data.layers.At(7)->data;
+	int height = data.height;
+	int width = data.width;
+
+	
+		for (int y = 0; y < height; ++y)
+			for (int x = 0; x < width; ++x)
+			{
+				// vec = MapToWorld(x, y);
+				vec.x = x;
+				vec.y = y;
+			
+				typeNode = layer->Get(x, y);
+				firstgidLayerCollisions = data.tilesets.At(0)->data->firstgid;
+				typeNode -= firstgidLayerCollisions;
+
+				if (typeNode >= TypeCollision::DOWN_LADDER && typeNode <= TypeCollision::UP_HALL)
+				{
+					nodeTp = new TeleportNode(vec, idFloor, idFloor + 1, (TpNodesTypes)typeNode);
+				}
+		
+				switch (typeNode)
+				{
+				case TypeCollision::UP_LADDER:
+					nodeTp->idNode = tpNodeUpLadder.Count();
+					tpNodeUpLadder.Add(nodeTp);
+					break;
+				case TypeCollision::DOWN_LADDER:
+					nodeTp->idNode = tpNodeDownLadder.Count();
+					tpNodeDownLadder.Add(nodeTp);
+					break;
+				case TypeCollision::UP_HALL:
+					nodeTp->idNode = tpNodeUpHall.Count();
+					tpNodeUpHall.Add(nodeTp);
+					break;
+				case TypeCollision::DOWN_HALL:
+					nodeTp->idNode = tpNodeDownHall.Count();
+					tpNodeDownHall.Add(nodeTp);
+
+					break;
+				default:
+					break;
+				}
+			}
+
 }
 
 
@@ -755,3 +838,5 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 	return ret;
 }
+
+

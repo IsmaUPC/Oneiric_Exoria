@@ -5,6 +5,7 @@
 #include "SceneControl.h"
 #include "Window.h"
 #include "SDL_ttf/include/SDL_ttf.h"
+#include "TeleportNode.h"
 
 class GuiButton;
 
@@ -101,6 +102,9 @@ public:
 	SceneBattle* sceneBattle;
 
 	SceneControl* sceneControl;
+
+	//Origin player tp
+	TeleportNode* originTpNode;
 
 	int lastLevel = 0;
 	TTF_Font* guiFont = nullptr;
