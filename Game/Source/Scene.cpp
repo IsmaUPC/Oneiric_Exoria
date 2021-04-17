@@ -100,7 +100,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
 
 	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
+	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
