@@ -10,6 +10,7 @@
 #include "Textures.h"
 #include "Module.h"
 #include "Input.h"
+#include "GuiButton.h"
 #include "SDL/include/SDL.h"
 
 using namespace std;

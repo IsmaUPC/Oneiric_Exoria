@@ -4,6 +4,7 @@
 #include "SceneControl.h"
 #include "Animation.h"
 #include "Point.h"
+#include "GuiManager.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -44,7 +45,6 @@ public:
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-
 	// Load state game
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
@@ -62,6 +62,10 @@ private:
 	Animation* idleAnim= new Animation();
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg=0;
+
+	GuiButton* btn1;
+	GuiButton* btn2;
+	GuiButton* btn3;
 };
 
 #endif // __SCENE_H__

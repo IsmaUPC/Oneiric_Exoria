@@ -298,7 +298,7 @@ bool Player::Update(float dt)
 		// Move player inputs control
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected())PlayerControls(dt);
 		// Move Between CheckPoints
-		else MoveBetweenCheckPoints();
+		//else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		for (int i = 0; i < numPartners; i++)

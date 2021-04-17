@@ -31,6 +31,7 @@
 			<entity type="1" x="16" y="14" id="1" level="1" state="0" move="true" />
 			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
 			<entity type="3" x="16" y="5" id="3" level="2" state="0" move="false" />
+			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>
 </save_state>

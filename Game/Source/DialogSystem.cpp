@@ -18,6 +18,7 @@ bool DialogueSystem::Start()
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	//currentNode = dialogueTrees[Id]->dialogueNodes[0];
 	//PerformDialogue(Id);
+
 	return true;
 }
 
