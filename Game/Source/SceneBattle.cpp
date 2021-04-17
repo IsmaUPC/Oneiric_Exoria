@@ -422,6 +422,13 @@ bool SceneBattle::Update(float dt_)
             enemies.At(enemiSelected)->data->stats.health = 0;
             enemies.At(enemiSelected)->data->entityData.state = DEAD;
             assigneDone = false;
+            for (int i = 0; i < tam; i++) {
+                if (turnSort[i].entityData.positionInitial == enemies.At(enemiSelected)->data->entityData.positionInitial)
+                {
+                    indexTurnBar = i;
+                    break;
+                }
+            }
         }
         faseAction = END_ACTION;
         break;
@@ -493,6 +500,13 @@ bool SceneBattle::Update(float dt_)
                     partners.At(ally)->data->stats.health = 0;
                     partners.At(ally)->data->entityData.state = DEAD;
                     assigneDone = false;
+                    for (int i = 0; i < tam; i++) {
+                        if (turnSort[i].entityData.positionInitial == partners.At(enemiSelected)->data->entityData.positionInitial)
+                        {
+                            indexTurnBar = i;
+                            break;
+                        }
+                    }
                 }
             }
             moveBarTurn = true;
@@ -667,12 +681,12 @@ bool SceneBattle::PostUpdate()
 
             if (currentExp < totalExp)
             {
-                currentExp += dt * 5;
+                currentExp += dt * 2;
                 for (int i = 0; i < partners.Count(); i++)
                 {
                     if (partners.At(i)->data->entityData.state != DEAD)
                     {
-                        partners.At(i)->data->stats.exp += dt * 5;
+                        partners.At(i)->data->stats.exp += dt * 2;
                         if (partners.At(i)->data->stats.exp > exp)
                         {
                             partners.At(i)->data->stats.exp = 0;
@@ -921,21 +935,34 @@ void SceneBattle::AssignEntities()
 {
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
-
-    for (int i = 0; i < enemies.Count(); i++)
+    if (initCombat)
     {
-        turnSort[i].entityData = enemies.At(i)->data->entityData;
-        turnSort[i].stats = enemies.At(i)->data->stats;
+        for (int i = 0; i < enemies.Count(); i++)
+        {
+            turnSort[i].entityData = enemies.At(i)->data->entityData;
+            turnSort[i].stats = enemies.At(i)->data->stats;
+        }
+        int j = 0;
+        tam = enemies.Count() + partners.Count();
+        for (int i = enemies.Count(); i < tam; i++)
+        {
+            turnSort[i].entityData = partners.At(j)->data->entityData;
+            turnSort[i].stats = partners.At(j)->data->stats;
+            j++;
+        }
+    
+        BubbleSort();
+        initCombat = false;
     }
-    int j = 0;
-    tam = enemies.Count() + partners.Count();
-    for (int i = enemies.Count(); i < tam; i++)
+    if (indexTurnBar != -1)
     {
-        turnSort[i].entityData = partners.At(j)->data->entityData;
-        turnSort[i].stats = partners.At(j)->data->stats;
-        j++;
+        for (int i = indexTurnBar; i < tam - 1; i++)
+        {
+            turnSort[i] = turnSort[i + 1];
+        }
+        tam--;
+        indexTurnBar = -1;
     }
-    BubbleSort();
 
     assigneDone = true;
 }
