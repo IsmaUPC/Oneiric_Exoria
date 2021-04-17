@@ -142,6 +142,7 @@
     </ClCompile>
     <ClCompile Include="Source\TransitionManager.cpp">
       <Filter>Modules\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Source\TeleportNode.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
