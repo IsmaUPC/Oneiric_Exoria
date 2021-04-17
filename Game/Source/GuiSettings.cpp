@@ -55,7 +55,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	app->render->DrawTextBox(initialPos.x - app->render->camera.x, initialPos.y - app->render->camera.y, 307, 350, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(initialPos.x - app->render->camera.x, initialPos.y - app->render->camera.y, 307, 350, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
 	return true;
 }

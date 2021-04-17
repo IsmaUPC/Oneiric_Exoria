@@ -110,7 +110,7 @@ bool GUI::PostUpdate()
 	point0.y = point0.y + headPositionY;
 
 	//text box
-	if (app->dialogueSystem->onDialog == true) app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565, 600, 150, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	if (app->dialogueSystem->onDialog == true) app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565, 600, 150, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
 	// Respawns
 	SDL_Rect rectGUI;
@@ -178,7 +178,7 @@ bool GUI::PostUpdate()
 		point0.y += WINDOW_H - 100;
 		sprintf_s(coinText, 10, "%3d", app->GetFramesOnLastSecond());
 
-		app->fonts->BlitText(point0.x, point0.y, 0, coinText, { 255, 255, 255 });
+		app->fonts->BlitText(point0.x, point0.y, 0, coinText, { 60, 43, 13 });
 
 	}
 

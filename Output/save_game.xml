@@ -6,18 +6,16 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="-382" y="-72" />
+		<camera x="70" y="90" />
 	</renderer>
 	<player>
-		<data x="1022" y="432" direction="0" level="1" exp="0" health="8" />
+		<data x="570" y="270" direction="3" level="1" exp="0" health="8" />
 		<coins count="0" />
-		<path>
-			<breadcrumb x="1030" y="432" />
-		</path>
+		<path />
 		<partners>
-			<partner x="1030" y="464" breadcrumb="0" direction="2" level="1" exp="0" />
-			<partner x="1030" y="504" breadcrumb="0" direction="2" level="1" exp="0" />
-			<partner x="1030" y="544" breadcrumb="0" direction="2" level="1" exp="0" />
+			<partner x="530" y="270" breadcrumb="0" direction="1" level="1" exp="0" />
+			<partner x="490" y="270" breadcrumb="0" direction="1" level="1" exp="0" />
+			<partner x="450" y="270" breadcrumb="0" direction="1" level="1" exp="0" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -28,11 +26,11 @@
 		<score value="0" />
 		<time value="0" />
 		<entities>
-			<entity type="1" x="26" y="14" id="1" level="1" state="6" move="true" />
+			<entity type="13" x="-2" y="-2" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="26" y="14" id="1" level="1" state="0" move="true" />
 			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
-			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
 			<entity type="3" x="16" y="5" id="3" level="2" state="0" move="false" />
+			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>
 </save_state>

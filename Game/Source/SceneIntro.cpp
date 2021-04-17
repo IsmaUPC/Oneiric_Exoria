@@ -158,7 +158,7 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(smallCloud, sCloudPos.x, sCloudPos.y);
 	app->render->DrawTexture(smallCloud, sCloudPos2.x, sCloudPos2.y);
 
-	app->render->DrawTextBox(935, 427, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(935, 427, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
 	if (menuSettings->active)
 	{

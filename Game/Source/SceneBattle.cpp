@@ -659,7 +659,7 @@ bool SceneBattle::PostUpdate()
 
     if (win)
     {
-        app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200, 800, 400, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+        app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200, 800, 400, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
         for (int i = 0; i < partners.Count() ; i++)
         {
             posX = WINDOW_W / 2 - 400 + 40 + (i * 190);
@@ -711,7 +711,7 @@ bool SceneBattle::PostUpdate()
             sprintf_s(textLevel, 8, "Lvl.%d", partners.At(i)->data->entityData.level);
             int w = 0, h = 0;
             TTF_SizeText(app->sceneManager->guiFont, textLevel, &w, &h);
-            app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textLevel, white);
+            app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textLevel, { 60, 43, 13 });
            
         }
     }
@@ -757,7 +757,7 @@ void SceneBattle::DrawBarLives()
 
     int w = 0,  h = 0;
     TTF_SizeText(app->sceneManager->guiFont, textLive, &w, &h);
-    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textLive, black);
+    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textLive, { 60, 43, 13 });
 }
 
 void SceneBattle::DrawBarExperience()
@@ -772,7 +772,7 @@ void SceneBattle::DrawBarExperience()
 
     int w = 0, h = 0;
     TTF_SizeText(app->sceneManager->guiFont, textExperience, &w, &h);
-    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textExperience, black);
+    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textExperience, { 60, 43, 13 });
 }
 
 void SceneBattle::DrawTurnBar()

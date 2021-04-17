@@ -86,7 +86,7 @@ bool GuiMenuPause::PostUpdate()
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
-		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W/2 - 237/2, -app->render->camera.y + WINDOW_H/2 - 237/2, 237, 237, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W/2 - 237/2, -app->render->camera.y + WINDOW_H/2 - 237/2, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
 
 	if (menuSettings->active)
