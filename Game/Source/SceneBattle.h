@@ -105,6 +105,7 @@ private:
 	Entity* turnSort;
 
 	GuiMenuMagic* menuMagic;
+	pugi::xml_document saveFile;
 	
 	Magic* magicInUse;
 	bool activeMenuMagic;
@@ -124,6 +125,8 @@ private:
 	bool moveBarTurn = false;
 	bool assigneDone = false;
 	bool win = true;
+	int totalExp = 0;
+	float currentExp = 0;
 
 	int posX = 0;
 	int posY = 0;

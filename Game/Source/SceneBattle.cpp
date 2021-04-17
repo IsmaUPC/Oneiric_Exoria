@@ -55,6 +55,14 @@ bool SceneBattle::Start()
     InicializeStats();
     app->entityManager->spawnQueue = enemies;
 
+    TypeEntity pType;
+    for (int i = 0; i < enemies.Count(); i++)
+    {
+        pType = enemies.At(i)->data->entityData.type;
+        if (pType != KENZIE_ && pType != KEILER_ && pType != ISRRA_ && pType != BRENDA_)
+            totalExp += enemies.At(i)->data->stats.exp;
+    }
+
     int num = enemies.Count();
     turnSort = new Entity[num];
 
@@ -313,7 +321,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 
     btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "Continue", RECTANGLE, btnTextureAtlas);
     btnContinue->SetObserver(this);
-    btnContinue->active = false;
+    //btnContinue->active = false;
     app->guiManager->AddGuiButton(btnContinue);
 
     //MenuMagic
@@ -414,9 +422,12 @@ bool SceneBattle::Update(float dt_)
         {
             if (enemies.At(i)->data->stats.health > 0) break;
             if (i == enemies.Count() - 1)
+            {
                 win = true;
+                AbleDisableButtons();
+            }
+                
         }
-        AbleDisableButtons();
     }
    
     // Lose Condition
@@ -495,10 +506,10 @@ bool SceneBattle::PostUpdate()
             posY = WINDOW_H / 2 - 200 + 40;
             app->render->DrawRectangle({ posX, posY , 150, 150},0,33,78);
             // Draw Head Players
-            // 
+             
 
             // Draw Bar Lives
-            rec = { posX, posY + 200, 150, 20 };
+            rec = { posX, posY + 200, 150, 25 };
             live = rec;
             live.w = partners.At(i)->data->stats.health * rec.w / partners.At(i)->data->stats.maxHealth;
             sprintf_s(textLive, 8, "%d/%d", (int)partners.At(i)->data->stats.health, partners.At(i)->data->stats.maxHealth);
@@ -512,9 +523,23 @@ bool SceneBattle::PostUpdate()
             sprintf_s(textExperience, 14, "%d/%d", (int)partners.At(i)->data->stats.exp, exp);
             DrawBarExperience();
 
+            if (currentExp < totalExp)
+            {
+                currentExp += dt * 5;
+                for (int i = 0; i < partners.Count(); i++)
+                {
+                    partners.At(i)->data->stats.exp += dt*5;
+                    if (partners.At(i)->data->stats.exp > exp)
+                    {
+                        partners.At(i)->data->stats.exp = 0;
+                        partners.At(i)->data->entityData.level++;
+                    }
+                }
+            }         
+
             // Draw Level
-            rec.y -= 60;
-            live.y -= 60;
+            rec.y -= 70;
+            live.y -= 70;
             sprintf_s(textLevel, 8, "Lvl.%d", partners.At(i)->data->entityData.level);
             int w = 0, h = 0;
             TTF_SizeText(app->sceneManager->guiFont, textLevel, &w, &h);
@@ -699,6 +724,9 @@ bool SceneBattle::CleanUp()
     enemies = app->entityManager->entities;
     partners = app->entityManager->partners;
 
+    RELEASE(menuMagic);
+    magicInUse = nullptr;
+
     return ret;
 }
 
@@ -793,6 +821,24 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //EXIT
         else if (control->id == 23)
         {
+            isContinue = true;
+            TransitionToScene(SceneType::LEVEL1);
+        }
+        // Continue
+        else if (control->id == 24)
+        {
+            app->player->playerData.level = partners.At(0)->data->entityData.level;
+            app->player->playerData.exp = partners.At(0)->data->stats.exp;
+            for (int i = 0; i < partners.Count()-1; i++)
+            {
+                if (partners.At(i)->data->entityData.state != DEAD)
+                {
+                    app->player->GetPartners()[i].level = partners.At(i+1)->data->entityData.level;
+                    app->player->GetPartners()[i].exp = partners.At(i+1)->data->stats.exp;
+                }
+            }
+            bool ret = true;
+
             isContinue = true;
             TransitionToScene(SceneType::LEVEL1);
         }

@@ -66,6 +66,8 @@ public:
 	int GetEnemeyDetected() { return enemyDetected; }
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
+	SceneControl* GetCurrentScene() { return current; };
+
 
 private:
 

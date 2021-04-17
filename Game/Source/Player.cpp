@@ -48,6 +48,11 @@ bool Player::Start()
 	playerData.velocity = 1;
 	playerData.direction = WALK_R;
 	lastDirection = playerData.direction;
+	if (!app->sceneManager->GetCurrentScene()->isContinue)
+	{
+		playerData.level = 1;
+		playerData.exp = 0;
+	}
 
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
 	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
@@ -139,6 +144,12 @@ void Player::LoadPartners()
 		partners[i].direction = WALK_R;
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
+		if (!app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			partners[i].level = 1;
+			partners[i].exp = 0;
+		}		
+
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
@@ -157,10 +168,14 @@ bool Player::Awake(pugi::xml_node& config)
 bool Player::LoadState(pugi::xml_node& player) 
 {
 	bool ret=true;
-	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
-	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
-	playerData.direction = (MoveDirection)player.child("position").attribute("direction").as_int(playerData.direction);
-	playerData.level = player.child("level").attribute("velue").as_int(playerData.level);
+	playerData.position.x = player.child("data").attribute("x").as_int(playerData.position.x);
+	playerData.position.y = player.child("data").attribute("y").as_int(playerData.position.y);
+	playerData.direction = (MoveDirection)player.child("data").attribute("direction").as_int(playerData.direction);
+	if (app->sceneManager->GetCurrentScene()->isContinue)
+	{
+		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
+		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
+	}
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
 	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
@@ -173,7 +188,11 @@ bool Player::LoadState(pugi::xml_node& player)
 		partners[i].position.y = positionPartners.attribute("y").as_int();
 		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
 		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
-		partners[i].level = positionPartners.attribute("level").as_int();
+		if (app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			partners[i].level = positionPartners.attribute("level").as_int();
+			partners[i].exp = positionPartners.attribute("exp").as_int();
+		}
 	
 		positionPartners = positionPartners.next_sibling();
 		i++;
@@ -787,14 +806,7 @@ bool Player::CleanUp()
 	RELEASE(walkAnimR);
 	RELEASE(walkAnimUp);
 	RELEASE(walkAnimDown);
-
-	// Partners
-	//for (int i = 3; i < numPartners; i++)
-	//{
-	//	// Animations of each partner
-	//	// ...
-	//}
-
+	
 	for (int i = 0; i < texPartners.Count(); i++)
 	{
 		app->tex->UnLoad(texPartners.At(i)->data);

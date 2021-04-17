@@ -97,13 +97,13 @@ public:
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
 
+	bool SaveLevel(pugi::xml_node& data)const;
 private:
 
 	// Load state game
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
-	bool SaveLevel(pugi::xml_node& data)const;
 
 	void MoveToDirection(MoveDirection direction, iPoint &position);
 
