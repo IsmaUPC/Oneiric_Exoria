@@ -73,17 +73,17 @@ public:
 
 private:
 
-	Input* input;
-	Render* render;
-	Textures* tex;
+	Input* input = nullptr;
+	Render* render = nullptr;
+	Textures* tex = nullptr;
 	
-	SceneControl* current;
-	SceneControl* next;
+	SceneControl* current = nullptr;
+	SceneControl* next = nullptr;
 
 	// Required variables to manage screen transitions (fade-in, fade-out)
-	bool onTransition;
-	bool fadeOutCompleted;
-	float transitionAlpha;
+	bool onTransition =false;
+	bool fadeOutCompleted = false;
+	float transitionAlpha = 0.0f;
 	bool pause = false;
 
 	bool enemyDetected = false;
@@ -93,18 +93,18 @@ private:
 	bool win = false;
 
 public:
-	SceneLogo* sceneLogo;
-	Scene* scene;
-	SceneIntro* sceneIntro;
-	SceneWin* sceneWin;
-	SceneLose* sceneLose;
-	SceneLevel2* sceneLevel2;
-	SceneBattle* sceneBattle;
+	SceneLogo* sceneLogo = nullptr;
+	Scene* scene = nullptr;
+	SceneIntro* sceneIntro = nullptr;
+	SceneWin* sceneWin = nullptr;
+	SceneLose* sceneLose = nullptr;
+	SceneLevel2* sceneLevel2 = nullptr;
+	SceneBattle* sceneBattle = nullptr;
 
-	SceneControl* sceneControl;
+	SceneControl* sceneControl = nullptr;
 
 	//Origin player tp
-	TeleportNode* originTpNode;
+	TeleportNode* originTpNode = nullptr;
 
 	int lastLevel = 0;
 	TTF_Font* guiFont = nullptr;

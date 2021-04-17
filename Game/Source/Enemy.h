@@ -35,7 +35,6 @@ private:
 	void CreatePathEnemy(iPoint origin, iPoint destination);
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
 	void MoveEnemy();
-	int CalculateDistance(iPoint origin, iPoint destination);
 
 private:
 
@@ -44,11 +43,11 @@ private:
 	bool isDetected = false;
 	bool returning = false;
 	int radiusCollision = 0;
-	
-	iPoint destination;
-	fPoint tmp;
+
+	iPoint destination = { 0,0 };
+	fPoint tmp = { 0.0f,0.0f };
 
 	// We store the created path here
-	DynArray<iPoint>* lastPath;
+	DynArray<iPoint>* lastPath = nullptr;
 };
 #endif // _ENEMY_H_

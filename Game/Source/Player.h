@@ -5,24 +5,22 @@
 
 struct PlayerData
 {
-	iPoint position;
-	iPoint centerPoint;
-	State state;
-	MoveDirection direction;
-	Animation* currentAnimation;
-	float velocity ;
+	iPoint position = { 0,0 };
+	iPoint centerPoint = { 0,0 };
+	State state = IDLE;
+	MoveDirection direction = WALK_DOWN;
+	Animation* currentAnimation = nullptr;
+	float velocity = 1;
 	int level = 1;
 	int exp = 0;
 	int health = 0;
 	uint respawns = 0;
 	uint coins = 0;
 
-	SDL_Texture* texture;
+	SDL_Texture* texture = nullptr;
 	static const int numPoints = 4;
 
-	//iPoint pointsCollision[numPoints] = { { 0, 0 },{ 32, 0 },{ 32,44 },{ 0, 44 } };
 	iPoint pointsCollision[numPoints] =  { { 2,30 },{ 28, 30 },{ 28,50 },{ 2, 50 } };
-
 };
 enum TypePartner
 {
@@ -32,11 +30,11 @@ enum TypePartner
 };
 struct Partner 
 {
-	iPoint position;
-	State state;
-	MoveDirection direction;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
+	iPoint position = {0,0};
+	State state = IDLE;
+	MoveDirection direction = WALK_R;
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* texture = nullptr;
 	TypePartner type;
 	int level = 1;
 	int exp = 0;
@@ -121,14 +119,14 @@ private:
 public:
 
 	PlayerData playerData;
-	int radiusCollision;
+	int radiusCollision = 0;
 	bool godMode = false;
 	iPoint* positionInitial= new iPoint(0,0);	
 	bool win = false;
 
 private:
 	
-	int levelScene;
+	int levelScene = 0;
 	float vel = 0;
 
 	// Partners
@@ -140,31 +138,31 @@ private:
 	int diagonal = 0;
 
 
-	Animation* idleAnimR;
-	Animation* idleAnimL;
-	Animation* idleAnimUp;
-	Animation* idleAnimDown;
+	Animation* idleAnimR = nullptr;
+	Animation* idleAnimL = nullptr;
+	Animation* idleAnimUp = nullptr;
+	Animation* idleAnimDown = nullptr;
 
-	Animation* walkAnimR;
-	Animation* walkAnimL;
-	Animation* walkAnimUp;
-	Animation* walkAnimDown;
+	Animation* walkAnimR = nullptr;
+	Animation* walkAnimL = nullptr;
+	Animation* walkAnimUp = nullptr;
+	Animation* walkAnimDown = nullptr;
 
 	pugi::xml_document playerFile;
 	SString folder;
-	iPoint tmp;
+	iPoint tmp = {0,0};
 
-	uint bonfireFx;
-	uint damageFx;
+	uint bonfireFx = 0;
+	uint damageFx = 0;
 
 	// CheckPoint's vars
-	bool inCheckPoint;
+	bool inCheckPoint = false;
 	List<iPoint> checkPoints;
-	bool debugCheckPoints;
+	bool debugCheckPoints = false;
 
-	int lastCP;
-	bool checkpointMove;
-	bool endUpdate;
+	int lastCP = 0;
+	bool checkpointMove = false;
+	bool endUpdate = false;
 
 	State lastState;
 	MoveDirection hitDirection;
@@ -173,5 +171,3 @@ private:
 };
 
 #endif // _PLAYER_H_
-
-

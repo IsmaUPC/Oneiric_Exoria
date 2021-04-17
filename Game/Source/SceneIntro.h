@@ -48,30 +48,30 @@ public:
 
 private:
 
-	SDL_Texture* bgIntro;
-	SDL_Texture* logoIntro;
-	SDL_Texture* bigCloud;
-	SDL_Texture* smallCloud;
+	SDL_Texture* bgIntro = nullptr;
+	SDL_Texture* logoIntro = nullptr;
+	SDL_Texture* bigCloud = nullptr;
+	SDL_Texture* smallCloud = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	bool transition;
+	bool transition = false;
 
-	fPoint bCloudPos;
-	fPoint bCloudPos2;
-	fPoint sCloudPos;
-	fPoint sCloudPos2;
+	fPoint bCloudPos = { 0,0 };
+	fPoint bCloudPos2 = { 0,0 };
+	fPoint sCloudPos = { 0,0 };
+	fPoint sCloudPos2 = { 0,0 };
 
 	pugi::xml_document sceneFile;
 	pugi::xml_node sceneStateFile;
 
-	GuiButton* btnPlay;
-	GuiButton* btnContinue;
-	GuiButton* btnRemove;
-	GuiButton* btnSettings;
-	GuiButton* btnCredits;
-	GuiButton* btnExit;
+	GuiButton* btnPlay = nullptr;
+	GuiButton* btnContinue = nullptr;
+	GuiButton* btnRemove = nullptr;
+	GuiButton* btnSettings = nullptr;
+	GuiButton* btnCredits = nullptr;
+	GuiButton* btnExit = nullptr;
 
-	GuiSettings* menuSettings;
-	uint startFx;
+	GuiSettings* menuSettings = nullptr;
+	uint startFx = -1;
 };
 
 #endif // __SCENEINTRO_H__

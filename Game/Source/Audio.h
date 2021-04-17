@@ -67,8 +67,8 @@ public:
 
 private:
 
-	_Mix_Music* music;
-	List<Mix_Chunk*>	fx;
+	_Mix_Music* music = nullptr;
+	List<Mix_Chunk*> fx;
 	List<int> channels;
 
 	// TODO: Create the varaibles you need

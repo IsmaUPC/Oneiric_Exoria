@@ -28,23 +28,22 @@ public:
 
 private:
 	int padding = 40;
-	GuiButton* btnResume;
-	GuiButton* btnSettings;
-	GuiButton* btnBackToTitle;
-	GuiButton* btnSave;
-	GuiButton* btnExit;
+	GuiButton* btnResume = nullptr;
+	GuiButton* btnSettings = nullptr;
+	GuiButton* btnBackToTitle = nullptr;
+	GuiButton* btnSave = nullptr;
+	GuiButton* btnExit = nullptr;
 
-	GuiSettings* menuSettings;
+	GuiSettings* menuSettings = nullptr;
 
-	iPoint initialPos;
+	iPoint initialPos = { 0,0 };
 
-	SceneControl* observer;
+	SceneControl* observer = nullptr;
 
 	SDL_Rect screenRect = { NULL };
 
-	bool active;
-	bool activeSettings;
-
+	bool active = false;
+	bool activeSettings = false;
 };
 
 #endif // !__GUIMENUPAUSE_H__

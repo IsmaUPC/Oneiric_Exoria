@@ -64,9 +64,9 @@ public:
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
 
-	uint chickenFx;
-	uint batFx;
-	uint liveFx;
+	uint chickenFx = 0;
+	uint batFx = 0;
+	uint liveFx = 0;
 
 	// Animations
 	List<Animation*> animations;
@@ -75,12 +75,12 @@ public:
 
 private:
 	// Textures
-	SDL_Texture* texCoin;
-	SDL_Texture* texLive;
-	SDL_Texture* texHead;
-	SDL_Texture* texEnemies;
+	SDL_Texture* texCoin = nullptr;
+	SDL_Texture* texLive = nullptr;
+	SDL_Texture* texHead = nullptr;
+	SDL_Texture* texEnemies = nullptr;
 
-	Enemy* current;
+	Enemy* current = nullptr;
 };
 
 #endif // __MODULE_H__

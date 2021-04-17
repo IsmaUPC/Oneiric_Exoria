@@ -69,16 +69,6 @@ bool SceneBattle::Start()
     // Gui Buttons
     AddBattleMenu(btnTextureAtlas);
 
-    // Colors
-    green.r = 0; green.g = 187; green.b = 45;
-    yellow.r = 229; yellow.g = 190; yellow.b = 1;
-    red.r = 203; red.g = 50; red.b = 52;
-    blue.r = 37; blue.g = 40; blue.b = 80;
-    cyan.r = 0; cyan.g = 183; cyan.b = 255;
-    orange.r = 255; orange.g = 136; orange.b = 18;
-    white.r = 255; white.g = 255; white.b = 255;
-	black.r = 0; black.g = 0; black.b = 0;
-
     god = false;
     return true;
 }

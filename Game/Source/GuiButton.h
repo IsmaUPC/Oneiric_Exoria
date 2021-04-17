@@ -59,7 +59,7 @@ private:
 	iPoint* exitAtlasPos = new iPoint(0, 1810);
 	iPoint* backAtlasPos = new iPoint( 0, 1114);
 	
-	SDL_Rect rect;
+	SDL_Rect rect = { 0,0,0,0 };
 
 	bool textDisable = false;
 	

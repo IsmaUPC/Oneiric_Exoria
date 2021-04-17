@@ -8,9 +8,9 @@ struct SDL_Texture;
 
 struct AnimationWin
 {
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
+	iPoint position = { 0,0 };
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* texture = nullptr;
 };
 
 class SceneWin :public SceneControl
@@ -51,9 +51,9 @@ private:
 	AnimationWin animationFather;
 	Animation idleAnimFather;
 
-	SDL_Texture* img;
+	SDL_Texture* img = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	bool transition;
+	bool transition = false;
 
 	Timer timer;
 };

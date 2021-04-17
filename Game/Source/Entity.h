@@ -82,14 +82,14 @@ struct Stats
 
 struct EntityData
 {
-	fPoint position;
-	iPoint centerPoint;
-	iPoint positionInitial;
+	fPoint position = {0,0};
+	iPoint centerPoint = { 0,0 };
+	iPoint positionInitial = { 0,0 };
 	State state = IDLE;
 	MoveDirection direction = WALK_R;
 	Animation* currentAnimation = nullptr;
-	TypeEntity type;
-	SDL_Texture* texture;
+	TypeEntity type = UNKNOWN;
+	SDL_Texture* texture = nullptr;
 	float velocity = 1;
 	int numPoints = 4;
 	iPoint* pointsCollision = new iPoint[numPoints];

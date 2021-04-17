@@ -33,15 +33,15 @@ public:
 	void NextMagics();
 	void PrevMagics();
 
-	GuiButton* magic1;
-	GuiButton* magic2;
-	GuiButton* magic3;
-	GuiButton* magic4;
+	GuiButton* magic1 = nullptr;
+	GuiButton* magic2 = nullptr;
+	GuiButton* magic3 = nullptr;
+	GuiButton* magic4 = nullptr;
 
-	GuiButton* close;
+	GuiButton* close = nullptr;
 
 private:
-	bool active;
+	bool active = false;
 	
 	int IdCharacterTurn = 0;
 
@@ -50,9 +50,9 @@ private:
 	List<Magic*> magics;
 	List<Magic*> magicsCharacterTurn;
 
-	int btnW, btnH;
-	int padding;
-	iPoint initialPos;
+	int btnW, btnH = 0;
+	int padding = 0;
+	iPoint initialPos = { 0,0 };
 };
 
 

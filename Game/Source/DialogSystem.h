@@ -24,9 +24,9 @@ public:
 	~DialogueOption() {};
 
 	DialogueOption(string Text, int ReturnCode, int NextNode);
-	string text;
-	int returnCode;
-	int nextNode;
+	string text = "";
+	int returnCode = 0;
+	int nextNode = 0;
 };
 
 class DialogueNode
@@ -36,10 +36,10 @@ public:
 	~DialogueNode() {};
 
 	DialogueNode(string Text);
-	string text;
+	string text = "";
 	vector <DialogueOption*> dialogueOptions;
 	List <string> answersList;
-	int nodeId;
+	int nodeId = 0;
 };
 
 class DialogueTree
@@ -50,7 +50,7 @@ public:
 
 
 public:
-	int treeId;
+	int treeId = 0;
 	vector <DialogueNode*> dialogueNodes;
 };
 
@@ -88,9 +88,9 @@ private:
 	iPoint point = { 0,0 };
 	pugi::xml_document	dialogues;
 
-	Input* input;
-	Render* render;
-	Textures* tex;
+	Input* input = nullptr;
+	Render* render = nullptr;
+	Textures* tex = nullptr;
 
 };
 #endif // __DIALOGSYSTEM_H__

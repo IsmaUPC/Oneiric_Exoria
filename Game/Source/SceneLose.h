@@ -8,9 +8,9 @@ struct SDL_Texture;
 
 struct AnimationEnd
 {
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
+	iPoint position = { 0,0 };
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* texture = nullptr;
 };
 
 class SceneLose : public SceneControl
@@ -43,10 +43,10 @@ private:
 	AnimationEnd animationEnd;
 	Animation idleAnim;
 
-	SDL_Texture* img;
+	SDL_Texture* img = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	bool transition;
-	bool keyPressed;
+	bool transition = false;
+	bool keyPressed = false;
 
 	Timer timer;
 };

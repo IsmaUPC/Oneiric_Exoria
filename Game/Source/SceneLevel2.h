@@ -10,9 +10,9 @@ struct SDL_Texture;
 
 struct AnimationFather2
 {
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
+	iPoint position = { 0,0 };
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* texture = nullptr;
 };
 
 class SceneLevel2 : public SceneControl
@@ -56,7 +56,7 @@ public:
 
 private:
 
-	int numThisScene;
+	int numThisScene = 2;
 
 	void Parallax();
 	void DebugKeys();
@@ -66,16 +66,16 @@ private:
 	bool lose = false;
 	AnimationFather2 animationFather;
 	Animation idleAnim;
-	SDL_Texture* img;
-	int moveBG0;
-	int moveBG1;
-	int moveBG2;
-	int withBG;
-	int posX0;
-	int posX1;
-	int posX2;
-	int xW;
-	int xSpeed;
+	SDL_Texture* img = nullptr;
+	int moveBG0 = 0;
+	int moveBG1 = 0;
+	int moveBG2 = 0;
+	int withBG = 0;
+	int posX0 = 0;
+	int posX1 = 0;
+	int posX2 = 0;
+	int xW = 0;
+	int xSpeed = 0;
 
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg = 0;

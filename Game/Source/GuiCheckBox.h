@@ -29,12 +29,12 @@ private:
 	iPoint* rectAtlasPos = new iPoint(87, 99);
 	int margin = 10;
 
-	SDL_Rect button;
+	SDL_Rect button = {0,0,0,0};
 	int rectTexW = 183;
 	int rectTexH = 91;
 
-	SDL_Rect checkBoxInput;
-	SDL_Rect checkBoxImage;
+	SDL_Rect checkBoxInput = { 0,0,0,0 };
+	SDL_Rect checkBoxImage = { 0,0,0,0 };
 
 	iPoint* falseAtlasPos = new iPoint(227, 201);
 	iPoint* trueAtlasPos = new iPoint(552, 1407);
@@ -45,7 +45,7 @@ private:
 	bool textDisable = false;
 
 	bool mouseIn = false;
-	bool checked;
+	bool checked = false;
 };
 
 #endif // __GUICHECKBOX_H__

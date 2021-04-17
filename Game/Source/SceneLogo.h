@@ -35,15 +35,15 @@ public:
 private:
 
 	SDL_Rect logo;
-	SDL_Texture* img;
+	SDL_Texture* img = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	uint introFx;
+	uint introFx = -1;
 
 	SDL_Color color;		// Tint color
 
 	int state;
-	float timeCounter;
-	float logoAlpha;
+	float timeCounter = 0;
+	float logoAlpha = 0;
 	
 };
 

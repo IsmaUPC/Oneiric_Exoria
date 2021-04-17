@@ -73,23 +73,23 @@ public:
 	float updateMsCycle = 0.0f;
 	bool doLogic = false;
 
-	uint btnSelected;
-	uint btnPressed;
-	uint btnDisabled;
-	uint btnSlider;
+	uint btnSelected = 0;
+	uint btnPressed = 0;
+	uint btnDisabled = 0;
+	uint btnSlider = 0;
 
-	SDL_Texture* btnTextureAtlas;
-	SDL_Texture* moonCorner;
-	SDL_Texture* uiAtlas;
-	SDL_Texture* handCursor;
-	Animation* handAnim;
+	SDL_Texture* btnTextureAtlas = nullptr;
+	SDL_Texture* moonCorner = nullptr;
+	SDL_Texture* uiAtlas = nullptr;
+	SDL_Texture* handCursor = nullptr;
+	Animation* handAnim = nullptr;
 
-	bool press;
+	bool press = false;
 
 private:
-	Input* input;
-	Render* render;
-	GuiMenuPause* menu;
+	Input* input = nullptr;
+	Render* render = nullptr;
+	GuiMenuPause* menu = nullptr;
 
 };
 #endif // __GUIMANAGER_H__

@@ -30,17 +30,18 @@ public:
 public:
 
 	bool isCollected = false;
+
 private:
-	iPoint position;
-	int numPoints;
-	iPoint* pointsCollision;
+	iPoint position = { 0,0 };
+	int numPoints = 0;
+	iPoint* pointsCollision = nullptr;
 
 	Animation* liveAnimation = new Animation();
 	Animation* particleAnimation = new Animation();
 
-	uint liveFx;
+	uint liveFx = 0;
 
-	SDL_Texture* texLive;
+	SDL_Texture* texLive = nullptr;
 
 };
 #endif // _LIVES_H_

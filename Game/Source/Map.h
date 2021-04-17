@@ -16,23 +16,23 @@
 
 struct TileSet
 {
-	SString	name;
-	int	firstgid;
-	int margin;
-	int	spacing;
-	int	tileWidth;
-	int	tileHeight;
+	SString	name = "";
+	int	firstgid = 1;
+	int margin = 0;
+	int	spacing = 0;
+	int	tileWidth = 0;
+	int	tileHeight = 0;
 
-	int idFloor;
+	int idFloor = 0;
 
-	SDL_Texture* texture;
-	int	texWidth;
-	int	texHeight; 
-	int	numTilesWidth;
-	int	numTilesHeight;
-	int	offsetX;
-	int	offsetY;
-	int tilecount;
+	SDL_Texture* texture = nullptr;
+	int	texWidth = 0;
+	int	texHeight = 0;
+	int	numTilesWidth = 0;
+	int	numTilesHeight = 0;
+	int	offsetX = 0;
+	int	offsetY = 0;
+	int tilecount = 0;
 
 	SDL_Rect GetTileRect(int id) const;
 };
@@ -49,8 +49,8 @@ struct Properties
 {
 	struct Property
 	{
-		SString	name;
-		int value;
+		SString	name = "";
+		int value = 0;
 	};
 	
 	~Properties()
@@ -79,7 +79,7 @@ struct MapLayer
 	int height = 0;	
 	int mapWidth = 0;
 	int mapHeight = 0;
-	uint* data;
+	uint* data = nullptr;
 
 	Properties properties;
 
@@ -102,10 +102,10 @@ struct MapLayer
 
 struct MapData
 {
-	int width;
-	int	height;
-	int	tileWidth;
-	int	tileHeight;
+	int width = 0;
+	int	height = 0;
+	int	tileWidth = 0;
+	int	tileHeight = 0;
 	SDL_Color backgroundColor;
 	MapTypes type;
 	List<TileSet*> tilesets;
@@ -139,7 +139,7 @@ struct CheckPoints{
 
 	Animation* checkPointOffAnim = new Animation();
 	Animation* checkPointOnAnim = new Animation();
-	SDL_Texture* texture;
+	SDL_Texture* texture = nullptr;
 	List<CP*> list;
 };
 
@@ -227,7 +227,7 @@ private:
 public:
 
 	MapData data;
-	iPoint tileDestiny;
+	iPoint tileDestiny = { 0,0 };
 	CheckPoints checKpointsMap;
 
 
@@ -237,11 +237,11 @@ public:
 	List<TeleportNode*> tpNodeDownHall;
 private:
 
-	TeleportNode* nodeTp;
+	TeleportNode* nodeTp = nullptr;
 
 	pugi::xml_document mapFile;
 	SString folder;
-	bool mapLoaded;
+	bool mapLoaded = false;
 
 	bool drawColl=false;
 	bool drawColl2=false;
@@ -257,15 +257,15 @@ private:
 
 
 	// AStar (A*) variables
-	iPoint goalAStar;			// Store goal target tile
+	iPoint goalAStar = { 0,0 };	// Store goal target tile
 	bool finishAStar = false;	// Detect when reached goal
 
 	SDL_Texture* tileX = nullptr;
 
 	List<MapLayer*>* layerDrawUp;
 
-	iPoint vec;
-	int idFloor;
+	iPoint vec = { 0,0 };
+	int idFloor = 0;
 };
 
 #endif // __MAP_H__

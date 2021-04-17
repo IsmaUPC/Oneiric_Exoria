@@ -78,7 +78,7 @@ public:
 
 public:
 
-	uint32 id;
+	uint32 id = 0;
 	GuiControlType type;
 
    // TypeButton typeButton= RECTANGLE;
@@ -95,7 +95,7 @@ public:
 	TTF_Font* font;			// Text font
 	bool active = true;
 
-	SceneControl* observer;		// Observer module (it should probably be an array/list)
+	SceneControl* observer = nullptr;	// Observer module (it should probably be an array/list)
 };
 
 #endif // __GUICONTROL_H__

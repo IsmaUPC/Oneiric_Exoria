@@ -28,19 +28,19 @@ public:
 	void MovePosition();
 
 
-	GuiSlider* sldMusic;
-	GuiSlider* sldFx;
-	GuiCheckBox* chBxFullScreen;
-	GuiCheckBox* chBxVSync;
+	GuiSlider* sldMusic = nullptr;
+	GuiSlider* sldFx = nullptr;
+	GuiCheckBox* chBxFullScreen = nullptr;
+	GuiCheckBox* chBxVSync = nullptr;
 
-	GuiButton* btnBack;
+	GuiButton* btnBack = nullptr;
 
-	bool active;
+	bool active = false;
 
 private:
 	int padding = 60;
 
-	iPoint initialPos;
+	iPoint initialPos = { 0,0};
 
 };
 #endif // __GUISETTINGS_H__

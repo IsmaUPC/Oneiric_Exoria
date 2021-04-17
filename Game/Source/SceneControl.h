@@ -82,7 +82,7 @@ public:
 	// Possible properties
 	bool loaded = false;
 
-	bool transitionRequired;
+	bool transitionRequired = false;
 	SceneType nextScene;
 	int lastLevel = 0;
 	bool isContinue = false;

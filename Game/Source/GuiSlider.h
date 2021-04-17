@@ -34,26 +34,25 @@ private:
 	 // Maybe some animation properties for state change?
 	 iPoint* rectAtlasPos = new iPoint(87, 99);
 	 int margin = 10;
-	 SDL_Rect button;
+	 SDL_Rect button = {0,0,0,0};
 	 int rectTexW = 183;
 	 int rectTexH = 91;
 
 
-	 SDL_Rect slider;
-	 SDL_Rect sliderImage;
+	 SDL_Rect slider = { 0,0,0,0 };
+	 SDL_Rect sliderImage = { 0,0,0,0 };
 	 int marginSliders = 4;
 
 
-	 SDL_Rect sliderBarInput;
-	 SDL_Rect sliderBarImage;
+	 SDL_Rect sliderBarInput = { 0,0,0,0 };
+	 SDL_Rect sliderBarImage = { 0,0,0,0 };
 
 
-	 int value;
-	 int lastValue;
+	 int value = 0;
+	 int lastValue = 0;
 
-	 int minValue;
-	 int maxValue;
-
+	 int minValue = 0;
+	 int maxValue = 0;
 };
 
 #endif // __GUISLIDER_H__

@@ -340,7 +340,8 @@ iPoint Map::MapToWorld(int x, int y) const
 	}
 
 	return ret;
-}iPoint Map::MapToWorld(iPoint position) const
+}
+iPoint Map::MapToWorld(iPoint position) const
 {
 	iPoint ret;
 	int x= position.x;

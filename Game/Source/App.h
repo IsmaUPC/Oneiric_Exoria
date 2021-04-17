@@ -102,34 +102,34 @@ private:
 public:
 
 	// Modules
-	Window* win;
-	Input* input;
-	Render* render;
-	Textures* tex;
-	Audio* audio;
-	Map* map;
-	Player* player;
-	EntityManager* entityManager;
-	SceneManager* sceneManager;
-	GuiManager* guiManager;
-	Entity* entity;
-	PathFinding* pathfinding;
-	DialogueSystem* dialogueSystem;
-	Fonts* fonts;
+	Window* win = nullptr;
+	Input* input = nullptr;
+	Render* render = nullptr;
+	Textures* tex = nullptr;
+	Audio* audio = nullptr;
+	Map* map = nullptr;
+	Player* player = nullptr;
+	EntityManager* entityManager = nullptr;
+	SceneManager* sceneManager = nullptr;
+	GuiManager* guiManager = nullptr;
+	Entity* entity = nullptr;
+	PathFinding* pathfinding = nullptr;
+	DialogueSystem* dialogueSystem = nullptr;
+	Fonts* fonts = nullptr;
 
 
 	bool fullScreen=0;
 	bool removeGame = false;
 private:
 
-	int argc;
+	int argc = 0;
 	char** args;
 	SString title;
 	SString organization;
-	int framerate;
+	int framerate = 60;
 	List<Module *> modules;
 
-	uint frames;
+	uint frames = 0;
 	PerfTimer ptimer;
 	uint64 frameCount = 0;
 
@@ -141,13 +141,13 @@ private:
 	uint32 framesOnLastSecond = 0;
 	uint32 lastFrameMs = 0;
 	float dt = 0.0f;
-	float perfTime;
+	float perfTime = 0.0f;
 	float oldLastFrame = 0.0f;
 	float timeFramesSecond = 0.0f;
-	float	cappedMs = -1;
+	float cappedMs = -1;
 
 	mutable bool saveGameRequested;
-	bool loadGameRequested;
+	bool loadGameRequested = false;
 
 	pugi::xml_document stateFile;
 	pugi::xml_node rootStateFile;

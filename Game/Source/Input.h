@@ -30,21 +30,21 @@ enum KeyState
 struct GamePad
 {
 	//Input data
-	bool start, back, guide;
-	bool x, y, a, b, l1, r1, l3, r3;
-	bool up, down, left, right;
-	float l2, r2;
-	float l_x, l_y, r_x, r_y, l_dz, r_dz;
+	bool start, back, guide = false;
+	bool x, y, a, b, l1, r1, l3, r3 = false;
+	bool up, down, left, right = false;
+	float l2, r2 = 0;
+	float l_x, l_y, r_x, r_y, l_dz, r_dz = 0;
 
 	//Controller data
-	bool enabled;
-	int index;
-	_SDL_GameController* controller;
-	_SDL_Haptic* haptic;
+	bool enabled = false;
+	int index = 0;
+	_SDL_GameController* controller = nullptr;
+	_SDL_Haptic* haptic = nullptr;
 
 	//Rumble controller
-	int rumble_countdown;
-	float rumble_strength;
+	int rumble_countdown = 0;
+	float rumble_strength = 0;
 };
 
 class Input : public Module
@@ -104,12 +104,12 @@ public:
 
 private:
 	bool windowEvents[WE_COUNT];
-	KeyState* keyboard;
+	KeyState* keyboard = nullptr;
 	KeyState mouseButtons[NUM_MOUSE_BUTTONS];
-	int	mouseMotionX;
-	int mouseMotionY;
-	int mouseX;
-	int mouseY;
+	int	mouseMotionX = 0;
+	int mouseMotionY = 0;
+	int mouseX = 0;
+	int mouseY = 0;
 
 public:
 	//GamePad

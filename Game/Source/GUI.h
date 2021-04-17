@@ -46,32 +46,32 @@ private:
 	uint* respawn = 0;
 
 	iPoint point0 = { 0,0 };
-	SDL_Texture* headTex;
-	SDL_Texture* arrowTex;
+	SDL_Texture* headTex = nullptr;
+	SDL_Texture* arrowTex = nullptr;
 
-	Animation* headAnim;
-	Animation* arrowAnim;
-	Animation* buttonEAnim;
+	Animation* headAnim = nullptr;
+	Animation* arrowAnim = nullptr;
+	Animation* buttonEAnim = nullptr;
 
-	bool inCheckPoint;
+	bool inCheckPoint = false;
 
 	// Coin
-	SDL_Texture* imgCoin;
-	Animation* coinHudAnim;
+	SDL_Texture* imgCoin = nullptr;
+	Animation* coinHudAnim = nullptr;
 
 	// Text
 	uint* coins = 0;
 	char coinText[10] = { "\0" };
 
-	bool activeFPS;
+	bool activeFPS = false;
 	// Time
 	Timer timer;
 	char timeText[10] = { "\0" };
 	char scoreText[12] = { "\0" };
-	uint miliseconds=0;
+	uint miliseconds = 0;
 	uint miliseconds2 = 0;
 	uint seconds = 0;
-	uint minuts=0;
+	uint minuts = 0;
 	Timer auxTimePause;
 	bool stopTime = false;
 };

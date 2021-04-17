@@ -51,7 +51,7 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 private:
 
-	int numThisScene;
+	int numThisScene = 1;
 
 	void DebugKeys();
 
@@ -63,9 +63,9 @@ private:
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg=0;
 
-	GuiButton* btn1;
-	GuiButton* btn2;
-	GuiButton* btn3;
+	GuiButton* btn1 = nullptr;
+	GuiButton* btn2 = nullptr;
+	GuiButton* btn3 = nullptr;
 };
 
 #endif // __SCENE_H__

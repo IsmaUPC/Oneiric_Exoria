@@ -76,30 +76,30 @@ private:
 
 	void UseAMagic();
 
-	SDL_Rect rec;
-	SDL_Rect live;
-	SDL_Rect tex;
-	SDL_Rect face;
+	SDL_Rect rec = { 0,0,0,0 };
+	SDL_Rect live = { 0,0,0,0 };
+	SDL_Rect tex = { 0,0,0,0 };
+	SDL_Rect face = { 0,0,0,0 };
 
-	SDL_Color green;
-	SDL_Color yellow;
-	SDL_Color red;
-	SDL_Color blue;
-	SDL_Color cyan;
-	SDL_Color orange;
-	SDL_Color white;
-	SDL_Color black;
+	SDL_Color green = { 0,187, 45 };
+	SDL_Color yellow = { 229,190,1 };
+	SDL_Color red = { 203,50,52 };
+	SDL_Color blue = {37, 40,80};
+	SDL_Color cyan = { 0, 183,255 };
+	SDL_Color orange = {255,136,18};
+	SDL_Color white = { 255,255,255 };
+	SDL_Color black = { 0,0,0 };
 
-	GuiButton* btnAttack;
-	GuiButton* btnMagic;
-	GuiButton* btnDefense;
-	GuiButton* btnExit;
-	GuiButton* btnContinue;
-	GuiButton* btnGod;
+	GuiButton* btnAttack = nullptr;
+	GuiButton* btnMagic = nullptr;
+	GuiButton* btnDefense = nullptr;
+	GuiButton* btnExit = nullptr;
+	GuiButton* btnContinue = nullptr;
+	GuiButton* btnGod = nullptr;
 
-	SDL_Texture* img;
-	SDL_Texture* texPalyers;
-	SDL_Texture* texEnemies;
+	SDL_Texture* img = nullptr;
+	SDL_Texture* texPalyers = nullptr;
+	SDL_Texture* texEnemies = nullptr;
 
 	List<Animation*> spritesBarTurn;
 	List<Animation*> animationsPlayer;
@@ -107,13 +107,13 @@ private:
 
 	List<Entity*> enemies;
 	List<Entity*> partners;
-	Entity* turnSort;
+	Entity* turnSort = nullptr;
 
-	GuiMenuMagic* menuMagic;
+	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
 	
-	Magic* magicInUse;
-	bool activeMenuMagic;
+	Magic* magicInUse = nullptr;
+	bool activeMenuMagic =false;
 
 	int turn = 0;
 	int tam = 0;
@@ -124,8 +124,8 @@ private:
 	char textLevel[7] = { "\0" };
 	char textExperience[14] = { "\0" };
 
-	int faseAction;
-	int enemiSelected;
+	int faseAction = 0;
+	int enemiSelected = 0;
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;

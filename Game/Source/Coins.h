@@ -33,16 +33,16 @@ public:
 
 	bool isCollected = false;
 private:
-	iPoint position;
-	int numPoints;
-	iPoint* pointsCollision;
+	iPoint position = { 0,0 };
+	int numPoints = 0;
+	iPoint* pointsCollision = nullptr;
 
 	Animation* coinAnimation = new Animation();
 	Animation* particleAnimation = new Animation();
 
-	uint coinFx;
+	uint coinFx = -1;
 
-	SDL_Texture* texCoin;
+	SDL_Texture* texCoin = nullptr;
 	//SDL_Texture* texCoinParticle;
 };
 #endif // _COINS_H_
