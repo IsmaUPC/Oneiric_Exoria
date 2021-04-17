@@ -132,6 +132,7 @@ private:
 	int totalExp = 0;
 	float currentExp = 0;
 
+	bool missClick;
 
 	int posX = 0;
 	int posY = 0;
