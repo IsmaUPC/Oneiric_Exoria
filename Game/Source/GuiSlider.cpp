@@ -70,6 +70,7 @@ bool GuiSlider::Update(float dt)
 			{
 				SliderControl(mouseX, mouseY, pad);
 				NotifyObserver();
+				state = GuiControlState::FOCUSED;
 			}
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP 
 				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP 
@@ -176,7 +177,7 @@ void GuiSlider::SliderControl(int mouseX, int mouseY,GamePad pad)
 		slider.x = sliderBarInput.x + slider.w/2;
 		value = minValue;
 	}
-	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w - slider.w))
+	if ((slider.x + slider.w) > (sliderBarInput.x + sliderBarInput.w) || value > maxValue)
 	{
 		slider.x = (sliderBarInput.x + sliderBarInput.w) - slider.w;
 		value = maxValue;
