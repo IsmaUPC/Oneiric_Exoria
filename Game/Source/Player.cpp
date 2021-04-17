@@ -262,7 +262,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
 			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
 			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
-			partnersData.last_child().append_attribute("live").set_value(partners[i].health);
+			partnersData.last_child().append_attribute("health").set_value(partners[i].health);
 		}
 
 		SaveLevel(player);
