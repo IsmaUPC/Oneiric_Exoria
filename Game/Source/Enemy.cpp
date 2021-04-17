@@ -218,13 +218,13 @@ bool Enemy::Update(float dt)
 		else
 		{
 			//if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
-			if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true)))
+			if (!app->dialogueSystem->onDialog && Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
 				app->dialogueSystem->SetId(entityData.id);
 				app->dialogueSystem->onDialog = true;
-				//app->dialogueSystem->missClick = true;
+				app->dialogueSystem->missClick = true;
 			}
 			else if (Radar(app->player->playerData.position, 50)!= true) app->dialogueSystem->onDialog = false;
 		}
