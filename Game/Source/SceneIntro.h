@@ -29,6 +29,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void CloudsUpdate();
+
 	// Called before all Updates
 	bool PostUpdate();
 
@@ -48,8 +50,15 @@ private:
 
 	SDL_Texture* bgIntro;
 	SDL_Texture* logoIntro;
+	SDL_Texture* bigCloud;
+	SDL_Texture* smallCloud;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	bool transition;
+
+	fPoint bCloudPos;
+	fPoint bCloudPos2;
+	fPoint sCloudPos;
+	fPoint sCloudPos2;
 
 	pugi::xml_document sceneFile;
 	pugi::xml_node sceneStateFile;
