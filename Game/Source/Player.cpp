@@ -295,7 +295,7 @@ bool Player::Update(float dt)
 
 		CameraPlayer();
 		// Move player inputs control
-		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected())PlayerControls(dt);
+		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected() && app->dialogueSystem->onDialog == false)PlayerControls(dt);
 		// Move Between CheckPoints
 		else MoveBetweenCheckPoints();
 

@@ -68,7 +68,8 @@ public:
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
 	SceneControl* GetCurrentScene() { return current; };
-
+	bool GetWinBattle() { return win; };
+	void SetWinBattle(bool ret) { win = ret; };
 
 private:
 
@@ -89,6 +90,7 @@ private:
 
 	List<SceneControl*> scenes;
 	bool ViewRectangles = false;
+	bool win = false;
 
 public:
 	SceneLogo* sceneLogo;
