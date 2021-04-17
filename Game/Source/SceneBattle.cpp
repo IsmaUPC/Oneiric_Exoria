@@ -308,19 +308,20 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 {
     int padding = 90;
     int yPosition = 20;
-    btnAttack = new GuiButton(20, { WINDOW_W - 200 ,yPosition + (padding * 0),  183, 91 }, "ATTACK", RECTANGLE, btnTextureAtlas);
+    int xPosition = WINDOW_W - 100;
+    btnAttack = new GuiButton(20, { xPosition ,yPosition + (padding * 0),  183, 91 }, "ATTACK", RECTANGLE, btnTextureAtlas);
     btnAttack->SetObserver(this);
     app->guiManager->AddGuiButton(btnAttack);
 
-    btnMagic = new GuiButton(21, { WINDOW_W - 200 , yPosition + (padding * 1),  183, 91 }, "MAGIC", RECTANGLE, btnTextureAtlas);
+    btnMagic = new GuiButton(21, { xPosition , yPosition + (padding * 1),  183, 91 }, "MAGIC", RECTANGLE, btnTextureAtlas);
     btnMagic->SetObserver(this);
     app->guiManager->AddGuiButton(btnMagic);
 
-    btnDefense = new GuiButton(22, { WINDOW_W - 200,yPosition + (padding * 2),  183, 91 }, "DEFENSE", RECTANGLE, btnTextureAtlas);
+    btnDefense = new GuiButton(22, { xPosition,yPosition + (padding * 2),  183, 91 }, "DEFENSE", RECTANGLE, btnTextureAtlas);
     btnDefense->SetObserver(this);
     app->guiManager->AddGuiButton(btnDefense);
 
-    btnExit = new GuiButton(23, { WINDOW_W - 200, yPosition + (padding * 3),  183, 91 }, "EXIT", RECTANGLE, btnTextureAtlas);
+    btnExit = new GuiButton(23, { xPosition, yPosition + (padding * 3),  183, 91 }, "EXIT", RECTANGLE, btnTextureAtlas);
     btnExit->SetObserver(this);
     app->guiManager->AddGuiButton(btnExit);
 
@@ -591,9 +592,10 @@ bool SceneBattle::PostUpdate()
             }
         }
 
-        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 60;
-        int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 60;
-        app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 255);
+        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 55;
+        int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 65;
+        //app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 255);
+        app->render->DrawTexture(app->guiManager->handCursor, posX, posY, &app->guiManager->handAnim->GetCurrentFrame(),0,90);
     }
 
     // Draw Bar lives
