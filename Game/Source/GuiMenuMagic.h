@@ -41,6 +41,7 @@ public:
 	GuiButton* close;
 
 private:
+	bool active;
 	
 	int IdCharacterTurn = 0;
 
@@ -52,7 +53,6 @@ private:
 	int btnW, btnH;
 	int padding;
 	iPoint initialPos;
-	bool active;
 };
 
 

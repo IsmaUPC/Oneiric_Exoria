@@ -18,6 +18,7 @@ bool DialogueSystem::Start()
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	//currentNode = dialogueTrees[Id]->dialogueNodes[0];
 	//PerformDialogue(Id);
+
 	return true;
 }
 
@@ -115,7 +116,8 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
-				currentNode = dialogueTrees[treeId]->dialogueNodes[i];
+				if (currentNode->dialogueOptions[playerInput]->nextNode == 100) onDialog = false;
+				else currentNode = dialogueTrees[treeId]->dialogueNodes[i];
 				break;
 			}
 	}

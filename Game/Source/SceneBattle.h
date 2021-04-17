@@ -74,6 +74,8 @@ public:
 
 private:
 
+	void UseAMagic();
+
 	SDL_Rect rec;
 	SDL_Rect live;
 	SDL_Rect face;
@@ -91,6 +93,7 @@ private:
 	GuiButton* btnDefense;
 	GuiButton* btnExit;
 	GuiButton* btnContinue;
+	GuiButton* btnGod;
 
 	SDL_Texture* img;
 	SDL_Texture* texPalyers;
@@ -125,8 +128,10 @@ private:
 	bool moveBarTurn = false;
 	bool assigneDone = false;
 	bool win = true;
+	bool god = false;
 	int totalExp = 0;
 	float currentExp = 0;
+
 
 	int posX = 0;
 	int posY = 0;

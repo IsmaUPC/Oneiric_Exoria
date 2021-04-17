@@ -317,7 +317,7 @@ bool Player::Update(float dt)
 		// Move player inputs control
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected())PlayerControls(dt);
 		// Move Between CheckPoints
-		else MoveBetweenCheckPoints();
+		//else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		for (int i = 0; i < numPartners; i++)
@@ -578,18 +578,18 @@ void Player::PlayerControls(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		app->dialogueSystem->PerformDialogue(1, 0);
+		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 	
-		app->dialogueSystem->PerformDialogue(1, 1);
+		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		app->dialogueSystem->PerformDialogue(1, 2);
+		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
 	}
 
 }

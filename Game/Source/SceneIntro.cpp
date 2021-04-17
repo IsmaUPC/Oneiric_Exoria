@@ -73,6 +73,7 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
+	startFx = app->audio->LoadFx("Assets/Audio/Music/Good/start_button.wav");
 
 	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
@@ -159,6 +160,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		
 		if (control->id == 1)
 		{
+			app->audio->PlayFx(startFx);
 			app->removeGame = false;
 			TransitionToScene(SceneType::LEVEL1);
 			app->sceneManager->lastLevel = 1;

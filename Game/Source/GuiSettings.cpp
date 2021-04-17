@@ -12,7 +12,7 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	initialPos = Position;
 
-	SDL_Texture* btnTextureAtlas = app->guiManager->btnTextureAtlas;
+	SDL_Texture* btnTextureAtlas = app->guiManager->uiAtlas;
 
 	sldMusic = new GuiSlider(11, { initialPos.x, initialPos.y, 80, 20 }, "Music", 0, MIX_MAX_VOLUME, btnTextureAtlas);
 	sldMusic->SetObserver(moduleObserver);
@@ -55,7 +55,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	app->render->DrawTextBox(initialPos.x, initialPos.y, 307, 350, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
+	app->render->DrawTextBox(initialPos.x - app->render->camera.x, initialPos.y - app->render->camera.y, 307, 350, { 24, 61, 172 }, { 97, 159, 207 }, { 0, 33, 78 }, app->guiManager->moonCorner, 200);
 
 	return true;
 }

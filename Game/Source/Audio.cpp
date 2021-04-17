@@ -180,6 +180,7 @@ unsigned int Audio::LoadFx(const char* path)
 	{
 		fx.Add(chunk);
 		ret = fx.Count();
+		LOG("Sucesfully loaded wav %s.", path);
 	}
 
 	return ret;
@@ -205,6 +206,7 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 			if (Mix_Volume(channel, -1) > volumeFx)
 				Mix_Volume(channel, volumeFx);
 			Mix_PlayChannel(channel, fx[id - 1], repeat);
+			LOG("Sucessfully playing the Fx.");
 		}
 	}
 

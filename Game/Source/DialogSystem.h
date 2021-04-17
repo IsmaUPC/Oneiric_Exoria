@@ -10,6 +10,7 @@
 #include "Textures.h"
 #include "Module.h"
 #include "Input.h"
+#include "GuiButton.h"
 #include "SDL/include/SDL.h"
 
 using namespace std;
@@ -78,11 +79,12 @@ public:
 	bool onDialog = false;
 	SDL_Texture* moonCorner;
 	void SetId(int id_) { id = id_; };
+	int id = 0;
 
 private:
 	//int playerInput = 7;
-	int id = 0;
 	//DialogueNode* currentNode;
+
 	iPoint point = { 0,0 };
 	pugi::xml_document	dialogues;
 

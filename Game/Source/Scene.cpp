@@ -71,9 +71,23 @@ bool Scene::Start()
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
 	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
+	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
+
+	// Dialog System buttons
+	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn1->SetObserver(this);
+	app->guiManager->AddGuiButton(btn1);
+
+	btn2 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn2->SetObserver(this);
+	app->guiManager->AddGuiButton(btn2);
+
+	btn3 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn3->SetObserver(this);
+	app->guiManager->AddGuiButton(btn3);
 
 	return true;
 }
@@ -117,6 +131,27 @@ bool Scene::Update(float dt)
 		LOG("GAME OVER!");
 		lose = true;
 	}
+
+	btn1->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175;
+	btn1->bounds.y = -app->render->camera.y + 675;
+	btn2->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175*2;
+	btn2->bounds.y = -app->render->camera.y + 675;
+	btn3->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175*3;
+	btn3->bounds.y = -app->render->camera.y + 675;
+
+	if (app->dialogueSystem->onDialog == false)
+	{
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
+	}
+	else
+	{
+		btn1->active = true;
+		btn2->active = true;
+		btn3->active = true;
+	}
+
 	return ret;
 }
 
@@ -194,6 +229,29 @@ void Scene::DebugKeys()
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		//Option 1
+		if (control->id == 40)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
+		}
+		//Option 2
+		else if (control->id == 41)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
+		}
+		//Option 3
+		else if (control->id == 42)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
+		}
+	}
+	default: break;
+	}
+
 	return app->guiManager->GetMenuPause()->Event(control);
 }
 

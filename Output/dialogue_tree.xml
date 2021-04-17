@@ -30,7 +30,7 @@
 
   <dialogueExample Id="1">
     <node text="Hi welcome to the library"  id="0">
-      <dialogue option="" returnCode="0" nextNode="1"/>
+      <dialogue option="Continue" returnCode="0" nextNode="1"/>
     </node>
     <node text="Do you want somethething?"  id="1">
       <dialogue option="Information" returnCode="0" nextNode="2"/>
@@ -42,13 +42,35 @@
       <dialogue option="Im fine" returnCode="1" nextNode="100"/>
     </node>
     <node text="You can move using WASD or the left joystick" id="3">
-      <dialogue option="" returnCode="1" nextNode="100"/>
+      <dialogue option="Continue" returnCode="1" nextNode="100"/>
     </node>
     <node text="Press E to interact with people and objects" id="4">
-      <dialogue option="" returnCode="1" nextNode="100"/>
+      <dialogue option="Continue" returnCode="1" nextNode="100"/>
     </node>
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
+
+  <dialogueExample Id="2">
+    <node text="Kenzie, welcome to LansDowne"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="1"/>
+    </node>
+    <node text="One of the few academies where we study magic"  id="1">
+      <dialogue option="Continue" returnCode="0" nextNode="2"/>
+    </node>
+    <node text="Can you get me the card from the right shelving?"  id="2">
+      <dialogue option="Sure" returnCode="0" nextNode="3"/>
+      <dialogue option="How?" returnCode="0" nextNode="4"/>
+    </node>
+      <node text="Thanks I will be right here"  id="3">
+        <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="Press the interaction button E to grab the card"  id="4">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+  
     
 </dialogueTree>

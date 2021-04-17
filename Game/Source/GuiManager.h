@@ -80,6 +80,7 @@ public:
 
 	SDL_Texture* btnTextureAtlas;
 	SDL_Texture* moonCorner;
+	SDL_Texture* uiAtlas;
 	SDL_Texture* handCursor;
 	Animation* handAnim;
 
