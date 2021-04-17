@@ -70,6 +70,7 @@ bool SceneBattle::Start()
     orange.r = 255; orange.g = 136; orange.b = 18;
     white.r = 255; white.g = 255; white.b = 255;
 
+    god = false;
     return true;
 }
 
@@ -316,6 +317,11 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
     btnContinue->active = false;
     app->guiManager->AddGuiButton(btnContinue);
 
+    btnGod = new GuiButton(25, { WINDOW_W -40, WINDOW_H-30,  10, 20 }, "GOD", RECTANGLE, btnTextureAtlas);
+    btnGod->SetObserver(this);
+    btnGod->active = true;
+    app->guiManager->AddGuiButton(btnGod);
+
     //MenuMagic
     menuMagic = new GuiMenuMagic({ WINDOW_W / 2 -200, yPosition}, this);
     activeMenuMagic = false;
@@ -424,7 +430,7 @@ bool SceneBattle::Update(float dt_)
                     theHealth = enemies.At(i)->data->stats.health;
             }
 
-            if (theHealth > 0){
+            if (theHealth > 0 && !god){
                 int ally;
                 if (magicInUse == nullptr)
                 {
@@ -523,7 +529,10 @@ bool SceneBattle::PostUpdate()
         app->render->DrawRectangle({ posX, posY, 20, 20 }, blue.r, blue.g, blue.b, 255);
         }
     }
-
+    if (god)
+    {
+        app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
+    }
     //Icon Enemy selected
     if (faseAction == SELECT_ENEMI) {
 
@@ -947,6 +956,15 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         else if (control->id == 24)
         {
             TransitionToScene(SceneType::WIN);
+        }
+        else if (control->id == 25)
+        {
+            if (!god)
+            {
+                god = true;
+            }else{
+                god = false;
+            }
         }
         //--MAGIC MENU--
         else if (control->id == 30)

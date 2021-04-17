@@ -93,6 +93,7 @@ private:
 	GuiButton* btnDefense;
 	GuiButton* btnExit;
 	GuiButton* btnContinue;
+	GuiButton* btnGod;
 
 	SDL_Texture* img;
 	SDL_Texture* texPalyers;
@@ -126,6 +127,7 @@ private:
 	bool moveBarTurn = false;
 	bool assigneDone = false;
 	bool win = false;
+	bool god = false;
 
 	int posX = 0;
 	int posY = 0;
