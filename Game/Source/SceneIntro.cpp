@@ -78,6 +78,9 @@ bool SceneIntro::Start()
 	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 
+	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
+	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
+
 	bCloudPos = { WINDOW_W /2 + 150, WINDOW_H / 3 };
 	bCloudPos2 = { WINDOW_W / 2 + 850, WINDOW_H / 3 - 100 };
 	sCloudPos = {WINDOW_W /2 + 500, WINDOW_H/3 - 50};
@@ -128,6 +131,8 @@ void SceneIntro::CloudsUpdate()
 	bCloudPos2.x -= 0.5f;
 	sCloudPos.x -= 0.75f;
 	sCloudPos2.x -= 0.75f;
+	sBackCloudPos.x -= 0.75f;
+	bBackCloudPos.x -= 0.5f;
 	if (bCloudPos.x + 585 < 0)
 	{
 		bCloudPos.x = WINDOW_W;
@@ -144,6 +149,14 @@ void SceneIntro::CloudsUpdate()
 	{
 		sCloudPos2.x = WINDOW_W;
 	}
+	if (sBackCloudPos.x + 292 < 0)
+	{
+		sBackCloudPos.x = WINDOW_W;
+	}
+	if (bBackCloudPos.x + 585 < 0)
+	{
+		bBackCloudPos.x = WINDOW_W;
+	}
 }
 
 bool SceneIntro::PostUpdate()
@@ -151,6 +164,10 @@ bool SceneIntro::PostUpdate()
 	bool ret = true;
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
+
+	app->render->DrawTexture(smallCloud, sBackCloudPos.x, sBackCloudPos.y);
+	app->render->DrawTexture(bigCloud, bBackCloudPos.x, bBackCloudPos.y);
+
 	app->render->DrawTexture(logoIntro, 108, 33);
 
 	app->render->DrawTexture(bigCloud, bCloudPos.x, bCloudPos.y);

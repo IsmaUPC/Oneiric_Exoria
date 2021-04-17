@@ -55,6 +55,9 @@ private:
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	bool transition = false;
 
+	fPoint sBackCloudPos = { 0,0 };
+	fPoint bBackCloudPos = { 0,0 };
+
 	fPoint bCloudPos = { 0,0 };
 	fPoint bCloudPos2 = { 0,0 };
 	fPoint sCloudPos = { 0,0 };
