@@ -89,6 +89,7 @@ void SceneBattle::LoadAnimations()
     {
         Animation* b = new Animation;
         b->loop = true;
+        b->speed = 0.1;
         for (int j = 0; j < 6; j++)
         {
             if (i == 3)
@@ -104,6 +105,7 @@ void SceneBattle::LoadAnimations()
     {
         Animation* b = new Animation;
         b->loop = true;
+        b->speed = 0.1;
         for (int j = 0; j < 4; j++)
         {
             b->PushBack({ 384,32 * j + (128 * i), 32, 32 });
@@ -116,6 +118,7 @@ void SceneBattle::LoadAnimations()
     {
         Animation* b = new Animation;
         b->loop = true;
+        b->speed = 0.1;
         if (i % 2) numSprites = 2;
         else numSprites = 4;
         if (i == 6) numSprites = 5;
@@ -194,24 +197,28 @@ void SceneBattle::AddPartners()
 {
     // Partners and Player
     int num = app->player->GetNumPartners();
-    app->entityManager->AddEntity(KENZIE_, 26, 13, 0, app->player->playerData.level);
+    if(app->player->playerData.health > 0)
+        app->entityManager->AddEntity(KENZIE_, 26, 13, 0, app->player->playerData.level);
 
     for (int i = 0; i < num; i++)
     {
-        switch (app->player->GetPartners()[i].type)
+        if (app->player->GetPartners()[i].health > 0)
         {
-        case KEILER:
-            app->entityManager->AddEntity(KEILER_, 29, 15, 0, app->player->GetPartners()[i].level);
-            break;
-        case ISRRA:
-            app->entityManager->AddEntity(ISRRA_, 29, 19, 0, app->player->GetPartners()[i].level);
-            break;
-        case BRENDA:
-            app->entityManager->AddEntity(BRENDA_, 26, 17, 0, app->player->GetPartners()[i].level);
-            break; 
-        default:
-            break;
-        }
+            switch (app->player->GetPartners()[i].type)
+            {
+            case KEILER:
+                app->entityManager->AddEntity(KEILER_, 29, 15, 0, app->player->GetPartners()[i].level);
+                break;
+            case ISRRA:
+                app->entityManager->AddEntity(ISRRA_, 29, 19, 0, app->player->GetPartners()[i].level);
+                break;
+            case BRENDA:
+                app->entityManager->AddEntity(BRENDA_, 26, 17, 0, app->player->GetPartners()[i].level);
+                break;
+            default:
+                break;
+            }
+        }        
     }
 }
 
@@ -658,10 +665,10 @@ bool SceneBattle::PostUpdate()
             app->render->DrawRectangle({ posX, posY , 150, 150},0,33,78);
 
             // Draw Head Players
-            if(i==0)face = { 0,372,145,145 };
-            else if(i==1)face = { 145,372,145,145 };
-            else if(i==2)face = { 0,517,145,145 };
-            else if(i==3)face = { 145,517,145,145 };
+            if(partners.At(i)->data->entityData.type == KENZIE_)face = { 0,372,145,145 };
+            else if(partners.At(i)->data->entityData.type == KEILER_)face = { 145,372,145,145 };
+            else if(partners.At(i)->data->entityData.type == ISRRA_)face = { 0,517,145,145 };
+            else if(partners.At(i)->data->entityData.type == BRENDA_)face = { 145,517,145,145 };
             app->render->DrawTexture(texPalyers, posX+2, posY + 2, &face);
 
             // Draw Bar Lives
@@ -931,7 +938,7 @@ void SceneBattle::SpeedAnimationCheck(float dt)
     }
     for (int i = 0; i < animationsEnemies.Count(); i++)
     {
-        animationsEnemies.At(i)->data->speed = dt * 2;
+        animationsEnemies.At(i)->data->speed = dt * 6;
     }
 }
 
@@ -1042,18 +1049,65 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         // Continue
         else if (control->id == 24)
         {
-            app->player->playerData.level = partners.At(0)->data->entityData.level;
-            app->player->playerData.exp = partners.At(0)->data->stats.exp;
-            app->player->playerData.health = partners.At(0)->data->stats.health;
-            for (int i = 0; i < partners.Count()-1; i++)
+            for (int i = 0; i < partners.Count(); i++)
             {
-                if (partners.At(i)->data->entityData.state != DEAD)
+                if (partners.At(i)->data->entityData.type == KENZIE_)
                 {
-                    app->player->GetPartners()[i].level = partners.At(i+1)->data->entityData.level;
-                    app->player->GetPartners()[i].exp = partners.At(i+1)->data->stats.exp;
+                    app->player->playerData.level = partners.At(i)->data->entityData.level;
+                    app->player->playerData.exp = partners.At(i)->data->stats.exp;
+                    app->player->playerData.health = partners.At(i)->data->stats.health;
+                    break;
                 }
-                app->player->GetPartners()[i].health = partners.At(i+1)->data->stats.health;
+                else app->player->playerData.health = 0;
             }
+
+            for (int i = 0; i < app->player->GetNumPartners(); i++)
+            {
+                switch (app->player->GetPartners()[i].type)
+                {
+                case KEILER:
+                    for (int j = 0; j < partners.Count(); j++)
+                    {
+                        if (partners.At(j)->data->entityData.type == KEILER_)
+                        {
+                            app->player->GetPartners()[i].level = partners.At(j)->data->entityData.level;
+                            app->player->GetPartners()[i].exp = partners.At(j)->data->stats.exp;
+                            app->player->GetPartners()[i].health = partners.At(j)->data->stats.health;
+                            break;
+                        }
+                        else app->player->GetPartners()[i].health = 0;
+                    }
+                    break;
+                case ISRRA:
+                    for (int j = 0; j < partners.Count(); j++)
+                    {
+                        if (partners.At(j)->data->entityData.type == ISRRA_)
+                        {
+                            app->player->GetPartners()[i].level = partners.At(j)->data->entityData.level;
+                            app->player->GetPartners()[i].exp = partners.At(j)->data->stats.exp;
+                            app->player->GetPartners()[i].health = partners.At(j)->data->stats.health;
+                            break;
+                        }
+                        else app->player->GetPartners()[i].health = 0;
+                    }
+                    break;
+                case BRENDA:
+                    for (int j = 0; j < partners.Count(); j++)
+                    {
+                        if (partners.At(j)->data->entityData.type == BRENDA_)
+                        {
+                            app->player->GetPartners()[i].level = partners.At(j)->data->entityData.level;
+                            app->player->GetPartners()[i].exp = partners.At(j)->data->stats.exp;
+                            app->player->GetPartners()[i].health = partners.At(j)->data->stats.health;
+                            break;
+                        }
+                        else app->player->GetPartners()[i].health = 0;
+                    }
+                    break;
+                default:
+                    break;
+                }
+               }
             bool ret = true;
 
             isContinue = true;
