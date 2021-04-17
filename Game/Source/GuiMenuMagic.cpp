@@ -120,8 +120,13 @@ void GuiMenuMagic::AbleDisableMagic()
 	magic3->active = active;
 	magic4->active = active;
 	close->active = active;
-	if (!close->active)
+	if (!close->active) {
 		close->state = GuiControlState::NORMAL;
+		magic1->state = GuiControlState::NORMAL;
+		magic2->state = GuiControlState::NORMAL;
+		magic3->state = GuiControlState::NORMAL;
+		magic4->state = GuiControlState::NORMAL;
+	}
 
 }
 
@@ -171,6 +176,7 @@ void GuiMenuMagic::SetIdTurn(int turn)
 		}
 	}
 }
+
 /*
 for (int i = 0; i < 4; i++)
 	{

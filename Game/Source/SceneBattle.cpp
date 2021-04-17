@@ -58,7 +58,6 @@ bool SceneBattle::Start()
 
     int num = enemies.Count();
     turnSort = new Entity[num];
-
     // Gui Buttons
     AddBattleMenu(btnTextureAtlas);
 
@@ -312,7 +311,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
     btnExit->SetObserver(this);
     app->guiManager->AddGuiButton(btnExit);
 
-    btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "Continue", RECTANGLE, btnTextureAtlas);
+    btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
     btnContinue->SetObserver(this);
     btnContinue->active = false;
     app->guiManager->AddGuiButton(btnContinue);
@@ -340,9 +339,22 @@ bool SceneBattle::Update(float dt_)
     switch (faseAction)
     {
     case SELECT_ACTION:
+
         if (turnSort[turn].entityData.type < 15)
         {
             faseAction = ENEMY_ATTACK;
+        }
+        else
+        {
+            int theHealth = 1;
+            for (int i = 0; i < partners.Count(); i++) {
+                if (turnSort[turn].entityData.positionInitial == partners.At(i)->data->entityData.positionInitial)
+                    theHealth = partners.At(i)->data->stats.health;
+            }
+            if (theHealth <= 0)
+            {
+                faseAction = END_ACTION;
+            }
         }
         break;
 
@@ -358,10 +370,12 @@ bool SceneBattle::Update(float dt_)
             btnDefense->state = GuiControlState::NORMAL;
             btnExit->state = GuiControlState::NORMAL;
             faseAction = SELECT_ACTION;
+
         }
 
         if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
             faseAction = DO_ACITON;
+
         }
 
         break;
@@ -376,70 +390,120 @@ bool SceneBattle::Update(float dt_)
         else
         {
             enemies.At(enemiSelected)->data->stats.health -= magicInUse->damage;
-        }
+            magicInUse = nullptr;
 
+            activeMenuMagic = false;
+            btnAttack->state = GuiControlState::DISABLED;
+            btnMagic->state = GuiControlState::DISABLED;
+            btnDefense->state = GuiControlState::DISABLED;
+            btnExit->state = GuiControlState::DISABLED;
+        }
+        if (enemies.At(enemiSelected)->data->stats.health <= 0)
+        {
+            enemies.At(enemiSelected)->data->stats.health = 0;
+        }
         faseAction = END_ACTION;
         break;
 
     case END_ACTION:
         moveBarTurn = true;
-        btnAttack->state = GuiControlState::NORMAL;
-        btnMagic->state = GuiControlState::NORMAL;
-        btnDefense->state = GuiControlState::NORMAL;
-        btnExit->state = GuiControlState::NORMAL;
         faseAction = SELECT_ACTION;
         break;
 
     case ENEMY_ATTACK:
-
-        int ally;
-        if (magicInUse == nullptr)
+        btnAttack->state = GuiControlState::DISABLED;
+        btnMagic->state = GuiControlState::DISABLED;
+        btnDefense->state = GuiControlState::DISABLED;
+        btnExit->state = GuiControlState::DISABLED;
+        if (!moveBarTurn)
         {
-            ally = (rand() % partners.Count());
-            for (int i = 0; i < partners.Count(); i++)
-            {
-                //TODO que recorra todo el array desde una posicion random
+            // Find heald of actual enemy
+            int theHealth = 1;
+            for (int i = 0; i < enemies.Count(); i++){
+                if (turnSort[turn].entityData.positionInitial == enemies.At(i)->data->entityData.positionInitial)
+                    theHealth = enemies.At(i)->data->stats.health;
             }
 
-            /*do{
-                ally = (rand() % partners.Count());
-            } while (partners.At(ally)->data->stats.health <= 0);*/
-            float attack = turnSort[turn].stats.attack;
-            partners.At(ally)->data->stats.health -= attack;
-        }
-        else
-        {
-            do{
-                ally = (rand() % partners.Count());
-            } while (partners.At(ally)->data->stats.health <= 0);
-            partners.At((rand() % partners.Count()))->data->stats.health -= magicInUse->damage;
+            if (theHealth > 0){
+                int ally;
+                if (magicInUse == nullptr)
+                {
+                    ally = (rand() % partners.Count());
+                    if (partners.At(ally)->data->stats.health <= 0) {
+                        for (int i = ally; i >= 0; i--) {
+                            if (partners.At(i)->data->stats.health > 0) {
+                                ally = i;
+                                break;
+                            }
+                        }
+                        if (partners.At(ally)->data->stats.health <= 0) {
+                            for (int i = partners.Count() - 1; i >= 0; i--) {
+                                if (partners.At(i)->data->stats.health > 0) {
+                                    ally = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    partners.At(ally)->data->stats.health -= turnSort[turn].stats.attack;
+                }
+                else
+                {
+                    ally = (rand() % partners.Count());
+                    if (partners.At(ally)->data->stats.health <= 0) {
+                        for (int i = ally; i > 0; i--) {
+                            if (partners.At(i)->data->stats.health > 0) {
+                                ally = i;
+                                break;
+                            }
+                        }
+                        if (partners.At(ally)->data->stats.health <= 0) {
+                            for (int i = partners.Count() - 1; i > 0; i--) {
+                                if (partners.At(i)->data->stats.health > 0) {
+                                    ally = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    partners.At((rand() % partners.Count()))->data->stats.health -= magicInUse->damage;
+                }
+                if (partners.At(ally)->data->stats.health <= 0){
+                    partners.At(ally)->data->stats.health = 0;
+                }
+            }
+            moveBarTurn = true;
         }
 
-        moveBarTurn = true;
         faseAction = SELECT_ACTION;
         break;
     default:
         break;
     }
-    //*******************
+
     // Win Condition
-    if (!win)
-    {
-        for (int i = 0; i < enemies.Count(); i++)
-        {
-            if (enemies.At(i)->data->stats.health > 0) break;
-            if (i == enemies.Count() - 1)
-                win = true;
+    if (!win) {
+        int kills = 0;
+        for (int i = 0; i < enemies.Count(); i++){
+            if (enemies.At(i)->data->stats.health <= 0) {
+                kills++;
+            }
+        }
+        if (kills == enemies.Count()) {
+            //TODO. WHEN YOU WIN??
+            win = true;
             AbleDisableButtons();
         }
     }
-   
     // Lose Condition
-    for (int i = 0; i < partners.Count(); i++)
-    {
-        if (partners.At(i)->data->stats.health > 0) break;
-        if (i == partners.Count())
+    int deads = 0;
+    for (int i = 0; i < partners.Count(); i++){
+
+        if (partners.At(i)->data->stats.health <= 0) deads++;
+        if (deads == partners.Count()) {
+            //TODO. WHEN YOU LOSE??
             TransitionToScene(SceneType::LOSE);
+        }
     }
 
     return true;
@@ -451,25 +515,68 @@ bool SceneBattle::PostUpdate()
 
     app->render->DrawTexture(img, 0, 0);
 
+    //TODO: Borrar recuadro Azul de parners una vez que se reconozca al que se lleva en el turno
+    if (faseAction == SELECT_ACTION){
+        if (turnSort[turn].entityData.type >= 15) {
+        int posX = (int)turnSort[turn].entityData.position.x + 20;
+        int posY = (int)turnSort[turn].entityData.position.y - 40;
+        app->render->DrawRectangle({ posX, posY, 20, 20 }, blue.r, blue.g, blue.b, 255);
+        }
+    }
+
     //Icon Enemy selected
     if (faseAction == SELECT_ENEMI) {
 
         if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) { 
-            do{
-                enemiSelected--; 
-                if (enemiSelected < 0) enemiSelected = enemies.Count()-1;
-            } while (enemies.At(enemiSelected)->data->stats.health <= 0);
+            enemiSelected--;
+            if (enemiSelected < 0)
+            {
+                enemiSelected = enemies.Count() - 1;
+            }
+            if (enemies.At(enemiSelected)->data->stats.health <= 0){
+                for (int i = enemiSelected; i >= 0; i--){
+                    if (enemies.At(i)->data->stats.health > 0) {
+                        enemiSelected = i;
+                        break;
+                    }
+                }
+                if (enemies.At(enemiSelected)->data->stats.health <= 0){
+                    for (int i = enemies.Count() - 1; i >= 0; i--) {
+                        if (enemies.At(i)->data->stats.health > 0) {
+                            enemiSelected = i;
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) { 
-            do {
-                enemiSelected++;
-                if (enemiSelected >= enemies.Count()) enemiSelected = 0;
-            } while (enemies.At(enemiSelected)->data->stats.health <= 0);   
+            enemiSelected++;
+            if (enemiSelected >= enemies.Count())
+            {
+                enemiSelected = 0;
+            }
+            if (enemies.At(enemiSelected)->data->stats.health <= 0) {
+                for (int i = enemiSelected; i < enemies.Count(); i++) {
+                    if (enemies.At(i)->data->stats.health > 0) {
+                        enemiSelected = i;
+                        break;
+                    }
+                }
+                if (enemies.At(enemiSelected)->data->stats.health <= 0) {
+                    for (int i = 0; i < enemies.Count(); i++) {
+                        if (enemies.At(i)->data->stats.health > 0) {
+                            enemiSelected = i;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 60;
         int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 60;
-        app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 100);
+        app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 255);
     }
 
     // Draw Bar lives
@@ -553,6 +660,7 @@ void SceneBattle::AbleDisableButtons()
     btnMagic->active = false;
     btnExit->active = false;
 }
+
 void SceneBattle::DrawBarLives()
 {
     app->render->DrawRectangle(rec, 71, 75, 78, 150);
@@ -569,6 +677,7 @@ void SceneBattle::DrawBarLives()
 
     app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
 }
+
 void SceneBattle::DrawBarExperience()
 {
     app->render->DrawRectangle(rec, 71, 75, 78, 150);
@@ -599,7 +708,7 @@ void SceneBattle::DrawTurnBar()
             }
             else face = spritesBarTurn.At(0)->data->frames[0];
             app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
-            if (moveBarTurn && i == 0) 
+            if (moveBarTurn && i == 0)
             {
                 face = spritesBarTurn.At(0)->data->frames[0];
                 app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
@@ -692,12 +801,23 @@ void SceneBattle::DrawTurnBar()
     }
     if (moveBarTurn)
     {
-        face = {20,0,48,30};
+        face = { 20,0,48,30 };
         app->render->DrawTexture(img, 20, 0, &face);
-        face = { 20,64 * tam - 16 +30,48,64 };
-        app->render->DrawTexture(img, 20, 64 * tam - 16+30, &face);
+        face = { 20,64 * tam - 16 + 30,48,64 };
+        app->render->DrawTexture(img, 20, 64 * tam - 16 + 30, &face);
+        btnAttack->state = GuiControlState::DISABLED;
+        btnMagic->state = GuiControlState::DISABLED;
+        btnDefense->state = GuiControlState::DISABLED;
+        btnExit->state = GuiControlState::DISABLED;
     }
-    if (offset < -64 + 38)moveBarTurn = false, DisplaceToLeft(), faseAction = SELECT_ACTION;
+
+    if (offset < -64 + 38) {
+        moveBarTurn = false, DisplaceToLeft(), faseAction = SELECT_ACTION;
+        btnAttack->state = GuiControlState::NORMAL;
+        btnMagic->state = GuiControlState::NORMAL;
+        btnDefense->state = GuiControlState::NORMAL;
+        btnExit->state = GuiControlState::NORMAL;
+    }
 }
 
 bool SceneBattle::CleanUp()
@@ -771,6 +891,13 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         {
             magicInUse = nullptr;
             faseAction = SELECT_ENEMI;
+            for (int i = 0; i < enemies.Count(); i++)
+            {
+                if (enemies.At(i)->data->stats.health > 0) {
+                    enemiSelected = i;
+                    break;
+                }
+            }
         }
         //MAGIC
         else if (control->id == 21)
@@ -791,6 +918,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //DEFENSE
         else if (control->id == 22)
         {
+            moveBarTurn = true;
             switch (turnSort[turn].entityData.type)
             {
             case 15:
@@ -813,9 +941,13 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         else if (control->id == 23)
         {
             isContinue = true;
-            TransitionToScene(SceneType::LEVEL1);
+            AbleDisableButtons();
         }
-
+        //Continue
+        else if (control->id == 24)
+        {
+            TransitionToScene(SceneType::WIN);
+        }
         //--MAGIC MENU--
         else if (control->id == 30)
         {
@@ -830,55 +962,53 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         //Magic1
         else if (control->id == 31)
         {
+            menuMagic->AbleDisableMagic();
             magicInUse = menuMagic->GetMagic(1);
-            if (magicInUse==nullptr) {
-                // not exists magic
-            }
-            else {
-                // Use magicInUse
-                faseAction = SELECT_ENEMI;
-            }
+            UseAMagic();
         }
         //Magic2
         else if (control->id == 32)
         {
+            menuMagic->AbleDisableMagic();
             magicInUse = menuMagic->GetMagic(2);
-            if (magicInUse == nullptr) {
-                // not exists magic
-            }
-            else {
-                // Use magicInUse
-                faseAction = SELECT_ENEMI;
-            }
+            UseAMagic();
         }
         //Magic3
         else if (control->id == 33)
         {
+            menuMagic->AbleDisableMagic();
             magicInUse = menuMagic->GetMagic(3);
-            if (magicInUse == nullptr) {
-                // not exists magic
-            }
-            else {
-                // Use magicInUse
-                faseAction = SELECT_ENEMI;
-            }
+            UseAMagic();
         }
         //Magic4
         else if (control->id == 34)
         {
+            menuMagic->AbleDisableMagic();
             magicInUse = menuMagic->GetMagic(4);
-            if (magicInUse == nullptr) {
-                // not exists magic
-            }
-            else {
-                // Use magicInUse
-                faseAction = SELECT_ENEMI;
-            }
+            UseAMagic();
         }
     }
     default: break;
     }
     return true;
+}
+
+void SceneBattle::UseAMagic()
+{
+    if (magicInUse == nullptr) {
+        // not exists magic
+    }
+    else {
+        // Use magicInUse
+        for (int i = 0; i < enemies.Count(); i++)
+        {
+            if (enemies.At(i)->data->stats.health > 0) {
+                enemiSelected = i;
+                break;
+            }
+        }
+        faseAction = SELECT_ENEMI;
+    }
 }
 
 int SceneBattle::CalculateExp(int level)

@@ -74,6 +74,8 @@ public:
 
 private:
 
+	void UseAMagic();
+
 	SDL_Rect rec;
 	SDL_Rect live;
 	SDL_Rect face;
