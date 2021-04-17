@@ -12,7 +12,7 @@
 
 #include "List.h"
 
-#define SPACEBOUNDBAR 10
+#define SPACEBOUNDBAR 0
 
 class GuiManager : public Module
 {

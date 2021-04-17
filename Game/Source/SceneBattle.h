@@ -78,6 +78,7 @@ private:
 
 	SDL_Rect rec;
 	SDL_Rect live;
+	SDL_Rect tex;
 	SDL_Rect face;
 
 	SDL_Color green;
@@ -87,6 +88,7 @@ private:
 	SDL_Color cyan;
 	SDL_Color orange;
 	SDL_Color white;
+	SDL_Color black;
 
 	GuiButton* btnAttack;
 	GuiButton* btnMagic;
@@ -131,8 +133,10 @@ private:
 	bool god = false;
 	int totalExp = 0;
 	float currentExp = 0;
-
+	
 	bool missClick;
+	bool initCombat = true;
+	int indexTurnBar = -1;
 
 	int posX = 0;
 	int posY = 0;

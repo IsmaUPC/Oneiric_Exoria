@@ -57,8 +57,6 @@ bool EntityManager::Start()
 // Called each loop iteration
 bool EntityManager::PreUpdate()
 {
-	CheckDespawnEntities();
-
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 		entiti->data->PreUpdate();
 
@@ -69,8 +67,8 @@ bool EntityManager::Update(float dt)
 {
 	if (!app->sceneManager->GetIsPause())
 	{
+		CheckDespawnEntities();
 		SpeedAnimationCheck(dt);
-
 		CheckSpawnEntities();
 
 		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next) 
@@ -86,9 +84,12 @@ bool EntityManager::PostUpdate()
 {
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 		entiti->data->PostUpdate();
-	for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
-		partner->data->PostUpdate();
-	
+	if (!app->sceneManager->GetWinBattle())
+	{
+		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
+			partner->data->PostUpdate();
+	}
+		
 	return true;
 }
 

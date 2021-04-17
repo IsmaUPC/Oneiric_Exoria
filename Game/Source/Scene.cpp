@@ -61,13 +61,39 @@ bool Scene::Start()
 	// Positions Initials
 	app->player->positionInitial = new iPoint(570, 270);	
 
+	//Move to TpNode Class
+	  //Spawn Player in Tp Position
+	{
+		if (app->sceneManager->originTpNode != NULL)
+		{
+			int idNode = app->sceneManager->originTpNode->idNode;
+			uint typeNode = app->sceneManager->originTpNode->typeTpNode;//select next node
+
+			//if the type of node is even, it means that it is of type down, if it is odd otherwise, 
+			//to decide the next one it is added or subtracted depending on its origin
+			(typeNode % 2 == 0) ? typeNode += 1 : typeNode -= 1;
+
+			iPoint pos = app->player->FindNodeTpById(typeNode, idNode)->position;
+
+			if (typeNode % 2 == 0)pos.y -= 2;
+			else pos.y += 2;
+
+
+			pos = app->map->MapToWorld(pos);
+
+			app->player->positionInitial = new iPoint(pos.x, pos.y);
+		}
+		app->sceneManager->originTpNode = nullptr;
+	}
+
+
 	// Active calls
 	app->player->Init();
 	app->player->Start();
 	app->audio->active = true;
 
 	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 16, 14, 1, 1);
+	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
 	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
@@ -81,11 +107,11 @@ bool Scene::Start()
 	btn1->SetObserver(this);
 	app->guiManager->AddGuiButton(btn1);
 
-	btn2 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn2 = new GuiButton(41, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
 	btn2->SetObserver(this);
 	app->guiManager->AddGuiButton(btn2);
 
-	btn3 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
 	btn3->SetObserver(this);
 	app->guiManager->AddGuiButton(btn3);
 
@@ -138,18 +164,48 @@ bool Scene::Update(float dt)
 	btn2->bounds.y = -app->render->camera.y + 675;
 	btn3->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175*3;
 	btn3->bounds.y = -app->render->camera.y + 675;
+	if (app->dialogueSystem->onDialog == true)
+	{
+
+		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
+		{
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
+			if (i == 0)
+			{
+				btn1->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+			}
+			if (i == 1)
+			{
+				btn2->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+			}
+			if (i == 2)
+			{
+				btn3->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+				btn3->active = true;
+			}
+		}
+	}
+
+	/*char response[128] = { 0 };
+	for (int i = 0; i < currentNode->answersList.Count(); i++)
+	{
+		sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
+		app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 255, 255, 255 });
+	}*/
+
 
 	if (app->dialogueSystem->onDialog == false)
 	{
 		btn1->active = false;
 		btn2->active = false;
 		btn3->active = false;
-	}
-	else
-	{
-		btn1->active = true;
-		btn2->active = true;
-		btn3->active = true;
 	}
 
 	return ret;
@@ -166,7 +222,7 @@ bool Scene::PostUpdate()
 	if (victory == true)
 	{
 		victory = false;
-		TransitionToScene(SceneType::WIN);
+		TransitionToScene(SceneType::LEVEL2);
 		return true;
 	}
 	if (lose == true)

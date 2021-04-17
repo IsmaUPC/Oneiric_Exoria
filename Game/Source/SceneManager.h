@@ -5,6 +5,7 @@
 #include "SceneControl.h"
 #include "Window.h"
 #include "SDL_ttf/include/SDL_ttf.h"
+#include "TeleportNode.h"
 
 class GuiButton;
 
@@ -19,6 +20,7 @@ class SceneWin;
 class SceneLose;
 class SceneLevel2;
 class SceneBattle;
+class TransitionManager;
 
 class SceneManager : public Module
 {
@@ -67,7 +69,9 @@ public:
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
 	SceneControl* GetCurrentScene() { return current; };
-
+	bool GetWinBattle() { return win; };
+	void SetWinBattle(bool ret) { win = ret; };
+	bool GetOnTransition() { return onTransition; };
 
 private:
 
@@ -77,6 +81,7 @@ private:
 	
 	SceneControl* current;
 	SceneControl* next;
+	TransitionManager* transition;
 
 	// Required variables to manage screen transitions (fade-in, fade-out)
 	bool onTransition;
@@ -88,6 +93,7 @@ private:
 
 	List<SceneControl*> scenes;
 	bool ViewRectangles = false;
+	bool win = false;
 
 public:
 	SceneLogo* sceneLogo;
@@ -99,6 +105,9 @@ public:
 	SceneBattle* sceneBattle;
 
 	SceneControl* sceneControl;
+
+	//Origin player tp
+	TeleportNode* originTpNode;
 
 	int lastLevel = 0;
 	TTF_Font* guiFont = nullptr;

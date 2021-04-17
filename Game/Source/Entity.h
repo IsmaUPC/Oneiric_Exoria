@@ -61,7 +61,11 @@ enum TypeCollision {
 
 	VICTORY=1,
 	COLLISION= 0, // Change to id tile of collision
-	CHECK_POINT=2,
+	DOWN_LADDER = 2,
+	UP_LADDER = 3,
+	DOWN_HALL = 4,
+	UP_HALL = 5,
+	CHECK_POINT=7,
 	AIR,
 };
 struct Stats
@@ -133,6 +137,9 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
+	List<TeleportNode*>* FindTpNodeList(uint typeNode);
+	TeleportNode* FindNodeTpInPlayer(uint typeTilePlayer);
+	TeleportNode* FindNodeTpById(uint typeTilePlayer, int nodeId);
 	int CalculateDistance(iPoint origin, iPoint destination);
 	
 public:
@@ -144,6 +151,8 @@ public:
 	Collisions collision;
 	Stats stats;
 	bool move = true;
+
+	ListItem<TeleportNode*>* node=nullptr;
 };
 
 #endif // __MODULE_H__
