@@ -316,7 +316,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	default: break;
 	}
 
-	return true;
+	return app->guiManager->GetMenuPause()->Event(control);
 }
 
 bool Scene::LoadState(pugi::xml_node& data)
