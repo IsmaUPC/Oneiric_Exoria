@@ -48,12 +48,6 @@ bool Player::Start()
 	playerData.velocity = 1;
 	playerData.direction = WALK_R;
 	lastDirection = playerData.direction;
-	if (!app->sceneManager->GetCurrentScene()->isContinue)
-	{
-		playerData.level = 1;
-		playerData.exp = 0;
-		playerData.health = 8;
-	}
 
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
 	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
@@ -144,18 +138,6 @@ void Player::LoadPartners()
 		partners[i].direction = WALK_R;
 		partners[i].currentAnimation = idleAnimR;
 		partners[i].breadcrumb = 0;
-		if (!app->sceneManager->GetCurrentScene()->isContinue)
-		{
-			partners[i].level = 1;
-			partners[i].exp = 0;
-		}
-		if (!app->sceneManager->GetCurrentScene()->isContinue)
-		{
-			if (i == 0) partners[i].health = 14;
-			if (i == 1) partners[i].health = 10;
-			if (i == 2) partners[i].health = 13;
-		}
-		
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
@@ -174,15 +156,10 @@ bool Player::Awake(pugi::xml_node& config)
 bool Player::LoadState(pugi::xml_node& player) 
 {
 	bool ret=true;
-	playerData.position.x = player.child("data").attribute("x").as_int(playerData.position.x);
-	playerData.position.y = player.child("data").attribute("y").as_int(playerData.position.y);
-	playerData.direction = (MoveDirection)player.child("data").attribute("direction").as_int(playerData.direction);
-	if (app->sceneManager->GetCurrentScene()->isContinue)
-	{
-		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
-		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
-		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
-	}
+	playerData.position.x = player.child("position").attribute("x").as_int(playerData.position.x);
+	playerData.position.y = player.child("position").attribute("y").as_int(playerData.position.y);
+	playerData.direction = (MoveDirection)player.child("position").attribute("direction").as_int(playerData.direction);
+	playerData.level = player.child("level").attribute("velue").as_int(playerData.level);
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
 	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
@@ -195,12 +172,7 @@ bool Player::LoadState(pugi::xml_node& player)
 		partners[i].position.y = positionPartners.attribute("y").as_int();
 		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
 		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
-		if (app->sceneManager->GetCurrentScene()->isContinue)
-		{
-			partners[i].level = positionPartners.attribute("level").as_int();
-			partners[i].exp = positionPartners.attribute("exp").as_int();
-			partners[i].health = positionPartners.attribute("health").as_int();
-		}
+		partners[i].level = positionPartners.attribute("level").as_int();
 	
 		positionPartners = positionPartners.next_sibling();
 		i++;
@@ -225,6 +197,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 {
 	pugi::xml_node positionPlayer = player.child("data");
 	pugi::xml_node coinsPlayer = player.child("coins");
+	pugi::xml_node respawnsPlayer = player.child("lives");
 
 	player.remove_child("path");
 	player.append_child("path").set_value(0);
@@ -247,14 +220,15 @@ bool Player::SaveState(pugi::xml_node& player) const
 			positionPlayer.attribute("direction").set_value(0);
 		}
 		coinsPlayer.attribute("count").set_value(0);
+		respawnsPlayer.attribute("num_respawns").set_value(3);
 	}
 	else
 	{
 		positionPlayer.attribute("x").set_value(playerData.position.x);
 		positionPlayer.attribute("y").set_value(playerData.position.y);
 		positionPlayer.attribute("direction").set_value(playerData.direction);
-		positionPlayer.attribute("health").set_value(playerData.health);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
+		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
 		for (int i = 0; i < numPartners; i++)
 		{
@@ -262,7 +236,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
 			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
 			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
-			partnersData.last_child().append_attribute("health").set_value(partners[i].health);
 		}
 
 		SaveLevel(player);
@@ -324,7 +297,7 @@ bool Player::Update(float dt)
 		// Move player inputs control
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected())PlayerControls(dt);
 		// Move Between CheckPoints
-		//else MoveBetweenCheckPoints();
+		else MoveBetweenCheckPoints();
 
 		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		for (int i = 0; i < numPartners; i++)
@@ -585,18 +558,18 @@ void Player::PlayerControls(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
+		app->dialogueSystem->PerformDialogue(1, 0);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 	
-		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
+		app->dialogueSystem->PerformDialogue(1, 1);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
-		app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
+		app->dialogueSystem->PerformDialogue(1, 2);
 	}
 
 }
@@ -813,7 +786,14 @@ bool Player::CleanUp()
 	RELEASE(walkAnimR);
 	RELEASE(walkAnimUp);
 	RELEASE(walkAnimDown);
-	
+
+	// Partners
+	//for (int i = 3; i < numPartners; i++)
+	//{
+	//	// Animations of each partner
+	//	// ...
+	//}
+
 	for (int i = 0; i < texPartners.Count(); i++)
 	{
 		app->tex->UnLoad(texPartners.At(i)->data);

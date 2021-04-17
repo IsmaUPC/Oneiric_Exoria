@@ -117,6 +117,7 @@ public:
 	DialogueSystem* dialogueSystem;
 	Fonts* fonts;
 
+
 	bool fullScreen=0;
 	bool removeGame = false;
 private:
