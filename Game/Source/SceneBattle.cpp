@@ -41,6 +41,10 @@ bool SceneBattle::Start()
     texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
     texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
     app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
+    winFx = app->audio->LoadFx("Assets/Audio/Fx/win.wav");
+    loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
+    attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
+    magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
 
     // Load Animations
     LoadAnimations();
@@ -50,7 +54,7 @@ bool SceneBattle::Start()
     AddPartners();
 
     enemies = app->entityManager->spawnQueue;
-    enemiSelected = 0;
+    enemySelected = 0;
 
     // Inicialize the stats
     InicializeStats();
@@ -409,11 +413,11 @@ bool SceneBattle::Update(float dt_)
         if (magicInUse == nullptr)
         {
             float attack = turnSort[turn].stats.attack;
-            enemies.At(enemiSelected)->data->stats.health -= attack;
+            enemies.At(enemySelected)->data->stats.health -= attack;
         }
         else
         {
-            enemies.At(enemiSelected)->data->stats.health -= magicInUse->damage;
+            enemies.At(enemySelected)->data->stats.health -= magicInUse->damage;
             magicInUse = nullptr;
 
             activeMenuMagic = false;
@@ -423,13 +427,14 @@ bool SceneBattle::Update(float dt_)
             btnExit->state = GuiControlState::DISABLED;
             btnGod->state = GuiControlState::DISABLED;
         }
-        if (enemies.At(enemiSelected)->data->stats.health < 1)
+        if (enemies.At(enemySelected)->data->stats.health < 1)
         {
-            enemies.At(enemiSelected)->data->stats.health = 0;
-            enemies.At(enemiSelected)->data->entityData.state = DEAD;
+            enemies.At(enemySelected)->data->stats.health = 0;
+            enemies.At(enemySelected)->data->entityData.state = DEAD;
             assigneDone = false;
+            
             for (int i = 0; i < tam; i++) {
-                if (turnSort[i].entityData.positionInitial == enemies.At(enemiSelected)->data->entityData.positionInitial)
+                if (turnSort[i].entityData.positionInitial == enemies.At(enemySelected)->data->entityData.positionInitial)
                 {
                     indexTurnBar = i;
                     break;
@@ -543,7 +548,9 @@ bool SceneBattle::Update(float dt_)
         {
             if (partners.At(i)->data->stats.health > 0) break;
             if (i == partners.Count() - 1)
+            {
                 TransitionToScene(SceneType::LOSE);
+            }
         }
     }
 
@@ -565,22 +572,22 @@ bool SceneBattle::PostUpdate()
 
         if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || (app->input->pads[0].left && !missClick)) {
             missClick = true;
-            enemiSelected--;
-            if (enemiSelected < 0)
+            enemySelected--;
+            if (enemySelected < 0)
             {
-                enemiSelected = enemies.Count() - 1;
+                enemySelected = enemies.Count() - 1;
             }
-            if (enemies.At(enemiSelected)->data->stats.health <= 0){
-                for (int i = enemiSelected; i >= 0; i--){
+            if (enemies.At(enemySelected)->data->stats.health <= 0){
+                for (int i = enemySelected; i >= 0; i--){
                     if (enemies.At(i)->data->stats.health > 0) {
-                        enemiSelected = i;
+                        enemySelected = i;
                         break;
                     }
                 }
-                if (enemies.At(enemiSelected)->data->stats.health <= 0){
+                if (enemies.At(enemySelected)->data->stats.health <= 0){
                     for (int i = enemies.Count() - 1; i >= 0; i--) {
                         if (enemies.At(i)->data->stats.health > 0) {
-                            enemiSelected = i;
+                            enemySelected = i;
                             break;
                         }
                     }
@@ -589,22 +596,22 @@ bool SceneBattle::PostUpdate()
         }
         if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || (app->input->pads[0].right && !missClick)) {
             missClick = true;
-            enemiSelected++;
-            if (enemiSelected >= enemies.Count())
+            enemySelected++;
+            if (enemySelected >= enemies.Count())
             {
-                enemiSelected = 0;
+                enemySelected = 0;
             }
-            if (enemies.At(enemiSelected)->data->stats.health <= 0) {
-                for (int i = enemiSelected; i < enemies.Count(); i++) {
+            if (enemies.At(enemySelected)->data->stats.health <= 0) {
+                for (int i = enemySelected; i < enemies.Count(); i++) {
                     if (enemies.At(i)->data->stats.health > 0) {
-                        enemiSelected = i;
+                        enemySelected = i;
                         break;
                     }
                 }
-                if (enemies.At(enemiSelected)->data->stats.health <= 0) {
+                if (enemies.At(enemySelected)->data->stats.health <= 0) {
                     for (int i = 0; i < enemies.Count(); i++) {
                         if (enemies.At(i)->data->stats.health > 0) {
-                            enemiSelected = i;
+                            enemySelected = i;
                             break;
                         }
                     }
@@ -612,8 +619,8 @@ bool SceneBattle::PostUpdate()
             }
         }
 
-        int posX = (int)enemies.At(enemiSelected)->data->entityData.position.x + 50;
-        int posY = (int)enemies.At(enemiSelected)->data->entityData.position.y - 65;
+        int posX = (int)enemies.At(enemySelected)->data->entityData.position.x + 50;
+        int posY = (int)enemies.At(enemySelected)->data->entityData.position.y - 65;
         //app->render->DrawRectangle({ posX, posY, 20, 20 }, red.r, red.g, red.b, 255);
         app->render->DrawTexture(app->guiManager->handCursor, posX, posY, &app->guiManager->handAnim->GetCurrentFrame(),0,90);
     }
@@ -703,7 +710,7 @@ bool SceneBattle::PostUpdate()
                         }
                     }                    
                 }                                
-            }         
+            }     
 
             // Draw Level
             rec.y -= 70;
@@ -996,7 +1003,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
             for (int i = 0; i < enemies.Count(); i++)
             {
                 if (enemies.At(i)->data->stats.health > 0) {
-                    enemiSelected = i;
+                    enemySelected = i;
                     break;
                 }
             }
@@ -1185,7 +1192,7 @@ void SceneBattle::UseAMagic()
         for (int i = 0; i < enemies.Count(); i++)
         {
             if (enemies.At(i)->data->stats.health > 0) {
-                enemiSelected = i;
+                enemySelected = i;
                 break;
             }
         }

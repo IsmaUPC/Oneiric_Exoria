@@ -79,6 +79,8 @@ private:
 	Render* render = nullptr;
 	Textures* tex = nullptr;
 
+	uint transitionFx;
+
 	SceneControl* current = nullptr;
 	SceneControl* next = nullptr;
 	TransitionManager* transition = nullptr;
