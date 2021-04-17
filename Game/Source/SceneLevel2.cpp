@@ -75,9 +75,16 @@ bool SceneLevel2::Start()
 
 			iPoint pos = app->player->FindNodeTpById(typeNode, idNode)->position;
 
-			if (typeNode % 2 == 0)pos.y -= 2;
-			else pos.y += 2;
-			
+			if (typeNode % 2 == 0)
+			{
+				pos.y -= 2;
+				app->player->playerData.direction = WALK_UP;
+			}
+			else
+			{
+				pos.y += 2;
+				app->player->playerData.direction = WALK_DOWN;
+			}
 
 			pos = app->map->MapToWorld(pos);
 

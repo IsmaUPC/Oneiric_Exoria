@@ -44,10 +44,10 @@ bool Player::Start()
 	LoadTexCharacters();
 
 	playerData.position = *positionInitial;
-	playerData.state = IDLE;
+	playerData.state = playerData.state;
 	playerData.velocity = 1;
 	
-	playerData.direction = WALK_R;
+	playerData.direction = playerData.direction;
 	lastDirection = playerData.direction;
 	if (!app->sceneManager->GetCurrentScene()->isContinue)
 	{

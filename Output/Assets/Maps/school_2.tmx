@@ -18234,7 +18234,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="collisions" width="59" height="44">
+ <layer id="2" name="collisions" width="59" height="44" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="1"/>
   </properties>
@@ -18694,7 +18694,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18702,6 +18701,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="1"/>
    <tile/>
    <tile/>
@@ -18905,7 +18905,6 @@
    <tile/>
    <tile/>
    <tile gid="1"/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -18921,6 +18920,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="11"/>
+   <tile gid="12"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18929,7 +18930,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
    <tile gid="1"/>
    <tile/>
    <tile/>
@@ -19501,7 +19501,7 @@
    <tile/>
    <tile gid="1"/>
    <tile gid="1"/>
-   <tile/>
+   <tile gid="1"/>
    <tile/>
    <tile/>
    <tile/>
@@ -20315,7 +20315,7 @@
    <tile/>
    <tile/>
    <tile gid="1"/>
-   <tile/>
+   <tile gid="1"/>
    <tile/>
    <tile/>
    <tile/>
@@ -20492,9 +20492,9 @@
    <tile/>
    <tile/>
    <tile gid="1"/>
-   <tile/>
    <tile/>
    <tile gid="1"/>
+   <tile gid="1"/>
    <tile/>
    <tile/>
    <tile/>
@@ -20585,7 +20585,7 @@
    <tile gid="1"/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="1"/>
    <tile/>
    <tile/>
    <tile gid="1"/>

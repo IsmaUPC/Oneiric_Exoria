@@ -55,7 +55,7 @@ bool Enemy::Start()
 	// Enemy Path
 	destination = entityData.positionInitial;
 
-	radiusCollision = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[2]) / 2;
+	radiusCollision = app->entity->CalculateDistance(entityData.pointsCollision[0], entityData.pointsCollision[2]) / 2 - 15;
 
 	return true;
 }
