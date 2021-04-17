@@ -71,6 +71,27 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
+
+  <dialogueExample Id="3">
+    <node text="Kenzie, welcome to LansDowne"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="1"/>
+    </node>
+    <node text="One of the few academies where we study magic"  id="1">
+      <dialogue option="Continue" returnCode="0" nextNode="2"/>
+    </node>
+    <node text="Can you get me the card from the right shelving?"  id="2">
+      <dialogue option="Sure" returnCode="0" nextNode="3"/>
+      <dialogue option="How?" returnCode="0" nextNode="4"/>
+    </node>
+    <node text="Thanks I will be right here"  id="3">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="Press the interaction button E to grab the card"  id="4">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
   
     
 </dialogueTree>
