@@ -753,17 +753,17 @@ void SceneBattle::DrawBarLives()
 
 void SceneBattle::DrawBarExperience()
 {
-    app->render->DrawRectangle(rec, 71, 75, 78, 150);
+	tex = { 0, 32, rec.w, rec.h + 7 };
+	app->render->DrawTexture(app->guiManager->uiAtlas, rec.x, rec.y - 7, &tex);
 
     if (live.w > rec.w) live.w = rec.w;
     if (live.w < 0)live.w = 0;
-    app->render->DrawRectangle(live, cyan.r, cyan.g, cyan.b);
+	tex = { 0, 256, live.w, rec.h + 7 };
+	app->render->DrawTexture(app->guiManager->uiAtlas, live.x, live.y - 7, &tex);
 
     int w = 0, h = 0;
     TTF_SizeText(app->sceneManager->guiFont, textExperience, &w, &h);
-    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textExperience, white);
-
-    app->render->DrawRectangle(rec, 71, 75, 78, 255, false);
+    app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2 - 7, 0, textExperience, black);
 }
 
 void SceneBattle::DrawTurnBar()
