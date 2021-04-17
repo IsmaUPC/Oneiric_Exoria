@@ -20,6 +20,7 @@ class SceneWin;
 class SceneLose;
 class SceneLevel2;
 class SceneBattle;
+class TransitionManager;
 
 class SceneManager : public Module
 {
@@ -70,15 +71,17 @@ public:
 	SceneControl* GetCurrentScene() { return current; };
 	bool GetWinBattle() { return win; };
 	void SetWinBattle(bool ret) { win = ret; };
+	bool GetOnTransition() { return onTransition; };
 
 private:
 
 	Input* input = nullptr;
 	Render* render = nullptr;
 	Textures* tex = nullptr;
-	
+
 	SceneControl* current = nullptr;
 	SceneControl* next = nullptr;
+	TransitionManager* transition = nullptr;
 
 	// Required variables to manage screen transitions (fade-in, fade-out)
 	bool onTransition =false;

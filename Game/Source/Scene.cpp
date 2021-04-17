@@ -100,7 +100,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
 
 	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
+	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
@@ -114,6 +114,8 @@ bool Scene::Start()
 	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
 	btn3->SetObserver(this);
 	app->guiManager->AddGuiButton(btn3);
+
+	//app->dialogueSystem->missClick = false;
 
 	return true;
 }
@@ -133,6 +135,11 @@ bool Scene::PreUpdate()
 bool Scene::Update(float dt)
 {
 	bool ret = true;
+
+	//GamePad& pad = app->input->pads[0];
+	/*if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
+		app->dialogueSystem->missClick = false;
+	}*/
 
 	// DEBUG KEYS
 	DebugKeys();
@@ -293,16 +300,19 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 40)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
+			//app->dialogueSystem->missClick = true;
 		}
 		//Option 2
 		else if (control->id == 41)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
+			//app->dialogueSystem->missClick = true;
 		}
 		//Option 3
 		else if (control->id == 42)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
+			app->dialogueSystem->missClick = true;
 		}
 	}
 	default: break;

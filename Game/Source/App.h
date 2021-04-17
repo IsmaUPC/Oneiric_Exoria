@@ -27,6 +27,7 @@ class Entity;
 class PathFinding;
 class DialogueSystem;
 class Fonts;
+class TransitionManager;
 
 class App
 {
@@ -116,7 +117,7 @@ public:
 	PathFinding* pathfinding = nullptr;
 	DialogueSystem* dialogueSystem = nullptr;
 	Fonts* fonts = nullptr;
-
+	TransitionManager* transitionManager = nullptr;
 
 	bool fullScreen=0;
 	bool removeGame = false;

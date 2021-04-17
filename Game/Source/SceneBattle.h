@@ -133,6 +133,8 @@ private:
 	bool god = false;
 	int totalExp = 0;
 	float currentExp = 0;
+	
+	bool missClick = false;
 	bool initCombat = true;
 	int indexTurnBar = -1;
 

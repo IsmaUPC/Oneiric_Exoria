@@ -75,7 +75,8 @@ bool SceneIntro::Start()
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
 	bigCloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
 	smallCloud = app->tex->Load("Assets/Textures/GUI/cloud_small.png");
-	startFx = app->audio->LoadFx("Assets/Audio/Music/Good/start_button.wav");
+	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
+	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 
 	bCloudPos = { WINDOW_W /2 + 150, WINDOW_H / 3 };
 	bCloudPos2 = { WINDOW_W / 2 + 850, WINDOW_H / 3 - 100 };
@@ -176,6 +177,8 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
+	app->tex->UnLoad(bigCloud);
+	app->tex->UnLoad(smallCloud);
 
 	app->guiManager->DeleteList();
 
@@ -232,6 +235,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		else if (control->id == 4)
 		{
 			//TransitionToScene(SceneType::LOGO);
+			app->audio->PlayFx(exitFx);
 			return false;
 		}
 		else if (control->id == 5)

@@ -80,6 +80,7 @@ public:
 	SDL_Texture* moonCorner;
 	void SetId(int id_) { id = id_; };
 	int id = 0;
+	bool missClick = false;
 
 private:
 	//int playerInput = 7;
