@@ -13,7 +13,7 @@ struct PlayerData
 	float velocity ;
 	int level = 1;
 	int exp = 0;
-	uint lives = 0;
+	int health = 0;
 	uint respawns = 0;
 	uint coins = 0;
 
@@ -40,6 +40,7 @@ struct Partner
 	TypePartner type;
 	int level = 1;
 	int exp = 0;
+	int health = 0;
 	int breadcrumb = 0;
 };
 

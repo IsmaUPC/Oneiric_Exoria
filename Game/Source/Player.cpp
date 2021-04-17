@@ -52,6 +52,7 @@ bool Player::Start()
 	{
 		playerData.level = 1;
 		playerData.exp = 0;
+		playerData.health = 8;
 	}
 
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
@@ -63,7 +64,6 @@ bool Player::Start()
 
 	playerData.respawns = 3;
 	playerData.coins = 0;
-	playerData.lives = 3;
 
 	inCheckPoint = false;
 	checkpointMove = false;
@@ -148,7 +148,10 @@ void Player::LoadPartners()
 		{
 			partners[i].level = 1;
 			partners[i].exp = 0;
-		}		
+		}	
+		if (i == 0) partners[i].health = 14;
+		if (i == 1) partners[i].health = 10;
+		if (i == 2) partners[i].health = 13;
 
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
@@ -175,6 +178,7 @@ bool Player::LoadState(pugi::xml_node& player)
 	{
 		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
+		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
 	}
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
@@ -192,6 +196,7 @@ bool Player::LoadState(pugi::xml_node& player)
 		{
 			partners[i].level = positionPartners.attribute("level").as_int();
 			partners[i].exp = positionPartners.attribute("exp").as_int();
+			partners[i].health = positionPartners.attribute("health").as_int();
 		}
 	
 		positionPartners = positionPartners.next_sibling();
@@ -247,6 +252,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 		positionPlayer.attribute("x").set_value(playerData.position.x);
 		positionPlayer.attribute("y").set_value(playerData.position.y);
 		positionPlayer.attribute("direction").set_value(playerData.direction);
+		positionPlayer.attribute("live").set_value(playerData.health);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
@@ -256,6 +262,7 @@ bool Player::SaveState(pugi::xml_node& player) const
 			partnersData.last_child().append_attribute("y").set_value(partners[i].position.y);
 			partnersData.last_child().append_attribute("breadcrumb").set_value(partners[i].breadcrumb);
 			partnersData.last_child().append_attribute("direction").set_value(partners[i].direction);
+			partnersData.last_child().append_attribute("live").set_value(partners[i].health);
 		}
 
 		SaveLevel(player);

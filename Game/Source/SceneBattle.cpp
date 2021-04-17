@@ -229,8 +229,8 @@ void SceneBattle::InicializeStats()
             case KENZIE_ :
                 enemies.At(i)->data->stats.attack = 3.5 * level + 9.5;
                 enemies.At(i)->data->stats.defense = 1.5 * level + 6.5;
-                enemies.At(i)->data->stats.health = 2 * level + 6;
-                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.health = app->player->playerData.health;
+                enemies.At(i)->data->stats.maxHealth = 2 * level + 6;;
                 enemies.At(i)->data->stats.mana = 3 * level +8;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.exp = app->player->playerData.exp;
@@ -239,8 +239,8 @@ void SceneBattle::InicializeStats()
             case KEILER_:
                 enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.defense = 1.5 * level + 5.5;
-                enemies.At(i)->data->stats.health = 4 * level + 10;
-                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.health = app->player->GetPartners()[0].health;
+                enemies.At(i)->data->stats.maxHealth = 4 * level + 10;;
                 enemies.At(i)->data->stats.mana = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
                 enemies.At(i)->data->stats.exp = app->player->GetPartners()[0].exp;
@@ -249,8 +249,8 @@ void SceneBattle::InicializeStats()
             case ISRRA_:
                 enemies.At(i)->data->stats.attack = 2 * level + 7;
                 enemies.At(i)->data->stats.defense = 2 * level + 7;
-                enemies.At(i)->data->stats.health = 2.5 * level + 7.5;
-                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.health = app->player->GetPartners()[1].health;
+                enemies.At(i)->data->stats.maxHealth = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.mana = 3.5 * level + 8.5;
                 enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
                 enemies.At(i)->data->stats.exp = app->player->GetPartners()[1].exp;
@@ -259,8 +259,8 @@ void SceneBattle::InicializeStats()
             case BRENDA_:
                 enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.defense = 3.5 * level + 9.5;
-                enemies.At(i)->data->stats.health = 3.5 * level + 9.5;
-                enemies.At(i)->data->stats.maxHealth = enemies.At(i)->data->stats.health;
+                enemies.At(i)->data->stats.health = app->player->GetPartners()[2].health;
+                enemies.At(i)->data->stats.maxHealth = 3.5 * level + 9.5;
                 enemies.At(i)->data->stats.mana = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
                 enemies.At(i)->data->stats.exp = app->player->GetPartners()[2].exp;
@@ -989,6 +989,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
         {
             app->player->playerData.level = partners.At(0)->data->entityData.level;
             app->player->playerData.exp = partners.At(0)->data->stats.exp;
+            app->player->playerData.health = partners.At(0)->data->stats.health;
             for (int i = 0; i < partners.Count()-1; i++)
             {
                 if (partners.At(i)->data->entityData.state != DEAD)
@@ -996,6 +997,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
                     app->player->GetPartners()[i].level = partners.At(i+1)->data->entityData.level;
                     app->player->GetPartners()[i].exp = partners.At(i+1)->data->stats.exp;
                 }
+                app->player->GetPartners()[i].health = partners.At(i+1)->data->stats.health;
             }
             bool ret = true;
 
