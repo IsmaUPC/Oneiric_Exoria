@@ -148,11 +148,14 @@ void Player::LoadPartners()
 		{
 			partners[i].level = 1;
 			partners[i].exp = 0;
-		}	
-		if (i == 0) partners[i].health = 14;
-		if (i == 1) partners[i].health = 10;
-		if (i == 2) partners[i].health = 13;
-
+		}
+		if (!app->sceneManager->GetCurrentScene()->isContinue)
+		{
+			if (i == 0) partners[i].health = 14;
+			if (i == 1) partners[i].health = 10;
+			if (i == 2) partners[i].health = 13;
+		}
+		
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
@@ -222,7 +225,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 {
 	pugi::xml_node positionPlayer = player.child("data");
 	pugi::xml_node coinsPlayer = player.child("coins");
-	pugi::xml_node respawnsPlayer = player.child("lives");
 
 	player.remove_child("path");
 	player.append_child("path").set_value(0);
@@ -245,16 +247,14 @@ bool Player::SaveState(pugi::xml_node& player) const
 			positionPlayer.attribute("direction").set_value(0);
 		}
 		coinsPlayer.attribute("count").set_value(0);
-		respawnsPlayer.attribute("num_respawns").set_value(3);
 	}
 	else
 	{
 		positionPlayer.attribute("x").set_value(playerData.position.x);
 		positionPlayer.attribute("y").set_value(playerData.position.y);
 		positionPlayer.attribute("direction").set_value(playerData.direction);
-		positionPlayer.attribute("live").set_value(playerData.health);
+		positionPlayer.attribute("health").set_value(playerData.health);
 		coinsPlayer.attribute("count").set_value(playerData.coins);
-		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
 		for (int i = 0; i < numPartners; i++)
 		{
