@@ -127,6 +127,7 @@
     <ClCompile Include="Source\SceneWin.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Timer.cpp" />
+    <ClCompile Include="Source\TransitionManager.cpp" />
     <ClCompile Include="Source\Window.cpp" />
     <ClInclude Include="PQueue.h" />
     <ClInclude Include="Source\Animation.h" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Source\SceneWin.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Timer.h" />
+    <ClInclude Include="Source\TransitionManager.h" />
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Defs.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

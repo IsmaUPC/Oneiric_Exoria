@@ -14,6 +14,7 @@
 #include "Pathfinding.h"
 #include "DialogSystem.h"
 #include "Fonts.h"
+#include "TransitionManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new PathFinding();
 	fonts = new Fonts();
 	dialogueSystem = new DialogueSystem();
+	transitionManager = new TransitionManager(render,tex,sceneManager);
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(fonts);
 	AddModule(pathfinding);
 	AddModule(dialogueSystem);
+	AddModule(transitionManager);
 
 	audio->active = true;
 	player->active = false;

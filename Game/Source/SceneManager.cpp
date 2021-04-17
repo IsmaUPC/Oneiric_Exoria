@@ -30,7 +30,7 @@ SceneManager::SceneManager(Input* input, Render* render, Textures* tex) : Module
 
 	onTransition = false;
 	fadeOutCompleted = false;
-	transitionAlpha = 0.0f;;
+	transitionAlpha = 0.0f;
 
 	this->input = input;
 	this->render = render;
@@ -171,7 +171,7 @@ bool SceneManager::PostUpdate()
 	if (onTransition)
 	{
 		render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
-	}
+	}	
 
 	return ret;
 }
