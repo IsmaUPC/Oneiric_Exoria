@@ -60,7 +60,7 @@ bool SceneLevel2::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(400,750);
+	app->player->positionInitial = new iPoint(930,730);
 
 
 	//Move to TpNode Class

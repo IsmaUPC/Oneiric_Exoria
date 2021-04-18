@@ -59,7 +59,7 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->player->positionInitial = new iPoint(570, 270);	
+	app->player->positionInitial = new iPoint(570, 450);	
 
 	//Move to TpNode Class
 	  //Spawn Player in Tp Position
