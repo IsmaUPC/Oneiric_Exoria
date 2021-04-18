@@ -199,6 +199,7 @@ bool SceneManager::CleanUp()
 
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);
+	app->audio->Unload1Fx(transitionFx);
 
 	input = nullptr;
 	render = nullptr;

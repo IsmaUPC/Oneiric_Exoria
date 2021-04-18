@@ -262,6 +262,8 @@ bool SceneLevel2::CleanUp()
 	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
 
+	app->audio->Unload1Fx(loseFx);
+
 	app->sceneManager->SetPause(false);
 
 	active = false;
