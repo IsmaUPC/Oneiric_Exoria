@@ -582,7 +582,7 @@ bool SceneBattle::Update(float dt_)
     {
         for (int i = 0; i < enemies.Count(); i++)
         {
-            if (enemies.At(i)->data->stats.health > 0) break;
+            if (enemies.At(i)->data->entityData.state != DEAD) break;
             if (i == enemies.Count() - 1)
             {
                 win = true;
@@ -732,7 +732,7 @@ bool SceneBattle::PostUpdate()
     {
         int w = 0, h = 0;
         TTF_SizeText(app->sceneManager->titleFont, textVictory, &w, &h);
-        app->fonts->BlitText(WINDOW_W / 2 - w / 2, 100, 1, textVictory, white);
+        app->fonts->BlitText(WINDOW_W / 2 - w / 2, 80, 1, textVictory, white);
 
         app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200, 800, 400, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
         for (int i = 0; i < partners.Count(); i++)
