@@ -390,7 +390,7 @@ bool SceneBattle::Update(float dt_)
 
 
 
-        if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].b) {
+        if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].b || app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT) {
             btnAttack->state = GuiControlState::NORMAL;
             btnMagic->state = GuiControlState::NORMAL;
             btnDefense->state = GuiControlState::NORMAL;
@@ -400,8 +400,21 @@ bool SceneBattle::Update(float dt_)
             faseAction = SELECT_ACTION;
         }
 
-        //TODO. evitar el clik de fonfirmacion de mando
+        //Select enemy with mouse TODO
+        int mouseX, mouseY;
+        app->input->GetMousePosition(mouseX, mouseY);
+        bool click;
+        for (int i = 0; i < enemies.Count(); i++) {
+            if ((mouseX > (enemies.At(i)->data->entityData.position.x + 20) && (mouseX < (enemies.At(i)->data->entityData.position.x + 100)) &&
+                (mouseY > (enemies.At(i)->data->entityData.position.y - 20)) && (mouseY < (enemies.At(i)->data->entityData.position.y + 80)))) {
+                enemySelected = i;
+                if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT) {
+                    faseAction = DO_ACITON;
+                }
+            }
+        }
 
+        //if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a && !missClick) || app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT) {
         if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a && !missClick)) {
             faseAction = DO_ACITON;
         }
@@ -567,6 +580,7 @@ bool SceneBattle::PostUpdate()
     {
         app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
     }
+
     //Icon Enemy selected
     if (faseAction == SELECT_ENEMY) {
 
@@ -618,6 +632,7 @@ bool SceneBattle::PostUpdate()
                 }
             }
         }
+
 
         int posX = (int)enemies.At(enemySelected)->data->entityData.position.x + 50;
         int posY = (int)enemies.At(enemySelected)->data->entityData.position.y - 65;
