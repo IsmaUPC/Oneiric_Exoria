@@ -5,6 +5,7 @@
 #include "GuiButton.h"
 #include "Animation.h"
 #include "GuiMenuMagic.h"
+#include "EntityManager.h"
 
 #include "PugiXml\src\pugixml.hpp"
 #include <string>
@@ -68,9 +69,14 @@ public:
 	void AssignEntities();
 	void SpeedAnimationCheck(float dt);
 
+	// Turn bar
 	void BubbleSort();
 	void DisplaceToLeft();
+
 	void AbleDisableButtons();
+	
+	void SaveStateLose();
+	void SaveState(TypeEntity pType, int i);
 
 private:
 
@@ -120,6 +126,8 @@ private:
 	int numArrows = 0;
 	float dt = 0;
 	float offset = 38;
+	char textVictory[9] = { "VICTORY!" };
+	char textLoose[10] = { "YOU LOOSE" };
 	char textLive[8] = { "\0" };
 	char textLevel[7] = { "\0" };
 	char textExperience[14] = { "\0" };
@@ -130,6 +138,7 @@ private:
 	bool moveBarTurn = false;
 	bool assigneDone = false;
 	bool win = false;
+	bool lose = false;
 	bool god = false;
 	int totalExp = 0;
 	float currentExp = 0;

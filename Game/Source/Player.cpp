@@ -148,9 +148,6 @@ void Player::LoadPartners()
 		{
 			partners[i].level = 1;
 			partners[i].exp = 0;
-		}
-		if (!app->sceneManager->GetCurrentScene()->isContinue)
-		{
 			if (i == 0) partners[i].health = 14;
 			if (i == 1) partners[i].health = 10;
 			if (i == 2) partners[i].health = 13;
@@ -173,14 +170,18 @@ bool Player::Awake(pugi::xml_node& config)
 bool Player::LoadState(pugi::xml_node& player) 
 {
 	bool ret = true;
-	playerData.position.x = player.child("data").attribute("x").as_int(playerData.position.x);
-	playerData.position.y = player.child("data").attribute("y").as_int(playerData.position.y);
-	playerData.direction = (MoveDirection)player.child("data").attribute("direction").as_int(playerData.direction);
+	
 	if (app->sceneManager->GetCurrentScene()->isContinue)
 	{
 		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
 		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
+	}
+	if (!app->sceneManager->GetLoseBattle())
+	{
+		playerData.position.x = player.child("data").attribute("x").as_int(playerData.position.x);
+		playerData.position.y = player.child("data").attribute("y").as_int(playerData.position.y);
+		playerData.direction = (MoveDirection)player.child("data").attribute("direction").as_int(playerData.direction);
 	}
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
@@ -190,16 +191,20 @@ bool Player::LoadState(pugi::xml_node& player)
 	int i = 0;
 	while (positionPartners)
 	{
-		partners[i].position.x = positionPartners.attribute("x").as_int();
-		partners[i].position.y = positionPartners.attribute("y").as_int();
-		partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
-		partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
 		if (app->sceneManager->GetCurrentScene()->isContinue)
 		{
 			partners[i].level = positionPartners.attribute("level").as_int();
 			partners[i].exp = positionPartners.attribute("exp").as_int();
 			partners[i].health = positionPartners.attribute("health").as_int();
 		}
+		if (!app->sceneManager->GetLoseBattle())
+		{
+			partners[i].position.x = positionPartners.attribute("x").as_int();
+			partners[i].position.y = positionPartners.attribute("y").as_int();
+			partners[i].direction = (MoveDirection)positionPartners.attribute("direction").as_int();
+			partners[i].breadcrumb = positionPartners.attribute("breadcrumb").as_int();
+		}
+		else partners[i].breadcrumb = 0;
 
 		positionPartners = positionPartners.next_sibling();
 		i++;
@@ -207,16 +212,20 @@ bool Player::LoadState(pugi::xml_node& player)
 
 	path.Clear();
 	pugi::xml_node breadcrumbs = player.child("path").first_child();
-	while (breadcrumbs)
+	if (!app->sceneManager->GetLoseBattle())
 	{
-		iPoint* pos = new iPoint;
-		pos->x = breadcrumbs.attribute("x").as_int();
-		pos->y = breadcrumbs.attribute("y").as_int();
-		path.Add(pos);
+		while (breadcrumbs)
+		{
+			iPoint* pos = new iPoint;
+			pos->x = breadcrumbs.attribute("x").as_int();
+			pos->y = breadcrumbs.attribute("y").as_int();
+			path.Add(pos);
 
-		breadcrumbs = breadcrumbs.next_sibling();
-	}
+			breadcrumbs = breadcrumbs.next_sibling();
+		}
+	}	
 
+	app->sceneManager->SetLoseBattle(false);
 	return ret;
 }
 
