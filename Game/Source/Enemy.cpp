@@ -251,7 +251,7 @@ bool Enemy::PostUpdate()
 		else if (entityData.direction == MoveDirection::WALK_L)
 			app->render->DrawTextureFlip(entityData.texture, entityData.position.x, entityData.position.y, &rectEnemy);
 
-		if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_REPEAT)
+		if (app->map->GetDraw())
 		{
 			iPoint enemyCenter;
 			enemyCenter.x = entityData.position.x + entityData.pointsCollision[0].x + entityData.centerPoint.x;
