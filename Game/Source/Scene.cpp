@@ -95,10 +95,17 @@ bool Scene::Start()
 	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
+
+	//NPCs
 	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
 	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
 	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
-	
+
+	//Interactuable objects
+	app->entityManager->AddEntity(NPC, 20, 12, 7, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 30, 8, 0, false);
+	app->entityManager->AddEntity(NPC, 10, 3, 9, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
 	
 
 	// Load music

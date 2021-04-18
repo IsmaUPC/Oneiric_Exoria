@@ -65,6 +65,9 @@ public:
 	void SetVolumeMusic(int volume);
 	void SetVolumeFx(int volume) { volumeFx = volume; }
 
+	bool GetHasBeenModificated() { return hasBeenModificated; }
+	void SetHasBeenModificated(bool ret) { hasBeenModificated = ret; }
+
 private:
 
 	_Mix_Music* music = nullptr;
@@ -77,6 +80,7 @@ private:
 	int volumeMusic = 128; // 128 = MIX_MAX_VOLUME
 	int volumeFx = 128;
 	bool pendingToDelete = false;
+	bool hasBeenModificated = false;
 };
 
 #endif // __AUDIO_H__

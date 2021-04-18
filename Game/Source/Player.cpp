@@ -578,14 +578,6 @@ void Player::PlayerControls(float dt)
 	}
 	if(!playerCollision) MovePartners();
 
-	if (godMode == true)
-	{
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)playerData.position.y -= vel;
-		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)playerData.position.y += vel;
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)playerData.position.x -= vel;
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)playerData.position.x += vel;
-	}
-
 	//DialogSystem Interaction
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -629,7 +621,7 @@ void Player::MovePlayer(MoveDirection playerDirection, float dt)
 		break;
 	}
 
-	if (CollisionPlayer(playerData.position))
+	if (CollisionPlayer(playerData.position) && !godMode)
 	{
 		playerData.position = tmp;
 		if (diagonal == 2 && playerCollision == false)

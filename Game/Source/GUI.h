@@ -36,34 +36,12 @@ public:
 
 private:
 
-	// Positions vars
-	int headSeparation = 10;
-	int headPositionX = 20;
-	int headPositionY = 20;
-
-	int headW = 0;
-
-	uint* respawn = 0;
-
 	iPoint point0 = { 0,0 };
-	SDL_Texture* headTex = nullptr;
-	SDL_Texture* arrowTex = nullptr;
-
-	Animation* headAnim = nullptr;
-	Animation* arrowAnim = nullptr;
-	Animation* buttonEAnim = nullptr;
 
 	bool inCheckPoint = false;
 
-	// Coin
-	SDL_Texture* imgCoin = nullptr;
-	Animation* coinHudAnim = nullptr;
-
-	// Text
-	uint* coins = 0;
-	char coinText[10] = { "\0" };
-
 	bool activeFPS = false;
+	char fps[3] = { "\0" };
 	// Time
 	Timer timer;
 	char timeText[10] = { "\0" };

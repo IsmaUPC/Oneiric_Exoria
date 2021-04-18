@@ -14,7 +14,6 @@ TransitionManager::TransitionManager(Render* render, Textures* tex, SceneManager
 
 	this->render = render;
 	this->tex = tex;
-	this->sceneManager = sceneManager;
 }
 
 // Destructor
@@ -60,15 +59,7 @@ bool TransitionManager::CleanUp()
 {
 	return true;
 }
-bool TransitionManager::LoadState(pugi::xml_node& node)
-{
-	return true;
-}
 
-bool TransitionManager::SaveState(pugi::xml_node& node)const
-{
-	return true;
-}
 
 void TransitionManager::Transition1()
 {

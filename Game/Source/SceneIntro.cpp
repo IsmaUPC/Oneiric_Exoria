@@ -77,6 +77,9 @@ bool SceneIntro::Start()
 	smallCloud = app->tex->Load("Assets/Textures/GUI/cloud_small.png");
 	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
+	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
+
+	app->audio->PlayFx(tittleFx);
 
 	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
 	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
@@ -179,6 +182,7 @@ bool SceneIntro::PostUpdate()
 
 	if (menuSettings->active)
 	{
+		app->render->DrawRectangle({ 935, 427, 237, 237 }, 0, 0, 0, 100);
 		menuSettings->Draw();
 	}
 

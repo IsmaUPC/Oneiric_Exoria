@@ -206,6 +206,7 @@ public:
 		drawColl = !drawColl; 
 		drawColl2 = !drawColl2;
 	};
+	bool GetDraw() { return drawColl; };
 private:
 
 	// Methods to load all required map data
