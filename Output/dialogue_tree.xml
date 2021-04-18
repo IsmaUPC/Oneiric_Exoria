@@ -256,7 +256,7 @@
   </dialogueExample>
 
   <dialogueExample Id="12">
-    <node text="It says:The 12 principles of magic"  id="0">
+    <node text="It says: 'The 12 principles of magic'"  id="0">
       <dialogue option="Continue" returnCode="0" nextNode="100"/>
     </node>
     <node text ="Bye" id ="100">
