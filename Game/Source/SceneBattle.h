@@ -102,7 +102,6 @@ private:
 	GuiButton* btnDefense = nullptr;
 	GuiButton* btnExit = nullptr;
 	GuiButton* btnContinue = nullptr;
-	GuiButton* btnGod = nullptr;
 
 	SDL_Texture* img = nullptr;
 	SDL_Texture* texPalyers = nullptr;
