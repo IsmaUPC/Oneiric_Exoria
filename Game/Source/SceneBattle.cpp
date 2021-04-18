@@ -1158,6 +1158,11 @@ bool SceneBattle::CleanUp()
 	app->tex->UnLoad(texPalyers);
 	app->tex->UnLoad(texEnemies);
 
+	app->audio->Unload1Fx(winFx);
+	app->audio->Unload1Fx(loseFx);
+	app->audio->Unload1Fx(attackFx);
+	app->audio->Unload1Fx(magicFx);
+
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
 	animationsEnemies.Clear();

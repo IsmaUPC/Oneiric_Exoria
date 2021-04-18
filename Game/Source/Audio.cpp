@@ -92,11 +92,11 @@ bool Audio::CleanUp()
 // Unload all Fx
 void Audio::UnloadFxs()
 {
-	ListItem<Mix_Chunk*>* item;
-	for (item = fx.start; item != NULL; item = item->next)
-		Mix_FreeChunk(item->data);
-
-	fx.Clear();
+	for (uint i = 0; i < MAX_FX; ++i)
+	{
+		if (fx[i] != nullptr)
+			Mix_FreeChunk(fx[i]);
+	}
 }
 // Unload 1 Fx
 void Audio::Unload1Fx(int index)
@@ -178,8 +178,14 @@ unsigned int Audio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.Add(chunk);
-		ret = fx.Count();
+		for (ret = 0; ret < MAX_FX; ++ret)
+		{
+			if (fx[ret] == nullptr)
+			{
+				fx[ret] = chunk;
+				break;
+			}
+		}
 		LOG("Sucesfully loaded wav %s.", path);
 	}
 
@@ -194,7 +200,7 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 	if (!active)
 		return false;
 
-	if (id > 0 && id <= fx.Count())
+	if (id > 0 && id <= MAX_FX)
 	{
 		// If Mix_Playing(-1) check all channels
 		if (Mix_Playing(channel) == 0 || channel == -1)
@@ -205,7 +211,7 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 			if (channel == -1) Mix_Volume(channel, volumeFx);
 			if (Mix_Volume(channel, -1) > volumeFx)
 				Mix_Volume(channel, volumeFx);
-			Mix_PlayChannel(channel, fx[id - 1], repeat);
+			Mix_PlayChannel(channel, fx[id], repeat);
 			LOG("Sucessfully playing the Fx.");
 		}
 	}

@@ -113,7 +113,7 @@ bool SceneLogo::CleanUp()
 
 	LOG("Freeing scene");
 	app->tex->UnLoad(img);
-	//app->audio->Unload1Fx(introFx);
+	app->audio->Unload1Fx(introFx);
 	img = nullptr;
 	active = false;
 	return true;

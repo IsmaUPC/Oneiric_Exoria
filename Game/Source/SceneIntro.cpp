@@ -201,6 +201,10 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(bigCloud);
 	app->tex->UnLoad(smallCloud);
 
+	app->audio->Unload1Fx(startFx);
+	app->audio->Unload1Fx(exitFx);
+	app->audio->Unload1Fx(tittleFx);
+
 	app->guiManager->DeleteList();
 
 	delete menuSettings;
