@@ -95,8 +95,11 @@ bool Scene::Start()
 	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
-	app->entityManager->AddEntity(NPC, 31, 23, 1, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
 	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
+	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
+	
+	
 
 	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
@@ -197,14 +200,6 @@ bool Scene::Update(float dt)
 			}
 		}
 	}
-
-	/*char response[128] = { 0 };
-	for (int i = 0; i < currentNode->answersList.Count(); i++)
-	{
-		sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 255, 255, 255 });
-	}*/
-
 
 	if (app->dialogueSystem->onDialog == false)
 	{

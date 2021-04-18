@@ -73,25 +73,146 @@
   </dialogueExample>
 
   <dialogueExample Id="3">
-    <node text="Kenzie, welcome to LansDowne"  id="0">
+    <node text="Hmmmm...."  id="0">
       <dialogue option="Continue" returnCode="0" nextNode="1"/>
     </node>
-    <node text="One of the few academies where we study magic"  id="1">
-      <dialogue option="Continue" returnCode="0" nextNode="2"/>
+    <node text="Where could it be?"  id="1">
+      <dialogue option="What happens?" returnCode="0" nextNode="2"/>
+      <dialogue option="..." returnCode="0" nextNode="4"/>
     </node>
-    <node text="Can you get me the card from the right shelving?"  id="2">
-      <dialogue option="Sure" returnCode="0" nextNode="3"/>
-      <dialogue option="How?" returnCode="0" nextNode="4"/>
+    <node text="I cant find the book im looking for"  id="2">
+      <dialogue option="I will find it" returnCode="0" nextNode="3"/>
+      <dialogue option="Good luck" returnCode="0" nextNode="100"/>
     </node>
-    <node text="Thanks I will be right here"  id="3">
+    <node text="For real? Thanks!"  id="3">
       <dialogue option="Continue" returnCode="0" nextNode="100"/>
     </node>
-    <node text="Press the interaction button E to grab the card"  id="4">
+    <node text="..."  id="4">
       <dialogue option="Continue" returnCode="0" nextNode="100"/>
     </node>
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-  
+
+  <dialogueExample Id="4">
+    <node text="This level is way to hard I cant finish it"  id="0">
+      <dialogue option="Hi" returnCode="0" nextNode="1"/>
+      <dialogue option="Nerd stuff" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="Hi, have you tried these arcades?"  id="1">
+      <dialogue option="Yes" returnCode="0" nextNode="2"/>
+      <dialogue option="No" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="They use the users magic to work not electricity"  id="2">
+      <dialogue option="Continue" returnCode="0" nextNode="4"/>
+    </node>
+    <node text="You should try once!"  id="3">
+      <dialogue option="Continue" returnCode="0" nextNode="2"/>
+    </node>
+    <node text="Who will it be the number 1 in the ranking?"  id="4">
+      <dialogue option="Continue" returnCode="0" nextNode="5"/>
+    </node>
+    <node text="Nobody knows, his nickname is raysan5"  id="5">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="5">
+    <node text="Hello, there is no class now"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="1"/>
+    </node>
+    <node text="Nevertheless I can explain the magic archetipes if you want"  id="1">
+      <dialogue option="Ask" returnCode="0" nextNode="2"/>
+      <dialogue option="I have to do something" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="There are four especialitations with diferent uses"  id="2">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="There is aura, elemental..."  id="3">
+      <dialogue option="About aura" returnCode="0" nextNode="5"/>
+      <dialogue option="About elemental" returnCode="0" nextNode="6"/>
+      <dialogue option="Continue" returnCode="0" nextNode="4"/>
+    </node>
+    <node text="also nexus and light magic"  id="4">
+      <dialogue option="About nexus" returnCode="0" nextNode="7"/>
+      <dialogue option="About light" returnCode="0" nextNode="8"/>
+      <dialogue option="Enough" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="Aura magic improves the physical skills of the user"  id="5">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="Elemental magic is the best to attack enemies"  id="6">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="Nexus magic can help or disturb others"  id="7">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="Light magic heals the diseases"  id="8">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="6">
+    <node text="The affinities will enter on the next exam"  id="0">
+      <dialogue option="Affinities?" returnCode="0" nextNode="1"/>
+      <dialogue option="Already know" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="Every magic has an affinity, there are 7 types"  id="1">
+      <dialogue option="Continue" returnCode="0" nextNode="2"/>
+    </node>
+    <node text="Enemies are weak or resitant to certain types"  id="2">
+      <dialogue option="Continue" returnCode="0" nextNode="3"/>
+    </node>
+    <node text="Do you want to study with me?"  id="3">
+      <dialogue option="Sure" returnCode="0" nextNode="4"/>
+      <dialogue option="Nope" returnCode="0" nextNode="100"/>
+    </node>
+    <node text="What do we study?"  id="4">
+      <dialogue option="Fire" returnCode="0" nextNode="7"/>
+      <dialogue option="Earth" returnCode="0" nextNode="8"/>
+      <dialogue option="Other" returnCode="0" nextNode="5"/>
+    </node>
+    <node text="What do we study?"  id="5">
+      <dialogue option="Water" returnCode="0" nextNode="9"/>
+      <dialogue option="Electricity" returnCode="0" nextNode="10"/>
+      <dialogue option="Other" returnCode="0" nextNode="6"/>
+    </node>
+    <node text="What do we study?"  id="6">
+      <dialogue option="Light" returnCode="0" nextNode="11"/>
+      <dialogue option="Shadow" returnCode="0" nextNode="12"/>
+      <dialogue option="Physical" returnCode="0" nextNode="13"/>
+    </node>
+    <node text="Fire magic deals massive damage"  id="7">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Earth magic can boost defense"  id="8">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Water magic can heal or inflict poison"  id="9">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Electricity can shook the enemy and slowing them"  id="10">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Light magic heal allies wounds and status"  id="11">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Shadow magic disrupt the enemies"  id="12">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Physical attacks usually have no special effects"  id="13">
+      <dialogue option="Continue" returnCode="0" nextNode="14"/>
+    </node>
+    <node text="Do you want to study any other?"  id="14">
+      <dialogue option="Yes" returnCode="0" nextNode="4"/>
+      <dialogue option="Done with this" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
     
 </dialogueTree>

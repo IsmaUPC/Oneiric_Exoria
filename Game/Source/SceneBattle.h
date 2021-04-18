@@ -115,6 +115,11 @@ private:
 	List<Entity*> partners;
 	Entity* turnSort = nullptr;
 
+	uint winFx;
+	uint loseFx;
+	uint attackFx;
+	uint magicFx;
+
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
 	
@@ -133,7 +138,11 @@ private:
 	char textExperience[14] = { "\0" };
 
 	int faseAction = 0;
-	int enemiSelected = 0;
+	int enemySelected = 0;
+	int ally=0;
+	bool hit=0;
+	float newHealth = 0;
+	int reduceLieveVelocity = 8;
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;

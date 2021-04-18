@@ -57,6 +57,7 @@ bool SceneManager::Start()
 	current->Start();
 	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
 	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
+	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 	next = nullptr;
 
 	return true;
@@ -142,7 +143,7 @@ bool SceneManager::Update(float dt)
 		case SceneType::LEVEL2: next = new SceneLevel2(); break;
 		case SceneType::WIN: next = new SceneWin(); break;
 		case SceneType::LOSE: next = new SceneLose(); break;
-		case SceneType::BATTLE: next = new SceneBattle(); break;
+		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(transitionFx); break;
 		default: break;
 		}
 
