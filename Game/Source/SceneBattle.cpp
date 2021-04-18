@@ -41,10 +41,12 @@ bool SceneBattle::Start()
 	texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
 	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
-	winFx = app->audio->LoadFx("Assets/Audio/Fx/win.wav");
+	winFx = app->audio->LoadFx("Assets/Audio/Fx/music_victory.wav");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
 	magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
+	defenseFx = app->audio->LoadFx("Assets/Audio/Fx/defense.wav");
+	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 
 	// Load Animations
 	LoadAnimations();
@@ -449,9 +451,11 @@ bool SceneBattle::Update(float dt_)
 				{
 					float attack = turnSort[turn].stats.attack;
 					newHealth = enemies.At(enemySelected)->data->stats.health - attack;
+					app->audio->PlayFx(attackFx);
 				}
 				else
 				{
+					app->audio->PlayFx(magicFx);
 					switch (magicInUse->type)
 					{
 					case 0:
@@ -463,7 +467,9 @@ bool SceneBattle::Update(float dt_)
 					default:
 						break;
 					}
-					
+					newHealth = enemies.At(enemySelected)->data->stats.health - magicInUse->damage;
+					magicInUse = nullptr;
+
 					activeMenuMagic = false;
 					btnAttack->state = GuiControlState::DISABLED;
 					btnMagic->state = GuiControlState::DISABLED;
@@ -573,6 +579,7 @@ bool SceneBattle::Update(float dt_)
 			{
 				if (!hit)
 				{
+					app->audio->PlayFx(attackFx);
 					ally = 0;
 					hit = true;
 					// Find heald of actual enemy
@@ -596,7 +603,7 @@ bool SceneBattle::Update(float dt_)
 								if (partners.At(ally)->data->stats.health <= 0) {
 									for (int i = partners.Count() - 1; i >= 0; i--) {
 										if (partners.At(i)->data->stats.health > 0) {
-											ally = i;
+											ally = i;							
 											break;
 										}
 									}
@@ -610,7 +617,7 @@ bool SceneBattle::Update(float dt_)
 							if (partners.At(ally)->data->stats.health <= 0) {
 								for (int i = ally; i > 0; i--) {
 									if (partners.At(i)->data->stats.health > 0) {
-										ally = i;
+										ally = i;	
 										break;
 									}
 								}
@@ -623,6 +630,7 @@ bool SceneBattle::Update(float dt_)
 									}
 								}
 							}
+			
 							newHealth = partners.At(ally)->data->stats.health - magicInUse->damage;
 						}
 					}
@@ -668,6 +676,7 @@ bool SceneBattle::Update(float dt_)
 			if (i == enemies.Count() - 1)
 			{
 				win = true;
+				app->audio->PlayFx(winFx);
 				AbleDisableButtons();
 				app->sceneManager->SetWinBattle(true);
 			}
@@ -685,6 +694,7 @@ bool SceneBattle::Update(float dt_)
 				btnExit->bounds.x += 20;
 				AbleDisableButtons();
 				lose = true;
+				app->audio->PlayFx(loseFx);
 				btnExit->active = true;
 				btnExit->state = GuiControlState::NORMAL;
 				app->sceneManager->SetLoseBattle(true);
@@ -1259,6 +1269,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 		//DEFENSE
 		else if (control->id == 22)
 		{
+			app->audio->PlayFx(defenseFx);
 			moveBarTurn = true;
 			switch (turnSort[turn].entityData.type)
 			{
@@ -1294,6 +1305,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 					app->player->GetPartners()[i].health = partners.At(i + 1)->data->stats.health;
 				}
 				isContinue = true;
+				app->audio->PlayFx(exitFx);
 				TransitionToScene(SceneType::LEVEL1);
 			}			
 		}

@@ -120,6 +120,9 @@ private:
 	uint loseFx = -1;
 	uint attackFx = -1;
 	uint magicFx = -1;
+	uint defenseFx = -1;
+	uint exitFx = -1;
+
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;

@@ -36,7 +36,6 @@ bool GuiManager::Start()
 	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
 	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
 	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
-	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
 
