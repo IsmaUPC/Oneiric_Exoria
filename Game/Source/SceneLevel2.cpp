@@ -98,34 +98,10 @@ bool SceneLevel2::Start()
 	app->player->Init();
 	app->player->Start();
 
-	//Parallax
-	img = app->tex->Load("Assets/Textures/sky_2.png");
-	SDL_QueryTexture(img, NULL, NULL, &withBG, &moveBG1);
-	moveBG0 = -1;
-	moveBG1 = 0;
-	moveBG2 = 1;
-	posX0 = 0;
-	posX1 = 0;
-	posX2 = 0;
-	xW = 0;
-	xSpeed = 0;
-	animationFather.texture = app->tex->Load("Assets/Textures/dino_orange.png");
 
-	animationFather.position = { 10500, 639 };
-	idleAnim.loop = true;
-	idleAnim.speed = 0.025;
 
-	for (int i = 0; i < 4; i++)
-		idleAnim.PushBack({ 117 * i,0, 117, 117 });
 
-	animationFather.currentAnimation = &idleAnim;
-
-	SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
-
-	app->render->camera.y -= imgH;
-	app->sceneManager->lastLevel = 2;
-
-	speedImg = PARALLAX_SPEED;
+	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
 	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
@@ -168,9 +144,6 @@ bool SceneLevel2::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-	idleAnim.speed = (dt * 100) * 0.025f;
-
-	animationFather.currentAnimation->Update();
 	
 	if (app->player->win)victory = true;
 
@@ -235,14 +208,11 @@ bool SceneLevel2::Update(float dt)
 // Called each loop iteration
 bool SceneLevel2::PostUpdate()
 {
-	// Draw Background
-	Parallax();
+
 	// Draw map
 	app->map->Draw();
 
 	bool ret = true;
-	SDL_Rect rectFather;
-	rectFather = animationFather.currentAnimation->GetCurrentFrame();
 
 	if (victory == true)
 	{
@@ -256,7 +226,6 @@ bool SceneLevel2::PostUpdate()
 		TransitionToScene(SceneType::LOSE);
 		return true;
 	}
-	app->render->DrawTextureFlip(animationFather.texture, animationFather.position.x, animationFather.position.y - (rectFather.h), &rectFather);
 	
 	return ret;
 }
@@ -264,54 +233,24 @@ bool SceneLevel2::PostUpdate()
 // Called before quitting
 bool SceneLevel2::CleanUp()
 {
+	bool ret = true;
+
 	if (!active)
 		return true;
 
 	LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
-	app->tex->UnLoad(img);
-	app->tex->UnLoad(animationFather.texture);
 	app->player->CleanUp();
+	app->entityManager->ClearList(ret);
 
 	app->sceneManager->SetPause(false);
 
 	active = false;
-	return true;
+	return ret;
 }
 
-void SceneLevel2::Parallax()
-{
-	imgY = (int)((app->render->camera.y / 6)) * -0.2f;
-	
-	int x = -app->render->camera.x;
-	imgX = (int)(app->render->camera.x / 6) - 10;
-	imgX *= PARALLAX_SPEED;
-	
-	xW = x + withBG;
-	xSpeed = x + imgX;
 
-	posX0 = (moveBG0 * withBG);
-	posX1 = (moveBG1 * withBG);
-	posX2 = (moveBG2 * withBG);
-
-	////Back to front
-	if (xW + imgX > (posX0 + (withBG * 0.5f)) + imgX && xSpeed > (withBG * (moveBG0 + 2)) + imgX) moveBG0 += 3;
-	if (xW + imgX > (posX1 + (withBG * 0.5f)) + imgX && xSpeed > (withBG * (moveBG1 + 2)) + imgX) moveBG1 += 3;
-	if (xW + imgX > (posX2 + (withBG * 0.5f)) + imgX && xSpeed > (withBG * (moveBG2 + 2)) + imgX) moveBG2 += 3;
-	//front to back
-	if (xSpeed < (posX0 + (withBG * 0.5f)) + imgX && (moveBG2 > moveBG0)) moveBG2 -= 3;
-	if (xSpeed < (posX1 + (withBG * 0.5f)) + imgX && (moveBG0 > moveBG1)) moveBG0 -= 3;
-	if (xSpeed < (posX2 + (withBG * 0.5f)) + imgX && (moveBG1 > moveBG2)) moveBG1 -= 3;
-
-	posX0 = (moveBG0 * withBG) + imgX;
-	posX1 = (moveBG1 * withBG) + imgX;
-	posX2 = (moveBG2 * withBG) + imgX;
-
-	app->render->DrawTexture(img, posX0, imgY);
-	app->render->DrawTexture(img, posX1, imgY);
-	app->render->DrawTexture(img, posX2, imgY);
-}
 
 void SceneLevel2::DebugKeys()
 {

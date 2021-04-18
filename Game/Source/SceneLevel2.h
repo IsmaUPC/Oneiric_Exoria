@@ -60,15 +60,11 @@ private:
 
 	int numThisScene = 2;
 
-	void Parallax();
 	void DebugKeys();
 
 	bool debugCollisions = false;
 	bool victory = false;
 	bool lose = false;
-	AnimationFather2 animationFather;
-	Animation idleAnim;
-	SDL_Texture* img = nullptr;
 	int moveBG0 = 0;
 	int moveBG1 = 0;
 	int moveBG2 = 0;
