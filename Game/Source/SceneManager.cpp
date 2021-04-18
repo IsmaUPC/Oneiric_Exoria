@@ -77,7 +77,13 @@ bool SceneManager::Update(float dt)
 {
 	bool ret = true;
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (current->name == "scene" || current->name == "sceneLevel2"))
-		pause = !pause, app->guiManager->GetMenuPause()->AbleDisableMenu();
+	{
+		currentVolume = app->audio->GetVolumeMusic();
+		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
+		pause = !pause;
+		app->guiManager->GetMenuPause()->AbleDisableMenu();
+	}
+		
 
 	if (!onTransition)
 	{
