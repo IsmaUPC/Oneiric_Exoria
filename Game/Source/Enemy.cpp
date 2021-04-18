@@ -233,7 +233,8 @@ bool Enemy::Update(float dt)
 		if (isDetected) CheckCollisionEnemyToPlayer();
 	}
 
-	if (entityData.type != NPC && entityData.id != 0) entityData.currentAnimation->Update();
+	if (entityData.type != NPC ) entityData.currentAnimation->Update();
+	//&& entityData.id != 0
 	return true;
 }
 

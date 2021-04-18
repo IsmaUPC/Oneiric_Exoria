@@ -177,11 +177,11 @@ void SceneBattle::AddEntities()
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
 		app->entityManager->AddEntity(BANDIT, 13, 17, 0, randomLvl);
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
-		app->entityManager->AddEntity(BANDIT, 10, 15, 0, randomLvl);
+		app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
 		app->entityManager->AddEntity(BANDIT, 10, 19, 0, randomLvl);
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
-		app->entityManager->AddEntity(BANDIT, 7, 17, 0, randomLvl);
+		app->entityManager->AddEntity(SAPLING, 7, 17, 0, randomLvl);
 		break;
 
 	case 2:
@@ -385,10 +385,10 @@ bool SceneBattle::Update(float dt_)
 {
 	dt = dt_;
 	SpeedAnimationCheck(dt_);
-	for (int i = 0; i < animationsEnemies.Count(); i++)
+	/*for (int i = 0; i < animationsEnemies.Count(); i++)
 	{
 		animationsEnemies.At(i)->data->Update();
-	}
+	}*/
 	//GamePad& pad = app->input->pads[0];
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
