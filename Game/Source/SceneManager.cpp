@@ -200,6 +200,15 @@ bool SceneManager::CleanUp()
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);
 
+	input = nullptr;
+	render = nullptr;
+	tex = nullptr;
+	current = nullptr;
+	next = nullptr;
+	transition = nullptr;
+
+	scenes.Clear();
+
 	return true;
 }
 

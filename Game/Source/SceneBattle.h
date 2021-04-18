@@ -115,10 +115,10 @@ private:
 	List<Entity*> partners;
 	Entity* turnSort = nullptr;
 
-	uint winFx;
-	uint loseFx;
-	uint attackFx;
-	uint magicFx;
+	uint winFx = -1;
+	uint loseFx = -1;
+	uint attackFx = -1;
+	uint magicFx = -1;
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
