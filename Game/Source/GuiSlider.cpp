@@ -70,7 +70,7 @@ bool GuiSlider::Update(float dt)
 			{
 				SliderControl(mouseX, mouseY, pad);
 				NotifyObserver();
-				state = GuiControlState::FOCUSED;
+				//state = GuiControlState::FOCUSED;
 			}
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP 
 				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP 
@@ -100,6 +100,7 @@ bool GuiSlider::Draw()
 		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
 		//sliderImage.x += 3 * (sliderImage.w + marginSliders);
+		sliderImage = { 8,150,17,21 };
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 100, 100, 100, 190);
@@ -109,6 +110,7 @@ bool GuiSlider::Draw()
 	case GuiControlState::NORMAL:
 		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
+		sliderImage = { 8,150,17,21 };
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 0, 255, 0, 190);
@@ -119,6 +121,7 @@ bool GuiSlider::Draw()
 		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
 		//sliderImage.x += 1 * (sliderImage.w + marginSliders);
+		sliderImage = { 40,150,17,21 };
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 255, 255, 0, 190);
@@ -129,6 +132,7 @@ bool GuiSlider::Draw()
 		//app->render->DrawTexture(texture, bounds.x, bounds.y, &button);
 
 		//sliderImage.x += 2 * (sliderImage.w + marginSliders);
+		sliderImage = { 72,150,17,21 };
 		app->render->DrawTexture(texture, slider.x, slider.y, &sliderImage);
 
 		if (drawRectangles)app->render->DrawRectangle(sliderBarInput, 0, 255, 255, 190);

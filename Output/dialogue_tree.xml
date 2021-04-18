@@ -123,7 +123,7 @@
     <node text="Hello, there is no class now"  id="0">
       <dialogue option="Continue" returnCode="0" nextNode="1"/>
     </node>
-    <node text="Nevertheless I can explain the magic archetipes if you want"  id="1">
+    <node text="Still I can explain the magic archetipes if you want"  id="1">
       <dialogue option="Ask" returnCode="0" nextNode="2"/>
       <dialogue option="I have to do something" returnCode="0" nextNode="100"/>
     </node>
@@ -210,6 +210,80 @@
     <node text="Do you want to study any other?"  id="14">
       <dialogue option="Yes" returnCode="0" nextNode="4"/>
       <dialogue option="Done with this" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+  
+  <dialogueExample Id="7">
+    <node text="Director's room"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="8">
+    <node text="Emanates magic that doesn't let me pass"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="9">
+    <node text="Seems easy to pass but it's not that simple"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="10">
+    <node text="I could play Dino or Ian's adventure on these arcades"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="11">
+    <node text="Not in the mood for some Neetflex"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="12">
+    <node text="It says: 'The 12 principles of magic'"  id="0">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="13">
+    <node text="What coffee should I get?"  id="0">
+      <dialogue option="Latte" returnCode="0" nextNode="1"/>
+      <dialogue option="Cappuccino" returnCode="0" nextNode="1"/>
+      <dialogue option="None" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="I need the student card..." id ="1">
+      <dialogue option="No coffee then :(" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+
+  <dialogueExample Id="14">
+    <node text="What should I take"  id="0">
+      <dialogue option="Water" returnCode="0" nextNode="1"/>
+      <dialogue option="Cola" returnCode="0" nextNode="1"/>
+      <dialogue option="None" returnCode="0" nextNode="100"/>
+    </node>
+    <node text ="I need the student card..." id ="1">
+      <dialogue option="Continue" returnCode="0" nextNode="100"/>
     </node>
     <node text ="Bye" id ="100">
     </node>

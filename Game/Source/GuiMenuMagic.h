@@ -21,6 +21,7 @@ public:
 
 	void AbleDisableMagic();
 	bool GetActiveMagic() { return active; };
+	void SetActiveMagic(bool state) { active = state; };
 
 	void MovePosition();
 

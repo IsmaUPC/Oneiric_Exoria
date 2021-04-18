@@ -182,6 +182,7 @@ bool SceneIntro::PostUpdate()
 
 	if (menuSettings->active)
 	{
+		app->render->DrawRectangle({ 935, 427, 237, 237 }, 0, 0, 0, 100);
 		menuSettings->Draw();
 	}
 

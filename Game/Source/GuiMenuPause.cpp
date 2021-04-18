@@ -91,6 +91,7 @@ bool GuiMenuPause::PostUpdate()
 
 	if (menuSettings->active)
 	{
+		app->render->DrawRectangle({ -app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, 237, 237 }, 0, 0, 0, 100);
 		menuSettings->Draw();
 	}
 

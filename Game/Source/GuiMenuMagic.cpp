@@ -73,6 +73,7 @@ void GuiMenuMagic::LoadMagics(const char* file)
 				Magic* magic = new Magic;
 				magic->id = character.attribute("ID").as_int();
 				magic->level = n.attribute("level").as_int();
+				magic->type = n.attribute("type").as_int();
 				magic->name = n.attribute("name").as_string("");
 				magic->damage = n.attribute("damage").as_int();
 				magic->mana = n.attribute("mana").as_int();
