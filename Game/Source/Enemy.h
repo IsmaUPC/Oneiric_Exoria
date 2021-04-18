@@ -23,6 +23,8 @@ public:
 
 	void CheckCollisionEnemyToPlayer();
 
+	void SetAnimationState();
+
 	bool Update(float dt);
 
 	bool PostUpdate();

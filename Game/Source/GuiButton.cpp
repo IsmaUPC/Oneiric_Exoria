@@ -10,7 +10,19 @@ GuiButton::GuiButton(uint32 id, SDL_Rect bounds, const char* text, TypeButton ty
 	this->font = app->sceneManager->GetGuiFont();
 	this->bounds = bounds;
 	TTF_SizeText(this->font, text, &this->bounds.w, &this->bounds.h);
+	ResizeButton(&this->bounds.w, &this->bounds.h);
 	this->text = text;
+}
+
+void GuiButton::ResizeButton(int* w, int* h)
+{
+	bounds.w = *w;
+	bounds.h = *h;
+	bounds.x -= 5;
+	bounds.y -= 5;
+	bounds.w += 10;
+	bounds.h += 10;
+	bounds.x -= bounds.w / 2;
 }
 
 GuiButton::~GuiButton()
@@ -70,7 +82,7 @@ bool GuiButton::Draw()
 		break;
 	case GuiControlState::FOCUSED: 
 		rect.x+= 1*rect.w;
-		app->render->DrawTexture(app->guiManager->handCursor, bounds.x - 35, bounds.y - 5, &app->guiManager->handAnim->GetCurrentFrame());
+		app->render->DrawTexture(app->guiManager->handCursor, bounds.x - 35, bounds.y + 5, &app->guiManager->handAnim->GetCurrentFrame());
 		if (drawRectangles)app->render->DrawRectangle(bounds, 255, 255, 0, 190);
 		break;
 	case GuiControlState::PRESSED:
@@ -88,7 +100,7 @@ bool GuiButton::Draw()
 	centerX = (bounds.w / 2) - (((float)(text.Length() / 2)+0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centerY = (bounds.h/2)-(48/4);
-	app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), {60, 43, 13});
+	app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13});
 
 	return true;
 }

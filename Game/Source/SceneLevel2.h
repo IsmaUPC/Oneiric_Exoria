@@ -9,13 +9,6 @@
 
 struct SDL_Texture;
 
-struct AnimationFather2
-{
-	iPoint position = { 0,0 };
-	Animation* currentAnimation = nullptr;
-	SDL_Texture* texture = nullptr;
-};
-
 class SceneLevel2 : public SceneControl
 {
 public:
@@ -38,6 +31,8 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
+
+	void UpdateDialog();
 
 	// Called before all Updates
 	bool PostUpdate();
@@ -66,9 +61,7 @@ private:
 	bool debugCollisions = false;
 	bool victory = false;
 	bool lose = false;
-	AnimationFather2 animationFather;
 	Animation idleAnim;
-	SDL_Texture* img = nullptr;
 	int moveBG0 = 0;
 	int moveBG1 = 0;
 	int moveBG2 = 0;

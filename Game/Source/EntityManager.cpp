@@ -148,8 +148,8 @@ void EntityManager::CheckSpawnEntities()
 		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
 			a = spawnEntity->data->entityData.position;
-			if ((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
+			if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD)
 				SpawnEntity(spawnEntity->data);
 		}
 	}

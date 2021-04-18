@@ -39,11 +39,11 @@ bool SceneIntro::Start()
 	int padding = 110;
 	int yPosition = 330 + margin;
 
-	btnPlay = new GuiButton(1, { 1053 - 25, 470,  0, 0 }, "Play", RECTANGLE);
+	btnPlay = new GuiButton(1, { 935 + 237/2, 470,  0, 0 }, "Play", RECTANGLE);
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
-	btnContinue = new GuiButton(2, { 1053 - 85 / 2 , 510,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue = new GuiButton(2, { 935 + 237/2, 510,  85, 25 }, "Continue", RECTANGLE);
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -55,11 +55,11 @@ bool SceneIntro::Start()
 	btnCredits->SetObserver(this);
 	app->guiManager->AddGuiButton(btnCredits);*/
 
-	btnSettings = new GuiButton(3, { 1053 - 75/2, 550,  75, 25 }, "Settings", RECTANGLE);
+	btnSettings = new GuiButton(3, { 935 + 237/2, 550,  75, 25 }, "Settings", RECTANGLE);
 	btnSettings->SetObserver(this);
 	app->guiManager->AddGuiButton(btnSettings);
 
-	btnExit = new GuiButton(4, { 1053 - 35/2 , 590,  35, 25 }, "Exit", EXIT);
+	btnExit = new GuiButton(4, { 935 + 237/2, 590,  35, 25 }, "Exit", EXIT);
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	

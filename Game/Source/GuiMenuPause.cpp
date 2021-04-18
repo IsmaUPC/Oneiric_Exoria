@@ -86,7 +86,7 @@ bool GuiMenuPause::PostUpdate()
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
-		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W/2 - 237/2, -app->render->camera.y + WINDOW_H/2 - 237/2, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		app->render->DrawTextBox(-app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
 
 	if (menuSettings->active)
@@ -200,7 +200,10 @@ void GuiMenuPause::AbleDisableMenu()
 	btnExit->active = active;
 	
 	btnResume->PressButtonSound();
-	if (active == true)MovePosition();
+	if (active == true)
+	{
+		MovePosition();
+	}
 }
 
 void GuiMenuPause::AbleDisableSetting()
@@ -224,7 +227,7 @@ void GuiMenuPause::CloaseMenuSettings()
 void GuiMenuPause::MovePosition()
 {
 	int x = -app->render->camera.x + initialPos.x;
-	int y = -app->render->camera.y + initialPos.y + 30;
+	int y = -app->render->camera.y + initialPos.y +30;
 
 	btnResume->bounds.x = x + 237/2 - btnResume->bounds.w/2;
 	btnResume->bounds.y = y;
