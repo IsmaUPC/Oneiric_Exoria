@@ -78,6 +78,7 @@ public:
 	
 	void SaveStateLose();
 	void SaveState(TypeEntity pType, int i);
+	void ContinueGame();
 
 private:
 
