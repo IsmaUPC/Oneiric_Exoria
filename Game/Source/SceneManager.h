@@ -69,9 +69,12 @@ public:
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
 	SceneControl* GetCurrentScene() { return current; };
+	bool GetOnTransition() { return onTransition; };
+
 	bool GetWinBattle() { return win; };
 	void SetWinBattle(bool ret) { win = ret; };
-	bool GetOnTransition() { return onTransition; };
+	bool GetLoseBattle() { return lose; };
+	void SetLoseBattle(bool ret) { lose = ret; };
 
 private:
 
@@ -96,6 +99,7 @@ private:
 	List<SceneControl*> scenes;
 	bool ViewRectangles = false;
 	bool win = false;
+	bool lose = false;
 
 public:
 	SceneLogo* sceneLogo = nullptr;
@@ -113,6 +117,7 @@ public:
 
 	int lastLevel = 0;
 	TTF_Font* guiFont = nullptr;
+	TTF_Font* titleFont = nullptr;
 };
 
 #endif // __SCENEMANAGER_H__

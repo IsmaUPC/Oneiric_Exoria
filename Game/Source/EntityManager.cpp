@@ -82,10 +82,10 @@ bool EntityManager::Update(float dt)
 
 bool EntityManager::PostUpdate()
 {
-	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
-		entiti->data->PostUpdate();
 	if (!app->sceneManager->GetWinBattle())
 	{
+		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
+			entiti->data->PostUpdate();
 		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
 			partner->data->PostUpdate();
 	}
@@ -148,8 +148,8 @@ void EntityManager::CheckSpawnEntities()
 		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
 			a = spawnEntity->data->entityData.position;
-			if ((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
+			if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD)
 				SpawnEntity(spawnEntity->data);
 		}
 	}

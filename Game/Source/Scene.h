@@ -33,6 +33,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void UpdateDialog();
+
 	// Called before all Updates
 	bool PostUpdate();
 

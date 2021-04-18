@@ -56,6 +56,7 @@ bool SceneManager::Start()
 	current = new SceneLogo();
 	current->Start();
 	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
+	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
 	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 	next = nullptr;
 
@@ -98,7 +99,6 @@ bool SceneManager::Update(float dt)
 				current->CleanUp();	// Unload current screen
 				app->guiManager->DeleteList();
 				next->Start();	// Load next screen
-
 
 				if (current->isContinue)app->LoadGameRequest();
 				else if (next->name == "scene" || next->name == "sceneLevel2")// Save
@@ -192,6 +192,7 @@ bool SceneManager::CleanUp()
 	if (current != nullptr) current->CleanUp();
 
 	app->fonts->UnLoad(0);
+	app->fonts->UnLoad(1);
 
 	return true;
 }

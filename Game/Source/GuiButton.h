@@ -23,6 +23,7 @@ class GuiButton : public GuiControl
 public:
 
 	GuiButton(uint32 id, SDL_Rect bounds, const char *text, TypeButton typeButton, SDL_Texture* texture = NULL);
+	void ResizeButton(int* w, int* h);
 	virtual ~GuiButton();
 
 	bool Update(float dt);

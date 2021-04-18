@@ -166,15 +166,16 @@ bool Scene::Update(float dt)
 		lose = true;
 	}
 
-	btn1->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175;
-	btn1->bounds.y = -app->render->camera.y + 675;
-	btn2->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175*2;
-	btn2->bounds.y = -app->render->camera.y + 675;
-	btn3->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175*3;
-	btn3->bounds.y = -app->render->camera.y + 675;
+	UpdateDialog();
+
+	return ret;
+}
+
+void Scene::UpdateDialog()
+{
 	if (app->dialogueSystem->onDialog == true)
 	{
-
+		int w, h;
 		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
 		{
 			btn1->active = false;
@@ -184,12 +185,20 @@ bool Scene::Update(float dt)
 			{
 				btn1->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
 				btn1->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn1->text.GetString(), &w, &h);
+				btn1->ResizeButton(&w, &h);
+				btn1->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80;
+				btn1->bounds.y = -app->render->camera.y + 665;
 			}
 			if (i == 1)
 			{
 				btn2->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
 				btn1->active = true;
 				btn2->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn2->text.GetString(), &w, &h);
+				btn2->ResizeButton(&w, &h);
+				btn2->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175;
+				btn2->bounds.y = -app->render->camera.y + 665;
 			}
 			if (i == 2)
 			{
@@ -197,6 +206,10 @@ bool Scene::Update(float dt)
 				btn1->active = true;
 				btn2->active = true;
 				btn3->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn3->text.GetString(), &w, &h);
+				btn3->ResizeButton(&w, &h);
+				btn3->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175*2;
+				btn3->bounds.y = -app->render->camera.y + 665;
 			}
 		}
 	}
@@ -208,7 +221,6 @@ bool Scene::Update(float dt)
 		btn3->active = false;
 	}
 
-	return ret;
 }
 
 // Called each loop iteration

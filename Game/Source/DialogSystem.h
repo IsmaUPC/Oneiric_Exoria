@@ -66,6 +66,8 @@ public:
 	}
 	~DialogueSystem();
 
+	void UpdateDialog();
+
 	bool Start();
 	bool Update(float dt);
 	bool PostUpdate();
@@ -77,10 +79,13 @@ public:
 	DialogueNode* currentNode;
 	std::vector <DialogueTree*> dialogueTrees;
 	bool onDialog = false;
-	SDL_Texture* moonCorner;
 	void SetId(int id_) { id = id_; };
 	int id = 0;
 	bool missClick = false;
+
+	GuiButton* btn1 = nullptr;
+	GuiButton* btn2 = nullptr;
+	GuiButton* btn3 = nullptr;
 
 private:
 	//int playerInput = 7;

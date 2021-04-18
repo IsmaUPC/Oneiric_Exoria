@@ -16,7 +16,6 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue("dialogue_tree.xml");
-	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 
 
 	return true;
@@ -40,13 +39,13 @@ bool DialogueSystem::PostUpdate()
 	{
 		char NPCdialogue[128] = { 0 };
 		sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 250, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
+		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
 
 		char response[128] = { 0 };
 		for (int i = 0; i < currentNode->answersList.Count(); i++)
 		{
 			sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
-			app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 60, 43, 13 });
+			//app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 60, 43, 13 });
 		}
 	}
 
@@ -65,8 +64,6 @@ bool DialogueSystem::CleanUp()
 	}
 	dialogueTrees.clear();
 
-	app->tex->UnLoad(moonCorner);
-
 	return true;
 }
 
@@ -77,7 +74,10 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
-				if (currentNode->dialogueOptions[playerInput]->nextNode == 100) onDialog = false;
+				if (currentNode->dialogueOptions[playerInput]->nextNode == 100)
+				{
+					onDialog = false;
+				}
 				else currentNode = dialogueTrees[treeId]->dialogueNodes[i];
 				break;
 			}

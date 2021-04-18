@@ -100,7 +100,6 @@ bool SceneLevel2::Start()
 
 
 
-
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
@@ -144,7 +143,7 @@ bool SceneLevel2::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-	
+
 	if (app->player->win)victory = true;
 
 	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
@@ -159,15 +158,17 @@ bool SceneLevel2::Update(float dt)
 		app->dialogueSystem->missClick = false;
 	}
 
-	btn1->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175;
-	btn1->bounds.y = -app->render->camera.y + 675;
-	btn2->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175 * 2;
-	btn2->bounds.y = -app->render->camera.y + 675;
-	btn3->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175 * 3;
-	btn3->bounds.y = -app->render->camera.y + 675;
+	UpdateDialog();
+
+
+	return true;
+}
+
+void SceneLevel2::UpdateDialog()
+{
 	if (app->dialogueSystem->onDialog == true)
 	{
-
+		int w, h;
 		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
 		{
 			btn1->active = false;
@@ -177,12 +178,20 @@ bool SceneLevel2::Update(float dt)
 			{
 				btn1->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
 				btn1->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn1->text.GetString(), &w, &h);
+				btn1->ResizeButton(&w, &h);
+				btn1->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80;
+				btn1->bounds.y = -app->render->camera.y + 665;
 			}
 			if (i == 1)
 			{
 				btn2->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
 				btn1->active = true;
 				btn2->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn2->text.GetString(), &w, &h);
+				btn2->ResizeButton(&w, &h);
+				btn2->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175;
+				btn2->bounds.y = -app->render->camera.y + 665;
 			}
 			if (i == 2)
 			{
@@ -190,6 +199,10 @@ bool SceneLevel2::Update(float dt)
 				btn1->active = true;
 				btn2->active = true;
 				btn3->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn3->text.GetString(), &w, &h);
+				btn3->ResizeButton(&w, &h);
+				btn3->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175 * 2;
+				btn3->bounds.y = -app->render->camera.y + 665;
 			}
 		}
 	}
@@ -200,9 +213,6 @@ bool SceneLevel2::Update(float dt)
 		btn2->active = false;
 		btn3->active = false;
 	}
-
-
-	return true;
 }
 
 // Called each loop iteration
@@ -249,7 +259,6 @@ bool SceneLevel2::CleanUp()
 	active = false;
 	return ret;
 }
-
 
 
 void SceneLevel2::DebugKeys()

@@ -147,8 +147,8 @@ void GuiMenuMagic::MovePosition()
 	magic4->bounds.x = x + 110;
 	magic4->bounds.y = y + padding * 1;
 
-	close->bounds.x = x + 55;
-	close->bounds.y = y + padding * 2;
+	close->bounds.x = x + 70;
+	close->bounds.y = y + padding * 2 -10;
 }
 
 void GuiMenuMagic::SetIdTurn(int turn)
