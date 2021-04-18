@@ -79,7 +79,7 @@ bool SceneLevel2::Start()
 
 			if (typeNode % 2 == 0)
 			{
-				pos.y -= 2;
+				pos.y -= 3;
 				app->player->playerData.direction = WALK_UP;
 			}
 			else
