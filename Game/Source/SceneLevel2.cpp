@@ -226,7 +226,6 @@ void SceneLevel2::UpdateDialog()
 // Called each loop iteration
 bool SceneLevel2::PostUpdate()
 {
-
 	// Draw map
 	app->map->Draw();
 

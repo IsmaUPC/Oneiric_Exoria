@@ -347,7 +347,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 
-	btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(24, { WINDOW_W/2, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
 	btnContinue->SetObserver(this);
 	btnContinue->active = false;
 	app->guiManager->AddGuiButton(btnContinue);
@@ -753,7 +753,7 @@ bool SceneBattle::Update(float dt_)
 				btnContinue->bounds.x += 5;
 				btnExit->bounds = btnContinue->bounds;
 				btnExit->bounds.y += 40;
-				btnExit->bounds.x += 20;
+				btnExit->bounds.x = WINDOW_W/2-25;
 				AbleDisableButtons();
 				lose = true;
 				app->audio->PlayFx(loseFx);
@@ -1007,7 +1007,6 @@ bool SceneBattle::PostUpdate()
 					}
 				}
 			}
-
 
 			// Draw Level
 			rec.y -= 70;
@@ -1378,7 +1377,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 				}
 				isContinue = true;
 				app->audio->PlayFx(exitFx);
-				TransitionToScene(SceneType::LEVEL1);
+				TransitionToScene(SceneType::LEVEL3);
 			}			
 		}
 		// Continue
@@ -1422,7 +1421,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			}
 
 			isContinue = true;
-			TransitionToScene(SceneType::LEVEL1);
+			TransitionToScene(SceneType::LEVEL3);
 		}
 		else if (control->id == 25)
 		{

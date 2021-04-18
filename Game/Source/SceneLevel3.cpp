@@ -22,7 +22,7 @@
 SceneLevel3::SceneLevel3()
 {
 	active = true;
-	name.Create("SceneLevel3");
+	name.Create("sceneLevel3");
 }
 
 // Destructor
