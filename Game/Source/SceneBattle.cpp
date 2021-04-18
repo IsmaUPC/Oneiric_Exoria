@@ -132,7 +132,11 @@ void SceneBattle::LoadAnimations()
 	for (int i = 0; i < 12; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
+		if (i == 2 || i == 6 || i == 10)
+		{
+			b->loop = false;
+		}
+		else b->loop = true;
 		b->speed = 0.1;
 		if (i % 2) numSprites = 2;
 		else numSprites = 4;
@@ -353,11 +357,6 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 	btnContinue->active = false;
 	app->guiManager->AddGuiButton(btnContinue);
 
-	btnGod = new GuiButton(25, { WINDOW_W -40, WINDOW_H-30,  10, 20 }, "GOD", RECTANGLE, btnTextureAtlas);
-	btnGod->SetObserver(this);
-	btnGod->active = true;
-	app->guiManager->AddGuiButton(btnGod);
-
 	//MenuMagic
 	menuMagic = new GuiMenuMagic({ WINDOW_W - 420, yPosition +20}, this);
 	activeMenuMagic = false;
@@ -379,6 +378,38 @@ bool SceneBattle::Update(float dt_)
 	//GamePad& pad = app->input->pads[0];
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
+	}
+	for (int i = 0; i < enemies.Count(); i++)
+	{
+		TypeEntity eType = enemies.At(i)->data->entityData.type;
+		if (enemies.At(i)->data->entityData.currentAnimation->HasFinished() == true &&
+			((enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(2)->data ||
+			enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(5)->data) ||
+				enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(8)->data))
+		{
+			switch (eType)
+			{
+			case BANDIT:
+				animationsEnemies.At(2)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+				break;
+			case FIGHTER:
+				animationsEnemies.At(5)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+				break;
+			case SAPLING:
+				animationsEnemies.At(8)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		god = !god;
 	}
 	//*******************
 	if (!win && !lose)
@@ -411,14 +442,12 @@ bool SceneBattle::Update(float dt_)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
 
 			if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].b || app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT) {
 				btnAttack->state = GuiControlState::NORMAL;
 				btnMagic->state = GuiControlState::NORMAL;
 				btnDefense->state = GuiControlState::NORMAL;
 				btnExit->state = GuiControlState::NORMAL;
-				btnGod->state = GuiControlState::NORMAL;
 
 				faseAction = SELECT_ACTION;
 			}
@@ -467,6 +496,7 @@ bool SceneBattle::Update(float dt_)
 		{
 			if (!hit)
 			{
+
 				hit = true;
 				if (magicInUse == nullptr)
 				{
@@ -494,7 +524,6 @@ bool SceneBattle::Update(float dt_)
 					btnMagic->state = GuiControlState::DISABLED;
 					btnDefense->state = GuiControlState::DISABLED;
 					btnExit->state = GuiControlState::DISABLED;
-					btnGod->state = GuiControlState::DISABLED;
 				}
 			}
 			else
@@ -663,8 +692,6 @@ bool SceneBattle::Update(float dt_)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
-
 
 			if (!moveBarTurn)
 			{
@@ -675,12 +702,35 @@ bool SceneBattle::Update(float dt_)
 					hit = true;
 					// Find heald of actual enemy
 					int theHealth = 1;
+					int enemyIndex = 0;
 					for (int i = 0; i < enemies.Count(); i++) {
 						if (turnSort[turn].entityData.positionInitial == enemies.At(i)->data->entityData.positionInitial)
+						{
 							theHealth = enemies.At(i)->data->stats.health;
+							enemyIndex = i;
+						}
 					}
 
-					if (theHealth > 0 && !god) {
+					TypeEntity eType = enemies.At(enemyIndex)->data->entityData.type;
+					if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+					{
+						switch (eType)
+						{
+						case BANDIT:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(2)->data;
+							break;
+						case FIGHTER:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(5)->data;
+							break;
+						case SAPLING:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(8)->data;
+							break;
+						default:
+							break;
+						}
+					}
+
+					if (theHealth > 0) {
 						if (magicInUse == nullptr)
 						{
 							ally = (rand() % partners.Count());
@@ -701,6 +751,9 @@ bool SceneBattle::Update(float dt_)
 								}
 							}
 							newHealth = partners.At(ally)->data->stats.health - turnSort[turn].stats.attack;
+							if (god) {
+								newHealth = partners.At(ally)->data->stats.health;
+							}
 						}
 						else
 						{
@@ -723,6 +776,9 @@ bool SceneBattle::Update(float dt_)
 							}
 			
 							newHealth = partners.At(ally)->data->stats.health - magicInUse->damage;
+							if (god){
+								newHealth = partners.At(ally)->data->stats.health;
+							}
 						}
 					}
 				}
@@ -733,6 +789,10 @@ bool SceneBattle::Update(float dt_)
 					if (partners.At(ally)->data->stats.health > newHealth) {
 						//partners.At(ally)->data->entityData.state = HIT;
 						//partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(ally)->data;
+						/*if (enemies.At)
+						{
+
+						}*/
 						TypeEntity pType = partners.At(ally)->data->entityData.type;
 						if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
 						{
@@ -856,7 +916,7 @@ bool SceneBattle::PostUpdate()
 
 	if (god)
 	{
-		app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
+		app->render->DrawRectangle({ WINDOW_W - 50, WINDOW_H - 50,  50, 50 }, orange.r, orange.g, orange.b, 255);
 	}
 	//HitBox partners
 	/*for (int i = 0; i < partners.Count(); i++){
@@ -1111,7 +1171,7 @@ void SceneBattle::AbleDisableButtons()
 	btnDefense->active = false;
 	btnMagic->active = false;
 	btnExit->active = false;
-	btnGod->active = false;
+
 }
 
 void SceneBattle::DrawBarLives()
@@ -1277,7 +1337,6 @@ void SceneBattle::DrawTurnBar()
 		btnMagic->state = GuiControlState::DISABLED;
 		btnDefense->state = GuiControlState::DISABLED;
 		btnExit->state = GuiControlState::DISABLED;
-		btnGod->state = GuiControlState::DISABLED;
 	}
 
 	if (offset < -64 + 38) {
@@ -1286,7 +1345,6 @@ void SceneBattle::DrawTurnBar()
 		btnMagic->state = GuiControlState::NORMAL;
 		btnDefense->state = GuiControlState::NORMAL;
 		btnExit->state = GuiControlState::NORMAL;
-		btnGod->state = GuiControlState::NORMAL;
 	}
 }
 
@@ -1409,7 +1467,6 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
 
 		}
 		//DEFENSE
@@ -1497,15 +1554,6 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 
 			isContinue = true;
 			TransitionToScene(SceneType::LEVEL3);
-		}
-		else if (control->id == 25)
-		{
-			if (!god)
-			{
-				god = true;
-			}else{
-				god = false;
-			}
 		}
 
 		//--MAGIC MENU--
