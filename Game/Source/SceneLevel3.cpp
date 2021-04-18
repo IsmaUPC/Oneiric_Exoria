@@ -102,6 +102,7 @@ bool SceneLevel3::Start()
 	app->entityManager->AddEntity(BANDIT, 14, 9, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 4, 12, 3, 2, false);
+	app->entityManager->AddEntity(BANDIT, 3, 5, 4, 2, false);
 
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 

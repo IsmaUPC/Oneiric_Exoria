@@ -207,6 +207,20 @@ void SceneBattle::AddEntities()
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
 		app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
 		break;
+	case 4:
+		// Load textures
+		img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+
+		// Add Enemies
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(BANDIT, 13, 17, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 10, 19, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 7, 17, 0, randomLvl);
+		break;
 	default:
 		break;
 	}
