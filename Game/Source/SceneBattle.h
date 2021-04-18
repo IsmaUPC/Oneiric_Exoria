@@ -110,6 +110,7 @@ private:
 
 	List<Animation*> spritesBarTurn;
 	List<Animation*> animationsPlayer;
+	List<Animation*> animationsHitPlayer;
 	List<Animation*> animationsEnemies;
 
 	List<Entity*> enemies;

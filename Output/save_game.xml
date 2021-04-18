@@ -6,32 +6,41 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="288" y="-472" />
+		<camera x="-116" y="118" />
 	</renderer>
 	<player>
-		<data x="352" y="832" direction="2" level="1" exp="0" health="8" />
+		<data x="758" y="242" direction="1" level="1" exp="2" health="8" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="642" y="230" />
+			<breadcrumb x="644" y="232" />
+			<breadcrumb x="646" y="234" />
+			<breadcrumb x="648" y="236" />
+			<breadcrumb x="650" y="238" />
+			<breadcrumb x="652" y="240" />
+			<breadcrumb x="652" y="242" />
+		</path>
 		<partners>
-			<partner x="312" y="832" breadcrumb="0" direction="1" level="1" exp="0" />
-			<partner x="272" y="832" breadcrumb="0" direction="1" level="1" exp="0" />
-			<partner x="232" y="832" breadcrumb="0" direction="1" level="1" exp="0" />
+			<partner x="716" y="242" breadcrumb="7" direction="1" level="1" exp="2" />
+			<partner x="676" y="242" breadcrumb="7" direction="1" level="1" exp="0" />
+			<partner x="638" y="230" breadcrumb="0" direction="1" level="1" exp="2" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="2" />
+		<level lvl="1" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="2890" />
 		<entities>
-			<entity type="13" x="-9" y="14" id="0" level="0" state="0" move="true" />
-			<entity type="14" x="23" y="21" id="4" level="0" state="0" move="false" />
-			<entity type="14" x="11" y="38" id="5" level="0" state="0" move="false" />
-			<entity type="14" x="12" y="34" id="6" level="0" state="0" move="false" />
-			<entity type="14" x="24" y="19" id="10" level="0" state="0" move="false" />
-			<entity type="14" x="11" y="22" id="14" level="0" state="0" move="false" />
+			<entity type="13" x="3" y="-3" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="26" y="14" id="1" level="1" state="0" move="true" />
+			<entity type="2" x="24" y="8" id="2" level="1" state="6" move="false" />
+			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
+			<entity type="14" x="20" y="12" id="7" level="0" state="0" move="false" />
+			<entity type="14" x="10" y="3" id="9" level="0" state="0" move="false" />
+			<entity type="14" x="31" y="3" id="9" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>
 </save_state>

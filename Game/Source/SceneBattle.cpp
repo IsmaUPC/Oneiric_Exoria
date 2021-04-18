@@ -83,11 +83,12 @@ bool SceneBattle::Start()
 
 void SceneBattle::LoadAnimations()
 {
+	// Load Player Animations
 	for (int i = 0; i < 4; i++)
 	{
 		Animation* b = new Animation;
 		b->loop = true;
-		b->speed = 0.1;
+		b->speed = 0.1f;
 		for (int j = 0; j < 6; j++)
 		{
 			if (i == 3)
@@ -98,6 +99,20 @@ void SceneBattle::LoadAnimations()
 		}
 		animationsPlayer.Add(b);
 	}
+
+	//Load player hit animations
+	for (int i = 0; i < 4; i++)
+	{
+		Animation* b = new Animation;
+		b->loop = true;
+		b->speed = 0.1f;
+		for (int j = 0; j < 2; j++)
+		{
+			b->PushBack({j * 64 + ((64 * 2) * i), 672, 64, 96});
+		}
+		animationsHitPlayer.Add(b);
+	}
+
 	// Load Animation Bar Turn
 	for (int i = 0; i < 4; i++)
 	{
@@ -366,7 +381,7 @@ bool SceneBattle::Update(float dt_)
 		{
 		case SELECT_ACTION:
 
-			if (turnSort[turn].entityData.type < 15)
+			if (turnSort[turn].entityData.type < KENZIE_)
 			{
 				faseAction = ENEMY_ATTACK;
 			}
@@ -640,9 +655,55 @@ bool SceneBattle::Update(float dt_)
 					if (newHealth <= 0)newHealth = 0;
 					//Progres damage
 					if (partners.At(ally)->data->stats.health > newHealth) {
+						//partners.At(ally)->data->entityData.state = HIT;
+						//partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(ally)->data;
+						TypeEntity pType = partners.At(ally)->data->entityData.type;
+						if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
+						{
+							switch (pType)
+							{
+							case KENZIE_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(0)->data;
+								break;
+							case KEILER_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(1)->data;
+								break;
+							case ISRRA_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(2)->data;
+								break;
+							case BRENDA_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(3)->data;
+								break;
+
+							default:
+								break;
+							}
+						}
 						partners.At(ally)->data->stats.health -= dt * reduceLieveVelocity;
 					}
 					else {
+						TypeEntity pType = partners.At(ally)->data->entityData.type;
+						if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
+						{
+							switch (pType)
+							{
+							case KENZIE_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsPlayer.At(0)->data;
+								break;
+							case KEILER_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsPlayer.At(1)->data;
+								break;
+							case ISRRA_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsPlayer.At(2)->data;
+								break;
+							case BRENDA_:
+								partners.At(ally)->data->entityData.currentAnimation = animationsPlayer.At(3)->data;
+								break;
+
+							default:
+								break;
+							}
+						}
 						partners.At(ally)->data->stats.health = newHealth;
 						if (partners.At(ally)->data->stats.health < 1) {
 							partners.At(ally)->data->stats.health = 0;
@@ -705,6 +766,9 @@ bool SceneBattle::Update(float dt_)
 			}
 		}
 	}
+
+
+
 	return true;
 }
 
