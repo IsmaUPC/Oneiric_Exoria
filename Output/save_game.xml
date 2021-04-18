@@ -6,24 +6,27 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="-116" y="118" />
+		<camera x="-126" y="108" />
 	</renderer>
 	<player>
-		<data x="758" y="242" direction="1" level="1" exp="2" health="8" />
+		<data x="768" y="252" direction="1" level="1" exp="0" health="8" />
 		<coins count="0" />
 		<path>
-			<breadcrumb x="642" y="230" />
-			<breadcrumb x="644" y="232" />
-			<breadcrumb x="646" y="234" />
-			<breadcrumb x="648" y="236" />
-			<breadcrumb x="650" y="238" />
-			<breadcrumb x="652" y="240" />
-			<breadcrumb x="652" y="242" />
+			<breadcrumb x="704" y="270" />
+			<breadcrumb x="706" y="268" />
+			<breadcrumb x="708" y="266" />
+			<breadcrumb x="710" y="264" />
+			<breadcrumb x="712" y="262" />
+			<breadcrumb x="714" y="260" />
+			<breadcrumb x="716" y="258" />
+			<breadcrumb x="718" y="256" />
+			<breadcrumb x="720" y="254" />
+			<breadcrumb x="720" y="252" />
 		</path>
 		<partners>
-			<partner x="716" y="242" breadcrumb="7" direction="1" level="1" exp="2" />
-			<partner x="676" y="242" breadcrumb="7" direction="1" level="1" exp="0" />
-			<partner x="638" y="230" breadcrumb="0" direction="1" level="1" exp="2" />
+			<partner x="726" y="252" breadcrumb="10" direction="1" level="1" exp="0" />
+			<partner x="688" y="270" breadcrumb="0" direction="1" level="1" exp="0" />
+			<partner x="648" y="270" breadcrumb="0" direction="1" level="1" exp="0" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -32,11 +35,12 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="2890" />
+		<time value="2660" />
 		<entities>
 			<entity type="13" x="3" y="-3" id="0" level="0" state="0" move="true" />
 			<entity type="1" x="26" y="14" id="1" level="1" state="0" move="true" />
 			<entity type="2" x="24" y="8" id="2" level="1" state="6" move="false" />
+			<entity type="3" x="16" y="5" id="3" level="2" state="0" move="false" />
 			<entity type="14" x="21" y="6" id="2" level="0" state="0" move="false" />
 			<entity type="14" x="20" y="12" id="7" level="0" state="0" move="false" />
 			<entity type="14" x="10" y="3" id="9" level="0" state="0" move="false" />

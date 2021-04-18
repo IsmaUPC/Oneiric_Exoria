@@ -357,11 +357,6 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 	btnContinue->active = false;
 	app->guiManager->AddGuiButton(btnContinue);
 
-	btnGod = new GuiButton(25, { WINDOW_W -40, WINDOW_H-30,  10, 20 }, "GOD", RECTANGLE, btnTextureAtlas);
-	btnGod->SetObserver(this);
-	btnGod->active = true;
-	app->guiManager->AddGuiButton(btnGod);
-
 	//MenuMagic
 	menuMagic = new GuiMenuMagic({ WINDOW_W - 420, yPosition +20}, this);
 	activeMenuMagic = false;
@@ -376,6 +371,10 @@ bool SceneBattle::Update(float dt_)
 {
 	dt = dt_;
 	SpeedAnimationCheck(dt_);
+	for (int i = 0; i < animationsEnemies.Count(); i++)
+	{
+		animationsEnemies.At(i)->data->Update();
+	}
 	//GamePad& pad = app->input->pads[0];
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
@@ -406,6 +405,11 @@ bool SceneBattle::Update(float dt_)
 				break;
 			}
 		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	{
+		god = !god;
 	}
 	//*******************
 	if (!win && !lose)
@@ -438,14 +442,12 @@ bool SceneBattle::Update(float dt_)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
 
 			if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].b || app->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KeyState::KEY_REPEAT) {
 				btnAttack->state = GuiControlState::NORMAL;
 				btnMagic->state = GuiControlState::NORMAL;
 				btnDefense->state = GuiControlState::NORMAL;
 				btnExit->state = GuiControlState::NORMAL;
-				btnGod->state = GuiControlState::NORMAL;
 
 				faseAction = SELECT_ACTION;
 			}
@@ -522,7 +524,6 @@ bool SceneBattle::Update(float dt_)
 					btnMagic->state = GuiControlState::DISABLED;
 					btnDefense->state = GuiControlState::DISABLED;
 					btnExit->state = GuiControlState::DISABLED;
-					btnGod->state = GuiControlState::DISABLED;
 				}
 			}
 			else
@@ -691,8 +692,6 @@ bool SceneBattle::Update(float dt_)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
-
 
 			if (!moveBarTurn)
 			{
@@ -731,7 +730,7 @@ bool SceneBattle::Update(float dt_)
 						}
 					}
 
-					if (theHealth > 0 && !god) {
+					if (theHealth > 0) {
 						if (magicInUse == nullptr)
 						{
 							ally = (rand() % partners.Count());
@@ -752,6 +751,9 @@ bool SceneBattle::Update(float dt_)
 								}
 							}
 							newHealth = partners.At(ally)->data->stats.health - turnSort[turn].stats.attack;
+							if (god) {
+								newHealth = partners.At(ally)->data->stats.health;
+							}
 						}
 						else
 						{
@@ -774,6 +776,9 @@ bool SceneBattle::Update(float dt_)
 							}
 			
 							newHealth = partners.At(ally)->data->stats.health - magicInUse->damage;
+							if (god){
+								newHealth = partners.At(ally)->data->stats.health;
+							}
 						}
 					}
 				}
@@ -911,7 +916,7 @@ bool SceneBattle::PostUpdate()
 
 	if (god)
 	{
-		app->render->DrawRectangle({ WINDOW_W - 40, WINDOW_H - 30,  50, 50 }, orange.r, orange.g, orange.b, 255);
+		app->render->DrawRectangle({ WINDOW_W - 50, WINDOW_H - 50,  50, 50 }, orange.r, orange.g, orange.b, 255);
 	}
 	//HitBox partners
 	/*for (int i = 0; i < partners.Count(); i++){
@@ -1166,7 +1171,7 @@ void SceneBattle::AbleDisableButtons()
 	btnDefense->active = false;
 	btnMagic->active = false;
 	btnExit->active = false;
-	btnGod->active = false;
+
 }
 
 void SceneBattle::DrawBarLives()
@@ -1332,7 +1337,6 @@ void SceneBattle::DrawTurnBar()
 		btnMagic->state = GuiControlState::DISABLED;
 		btnDefense->state = GuiControlState::DISABLED;
 		btnExit->state = GuiControlState::DISABLED;
-		btnGod->state = GuiControlState::DISABLED;
 	}
 
 	if (offset < -64 + 38) {
@@ -1341,7 +1345,6 @@ void SceneBattle::DrawTurnBar()
 		btnMagic->state = GuiControlState::NORMAL;
 		btnDefense->state = GuiControlState::NORMAL;
 		btnExit->state = GuiControlState::NORMAL;
-		btnGod->state = GuiControlState::NORMAL;
 	}
 }
 
@@ -1464,7 +1467,6 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			btnMagic->state = GuiControlState::DISABLED;
 			btnDefense->state = GuiControlState::DISABLED;
 			btnExit->state = GuiControlState::DISABLED;
-			btnGod->state = GuiControlState::DISABLED;
 
 		}
 		//DEFENSE
@@ -1552,15 +1554,6 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 
 			isContinue = true;
 			TransitionToScene(SceneType::LEVEL3);
-		}
-		else if (control->id == 25)
-		{
-			if (!god)
-			{
-				god = true;
-			}else{
-				god = false;
-			}
 		}
 
 		//--MAGIC MENU--
