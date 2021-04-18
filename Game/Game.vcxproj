@@ -121,6 +121,7 @@
     <ClCompile Include="Source\SceneBattle.cpp" />
     <ClCompile Include="Source\SceneIntro.cpp" />
     <ClCompile Include="Source\SceneLevel2.cpp" />
+    <ClCompile Include="Source\SceneLevel3.cpp" />
     <ClCompile Include="Source\SceneLogo.cpp" />
     <ClCompile Include="Source\SceneLose.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Source\SceneControl.h" />
     <ClInclude Include="Source\SceneIntro.h" />
     <ClInclude Include="Source\SceneLevel2.h" />
+    <ClInclude Include="Source\SceneLevel3.h" />
     <ClInclude Include="Source\SceneLogo.h" />
     <ClInclude Include="Source\SceneLose.h" />
     <ClInclude Include="Source\SceneManager.h" />

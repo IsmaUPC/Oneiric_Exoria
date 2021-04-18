@@ -1,12 +1,12 @@
+#include "SceneLevel3.h"
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Render.h"
-#include "Scene.h"
 #include "Player.h"
-#include "EntityManager.h"
 #include "Map.h"
+#include "EntityManager.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
 #include "Pathfinding.h"
@@ -17,37 +17,39 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene()
+#define PARALLAX_SPEED -1.3f
+
+SceneLevel3::SceneLevel3()
 {
 	active = true;
-	name.Create("scene");
+	name.Create("SceneLevel3");
 }
 
 // Destructor
-Scene::~Scene()
+SceneLevel3::~SceneLevel3()
 {}
 
 // Called before render is available
-bool Scene::Awake()
+bool SceneLevel3::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
-	numThisScene = 1;
+	numThisScene = 2;
 	return ret;
 }
 
 // Called before the first frame
-bool Scene::Start()
+bool SceneLevel3::Start()
 {
 	app->SaveConfigRequested();
+
+	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
+	// Load map
 	app->SetLastScene((Module*)this);
-
-	victory=false;
+	victory = false;
 	app->player->win = false;
-
-	if (app->map->Load("school_1.tmx") == true)
-	//if (app->map->Load("level.tmx") == true)
-	//if (app->map->Load("room.tmx") == true)
+	if (app->map->Load("school_3.tmx") == true)
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -57,9 +59,9 @@ bool Scene::Start()
 		RELEASE_ARRAY(data);
 	}
 	app->map->active = true;
+	// Positions initials
+	app->player->positionInitial = new iPoint(400, 750);
 
-	// Positions Initials
-	app->player->positionInitial = new iPoint(570, 270);	
 
 	//Move to TpNode Class
 	  //Spawn Player in Tp Position
@@ -75,9 +77,16 @@ bool Scene::Start()
 
 			iPoint pos = app->player->FindNodeTpById(typeNode, idNode)->position;
 
-			if (typeNode % 2 == 0)pos.y -= 2;
-			else pos.y += 2;
-
+			if (typeNode % 2 == 0)
+			{
+				pos.y -= 2;
+				app->player->playerData.direction = WALK_UP;
+			}
+			else
+			{
+				pos.y += 2;
+				app->player->playerData.direction = WALK_DOWN;
+			}
 
 			pos = app->map->MapToWorld(pos);
 
@@ -86,30 +95,13 @@ bool Scene::Start()
 		app->sceneManager->originTpNode = nullptr;
 	}
 
-	// Active calls
 	app->player->Init();
 	app->player->Start();
-	app->audio->active = true;
 
-	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
-	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
-	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
 
-	//NPCs
-	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
-	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
-	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
 
-	//Interactuable objects
-	app->entityManager->AddEntity(NPC, 20, 12, 7, 0, false);
-	app->entityManager->AddEntity(NPC, 31, 30, 8, 0, false);
-	app->entityManager->AddEntity(NPC, 10, 3, 9, 0, false);
-	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
-	
+	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
-	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
@@ -124,61 +116,52 @@ bool Scene::Start()
 	btn3->SetObserver(this);
 	app->guiManager->AddGuiButton(btn3);
 
-	//app->dialogueSystem->missClick = false;
 	return true;
 }
 
-void Scene::SetDebugCollaider()
+void SceneLevel3::SetDebugCollaider()
 {
 	app->map->SetDrawColl();
 }
 
 // Called each loop iteration
-bool Scene::PreUpdate()
+bool SceneLevel3::PreUpdate()
 {
 	return true;
 }
 
 // Called each loop iteration
-bool Scene::Update(float dt)
+bool SceneLevel3::Update(float dt)
 {
-	bool ret = true;
+	// DEBUG KEYS
+	DebugKeys();
+	app->map->checKpointsMap.checkPointOnAnim->Update();
+	iPoint vec;
+	vec.x = 0, vec.y = 0;
+	app->input->GetMousePosition(vec.x, vec.y);
+
+
+	if (app->player->win)victory = true;
+
+	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
+	{
+		LOG("GAME OVER!");
+		lose = true;
+		app->audio->PlayFx(loseFx);
+	}
 
 	//GamePad& pad = app->input->pads[0];
 	if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
 		app->dialogueSystem->missClick = false;
 	}
 
-	// DEBUG KEYS
-	DebugKeys();
-	app->map->checKpointsMap.checkPointOnAnim->Update();
-	if (app->input->GetKey(SDL_SCANCODE_M)==KEY_UP)
-	{
-		app->input->GetMousePosition(app->map->tileDestiny.x, app->map->tileDestiny.y);
-		app->map->tileDestiny = app->map->WorldToMap( (app->render->camera.x*-1+  app->map->tileDestiny.x),
-			(app->render->camera.y -app->map->tileDestiny.y)*-1);
-	}
-
-	iPoint vec;
-	vec.x = 0, vec.y = 0;
-	app->input->GetMousePosition(vec.x, vec.y);
-
-	idleAnim->speed = (dt * 100) * 0.025f;
-
-	if(app->player->win)victory = true;
-
-	else if (app->player->CheckGameOver(1) && lose == false && app->player->godMode == false)
-	{
-		LOG("GAME OVER!");
-		lose = true;
-	}
-
 	UpdateDialog();
 
-	return ret;
+
+	return true;
 }
 
-void Scene::UpdateDialog()
+void SceneLevel3::UpdateDialog()
 {
 	if (app->dialogueSystem->onDialog == true)
 	{
@@ -215,7 +198,7 @@ void Scene::UpdateDialog()
 				btn3->active = true;
 				TTF_SizeText(app->sceneManager->guiFont, btn3->text.GetString(), &w, &h);
 				btn3->ResizeButton(&w, &h);
-				btn3->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175*2;
+				btn3->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175 * 2;
 				btn3->bounds.y = -app->render->camera.y + 665;
 			}
 		}
@@ -227,24 +210,38 @@ void Scene::UpdateDialog()
 		btn2->active = false;
 		btn3->active = false;
 	}
-
 }
 
 // Called each loop iteration
-bool Scene::PostUpdate()
+bool SceneLevel3::PostUpdate()
 {
+
 	// Draw map
 	app->map->Draw();
 
 	bool ret = true;
 
+	if (victory == true)
+	{
+		victory = false;
+		TransitionToScene(SceneType::LEVEL1);
+		return true;
+	}
+	if (lose == true)
+	{
+		lose = false;
+		TransitionToScene(SceneType::LOSE);
+		return true;
+	}
+
 	return ret;
 }
 
 // Called before quitting
-bool Scene::CleanUp()
+bool SceneLevel3::CleanUp()
 {
 	bool ret = true;
+
 	if (!active)
 		return true;
 
@@ -260,7 +257,8 @@ bool Scene::CleanUp()
 	return ret;
 }
 
-void Scene::DebugKeys()
+
+void SceneLevel3::DebugKeys()
 {
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
@@ -277,9 +275,8 @@ void Scene::DebugKeys()
 		app->LoadGameRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-	{
 		SetDebugCollaider();
-	}
+
 
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
@@ -287,8 +284,7 @@ void Scene::DebugKeys()
 		else app->player->godMode = false;
 	}
 }
-
-bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+bool SceneLevel3::OnGuiMouseClickEvent(GuiControl* control)
 {
 	switch (control->type)
 	{
@@ -319,13 +315,13 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	return app->guiManager->GetMenuPause()->Event(control);
 }
 
-bool Scene::LoadState(pugi::xml_node& data)
+bool SceneLevel3::LoadState(pugi::xml_node& data)
 {
 	return true;
 }
 
-bool Scene::SaveState(pugi::xml_node& data) const
+bool SceneLevel3::SaveState(pugi::xml_node& data) const
 {
-	data.child("level").attribute("lvl").set_value(1);
+	data.child("level").attribute("lvl").set_value(2);
 	return true;
 }

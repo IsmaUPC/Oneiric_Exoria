@@ -51,6 +51,8 @@ public:
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
+	
+
 private:
 
 	int numThisScene = 1;
@@ -58,8 +60,6 @@ private:
 	void DebugKeys();
 
 	bool debugCollisions = false;
-	bool victory = false;
-	bool lose = false;
 
 	Animation* idleAnim= new Animation();
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;

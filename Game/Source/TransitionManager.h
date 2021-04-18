@@ -33,10 +33,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Save and Load
-	bool LoadState(pugi::xml_node& node);
-	bool SaveState(pugi::xml_node& node)const;
-
 	// A frame count system to handle the fade time and ratio
 	
 	void ActivateTransition();
@@ -44,14 +40,13 @@ public:
 
 private:
 	
-	float framesCounter = 0;
-	int maxFadeFrames = 0;
-	float deltaTime;
+	float framesCounter = 0.0f;
+	float maxFadeFrames = 0.0f;
+	float deltaTime = 0.0f;
 	SDL_Rect transit1;
-	Render* render;
-	Textures* tex;
-	SceneManager* sceneManager;
-	bool activatorTransition;
+	Render* render = nullptr;
+	Textures* tex = nullptr;
+	bool activatorTransition = false;
 
 };
 

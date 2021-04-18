@@ -146,6 +146,9 @@
     <ClCompile Include="Source\TeleportNode.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneLevel3.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -300,6 +303,9 @@
     </ClInclude>
     <ClInclude Include="Source\TransitionManager.h">
       <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLevel3.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

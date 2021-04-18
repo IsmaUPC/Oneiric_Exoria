@@ -14,11 +14,12 @@ enum class SceneType
 {
 	LOGO,
 	INTRO,
-	LEVEL1,
-	LEVEL2,
 	WIN,
 	LOSE,
-	BATTLE
+	BATTLE,
+	LEVEL1 = 5,
+	LEVEL2 =6,
+	LEVEL3 =7,
 };
 
 class SceneControl
@@ -78,6 +79,9 @@ public:
 
 	bool active = true;
 	SString name;
+
+	bool victory=false;
+	bool lose=false;
 
 	// Possible properties
 	bool loaded = false;

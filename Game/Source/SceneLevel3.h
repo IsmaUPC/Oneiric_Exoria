@@ -1,5 +1,5 @@
-#ifndef __SCENE_LEVEL_2_H__
-#define __SCENE_LEVEL_2_H__
+#ifndef __SCENE_LEVEL_3_H__
+#define __SCENE_LEVEL_3_H__
 
 #include "SceneControl.h"
 #include "Point.h"
@@ -9,14 +9,14 @@
 
 struct SDL_Texture;
 
-class SceneLevel2 : public SceneControl
+class SceneLevel3 : public SceneControl
 {
 public:
 
-	SceneLevel2();
+	SceneLevel3();
 
 	// Destructor
-	virtual ~SceneLevel2();
+	virtual ~SceneLevel3();
 
 	// Called before render is available
 	bool Awake();
@@ -51,7 +51,6 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 
 
-
 private:
 
 	int numThisScene = 2;
@@ -59,6 +58,8 @@ private:
 	void DebugKeys();
 
 	bool debugCollisions = false;
+	bool victory = false;
+	bool lose = false;
 
 	int moveBG0 = 0;
 	int moveBG1 = 0;
@@ -80,5 +81,5 @@ private:
 	GuiButton* btn3 = nullptr;
 };
 
-#endif // __SCENELEVEL2_H__
+#endif // __SCENELEVEL_3_H__
 

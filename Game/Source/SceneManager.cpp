@@ -5,6 +5,7 @@
 #include "SceneIntro.h"
 #include "Scene.h"
 #include "SceneLevel2.h"
+#include "SceneLevel3.h"
 #include "SceneLose.h"
 #include "SceneWin.h"
 #include "SceneBattle.h"
@@ -147,6 +148,7 @@ bool SceneManager::Update(float dt)
 		case SceneType::INTRO: next = new SceneIntro(); break;
 		case SceneType::LEVEL1: next = new Scene(); break;
 		case SceneType::LEVEL2: next = new SceneLevel2(); break;
+		case SceneType::LEVEL3: next = new SceneLevel3(); break;
 		case SceneType::WIN: next = new SceneWin(); break;
 		case SceneType::LOSE: next = new SceneLose(); break;
 		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(transitionFx); break;
@@ -174,6 +176,32 @@ bool SceneManager::Update(float dt)
 bool SceneManager::PostUpdate()
 {
 	bool ret = true;
+
+	if (app->player->win== true)
+	{
+		app->player->win = false;
+		current->victory = false;
+
+		if (originTpNode->typeTpNode == 3)
+		{
+
+		current->TransitionToScene(SceneType((5+originTpNode->idFloor)+1));
+		return true;
+		}
+		else
+		{
+			if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
+			current->TransitionToScene(SceneType((5 + originTpNode->idFloor)-1));
+		}
+
+	}
+	if (lose == true)
+	{
+		current->lose = false;
+		current->TransitionToScene(SceneType::LOSE);
+		return true;
+	}
+
 	// Draw current scene
 	current->PostUpdate();
 	// Draw full screen rectangle in front of everything
