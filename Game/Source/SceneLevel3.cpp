@@ -60,7 +60,7 @@ bool SceneLevel3::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(400, 750);
+	app->player->positionInitial = new iPoint(450, 500);
 
 
 	//Move to TpNode Class
@@ -98,7 +98,10 @@ bool SceneLevel3::Start()
 	app->player->Init();
 	app->player->Start();
 
-
+	// Add Entities
+	app->entityManager->AddEntity(BANDIT, 14, 9, 1, 1);
+	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
+	app->entityManager->AddEntity(SAPLING, 4, 12, 3, 2, false);
 
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
@@ -260,7 +263,7 @@ bool SceneLevel3::CleanUp()
 
 void SceneLevel3::DebugKeys()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
 		app->render->camera.x = 0;
 		app->player->playerData.position = *app->player->positionInitial;

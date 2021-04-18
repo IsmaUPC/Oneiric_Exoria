@@ -168,6 +168,11 @@ bool SceneManager::Update(float dt)
 		current->TransitionToScene(SceneType::LEVEL2);
 		lastLevel =2;
 	}
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		current->TransitionToScene(SceneType::LEVEL3);
+		lastLevel = 3;
+	}
 
 	return ret;
 }

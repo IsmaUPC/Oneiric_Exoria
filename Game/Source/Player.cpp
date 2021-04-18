@@ -315,12 +315,12 @@ bool Player::Update(float dt)
 
 	if (!app->sceneManager->GetIsPause())
 	{
-		if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+		/*if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 			DebugCP();
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && endUpdate && debugCheckPoints){
 			endUpdate = false;
 			DebugCP();
-		}
+		}*/
 
 
 		SpeedAnimationCheck(dt);

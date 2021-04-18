@@ -260,7 +260,7 @@ bool SceneLevel2::CleanUp()
 
 void SceneLevel2::DebugKeys()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) 
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) 
 	{
 		app->render->camera.x = 0;
 		app->player->playerData.position = *app->player->positionInitial;
