@@ -77,7 +77,8 @@ bool SceneManager::PreUpdate()
 bool SceneManager::Update(float dt)
 {
 	bool ret = true;
-	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) && (current->name == "scene" || current->name == "sceneLevel2"))
+	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) 
+		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
 	{
 		currentVolume = app->audio->GetVolumeMusic();
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
@@ -167,6 +168,11 @@ bool SceneManager::Update(float dt)
 	{
 		current->TransitionToScene(SceneType::LEVEL2);
 		lastLevel =2;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		current->TransitionToScene(SceneType::LEVEL3);
+		lastLevel = 3;
 	}
 
 	return ret;

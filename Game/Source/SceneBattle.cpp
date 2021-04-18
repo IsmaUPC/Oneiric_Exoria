@@ -126,6 +126,7 @@ void SceneBattle::LoadAnimations()
 		}
 		spritesBarTurn.Add(b);
 	}
+
 	// Load Animations Enemies
 	int numSprites = 1;
 	for (int i = 0; i < 12; i++)
@@ -347,7 +348,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 
-	btnContinue = new GuiButton(24, { WINDOW_W/2 - 45, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
+	btnContinue = new GuiButton(24, { WINDOW_W/2, WINDOW_H/2 + 150,  180, 90 }, "CONTINUE", RECTANGLE, btnTextureAtlas);
 	btnContinue->SetObserver(this);
 	btnContinue->active = false;
 	app->guiManager->AddGuiButton(btnContinue);
@@ -366,6 +367,10 @@ bool SceneBattle::Update(float dt_)
 {
 	dt = dt_;
 	SpeedAnimationCheck(dt_);
+	for (int i = 0; i < animationsEnemies.Count(); i++)
+	{
+		animationsEnemies.At(i)->data->Update();
+	}
 	//GamePad& pad = app->input->pads[0];
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
@@ -482,8 +487,6 @@ bool SceneBattle::Update(float dt_)
 					default:
 						break;
 					}
-					newHealth = enemies.At(enemySelected)->data->stats.health - magicInUse->damage;
-					magicInUse = nullptr;
 
 					activeMenuMagic = false;
 					btnAttack->state = GuiControlState::DISABLED;
@@ -498,9 +501,45 @@ bool SceneBattle::Update(float dt_)
 					if (newHealth <= 0)newHealth = 0;
 					//Progres damage
 					if (enemies.At(enemySelected)->data->stats.health > newHealth) {
+						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
+						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+						{
+							switch (eType)
+							{
+							case BANDIT:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(1)->data;
+								break;
+							case FIGHTER:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(4)->data;
+								break;
+							case SAPLING:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(7)->data;
+								break;
+							default:
+								break;
+							}
+						}
 						enemies.At(enemySelected)->data->stats.health -= dt * reduceLieveVelocity;
 					}
 					else {
+						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
+						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+						{
+							switch (eType)
+							{
+							case BANDIT:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+								break;
+							case FIGHTER:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+								break;
+							case SAPLING:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+								break;
+							default:
+								break;
+							}
+						}
 						enemies.At(enemySelected)->data->stats.health = newHealth;
 						if (enemies.At(enemySelected)->data->stats.health < 1)
 						{
@@ -528,9 +567,45 @@ bool SceneBattle::Update(float dt_)
 					if (newHealth <= 0)newHealth = 0;
 					//Progres damage
 					if (enemies.At(enemySelected)->data->stats.health > newHealth){
+						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
+						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+						{
+							switch (eType)
+							{
+							case BANDIT:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(1)->data;
+								break;
+							case FIGHTER:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(4)->data;
+								break;
+							case SAPLING:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(7)->data;
+								break;
+							default:
+								break;
+							}
+						}
 						enemies.At(enemySelected)->data->stats.health -= dt * reduceLieveVelocity;
 					}
 					else {
+						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
+						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+						{
+							switch (eType)
+							{
+							case BANDIT:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+								break;
+							case FIGHTER:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+								break;
+							case SAPLING:
+								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+								break;
+							default:
+								break;
+							}
+						}
 						enemies.At(enemySelected)->data->stats.health = newHealth;
 						if (enemies.At(enemySelected)->data->stats.health < 1)
 						{
@@ -755,7 +830,7 @@ bool SceneBattle::Update(float dt_)
 				btnContinue->bounds.x += 5;
 				btnExit->bounds = btnContinue->bounds;
 				btnExit->bounds.y += 40;
-				btnExit->bounds.x += 20;
+				btnExit->bounds.x = WINDOW_W/2-25;
 				AbleDisableButtons();
 				lose = true;
 				app->audio->PlayFx(loseFx);
@@ -1009,7 +1084,6 @@ bool SceneBattle::PostUpdate()
 					}
 				}
 			}
-
 
 			// Draw Level
 			rec.y -= 70;
@@ -1377,7 +1451,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 				}
 				isContinue = true;
 				app->audio->PlayFx(exitFx);
-				TransitionToScene(SceneType::LEVEL1);
+				TransitionToScene(SceneType::LEVEL3);
 			}			
 		}
 		// Continue
@@ -1421,7 +1495,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			}
 
 			isContinue = true;
-			TransitionToScene(SceneType::LEVEL1);
+			TransitionToScene(SceneType::LEVEL3);
 		}
 
 		//--MAGIC MENU--
@@ -1438,28 +1512,24 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 		//Magic1
 		else if (control->id == 31)
 		{
-			menuMagic->AbleDisableMagic();
 			magicInUse = menuMagic->GetMagic(1);
 			UseAMagic();
 		}
 		//Magic2
 		else if (control->id == 32)
 		{
-			menuMagic->AbleDisableMagic();
 			magicInUse = menuMagic->GetMagic(2);
 			UseAMagic();
 		}
 		//Magic3
 		else if (control->id == 33)
 		{
-			menuMagic->AbleDisableMagic();
 			magicInUse = menuMagic->GetMagic(3);
 			UseAMagic();
 		}
 		//Magic4
 		else if (control->id == 34)
 		{
-			menuMagic->AbleDisableMagic();
 			magicInUse = menuMagic->GetMagic(4);
 			UseAMagic();
 		}
@@ -1477,6 +1547,7 @@ void SceneBattle::UseAMagic()
 	}
 	else {
 		// Use magicInUse
+		menuMagic->AbleDisableMagic();
 		switch (magicInUse->type)
 		{
 		case 0:

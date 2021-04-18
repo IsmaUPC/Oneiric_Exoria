@@ -111,6 +111,8 @@ private:
 	List<Animation*> animationsPlayer;
 	List<Animation*> animationsHitPlayer;
 	List<Animation*> animationsEnemies;
+	List<Animation*> animationsHitEnemies;
+	List<Animation*> animationsAttackEnemies;
 
 	List<Entity*> enemies;
 	List<Entity*> partners;

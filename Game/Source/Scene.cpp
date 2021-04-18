@@ -91,11 +91,6 @@ bool Scene::Start()
 	app->player->Start();
 	app->audio->active = true;
 
-	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 26, 14, 1, 1);
-	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
-	app->entityManager->AddEntity(SAPLING, 16, 5, 3, 2, false);
-
 	//NPCs
 	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
 	app->entityManager->AddEntity(NPC, 21, 6, 2, 0, false);
@@ -262,7 +257,7 @@ bool Scene::CleanUp()
 
 void Scene::DebugKeys()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
 		app->render->camera.x = 0;
 		app->player->playerData.position = *app->player->positionInitial;
