@@ -576,45 +576,44 @@ bool SceneBattle::Update(float dt_)
         default:
             break;
         }
-
-        // Win Condition
-        if (!win && !lose)
+    }
+    // Win Condition
+    if (!win && !lose)
+    {
+        for (int i = 0; i < enemies.Count(); i++)
         {
-            for (int i = 0; i < enemies.Count(); i++)
+            if (enemies.At(i)->data->stats.health > 0) break;
+            if (i == enemies.Count() - 1)
             {
-                if (enemies.At(i)->data->stats.health > 0) break;
-                if (i == enemies.Count() - 1)
-                {
-                    win = true;
-                    AbleDisableButtons();
-                    app->sceneManager->SetWinBattle(true);
-                }
+                win = true;
+                AbleDisableButtons();
+                app->sceneManager->SetWinBattle(true);
             }
-            // Lose Condition
-            for (int i = 0; i < partners.Count(); i++)
+        }
+        // Lose Condition
+        for (int i = 0; i < partners.Count(); i++)
+        {
+            if (partners.At(i)->data->entityData.state != DEAD) break;
+            if (i == partners.Count() - 1)
             {
-                if (partners.At(i)->data->stats.health > 0) break;
-                if (i == partners.Count() - 1)
+                btnContinue->bounds.y -= 70;
+                btnContinue->bounds.x += 5;
+                btnExit->bounds = btnContinue->bounds;
+                btnExit->bounds.y += 40;
+                btnExit->bounds.x += 20;
+                AbleDisableButtons();
+                lose = true;
+                btnExit->active = true;
+                btnExit->state = GuiControlState::NORMAL;
+                app->sceneManager->SetLoseBattle(true);
+                for (int i = 0; i < enemies.Count(); i++)
                 {
-                    btnContinue->bounds.y -= 70;
-                    btnContinue->bounds.x += 5;
-                    btnExit->bounds = btnContinue->bounds;
-                    btnExit->bounds.y += 40;
-                    btnExit->bounds.x += 20;
-                    AbleDisableButtons();
-                    lose = true;
-                    btnExit->active = true;
-                    app->sceneManager->SetLoseBattle(true);
-                    for (int i = 0; i < enemies.Count(); i++)
-                    {
-                        enemies.At(i)->data->entityData.state = DEAD;
-                    }
+                    enemies.At(i)->data->entityData.state = DEAD;
                 }
             }
         }
-
-        return true;
     }
+    return true;
 }
 
 bool SceneBattle::PostUpdate()
