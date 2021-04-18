@@ -31,6 +31,55 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 **QA Workflow**: Enric Morales
 * **GitHub account:** [enricmc19](https://github.com/enricmc19)
 
+## Key Bindings
+
+- MOVE:    A-W-S-D | PAD
+- INTERACT: E | CROSS
+- TRAVEL BETWEEN BUTTONS: ARROWS & MOUSE | PAD
+- PRESS BUTTON: ENTER | CROSS
+
+## Combat Key Bindings
+
+- SELECT OBJECTIVE: RIGHT CLICK - E | CROSS
+- CANCEL OBJECTIVE: LEFT CLICK - Q   | CIRCLE 
+- TRAVEL BETWEEN OPTIONS: A-D | PAD
+
+## Debug Key Bindings
+
+- F1 TRAVEL TO FLOOR 1
+- F2 TRAVEL TO FLOOR 2
+- F3 TRAVEL TO FLOOR 3
+- F4 SHOW FPS
+- F5 SAVE GAME
+- F6 LOAD GAME
+- F7 RESTART CURRENT LEVEL
+- F8 SHOW/HIDE BUTTONS LOGIC & DRAW ENEMY VECTORS
+- F9 SHOW/HIDE COLLISIONS
+- F10 GOD MODE ON/OFF
+
+## Features
+
+
+- Screen Logo with custom logo, audio and FX.
+- Title Screen with Save/Load to/from external file
+- Fx and Music track.
+- UI with custom menu, buttons and Fx feedback.
+- Custom school map with 3 different floors to explore.
+- Up to 4 playable characters in-game (and combat!).
+- 6 NPCs to interact with!
+- 13 different Dialogs.
+- Keyboard/Gamepad supported.
+- Pause menu in-game.
+- Music track in all the scenes.
+- Lower volume on pause, effects fade-in fade-out.
+- Battle Screen with 3 different type of enemies.
+- Diferent attacks, including spells!
+- Turn-based combat, with a menu to choose actions.
+- Fx according to all the actions.
+- Screen and Fx upon winning and losing.
+- 100% combat with mouse, keyboard or pad independently.
+
+
 ## Links
 
 * **Repository** [Github](https://github.com/IsmaUPC/Oneiric_Exoria)
