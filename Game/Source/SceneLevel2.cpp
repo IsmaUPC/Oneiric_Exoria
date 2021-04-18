@@ -102,9 +102,17 @@ bool SceneLevel2::Start()
 
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
+	//NPC
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
 	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
 	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
+
+	//Interactive objects
+	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false);
+	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false);
+	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false);
+	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false);
+	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false);
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
