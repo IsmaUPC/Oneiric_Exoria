@@ -76,6 +76,7 @@ private:
 	GuiSettings* menuSettings = nullptr;
 	uint startFx = -1;
 	uint exitFx = -1;
+	uint tittleFx = -1;
 };
 
 #endif // __SCENEINTRO_H__
