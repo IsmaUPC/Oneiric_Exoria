@@ -238,6 +238,7 @@ int Properties::GetProperty(const char* value, int defaultValue) const
 {
 	for (int i = 0; i < list.Count(); i++)
 	{
+
 		if (strcmp(list.At(i)->data->name.GetString(), value)==0)
 		{
 			if (list.At(i)->data->value != defaultValue) 
@@ -268,7 +269,7 @@ void Map::Draw()
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
 	{
-		if (layer->data->properties.GetProperty("up_draw", 0) == 1)
+		if ((layer->data->properties.GetProperty("up_draw", 0) == 1)|| layer->data->properties.GetProperty("Nodraw", 0) == 1)
 		{
 			if (layerDrawUp->Count()>0)
 			{
@@ -285,7 +286,7 @@ void Map::Draw()
 					vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
-						if (layer->data->properties.GetProperty("Nodraw", 0) == 0)//|| drawColl)
+						if (layer->data->properties.GetProperty("Nodraw", 0) == 0|| drawColl)
 							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 						//else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0)// || drawColl2)
 							//app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
@@ -311,7 +312,8 @@ void Map::DrawUp()
 					iPoint vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
-					app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+						if (layersUp->data->properties.GetProperty("Nodraw", 0) == 0 || drawColl)
+						app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 					}
 				}
 			}
@@ -649,7 +651,6 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
 	layer->name = node.attribute("name").as_string("");
-	if(layer->name=="IdFloor") idFloor= node.attribute("IdFloor").as_int(1000);
 
 	layer->height = node.attribute("height").as_int(0);
 	layer->width = node.attribute("width").as_int(0);
@@ -731,11 +732,12 @@ void Map::LoadTpNodes()
 	tpNodeDownHall.Clear();
 	int tileId;
 	uint typeNode;
-	uint firstgidLayerCollisions;
-	MapLayer* layer= data.layers.At(7)->data;
+	uint firstgidLayerCollisions; 
+	MapLayer* layer= data.layers.At(7)->data; 
 	int height = data.height;
 	int width = data.width;
-
+	idFloor= data.layers.At(0)->data->properties.GetProperty("IdFloor", 0);
+	
 	
 		for (int y = 0; y < height; ++y)
 			for (int x = 0; x < width; ++x)

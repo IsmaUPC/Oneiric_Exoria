@@ -1,4 +1,4 @@
-#include "SceneLevel2.h"
+#include "SceneLevel3.h"
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
@@ -19,18 +19,18 @@
 
 #define PARALLAX_SPEED -1.3f
 
-SceneLevel2::SceneLevel2()
+SceneLevel3::SceneLevel3()
 {
 	active = true;
-	name.Create("sceneLevel2");
+	name.Create("SceneLevel3");
 }
 
 // Destructor
-SceneLevel2::~SceneLevel2()
+SceneLevel3::~SceneLevel3()
 {}
 
 // Called before render is available
-bool SceneLevel2::Awake()
+bool SceneLevel3::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -39,17 +39,17 @@ bool SceneLevel2::Awake()
 }
 
 // Called before the first frame
-bool SceneLevel2::Start()
+bool SceneLevel3::Start()
 {
 	app->SaveConfigRequested();
-	
+
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
 	app->player->win = false;
-	if (app->map->Load("school_2.tmx") == true)
+	if (app->map->Load("school_3.tmx") == true)
 	{
 		int w, h;
 		uchar* data = NULL;
@@ -60,7 +60,7 @@ bool SceneLevel2::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(400,750);
+	app->player->positionInitial = new iPoint(400, 750);
 
 
 	//Move to TpNode Class
@@ -102,9 +102,6 @@ bool SceneLevel2::Start()
 
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
-	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
-	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
-	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
@@ -122,19 +119,19 @@ bool SceneLevel2::Start()
 	return true;
 }
 
-void SceneLevel2::SetDebugCollaider()
+void SceneLevel3::SetDebugCollaider()
 {
 	app->map->SetDrawColl();
 }
 
 // Called each loop iteration
-bool SceneLevel2::PreUpdate()
+bool SceneLevel3::PreUpdate()
 {
 	return true;
 }
 
 // Called each loop iteration
-bool SceneLevel2::Update(float dt)
+bool SceneLevel3::Update(float dt)
 {
 	// DEBUG KEYS
 	DebugKeys();
@@ -164,7 +161,7 @@ bool SceneLevel2::Update(float dt)
 	return true;
 }
 
-void SceneLevel2::UpdateDialog()
+void SceneLevel3::UpdateDialog()
 {
 	if (app->dialogueSystem->onDialog == true)
 	{
@@ -216,7 +213,7 @@ void SceneLevel2::UpdateDialog()
 }
 
 // Called each loop iteration
-bool SceneLevel2::PostUpdate()
+bool SceneLevel3::PostUpdate()
 {
 
 	// Draw map
@@ -224,11 +221,24 @@ bool SceneLevel2::PostUpdate()
 
 	bool ret = true;
 
+	if (victory == true)
+	{
+		victory = false;
+		TransitionToScene(SceneType::LEVEL1);
+		return true;
+	}
+	if (lose == true)
+	{
+		lose = false;
+		TransitionToScene(SceneType::LOSE);
+		return true;
+	}
+
 	return ret;
 }
 
 // Called before quitting
-bool SceneLevel2::CleanUp()
+bool SceneLevel3::CleanUp()
 {
 	bool ret = true;
 
@@ -248,9 +258,9 @@ bool SceneLevel2::CleanUp()
 }
 
 
-void SceneLevel2::DebugKeys()
+void SceneLevel3::DebugKeys()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) 
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
 		app->render->camera.x = 0;
 		app->player->playerData.position = *app->player->positionInitial;
@@ -264,17 +274,17 @@ void SceneLevel2::DebugKeys()
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 		app->LoadGameRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) 
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 		SetDebugCollaider();
-	
 
-	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) 
+
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 	{
 		if (app->player->godMode == false)app->player->godMode = true;
 		else app->player->godMode = false;
 	}
 }
-bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
+bool SceneLevel3::OnGuiMouseClickEvent(GuiControl* control)
 {
 	switch (control->type)
 	{
@@ -305,12 +315,12 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 	return app->guiManager->GetMenuPause()->Event(control);
 }
 
-bool SceneLevel2::LoadState(pugi::xml_node& data)
+bool SceneLevel3::LoadState(pugi::xml_node& data)
 {
 	return true;
 }
 
-bool SceneLevel2::SaveState(pugi::xml_node& data) const
+bool SceneLevel3::SaveState(pugi::xml_node& data) const
 {
 	data.child("level").attribute("lvl").set_value(2);
 	return true;

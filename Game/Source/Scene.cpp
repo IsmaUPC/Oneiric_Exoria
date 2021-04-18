@@ -231,20 +231,6 @@ bool Scene::PostUpdate()
 
 	bool ret = true;
 
-	if (victory == true)
-	{
-		victory = false;
-		TransitionToScene(SceneType::LEVEL2);
-		return true;
-	}
-	if (lose == true)
-	{
-		lose = false;
-		TransitionToScene(SceneType::LOSE);
-		return true;
-	}
-
-
 	return ret;
 }
 

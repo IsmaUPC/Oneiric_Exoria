@@ -19,6 +19,7 @@ class SceneIntro;
 class SceneWin;
 class SceneLose;
 class SceneLevel2;
+class SceneLevel3;
 class SceneBattle;
 class TransitionManager;
 
