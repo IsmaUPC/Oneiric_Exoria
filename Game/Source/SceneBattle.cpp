@@ -371,6 +371,10 @@ bool SceneBattle::Update(float dt_)
 {
 	dt = dt_;
 	SpeedAnimationCheck(dt_);
+	for (int i = 0; i < animationsEnemies.Count(); i++)
+	{
+		animationsEnemies.At(i)->data->Update();
+	}
 	//GamePad& pad = app->input->pads[0];
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
