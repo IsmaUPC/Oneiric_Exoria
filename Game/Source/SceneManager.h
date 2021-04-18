@@ -70,6 +70,7 @@ public:
 
 	SceneControl* GetCurrentScene() { return current; };
 	bool GetOnTransition() { return onTransition; };
+	int GetCurrentVolume() { return currentVolume; };
 
 	bool GetWinBattle() { return win; };
 	void SetWinBattle(bool ret) { win = ret; };
@@ -100,6 +101,7 @@ private:
 	bool ViewRectangles = false;
 	bool win = false;
 	bool lose = false;
+	int currentVolume = 0;
 
 public:
 	SceneLogo* sceneLogo = nullptr;

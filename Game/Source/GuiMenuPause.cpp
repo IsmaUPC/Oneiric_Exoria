@@ -117,6 +117,9 @@ bool GuiMenuPause::Event(GuiControl* control)
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
 			activeSettings = false;
+			if (!app->audio->GetHasBeenModificated())
+				app->audio->SetVolumeMusic(app->sceneManager->GetCurrentVolume());
+			else app->audio->SetHasBeenModificated(false);
 		}
 		else if (control->id == 2)
 		{
@@ -160,6 +163,7 @@ bool GuiMenuPause::Event(GuiControl* control)
 			menuMusic = menuSettings->sldMusic->GetValue();
 			LOG("%d", menuMusic);
 			app->audio->SetVolumeMusic(menuMusic);
+			app->audio->SetHasBeenModificated(true);
 
 		}
 		if (control->id == 12)
