@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "GuiManager.h"
 #include "Pathfinding.h"
+#include "DialogSystem.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -125,6 +126,24 @@ bool SceneLevel2::Start()
 	app->sceneManager->lastLevel = 2;
 
 	speedImg = PARALLAX_SPEED;
+
+	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
+	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
+	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
+
+	// Dialog System buttons
+	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn1->SetObserver(this);
+	app->guiManager->AddGuiButton(btn1);
+
+	btn2 = new GuiButton(41, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn2->SetObserver(this);
+	app->guiManager->AddGuiButton(btn2);
+
+	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn3->SetObserver(this);
+	app->guiManager->AddGuiButton(btn3);
+
 	return true;
 }
 
@@ -161,6 +180,55 @@ bool SceneLevel2::Update(float dt)
 		lose = true;
 		app->audio->PlayFx(loseFx);
 	}
+
+	//GamePad& pad = app->input->pads[0];
+	if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
+		app->dialogueSystem->missClick = false;
+	}
+
+	btn1->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175;
+	btn1->bounds.y = -app->render->camera.y + 675;
+	btn2->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175 * 2;
+	btn2->bounds.y = -app->render->camera.y + 675;
+	btn3->bounds.x = -app->render->camera.x + WINDOW_W / 2 - 400 + 175 * 3;
+	btn3->bounds.y = -app->render->camera.y + 675;
+	if (app->dialogueSystem->onDialog == true)
+	{
+
+		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
+		{
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
+			if (i == 0)
+			{
+				btn1->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+			}
+			if (i == 1)
+			{
+				btn2->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+			}
+			if (i == 2)
+			{
+				btn3->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+				btn3->active = true;
+			}
+		}
+	}
+
+	if (app->dialogueSystem->onDialog == false)
+	{
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
+	}
+
+
 	return true;
 }
 
@@ -273,6 +341,32 @@ void SceneLevel2::DebugKeys()
 }
 bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 {
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		//Option 1
+		if (control->id == 40 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
+			app->dialogueSystem->missClick = true;
+		}
+		//Option 2
+		else if (control->id == 41 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
+			app->dialogueSystem->missClick = true;
+		}
+		//Option 3
+		else if (control->id == 42 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
+			app->dialogueSystem->missClick = true;
+		}
+	}
+	default: break;
+	}
+
 	return app->guiManager->GetMenuPause()->Event(control);
 }
 

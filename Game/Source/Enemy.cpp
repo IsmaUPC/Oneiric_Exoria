@@ -226,7 +226,6 @@ bool Enemy::Update(float dt)
 				app->dialogueSystem->onDialog = true;
 				app->dialogueSystem->missClick = true;
 			}
-			else if (Radar(app->player->playerData.position, 50)!= true) app->dialogueSystem->onDialog = false;
 		}
 
 		if(move)MoveEnemy();
