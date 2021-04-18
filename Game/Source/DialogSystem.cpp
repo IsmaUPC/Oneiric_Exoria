@@ -15,8 +15,7 @@ DialogueSystem::~DialogueSystem() {}
 
 bool DialogueSystem::Start()
 {
-	LoadDialogue("dialogue_tree.xml");
-
+	LoadDialogue(DIALOGUE_TREE_FILENAME);
 
 	return true;
 }

@@ -47,7 +47,7 @@ GuiMenuMagic::GuiMenuMagic(iPoint Position, SceneControl* moduleObserver)
 	close->active = false;
 	app->guiManager->AddGuiButton(close);
 
-	LoadMagics("magicList.xml");
+	LoadMagics(LIST_MAGIC_FILENAME);
 }
 
 GuiMenuMagic::~GuiMenuMagic()
