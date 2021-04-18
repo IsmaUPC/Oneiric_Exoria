@@ -21,11 +21,12 @@
 	<!-- Isrra -->
 	<character ID = "17">
 			<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion"/>
-	</character>
+      <magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego"/>
+  </character>
 	
 	<!-- Benda -->
 	<character ID = "18">
 			<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion"/>
-			<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego"/>
-	</character>
+      <magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego"/>
+  </character>
 </magics>

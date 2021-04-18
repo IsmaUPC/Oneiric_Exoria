@@ -219,7 +219,7 @@ void SceneBattle::AddEntities()
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
 		app->entityManager->AddEntity(FIGHTER, 10, 19, 0, randomLvl);
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
-		app->entityManager->AddEntity(FIGHTER, 7, 17, 0, randomLvl);
+		app->entityManager->AddEntity(SAPLING, 7, 17, 0, randomLvl);
 		break;
 	default:
 		break;
