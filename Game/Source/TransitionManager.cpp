@@ -63,9 +63,9 @@ bool TransitionManager::CleanUp()
 
 void TransitionManager::Transition1()
 {
-	render->DrawRectangle({transit1},0,0,0,255);
+	render->DrawRectangle({ transit1 }, 0, 0, 0, 255);
 	transit1.x = -app->render->camera.x;
 	transit1.y = -app->render->camera.y;
-	transit1.h = EaseBounceInOut(framesCounter, WINDOW_H / 8, WINDOW_H, 24);
-	transit1.w = EaseBounceInOut(framesCounter, WINDOW_W / 8, WINDOW_W, 24);
+	transit1.h = WINDOW_H;
+	transit1.w = EaseLinearInOut(framesCounter, -app->render->camera.x, WINDOW_W, 24);
 }

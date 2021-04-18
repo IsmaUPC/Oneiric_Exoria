@@ -195,7 +195,7 @@ bool SceneManager::PostUpdate()
 		}
 
 	}
-	if (lose == true)
+	if (current->lose == true)
 	{
 		current->lose = false;
 		current->TransitionToScene(SceneType::LOSE);

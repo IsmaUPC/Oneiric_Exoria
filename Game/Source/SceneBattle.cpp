@@ -41,6 +41,7 @@ bool SceneBattle::Start()
 	texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
 	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
+
 	winFx = app->audio->LoadFx("Assets/Audio/Fx/music_victory.wav");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
@@ -1226,6 +1227,8 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(loseFx);
 	app->audio->Unload1Fx(attackFx);
 	app->audio->Unload1Fx(magicFx);
+	app->audio->Unload1Fx(defenseFx);
+	app->audio->Unload1Fx(exitFx);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
