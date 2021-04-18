@@ -132,7 +132,11 @@ void SceneBattle::LoadAnimations()
 	for (int i = 0; i < 12; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
+		if (i == 2 || i == 6 || i == 10)
+		{
+			b->loop = false;
+		}
+		else b->loop = true;
 		b->speed = 0.1;
 		if (i % 2) numSprites = 2;
 		else numSprites = 4;
@@ -376,6 +380,33 @@ bool SceneBattle::Update(float dt_)
 	if (missClick && !app->input->pads[0].a && !app->input->pads[0].left && !app->input->pads[0].right) {
 		missClick = false;
 	}
+	for (int i = 0; i < enemies.Count(); i++)
+	{
+		TypeEntity eType = enemies.At(i)->data->entityData.type;
+		if (enemies.At(i)->data->entityData.currentAnimation->HasFinished() == true &&
+			((enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(2)->data ||
+			enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(5)->data) ||
+				enemies.At(i)->data->entityData.currentAnimation == animationsEnemies.At(8)->data))
+		{
+			switch (eType)
+			{
+			case BANDIT:
+				animationsEnemies.At(2)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+				break;
+			case FIGHTER:
+				animationsEnemies.At(5)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+				break;
+			case SAPLING:
+				animationsEnemies.At(8)->data->Reset();
+				enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	//*******************
 	if (!win && !lose)
 	{
@@ -463,6 +494,7 @@ bool SceneBattle::Update(float dt_)
 		{
 			if (!hit)
 			{
+
 				hit = true;
 				if (magicInUse == nullptr)
 				{
@@ -671,9 +703,32 @@ bool SceneBattle::Update(float dt_)
 					hit = true;
 					// Find heald of actual enemy
 					int theHealth = 1;
+					int enemyIndex = 0;
 					for (int i = 0; i < enemies.Count(); i++) {
 						if (turnSort[turn].entityData.positionInitial == enemies.At(i)->data->entityData.positionInitial)
+						{
 							theHealth = enemies.At(i)->data->stats.health;
+							enemyIndex = i;
+						}
+					}
+
+					TypeEntity eType = enemies.At(enemyIndex)->data->entityData.type;
+					if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+					{
+						switch (eType)
+						{
+						case BANDIT:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(2)->data;
+							break;
+						case FIGHTER:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(5)->data;
+							break;
+						case SAPLING:
+							enemies.At(enemyIndex)->data->entityData.currentAnimation = animationsEnemies.At(8)->data;
+							break;
+						default:
+							break;
+						}
 					}
 
 					if (theHealth > 0 && !god) {
@@ -729,6 +784,10 @@ bool SceneBattle::Update(float dt_)
 					if (partners.At(ally)->data->stats.health > newHealth) {
 						//partners.At(ally)->data->entityData.state = HIT;
 						//partners.At(ally)->data->entityData.currentAnimation = animationsHitPlayer.At(ally)->data;
+						/*if (enemies.At)
+						{
+
+						}*/
 						TypeEntity pType = partners.At(ally)->data->entityData.type;
 						if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
 						{
