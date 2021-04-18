@@ -1516,11 +1516,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			}
 			else
 			{
-				app->player->playerData.health = partners.At(0)->data->stats.health;
-				for (int i = 0; i < partners.Count() - 1; i++)
-				{
-					app->player->GetPartners()[i].health = partners.At(i + 1)->data->stats.health;
-				}
+				ContinueGame();
 				isContinue = true;
 				app->audio->PlayFx(exitFx);
 				TransitionToScene(SceneType::LEVEL3);
@@ -1531,35 +1527,7 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 		{
 			if (win)
 			{
-				for (int i = 0; i < partners.Count(); i++)
-				{
-					if (partners.At(i)->data->entityData.type == KENZIE_)
-					{
-						app->player->playerData.level = partners.At(i)->data->entityData.level;
-						app->player->playerData.exp = partners.At(i)->data->stats.exp;
-						app->player->playerData.health = partners.At(i)->data->stats.health;
-						break;
-					}
-					else app->player->playerData.health = 0;
-				}
-
-				for (int i = 0; i < app->player->GetNumPartners(); i++)
-				{
-					switch (app->player->GetPartners()[i].type)
-					{
-					case KEILER:
-						SaveState(KEILER_, i);
-						break;
-					case ISRRA:
-						SaveState(ISRRA_, i);
-						break;
-					case BRENDA:
-						SaveState(BRENDA_, i);
-						break;
-					default:
-						break;
-					}
-				}
+				ContinueGame();
 			}
 			else if (lose)
 			{
@@ -1683,6 +1651,39 @@ void SceneBattle::SaveState(TypeEntity pType, int i)
 			break;
 		}
 		else app->player->GetPartners()[i].health = 0;
+	}
+}
+
+void SceneBattle::ContinueGame()
+{
+	for (int i = 0; i < partners.Count(); i++)
+	{
+		if (partners.At(i)->data->entityData.type == KENZIE_)
+		{
+			app->player->playerData.level = partners.At(i)->data->entityData.level;
+			app->player->playerData.exp = partners.At(i)->data->stats.exp;
+			app->player->playerData.health = partners.At(i)->data->stats.health;
+			break;
+		}
+		else app->player->playerData.health = 0;
+	}
+
+	for (int i = 0; i < app->player->GetNumPartners(); i++)
+	{
+		switch (app->player->GetPartners()[i].type)
+		{
+		case KEILER:
+			SaveState(KEILER_, i);
+			break;
+		case ISRRA:
+			SaveState(ISRRA_, i);
+			break;
+		case BRENDA:
+			SaveState(BRENDA_, i);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
