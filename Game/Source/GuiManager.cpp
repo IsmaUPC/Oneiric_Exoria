@@ -34,8 +34,8 @@ bool GuiManager::Start()
 	btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_travel.wav");
 	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_click.wav");
 	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
-	//btnTextureAtlas = app->tex->Load("Assets/Textures/GUI/button_atlas.png");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+
 	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
@@ -125,6 +125,7 @@ bool GuiManager::CleanUp()
 	app->audio->Unload1Fx(btnSelected);
 	app->audio->Unload1Fx(btnPressed);
 	app->audio->Unload1Fx(btnDisabled);
+	app->audio->Unload1Fx(btnSlider);
 
 	delete menu;
 	menu = nullptr;
