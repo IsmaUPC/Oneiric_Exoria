@@ -41,7 +41,7 @@ bool SceneBattle::Start()
     texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
     texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
     app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
-    winFx = app->audio->LoadFx("Assets/Audio/Fx/win.wav");
+    winFx = app->audio->LoadFx("Assets/Audio/Fx/music_victory.wav");
     loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
     attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
     magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
@@ -310,9 +310,9 @@ void SceneBattle::InicializeStats()
 
 void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
 {
-    int padding = 90;
-    int yPosition = 20;
-    int xPosition = WINDOW_W - 100;
+    int padding = 50;
+    int yPosition = 50;
+    int xPosition = WINDOW_W - 95;
     btnAttack = new GuiButton(20, { xPosition ,yPosition + (padding * 0),  183, 91 }, "ATTACK", RECTANGLE, btnTextureAtlas);
     btnAttack->SetObserver(this);
     app->guiManager->AddGuiButton(btnAttack);
@@ -340,7 +340,7 @@ void SceneBattle::AddBattleMenu(SDL_Texture* btnTextureAtlas)
     app->guiManager->AddGuiButton(btnGod);
 
     //MenuMagic
-    menuMagic = new GuiMenuMagic({ WINDOW_W / 2 -200, yPosition}, this);
+    menuMagic = new GuiMenuMagic({ WINDOW_W - 420, yPosition +20}, this);
     activeMenuMagic = false;
 }
 
@@ -689,9 +689,14 @@ bool SceneBattle::PostUpdate()
         }
     }
  
-    // Draw Bar lives
     if (!win && !lose)
     {
+        app->render->DrawTextBox(WINDOW_W - 175, 20, 150, 230, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+        if (activeMenuMagic)
+        {
+            app->render->DrawTextBox(WINDOW_W -450, 40, 250, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+        }
+        // Draw Bar lives
         for (int i = 0; i < enemies.Count(); i++)
         {
             if (enemies.At(i)->data->entityData.state != DEAD)
