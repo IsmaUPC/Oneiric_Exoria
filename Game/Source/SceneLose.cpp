@@ -76,6 +76,7 @@ bool SceneLose::PostUpdate()
 		transition = true;
 		if (app->sceneManager->lastLevel == 1) TransitionToScene(SceneType::LEVEL1);
 		if (app->sceneManager->lastLevel == 2) TransitionToScene(SceneType::LEVEL2);
+		if (app->sceneManager->lastLevel == 3) TransitionToScene(SceneType::LEVEL3);
 		return true;
 	}
 
