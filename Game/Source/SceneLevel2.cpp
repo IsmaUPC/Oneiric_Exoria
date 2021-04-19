@@ -62,44 +62,11 @@ bool SceneLevel2::Start()
 	// Positions initials
 	app->player->positionInitial = new iPoint(930,730);
 
-
-	//Move to TpNode Class
-	  //Spawn Player in Tp Position
-	{
-		if (app->sceneManager->originTpNode != NULL)
-		{
-			int idNode = app->sceneManager->originTpNode->idNode;
-			uint typeNode = app->sceneManager->originTpNode->typeTpNode;//select next node
-
-			//if the type of node is even, it means that it is of type down, if it is odd otherwise, 
-			//to decide the next one it is added or subtracted depending on its origin
-			(typeNode % 2 == 0) ? typeNode += 1 : typeNode -= 1;
-
-			iPoint pos = app->player->FindNodeTpById(typeNode, idNode)->position;
-
-			if (typeNode % 2 == 0)
-			{
-				pos.y -= 3;
-				app->player->playerData.direction = WALK_UP;
-			}
-			else
-			{
-				pos.y += 2;
-				app->player->playerData.direction = WALK_DOWN;
-			}
-
-			pos = app->map->MapToWorld(pos);
-
-			app->player->positionInitial = new iPoint(pos.x, pos.y);
-		}
-		app->sceneManager->originTpNode = nullptr;
-	}
-
 	app->player->Init();
 	app->player->Start();
 
 
-
+	// Return size image
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
 	//NPC

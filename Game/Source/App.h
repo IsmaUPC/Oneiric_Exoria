@@ -29,6 +29,7 @@ class PathFinding;
 class DialogueSystem;
 class Fonts;
 class TransitionManager;
+class TpNodeManager;
 
 class App
 {
@@ -119,6 +120,7 @@ public:
 	DialogueSystem* dialogueSystem = nullptr;
 	Fonts* fonts = nullptr;
 	TransitionManager* transitionManager = nullptr;
+	TpNodeManager* tpNodeManager = nullptr;
 
 	bool fullScreen=0;
 	bool removeGame = false;

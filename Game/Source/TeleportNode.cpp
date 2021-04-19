@@ -10,23 +10,17 @@ TeleportNode::TeleportNode(iPoint pos, int idFloor, int nextIdFloor, TpNodesType
 	this->typeTpNode = typeTpNode;
 }
 
-
 TeleportNode::~TeleportNode()
 {}
 
 
-
-
-bool TeleportNode::Awake(pugi::xml_node& config)
+bool TeleportNode::CleanUp()
 {
-	LOG("Loading TeleportNode Parser");
-	bool ret = true;
 
-
-	return ret;
+	return true;
 }
 
-bool TeleportNode::CleanUp()
+bool TeleportNode::Clear()
 {
 
 	return true;

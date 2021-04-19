@@ -59,6 +59,8 @@ public:
 
 	void LoadPartners();
 
+	void RePositionPartners();
+
 	bool PreUpdate();
 
 	bool Update(float dt);

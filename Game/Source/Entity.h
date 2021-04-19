@@ -137,9 +137,7 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
-	List<TeleportNode*>* FindTpNodeList(uint typeNode);
-	TeleportNode* FindNodeTpInPlayer(uint typeTilePlayer);
-	TeleportNode* FindNodeTpById(uint typeTilePlayer, int nodeId);
+
 	int CalculateDistance(iPoint origin, iPoint destination);
 	
 public:

@@ -25,11 +25,8 @@ public:
 	TeleportNode(iPoint pos, int idFloor,int nextIdFloor, TpNodesTypes typeTpNode);
 
 	virtual ~TeleportNode();
-
-	bool Awake(pugi::xml_node&);
 	bool CleanUp();
-
-
+	bool Clear();
 
 public:
 

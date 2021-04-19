@@ -753,11 +753,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="1145"/>
-   <tile gid="1146"/>
-   <tile gid="1146"/>
-   <tile gid="1146"/>
-   <tile gid="1147"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -3872,6 +3872,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="1145"/>
+   <tile gid="1146"/>
+   <tile gid="1146"/>
+   <tile gid="1146"/>
+   <tile gid="1147"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3898,16 +3903,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="28"/>
+   <tile gid="28"/>
+   <tile gid="28"/>
+   <tile gid="28"/>
+   <tile gid="28"/>
    <tile/>
    <tile/>
    <tile/>
@@ -5487,7 +5487,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="collisions" width="31" height="25">
+ <layer id="2" name="collisions" width="31" height="25" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="1"/>
   </properties>

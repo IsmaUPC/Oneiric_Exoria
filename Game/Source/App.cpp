@@ -15,6 +15,7 @@
 #include "DialogSystem.h"
 #include "Fonts.h"
 #include "TransitionManager.h"
+#include "TpNodeManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -41,6 +42,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fonts = new Fonts();
 	dialogueSystem = new DialogueSystem();
 	transitionManager = new TransitionManager(render,tex,sceneManager);
+	tpNodeManager = new TpNodeManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp

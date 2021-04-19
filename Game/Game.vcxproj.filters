@@ -149,6 +149,9 @@
     <ClCompile Include="Source\SceneLevel3.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TpNodeManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneLevel3.h">
       <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TpNodeManager.h">
+      <Filter>Modules\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

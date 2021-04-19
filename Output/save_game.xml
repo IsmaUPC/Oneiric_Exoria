@@ -6,50 +6,16 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="502" y="208" />
+		<camera x="-832" y="-472" />
 	</renderer>
 	<player>
-		<data x="136" y="152" direction="0" level="1" exp="0" health="8" />
+		<data x="1472" y="832" direction="2" level="1" exp="0" health="8" />
 		<coins count="0" />
-		<path>
-			<breadcrumb x="252" y="216" />
-			<breadcrumb x="250" y="214" />
-			<breadcrumb x="248" y="212" />
-			<breadcrumb x="246" y="210" />
-			<breadcrumb x="244" y="208" />
-			<breadcrumb x="242" y="206" />
-			<breadcrumb x="240" y="204" />
-			<breadcrumb x="238" y="202" />
-			<breadcrumb x="236" y="200" />
-			<breadcrumb x="234" y="198" />
-			<breadcrumb x="232" y="196" />
-			<breadcrumb x="230" y="194" />
-			<breadcrumb x="228" y="192" />
-			<breadcrumb x="226" y="190" />
-			<breadcrumb x="224" y="188" />
-			<breadcrumb x="222" y="186" />
-			<breadcrumb x="220" y="184" />
-			<breadcrumb x="218" y="182" />
-			<breadcrumb x="216" y="180" />
-			<breadcrumb x="214" y="178" />
-			<breadcrumb x="212" y="176" />
-			<breadcrumb x="210" y="174" />
-			<breadcrumb x="208" y="172" />
-			<breadcrumb x="206" y="170" />
-			<breadcrumb x="204" y="168" />
-			<breadcrumb x="202" y="166" />
-			<breadcrumb x="200" y="164" />
-			<breadcrumb x="198" y="162" />
-			<breadcrumb x="196" y="160" />
-			<breadcrumb x="194" y="158" />
-			<breadcrumb x="192" y="156" />
-			<breadcrumb x="190" y="154" />
-			<breadcrumb x="190" y="152" />
-		</path>
+		<path />
 		<partners>
-			<partner x="176" y="152" breadcrumb="33" direction="0" level="1" exp="0" />
-			<partner x="214" y="178" breadcrumb="20" direction="2" level="1" exp="0" />
-			<partner x="254" y="218" breadcrumb="0" direction="2" level="1" exp="0" />
+			<partner x="1472" y="872" breadcrumb="0" direction="2" level="1" exp="0" />
+			<partner x="1472" y="912" breadcrumb="0" direction="2" level="1" exp="0" />
+			<partner x="1472" y="952" breadcrumb="0" direction="2" level="1" exp="0" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -58,13 +24,12 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="3990" />
+		<time value="0" />
 		<entities>
-			<entity type="13" x="-15" y="-6" id="0" level="0" state="0" move="true" />
-			<entity type="1" x="14" y="9" id="1" level="1" state="0" move="true" />
-			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
-			<entity type="3" x="4" y="12" id="3" level="2" state="0" move="false" />
-			<entity type="1" x="3" y="5" id="4" level="2" state="6" move="false" />
+			<entity type="13" x="26" y="14" id="0" level="0" state="0" move="true" />
+			<entity type="14" x="33" y="18" id="11" level="0" state="0" move="false" />
+			<entity type="14" x="45" y="37" id="12" level="0" state="0" move="false" />
+			<entity type="14" x="46" y="22" id="13" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>
 </save_state>

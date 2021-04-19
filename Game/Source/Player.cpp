@@ -136,10 +136,7 @@ void Player::LoadPartners()
 	for (int i = 0; i < numPartners; i++)
 	{
 		partners[i].texture = texPartners.At(i)->data;
-		partners[i].position.x = playerData.position.x - (40 * i) - 40;
-		partners[i].position.y = playerData.position.y;
-		partners[i].direction = WALK_R;
-		partners[i].currentAnimation = idleAnimR;
+
 		partners[i].breadcrumb = 0;
 		if (!app->sceneManager->GetCurrentScene()->isContinue)
 		{
@@ -152,6 +149,41 @@ void Player::LoadPartners()
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
+	}
+}
+
+void Player::RePositionPartners()
+{
+	int x;
+	for (int i = 0; i < numPartners; i++)
+	{
+		switch (playerData.direction)
+		{
+		case WALK_L:
+
+			partners[i].position.x = playerData.position.x + (40 * i) + 40;
+			partners[i].position.y = playerData.position.y;
+				break;
+		case WALK_R:
+			partners[i].position.x = playerData.position.x - (40 * i) - 40;
+			partners[i].position.y = playerData.position.y;
+			break;
+		case WALK_UP:
+			partners[i].position.x = playerData.position.x ;
+			partners[i].position.y = playerData.position.y+ ((40 * i) + 40);
+			break;
+		case WALK_DOWN:
+			partners[i].position.x = playerData.position.x;
+			partners[i].position.y = playerData.position.y - (40 * i) - 40;
+			break;
+		default:
+			break;
+		}
+
+		partners[i].state = playerData.state;
+		partners[i].direction = playerData.direction;
+		partners[i].currentAnimation = playerData.currentAnimation;
+
 	}
 }
 

@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 #include "TeleportNode.h"
+#include "TpNodeManager.h"
 
 class GuiButton;
 
@@ -90,6 +91,7 @@ private:
 	SceneControl* next = nullptr;
 	TransitionManager* transition = nullptr;
 
+
 	// Required variables to manage screen transitions (fade-in, fade-out)
 	bool onTransition =false;
 	bool fadeOutCompleted = false;
@@ -105,6 +107,7 @@ private:
 	int currentVolume = 0;
 
 public:
+	TpNodeManager* tpManager = nullptr;
 	SceneLogo* sceneLogo = nullptr;
 	Scene* scene = nullptr;
 	SceneIntro* sceneIntro = nullptr;

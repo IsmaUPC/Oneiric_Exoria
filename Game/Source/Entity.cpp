@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "Player.h"
 #include "EntityManager.h"
+#include "TpNodeManager.h"
 #include "TeleportNode.h"
 #include "SceneManager.h"
 
@@ -128,10 +129,9 @@ int Entity::CheckCollision(iPoint positionMap)
 		case DOWN_LADDER:
 		case UP_HALL:
 		case DOWN_HALL:
-
-			app->sceneManager->originTpNode = FindNodeTpInPlayer(typeTilePlayer);
+			// Fill node origin in Scene manager
+			app->sceneManager->originTpNode = app->sceneManager->tpManager->FindNodeTpInPlayer(typeTilePlayer);
 			app->player->win = true;
-
 			break;
 
 		case CHECK_POINT:
@@ -148,77 +148,4 @@ int Entity::CheckCollision(iPoint positionMap)
 	}
 
 	return false;
-}
-
-// Move to TpNode Class
-List<TeleportNode*>* Entity::FindTpNodeList( uint typeNode)
-{
-	List<TeleportNode*>* nodeTpList= nullptr;
-	switch (typeNode)
-	{
-	case UP_LADDER:
-		// Next floor
-		nodeTpList = &app->map->tpNodeUpLadder;
-		break;
-
-	case DOWN_LADDER:
-		// Prev floor
-		nodeTpList = &app->map->tpNodeDownLadder;
-		break;
-
-	case UP_HALL:
-		// Next hall
-		nodeTpList = &app->map->tpNodeUpHall;
-		break;
-
-	case DOWN_HALL:
-		// Prev hall
-		nodeTpList = &app->map->tpNodeDownHall;
-		break;
-	}
-
-	return nodeTpList;
-}
-
-// Move to TpNode Class
-TeleportNode* Entity::FindNodeTpInPlayer(uint typeTilePlayer)
-{
-	ListItem<TeleportNode*>* node=	FindTpNodeList(typeTilePlayer)->start;
-//	iPoint vecPlayer = app->map->WorldToMap(app->player->playerData.position);
-	iPoint vecPlayer =app->player->playerData.position;
-	iPoint listPointsCollision[4];
-	int y = vecPlayer.y;
-	int x = vecPlayer.x;
-
-	for (int i = 0; i < app->player->playerData.numPoints; i++)
-	{
-		// Convert position player WorldToMap 
-		listPointsCollision[i]= app->map->WorldToMap(x + app->player->playerData.pointsCollision[i].x, y + app->player->playerData.pointsCollision[i].y);
-	
-	}
-
-	for (node; node; node = node->next)
-	{
-		if (node->data->position == listPointsCollision[0]||
-			node->data->position == listPointsCollision[1] || 
-			node->data->position == listPointsCollision[2] || 
-			node->data->position == listPointsCollision[3] )
-		{
-			//app->player->win = true;
-			//app->sceneManager->originTpNode = node->data;
-			return  node->data;
-			break;
-		}
-	}
-	
-	return nullptr;
-}
-
-// Move to TpNode Class
-TeleportNode* Entity::FindNodeTpById(uint typeNode, int nodeId)
-{
-	TeleportNode* nodeById = FindTpNodeList(typeNode)->At(nodeId)->data;
-	
-	return (nodeById != NULL) ? nodeById : 0;
-
 }

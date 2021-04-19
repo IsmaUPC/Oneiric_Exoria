@@ -16,6 +16,7 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "GuiManager.h"
+#include "TpNodeManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -56,6 +57,9 @@ bool SceneManager::Start()
 {
 	current = new SceneLogo();
 	current->Start();
+
+	tpManager = new TpNodeManager();
+
 	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
 	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
 	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
@@ -107,6 +111,12 @@ bool SceneManager::Update(float dt)
 				current->CleanUp();	// Unload current screen
 				app->guiManager->DeleteList();
 				next->Start();	// Load next screen
+
+				//Spawn Player in node TP
+				tpManager->SpawnPlayerTpNode(originTpNode);
+				//originTpNode = nullptr;
+				app->player->RePositionPartners();
+
 
 				if (current->isContinue)app->LoadGameRequest();
 				else if (next->name == "scene" || next->name == "sceneLevel2")// Save
@@ -163,16 +173,19 @@ bool SceneManager::Update(float dt)
 	{
 		current->TransitionToScene(SceneType::LEVEL1);
 		lastLevel = 1;
+		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		current->TransitionToScene(SceneType::LEVEL2);
 		lastLevel =2;
+		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
 		current->TransitionToScene(SceneType::LEVEL3);
 		lastLevel = 3;
+		originTpNode = nullptr;
 	}
 
 	return ret;
@@ -192,6 +205,7 @@ bool SceneManager::PostUpdate()
 		{
 
 		current->TransitionToScene(SceneType((5+originTpNode->idFloor)+1));
+		
 		return true;
 		}
 		else
