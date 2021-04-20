@@ -5,6 +5,7 @@
 #include "Fonts.h"
 #include "DialogSystem.h"
 #include "GuiManager.h"
+#include "SceneBattle.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -39,6 +40,9 @@ bool GUI::Start()
 	active = true;
 	int imgH = 0;
 	int imgW = 0;
+
+	playerLivesBar = { 0, 288, 238, 48 };
+	playerUi = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 
 	activeFPS = false;
 	timer.Start();
@@ -78,6 +82,8 @@ bool GUI::PostUpdate()
 	point0.x = -app->render->camera.x;
 	point0.y = -app->render->camera.y;
 
+	DrawPlayerStats();
+
 	// Time
 	//point0.x = -app->render->camera.x;
 	//point0.y = -app->render->camera.y;
@@ -111,6 +117,36 @@ bool GUI::PostUpdate()
 	return true;
 }
 
+void GUI::DrawPlayerStats()
+{
+	SDL_Rect playerUiRec;
+	for (int i = 0; i < 4; i++)
+	{
+		app->render->DrawTexture(app->guiManager->uiAtlas, point0.x + 30, point0.y + 30 + 60 * i, &playerLivesBar);
+		switch (i)
+		{
+		case 0:
+			playerUiRec = { 386, 0, 28, 28 };
+			app->render->DrawTexture(playerUi, point0.x + 40, point0.y + 40 + 60 * i, &playerUiRec);
+			break;
+		case 1:
+			playerUiRec = { 386, 128, 28, 28 };
+			app->render->DrawTexture(playerUi, point0.x + 40, point0.y + 40 + 60 * i, &playerUiRec);
+			break;
+		case 2:
+			playerUiRec = { 384, 256, 32, 28 };
+			app->render->DrawTexture(playerUi, point0.x + 38, point0.y + 40 + 60 * i, &playerUiRec);
+			break;
+		case 3:
+			playerUiRec = { 384, 384, 32, 28 };
+			app->render->DrawTexture(playerUi, point0.x + 38, point0.y + 40 + 60 * i, &playerUiRec);
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 void GUI::Chronometer()
 {
 	if (miliseconds >= 60000 && !stopTime)
@@ -133,6 +169,8 @@ bool GUI::CleanUp()
 	{
 		return true;
 	}
+
+	app->tex->UnLoad(playerUi);
 
 	active = false;
 
