@@ -152,6 +152,9 @@
     <ClCompile Include="Source\TpNodeManager.cpp">
       <Filter>Modules\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GuiStatsMenu.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -312,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Source\TpNodeManager.h">
       <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiStatsMenu.h">
+      <Filter>Modules\GuiControls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

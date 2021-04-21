@@ -173,10 +173,7 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTexture(logoIntro, 108, 33);
 
-	app->render->DrawTexture(bigCloud, bCloudPos.x, bCloudPos.y);
-	app->render->DrawTexture(bigCloud, bCloudPos2.x, bCloudPos2.y);
-	app->render->DrawTexture(smallCloud, sCloudPos.x, sCloudPos.y);
-	app->render->DrawTexture(smallCloud, sCloudPos2.x, sCloudPos2.y);
+	CloudsDraw();
 
 	app->render->DrawTextBox(935, 427, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
@@ -187,6 +184,14 @@ bool SceneIntro::PostUpdate()
 	}
 
 	return ret;
+}
+
+void SceneIntro::CloudsDraw()
+{
+	app->render->DrawTexture(bigCloud, bCloudPos.x, bCloudPos.y);
+	app->render->DrawTexture(bigCloud, bCloudPos2.x, bCloudPos2.y);
+	app->render->DrawTexture(smallCloud, sCloudPos.x, sCloudPos.y);
+	app->render->DrawTexture(smallCloud, sCloudPos2.x, sCloudPos2.y);
 }
 
 bool SceneIntro::CleanUp()

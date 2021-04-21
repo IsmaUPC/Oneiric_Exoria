@@ -7,6 +7,7 @@
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
 #include "GuiMenuPause.h"
+#include "GuiStatsMenu.h"
 #include "GuiSlider.h"
 #include "Animation.h"
 
@@ -53,9 +54,14 @@ public:
 	void DestroyGuiControl(GuiControl* entity);
 
 	void CreatMenuPause(SceneControl* current);
+	void CreateStatsMenu(SceneControl* current);
 	GuiMenuPause* GetMenuPause() 
 	{
 		return menu;
+	};
+	GuiStatsMenu* GetStatsMenu()
+	{
+		return stats;
 	};
 	void SetMenuPause(GuiMenuPause* pMenu)
 	{
@@ -82,6 +88,7 @@ public:
 	SDL_Texture* moonCorner = nullptr;
 	SDL_Texture* uiAtlas = nullptr;
 	SDL_Texture* handCursor = nullptr;
+	SDL_Texture* bookMenu = nullptr;
 	Animation* handAnim = nullptr;
 
 	bool press = false;
@@ -90,6 +97,6 @@ private:
 	Input* input = nullptr;
 	Render* render = nullptr;
 	GuiMenuPause* menu = nullptr;
-
+	GuiStatsMenu* stats = nullptr;
 };
 #endif // __GUIMANAGER_H__

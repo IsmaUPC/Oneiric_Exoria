@@ -89,7 +89,13 @@ bool SceneManager::Update(float dt)
 		pause = !pause;
 		app->guiManager->GetMenuPause()->AbleDisableMenu();
 	}
-		
+
+	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
+	{
+		pause = !pause;
+		app->guiManager->GetStatsMenu()->AbleDisableMenu();
+	}
 
 	if (!onTransition)
 	{
@@ -129,6 +135,7 @@ bool SceneManager::Update(float dt)
 
 				// Menu pause
 				app->guiManager->CreatMenuPause(current);
+				app->guiManager->CreateStatsMenu(current);
 
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;

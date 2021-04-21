@@ -39,6 +39,7 @@ bool GuiManager::Start()
 	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
+	bookMenu = app->tex->Load("Assets/Textures/GUI/stats_gui.png");
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;
@@ -63,7 +64,9 @@ bool GuiManager::Update(float dt)
 	handAnim->Update();
 
 	// Menu pause
-	if (app->sceneManager->GetIsPause()) menu->Update(dt);
+	if (app->sceneManager->GetIsPause() && app->guiManager->menu->GetActive()) menu->Update(dt);
+	// Stats Menu
+	if (app->sceneManager->GetIsPause() && app->guiManager->stats->GetActive()) stats->Update(dt);
 
 	if (doLogic == true)
 	{
@@ -95,7 +98,11 @@ bool GuiManager::Update(float dt)
 
 bool GuiManager::PostUpdate()
 {
-	if (app->sceneManager->GetIsPause())menu->PostUpdate();
+
+	if (app->sceneManager->GetIsPause() && app->guiManager->menu->GetActive()) menu->PostUpdate();
+
+	if (app->sceneManager->GetIsPause() && app->guiManager->stats->GetActive()) stats->PostUpdate();
+
 	for (int i = 0; i < buttons.Count(); i++)
 	{
 		if (buttons.At(i)->data->active)
@@ -120,12 +127,16 @@ bool GuiManager::CleanUp()
 	app->tex->UnLoad(btnTextureAtlas);
 	app->tex->UnLoad(moonCorner);
 	app->tex->UnLoad(handCursor);
+	app->tex->UnLoad(bookMenu);
 	DeleteList();
 
 	app->audio->Unload1Fx(btnSelected);
 	app->audio->Unload1Fx(btnPressed);
 	app->audio->Unload1Fx(btnDisabled);
 	app->audio->Unload1Fx(btnSlider);
+
+	delete stats;
+	stats = nullptr;
 
 	delete menu;
 	menu = nullptr;
@@ -337,4 +348,12 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 	delete menu;
 	menu=nullptr;
 	menu= (new GuiMenuPause({ -app->render->camera.x + WINDOW_W / 2 - 237 / 2, -app->render->camera.y + WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
+}
+
+void GuiManager::CreateStatsMenu(SceneControl* current)
+{
+	// Stats Menu
+	delete stats;
+	stats = nullptr;
+	stats = (new GuiStatsMenu({ -app->render->camera.x, -app->render->camera.y}, current, btnTextureAtlas));
 }

@@ -30,9 +30,6 @@ bool EntityManager::Start()
 	// Load Fx
 
 	// Load Textures
-	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
-	texLive = app->tex->Load("Assets/Textures/lives.png");
-	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");
 
 	// Animations
@@ -104,9 +101,6 @@ bool EntityManager::CleanUp()
 	// Unload Fx
 
 	// Unload Tx
-	app->tex->UnLoad(texCoin);
-	app->tex->UnLoad(texHead);
-	app->tex->UnLoad(texLive);
 	app->tex->UnLoad(texEnemies);
 
 	// Unload Animations
@@ -254,7 +248,7 @@ void EntityManager::SpawnEntity(Entity* info)
 		break;
 
 	case HUD:
-		entities.Add(new GUI(info, texHead));
+		entities.Add(new GUI(info, texEnemies));
 		entities.end->data->Start();
 		break;
 

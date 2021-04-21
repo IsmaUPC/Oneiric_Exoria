@@ -34,6 +34,8 @@ public:
 	// Called before all Updates
 	bool PostUpdate();
 
+	void CloudsDraw();
+
 	// Called before quitting
 	bool CleanUp();
 

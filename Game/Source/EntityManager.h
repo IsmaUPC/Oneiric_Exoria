@@ -75,9 +75,6 @@ public:
 
 private:
 	// Textures
-	SDL_Texture* texCoin = nullptr;
-	SDL_Texture* texLive = nullptr;
-	SDL_Texture* texHead = nullptr;
 	SDL_Texture* texEnemies = nullptr;
 
 	Enemy* current = nullptr;

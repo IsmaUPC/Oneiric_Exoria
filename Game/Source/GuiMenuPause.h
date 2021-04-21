@@ -26,6 +26,8 @@ public:
 
 	void MovePosition();
 
+	bool GetActive() { return active; }
+
 private:
 	int padding = 40;
 	GuiButton* btnResume = nullptr;
