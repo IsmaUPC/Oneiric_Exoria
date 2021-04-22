@@ -1170,9 +1170,22 @@ bool SceneBattle::PostUpdate()
 	{
 		app->render->DrawRectangle({ 0,0, WINDOW_W, WINDOW_H}, 0, 0, 0, 200);
 		int w = 0, h = 0;
+		sprintf_s(textLoose, 28, "YOU LOOSE");
 		TTF_SizeText(app->sceneManager->titleFont, textLoose, &w, &h);
 		app->fonts->BlitText(WINDOW_W / 2 - w / 2, 180, 1, textLoose, red);
 		app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + 50, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		if (btnContinue->state == GuiControlState::FOCUSED)
+		{
+			sprintf_s(textLoose, 28, "Continue from the last save");
+			TTF_SizeText(app->sceneManager->guiFont, textLoose, &w, &h);
+			app->fonts->BlitText(WINDOW_W / 2 - w / 2, 600, 0, textLoose, white);
+		}
+		else if (btnExit->state == GuiControlState::FOCUSED)
+		{
+			sprintf_s(textLoose, 28, "Return to title screen");
+			TTF_SizeText(app->sceneManager->guiFont, textLoose, &w, &h);
+			app->fonts->BlitText(WINDOW_W / 2 - w / 2, 600, 0, textLoose, white);
+		}
 	}
 
 	return true;

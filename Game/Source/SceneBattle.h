@@ -139,7 +139,7 @@ private:
 	float dt = 0;
 	float offset = 38;
 	char textVictory[9] = { "VICTORY!" };
-	char textLoose[10] = { "YOU LOOSE" };
+	char textLoose[28] = { "YOU LOOSE" };
 	char textLive[8] = { "\0" };
 	char textLevel[7] = { "\0" };
 	char textExperience[14] = { "\0" };
