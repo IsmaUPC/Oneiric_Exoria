@@ -49,6 +49,38 @@ bool GuiManager::Start()
 		handAnim->PushBack({ i * 32, 0, 32, 32 });
 	}
 
+	openBookAnim = new Animation();
+	openBookAnim->speed = 0.2f;
+	openBookAnim->loop = false;
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			openBookAnim->PushBack({ j * BOOK_W, i * BOOK_H, BOOK_W, BOOK_H });
+		}
+	}
+
+	rightBook = new Animation();
+	rightBook->speed = 0.1f;
+	rightBook->loop = false;
+	for (int i = 0; i < 4; i++)
+	{
+		rightBook->PushBack({ i * BOOK_W, 338, BOOK_W, BOOK_H });
+	}
+
+	leftBook = new Animation();
+	leftBook->speed = 0.1f;
+	leftBook->loop = false;
+	for (int i = 0; i < 4; i++)
+	{
+		leftBook->PushBack({ i * BOOK_W, 507, BOOK_W, BOOK_H });
+	}
+
+	idleBook = new Animation();
+	idleBook->speed = 0.1f;
+	idleBook->loop = false;
+	idleBook->PushBack({ 0, 676, BOOK_W, BOOK_H });
+
 	press = false;
 	return true;
 }
@@ -355,5 +387,5 @@ void GuiManager::CreateStatsMenu(SceneControl* current)
 	// Stats Menu
 	delete stats;
 	stats = nullptr;
-	stats = (new GuiStatsMenu({ -app->render->camera.x, -app->render->camera.y}, current, btnTextureAtlas));
+	stats = (new GuiStatsMenu({ -app->render->camera.x + WINDOW_W / 2 - BOOK_W * 2, -app->render->camera.y }, current, btnTextureAtlas));
 }
