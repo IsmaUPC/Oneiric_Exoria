@@ -200,7 +200,7 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 	if (!active)
 		return false;
 
-	if (id > 0 && id <= MAX_FX)
+	if (id <= MAX_FX)
 	{
 		// If Mix_Playing(-1) check all channels
 		if (Mix_Playing(channel) == 0 || channel == -1)
