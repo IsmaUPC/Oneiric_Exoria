@@ -4,10 +4,11 @@
 #include "Point.h"
 #include "SString.h"
 
-#define BOOK_W 748
-#define BOOK_H 676
+#define BOOK_W 187
+#define BOOK_H 169
 
 #include "GuiSettings.h"
+#include "Animation.h"
 
 class GuiStatsMenu
 {
@@ -28,13 +29,15 @@ public:
 
 	bool GetActive() { return active; }
 
+
+	Animation* currentAnim = nullptr;
+
 private:
 
 	iPoint initialPos = { 0,0 };
 
-	SceneControl* observer = nullptr;
 
-	SDL_Rect bookAnimRect;
+	SceneControl* observer = nullptr;
 
 	SDL_Rect screenRect = { NULL };
 

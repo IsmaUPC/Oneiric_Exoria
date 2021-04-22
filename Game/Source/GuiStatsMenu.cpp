@@ -35,6 +35,14 @@ bool GuiStatsMenu::Update(float dt)
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
 		}
+		if (app->guiManager->openBookAnim->HasFinished())
+		{
+			currentAnim = app->guiManager->idleBook;
+		}
+		if (currentAnim == app->guiManager->openBookAnim)
+		{
+			app->guiManager->openBookAnim->Update();
+		}
 	}
 
 	return ret;
@@ -47,9 +55,9 @@ bool GuiStatsMenu::PostUpdate()
 	{
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
+		app->render->DrawRectangle({ screenRect.x, screenRect.y, WINDOW_W, WINDOW_H }, 0, 0, 0, 200);
 
-		bookAnimRect = { 0, 0, BOOK_W, BOOK_H };
-		app->render->DrawTexture(app->guiManager->bookMenu, screenRect.x, screenRect.y, &bookAnimRect);
+		app->render->DrawTexture(app->guiManager->bookMenu, -app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, &currentAnim->GetCurrentFrame(), 4);
 
 	}
 
@@ -74,6 +82,8 @@ bool GuiStatsMenu::Event(GuiControl* control)
 void GuiStatsMenu::AbleDisableMenu()
 {
 	active = !active;
+
+	app->guiManager->openBookAnim->Reset();
 
 	if (active == true)
 	{

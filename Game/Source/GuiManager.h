@@ -91,6 +91,11 @@ public:
 	SDL_Texture* bookMenu = nullptr;
 	Animation* handAnim = nullptr;
 
+	Animation* openBookAnim = nullptr;
+	Animation* idleBook = nullptr;
+	Animation* rightBook = nullptr;
+	Animation* leftBook = nullptr;
+
 	bool press = false;
 
 private:
