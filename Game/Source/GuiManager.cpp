@@ -61,7 +61,7 @@ bool GuiManager::Start()
 	}
 
 	rightBook = new Animation();
-	rightBook->speed = 0.1f;
+	rightBook->speed = 0.2f;
 	rightBook->loop = false;
 	for (int i = 0; i < 4; i++)
 	{
@@ -69,7 +69,7 @@ bool GuiManager::Start()
 	}
 
 	leftBook = new Animation();
-	leftBook->speed = 0.1f;
+	leftBook->speed = 0.2f;
 	leftBook->loop = false;
 	for (int i = 0; i < 4; i++)
 	{

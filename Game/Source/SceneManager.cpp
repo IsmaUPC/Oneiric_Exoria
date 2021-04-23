@@ -93,6 +93,7 @@ bool SceneManager::Update(float dt)
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
 		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
 	{
+		app->guiManager->GetStatsMenu()->introBook = true;
 		app->guiManager->GetStatsMenu()->currentAnim = app->guiManager->openBookAnim;
 		pause = !pause;
 		app->guiManager->GetStatsMenu()->AbleDisableMenu();

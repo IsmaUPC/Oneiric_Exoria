@@ -30,19 +30,35 @@ bool GuiStatsMenu::Update(float dt)
 	if (active)
 	{
 		//Update stuff
+		if (app->guiManager->openBookAnim->HasFinished() || app->guiManager->leftBook->HasFinished() || app->guiManager->rightBook->HasFinished())
+		{
+			introBook = false;
+			changingPage = false;
+			app->guiManager->openBookAnim->Reset();
+			app->guiManager->rightBook->Reset();
+			app->guiManager->leftBook->Reset();
+			currentAnim = app->guiManager->idleBook;
+		}
+
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		{
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
 		}
-		if (app->guiManager->openBookAnim->HasFinished())
+		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && !introBook && !changingPage)
 		{
-			currentAnim = app->guiManager->idleBook;
+			changingPage = true;
+			currentAnim = app->guiManager->rightBook;
 		}
-		if (currentAnim == app->guiManager->openBookAnim)
+		if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && !introBook && !changingPage)
 		{
-			app->guiManager->openBookAnim->Update();
+			changingPage = true;
+			currentAnim = app->guiManager->leftBook;
 		}
+
+		if (currentAnim == app->guiManager->openBookAnim) app->guiManager->openBookAnim->Update();
+		if (currentAnim == app->guiManager->leftBook) app->guiManager->leftBook->Update();
+		if (currentAnim == app->guiManager->rightBook) app->guiManager->rightBook->Update();
 	}
 
 	return ret;
@@ -84,8 +100,10 @@ void GuiStatsMenu::AbleDisableMenu()
 	active = !active;
 
 	app->guiManager->openBookAnim->Reset();
+	app->guiManager->rightBook->Reset();
+	app->guiManager->leftBook->Reset();
 
-	if (active == true)
+	if (active)
 	{
 		MovePosition();
 	}

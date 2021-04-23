@@ -31,6 +31,7 @@ public:
 
 
 	Animation* currentAnim = nullptr;
+	bool introBook = false;
 
 private:
 
@@ -42,6 +43,7 @@ private:
 	SDL_Rect screenRect = { NULL };
 
 	bool active = false;
+	bool changingPage = false;
 };
 
 #endif // !__GUISTATSMENU_H__

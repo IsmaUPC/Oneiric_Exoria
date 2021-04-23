@@ -1055,7 +1055,7 @@ bool SceneBattle::PostUpdate()
 			}
 
 			//app->render->DrawRectangle({ posCursorX, posCursorY ,20,20 }, red.r, red.g, red.b, 255);
-			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 0, 90);
+			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
 		}
 	}
  

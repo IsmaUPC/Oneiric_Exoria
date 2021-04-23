@@ -326,9 +326,9 @@ bool Render::DrawTextBox(int x, int y, int w, int h, SDL_Color base, SDL_Color i
 	uint texW, texH;
 	app->tex->GetSize(cornerTex, texW, texH);
 	DrawTexture(cornerTex, x + 15, y + 15);
-	DrawTexture(cornerTex, x + w - 15 - texW, y + 15, 0, 1.0f, 90);
-	DrawTexture(cornerTex, x + w - 15 - texW, y + h - 15 - texH, 0, 1.0f, 180);
-	DrawTexture(cornerTex, x + 15, y + h - 15 - texH, 0, 1.0f, 270);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + 15, 0, 1, 1.0f, 90);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + h - 15 - texH, 0, 1, 1.0f, 180);
+	DrawTexture(cornerTex, x + 15, y + h - 15 - texH, 0, 1, 1.0f, 270);
 
 	return ret;
 }
