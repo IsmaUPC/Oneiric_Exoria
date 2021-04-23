@@ -390,5 +390,5 @@ void GuiManager::CreateStatsMenu(SceneControl* current)
 	// Stats Menu
 	delete stats;
 	stats = nullptr;
-	stats = (new GuiStatsMenu({ -app->render->camera.x + WINDOW_W / 2 - BOOK_W * 2, -app->render->camera.y }, current, btnTextureAtlas));
+	stats = (new GuiStatsMenu({ -app->render->camera.x + WINDOW_W / 2 - BOOK_W*5/2, -app->render->camera.y  + WINDOW_H / 2 - BOOK_H*5/2 - 43*2 }, current, btnTextureAtlas));
 }

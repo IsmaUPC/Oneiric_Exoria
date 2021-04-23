@@ -76,7 +76,7 @@ bool GuiStatsMenu::PostUpdate()
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle({ screenRect.x, screenRect.y, WINDOW_W, WINDOW_H }, 0, 0, 0, 200);
 
-		app->render->DrawTexture(app->guiManager->bookMenu, -app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, &currentAnim->GetCurrentFrame(), 4);
+		app->render->DrawTexture(app->guiManager->bookMenu, -app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, &currentAnim->GetCurrentFrame(), 5);
 
 	}
 
