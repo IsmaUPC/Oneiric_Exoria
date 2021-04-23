@@ -83,6 +83,8 @@ public:
 	uint btnPressed = 0;
 	uint btnDisabled = 0;
 	uint btnSlider = 0;
+	uint bookClose = 0;
+	uint changePage = 0;
 
 	SDL_Texture* btnTextureAtlas = nullptr;
 	SDL_Texture* moonCorner = nullptr;

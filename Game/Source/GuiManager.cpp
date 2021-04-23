@@ -35,6 +35,8 @@ bool GuiManager::Start()
 	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_click.wav");
 	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
 	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	bookClose = app->audio->LoadFx("Assets/Audio/Fx/close_book.wav");
+	changePage = app->audio->LoadFx("Assets/Audio/Fx/page1.wav");
 
 	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
@@ -43,7 +45,6 @@ bool GuiManager::Start()
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;
-	handAnim->loop = true;
 	for (int i = 0; i < 9; i++)
 	{
 		handAnim->PushBack({ i * 32, 0, 32, 32 });
@@ -166,6 +167,8 @@ bool GuiManager::CleanUp()
 	app->audio->Unload1Fx(btnPressed);
 	app->audio->Unload1Fx(btnDisabled);
 	app->audio->Unload1Fx(btnSlider);
+	app->audio->Unload1Fx(bookClose);
+	app->audio->Unload1Fx(changePage);
 
 	delete stats;
 	stats = nullptr;

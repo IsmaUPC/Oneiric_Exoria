@@ -678,7 +678,6 @@ int Map::LoadCheckPoint()
 	SDL_QueryTexture(checKpointsMap.texture, NULL, NULL, &texW, &texH);
 	texW = texW / 9;
 
-	checKpointsMap.checkPointOnAnim->loop = true;
 	checKpointsMap.checkPointOnAnim->speed = 0.1f;
 
 	checKpointsMap.checkPointOffAnim->PushBack({ 0,0, texW, texH });

@@ -6,6 +6,7 @@
 #include "GuiMenuPause.h"
 #include "SceneManager.h"
 #include "DialogSystem.h"
+#include "GuiManager.h"
 
 Player::Player() : Entity()
 {
@@ -31,6 +32,8 @@ bool Player::Start()
 	idleAnimL = new Animation();
 	idleAnimUp = new Animation();
 	idleAnimDown = new Animation();
+
+	bookAnim = new Animation();
 
 	walkAnimR = new Animation();
 	walkAnimL = new Animation();
@@ -68,18 +71,13 @@ bool Player::Start()
 	win = false;
 	debugCheckPoints = false;
 
-	idleAnimL->loop = true;
 	idleAnimL->speed = 0.05f;
-
-	idleAnimR->loop = true;
 	idleAnimR->speed = 0.05f;
-
-	idleAnimUp->loop = true;
 	idleAnimUp->speed = 0.05f;
-
-	idleAnimDown->loop = true;
 	idleAnimDown->speed = 0.05f;
 
+	bookAnim->speed = 0.05f;
+	bookAnim->loop = false;
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -100,6 +98,10 @@ bool Player::Start()
 	{
 		idleAnimDown->PushBack({ (32 * i) + (32 * 18), 78, 32, 50 });
 		walkAnimDown->PushBack({ (32 * i) + (32 * 18), 142, 32, 50 });
+	}
+	for (int i = 0; i < 9; i++)
+	{
+		bookAnim->PushBack({ 32 * i, 400, 32, 48 });
 	}
 	   
 	playerData.currentAnimation = idleAnimR;
@@ -345,6 +347,15 @@ bool Player::Update(float dt)
 {
 	playerData.currentAnimation->Update();
 
+	if (bookAnim->HasFinished())
+	{
+		app->guiManager->GetStatsMenu()->introBook = true;
+		app->guiManager->GetStatsMenu()->currentAnim = app->guiManager->openBookAnim;
+		app->guiManager->GetStatsMenu()->AbleDisableMenu();
+		bookAnim->Reset();
+		playerData.state = IDLE;
+	}
+
 	if (!app->sceneManager->GetIsPause())
 	{
 		/*if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
@@ -354,7 +365,6 @@ bool Player::Update(float dt)
 			DebugCP();
 		}*/
 
-
 		SpeedAnimationCheck(dt);
 		playerData.velocity = floor(1000 * dt/ 8) ;
 
@@ -363,13 +373,13 @@ bool Player::Update(float dt)
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected() && app->dialogueSystem->onDialog == false)PlayerControls(dt);
 		// Move Between CheckPoints
 
-		PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 		for (int i = 0; i < numPartners; i++)
 		{
 			PlayerMoveAnimation(playerData.state, partners[i].direction, partners[i].currentAnimation);
 		}
 		OffsetPartners();
 	}
+	PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
 	
 	return true;
 }
@@ -426,15 +436,17 @@ void Player::OffsetPartners()
 
 void Player::SpeedAnimationCheck(float dt)
 {
-	idleAnimL->speed = (dt * 5) ;
-	idleAnimR->speed = (dt * 5) ;
-	idleAnimUp->speed = (dt * 5) ;
-	idleAnimDown->speed = (dt * 5) ;
+	idleAnimL->speed = (dt * 6) ;
+	idleAnimR->speed = (dt * 6) ;
+	idleAnimUp->speed = (dt * 6) ;
+	idleAnimDown->speed = (dt * 6) ;
 
-	walkAnimR->speed = (dt * 5);
-	walkAnimL->speed = (dt * 5);
-	walkAnimUp->speed = (dt * 5);
-	walkAnimDown->speed = (dt * 5);
+	walkAnimR->speed = (dt * 6);
+	walkAnimL->speed = (dt * 6);
+	walkAnimUp->speed = (dt * 6);
+	walkAnimDown->speed = (dt * 6);
+
+	bookAnim->speed = (dt * 11);
 
 }
 
@@ -552,6 +564,9 @@ void Player::PlayerMoveAnimation(State state, MoveDirection direction, Animation
 			currentAnimation = walkAnimDown;
 			break;
 		}
+		break;
+	case MOBILE:
+		currentAnimation = bookAnim;
 		break;
 
 	default:

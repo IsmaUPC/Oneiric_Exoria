@@ -145,6 +145,8 @@ private:
 	Animation* idleAnimUp = nullptr;
 	Animation* idleAnimDown = nullptr;
 
+	Animation* bookAnim = nullptr;
+
 	Animation* walkAnimR = nullptr;
 	Animation* walkAnimL = nullptr;
 	Animation* walkAnimUp = nullptr;

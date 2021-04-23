@@ -35,7 +35,6 @@ bool Lives::Start()
 	numPoints = 4;
 	pointsCollision = new iPoint[4]{ { 4, 0 }, { 40 ,0 }, { 32,-26 }, { 4 ,-26 } };
 
-	liveAnimation->loop = true;
 	liveAnimation->speed = 0.06f;
 
 	for (int i = 0; i < 16; i++)

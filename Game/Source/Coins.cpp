@@ -37,7 +37,6 @@ bool Coins::Start()
 	numPoints = 4;
 	pointsCollision = new iPoint[4]{ { 0, 0 }, { 48 , 0 }, { 48,-48 }, { 0 ,-48 } };
 	
-	coinAnimation->loop = true;
 	coinAnimation->speed = 0.20f;
 	
 	for (int i = 0; i < 16; i++)

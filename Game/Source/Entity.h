@@ -48,6 +48,7 @@ enum State {
 	DEADING,
 	DEAD,
 	HIT,
+	MOBILE,
 };
 
 enum MoveDirection {

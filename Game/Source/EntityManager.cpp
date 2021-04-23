@@ -38,7 +38,6 @@ bool EntityManager::Start()
 	for (int i = 0; i < numEnemies * 2; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
 		if (i % 2) numSprites = 6;
 		else numSprites = 4;
 		for (int j = 0; j < numSprites; j++)

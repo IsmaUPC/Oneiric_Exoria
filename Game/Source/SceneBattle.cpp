@@ -88,7 +88,6 @@ void SceneBattle::LoadAnimations()
 	for (int i = 0; i < 4; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
 		b->speed = 0.1f;
 		for (int j = 0; j < 6; j++)
 		{
@@ -105,7 +104,6 @@ void SceneBattle::LoadAnimations()
 	for (int i = 0; i < 4; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
 		b->speed = 0.1f;
 		for (int j = 0; j < 2; j++)
 		{
@@ -118,7 +116,6 @@ void SceneBattle::LoadAnimations()
 	for (int i = 0; i < 4; i++)
 	{
 		Animation* b = new Animation;
-		b->loop = true;
 		b->speed = 0.1;
 		for (int j = 0; j < 4; j++)
 		{

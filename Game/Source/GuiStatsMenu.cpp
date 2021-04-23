@@ -42,16 +42,19 @@ bool GuiStatsMenu::Update(float dt)
 
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		{
+			app->audio->PlayFx(app->guiManager->bookClose);
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
 		}
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && !introBook && !changingPage)
 		{
+			app->audio->PlayFx(app->guiManager->changePage);
 			changingPage = true;
 			currentAnim = app->guiManager->rightBook;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && !introBook && !changingPage)
 		{
+			app->audio->PlayFx(app->guiManager->changePage);
 			changingPage = true;
 			currentAnim = app->guiManager->leftBook;
 		}
