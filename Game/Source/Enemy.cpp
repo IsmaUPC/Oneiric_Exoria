@@ -6,6 +6,7 @@
 #include "Pathfinding.h"
 #include "SceneManager.h"
 #include "DialogSystem.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -218,6 +219,8 @@ bool Enemy::Update(float dt)
 		else
 		{
 			//if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
+			if (Radar(app->player->playerData.position, 75)) app->guiManager->talkCloud->Update();
+
 			if (!app->dialogueSystem->onDialog && Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
@@ -264,6 +267,10 @@ bool Enemy::PostUpdate()
 
 			app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
 		}
+	}
+	else
+	{
+		if (Radar(app->player->playerData.position, 75)) app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
 	}
 	return true;
 }

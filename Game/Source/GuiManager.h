@@ -91,12 +91,13 @@ public:
 	SDL_Texture* uiAtlas = nullptr;
 	SDL_Texture* handCursor = nullptr;
 	SDL_Texture* bookMenu = nullptr;
-	Animation* handAnim = nullptr;
 
+	Animation* handAnim = nullptr;
 	Animation* openBookAnim = nullptr;
 	Animation* idleBook = nullptr;
 	Animation* rightBook = nullptr;
 	Animation* leftBook = nullptr;
+	Animation* talkCloud = nullptr;
 
 	bool press = false;
 
