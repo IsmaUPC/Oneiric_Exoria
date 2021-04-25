@@ -66,6 +66,8 @@ private:
 	
 	int margin = 10;
 	int marginSquare = 9;
+	float angle = 0;
+	float positionY = 0;
 };
 
 #endif // __GUIBUTTON_H__
