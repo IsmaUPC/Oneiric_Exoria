@@ -59,6 +59,7 @@ bool GuiSlider::Update(float dt)
 		// Check collision between mouse and button bounds
 		if (state == GuiControlState::FOCUSED || state == GuiControlState::PRESSED)
 		{
+			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT 
 				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT
 				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
@@ -81,6 +82,7 @@ bool GuiSlider::Update(float dt)
 				state = GuiControlState::FOCUSED;
 			}
 		}
+		if (state == GuiControlState::NORMAL) mouseIn = false;
 	}
 
 	return false;
