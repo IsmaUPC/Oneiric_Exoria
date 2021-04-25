@@ -100,7 +100,11 @@ bool SceneLogo::Update(float dt)
 		logoRect.h *= scale;
 		scale -= 0.1166;
 	}
-	else app->audio->PlayFx(introFx);
+	else if (!cracksOn)
+	{
+		cracksOn = true;
+		app->audio->PlayFx(introFx);
+	}
 
 	return true;
 }

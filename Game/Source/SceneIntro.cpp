@@ -73,8 +73,7 @@ bool SceneIntro::Start()
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
 	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
-	bigCloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
-	smallCloud = app->tex->Load("Assets/Textures/GUI/cloud_small.png");
+	cloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
 	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
@@ -168,8 +167,8 @@ bool SceneIntro::PostUpdate()
 
 	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
 
-	app->render->DrawTexture(smallCloud, sBackCloudPos.x, sBackCloudPos.y);
-	app->render->DrawTexture(bigCloud, bBackCloudPos.x, bBackCloudPos.y);
+	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
+	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y,0,2);
 
 	app->render->DrawTexture(logoIntro, 108, 33);
 
@@ -188,10 +187,10 @@ bool SceneIntro::PostUpdate()
 
 void SceneIntro::CloudsDraw()
 {
-	app->render->DrawTexture(bigCloud, bCloudPos.x, bCloudPos.y);
-	app->render->DrawTexture(bigCloud, bCloudPos2.x, bCloudPos2.y);
-	app->render->DrawTexture(smallCloud, sCloudPos.x, sCloudPos.y);
-	app->render->DrawTexture(smallCloud, sCloudPos2.x, sCloudPos2.y);
+	app->render->DrawTexture(cloud, bCloudPos.x, bCloudPos.y,0,2);
+	app->render->DrawTexture(cloud, bCloudPos2.x, bCloudPos2.y, 0, 2);
+	app->render->DrawTexture(cloud, sCloudPos.x, sCloudPos.y);
+	app->render->DrawTexture(cloud, sCloudPos2.x, sCloudPos2.y);
 }
 
 bool SceneIntro::CleanUp()
@@ -203,8 +202,7 @@ bool SceneIntro::CleanUp()
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logoIntro);
-	app->tex->UnLoad(bigCloud);
-	app->tex->UnLoad(smallCloud);
+	app->tex->UnLoad(cloud);
 
 	app->audio->Unload1Fx(startFx);
 	app->audio->Unload1Fx(exitFx);

@@ -52,8 +52,7 @@ private:
 
 	SDL_Texture* bgIntro = nullptr;
 	SDL_Texture* logoIntro = nullptr;
-	SDL_Texture* bigCloud = nullptr;
-	SDL_Texture* smallCloud = nullptr;
+	SDL_Texture* cloud = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	bool transition = false;
 

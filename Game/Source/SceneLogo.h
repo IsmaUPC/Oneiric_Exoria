@@ -45,6 +45,7 @@ private:
 	SDL_Color color;		// Tint color
 
 	int state;
+	bool cracksOn = false;
 	float scale = 0;
 	float timeCounter = 0;
 	float logoAlpha = 0;	
