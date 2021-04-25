@@ -203,6 +203,8 @@ void GuiMenuPause::AbleDisableMenu()
 	btnBackToTitle->active = active;
 	btnSave->active = active;
 	btnExit->active = active;
+
+	btnResume->state = GuiControlState::NORMAL;
 	
 	btnResume->PressButtonSound();
 	if (active == true)

@@ -76,7 +76,6 @@ public:
 private:
 	// Textures
 	SDL_Texture* texEnemies = nullptr;
-
 	Enemy* current = nullptr;
 };
 
