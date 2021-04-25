@@ -181,6 +181,7 @@ bool SceneIntro::Update(float dt)
 			}
 		}
 	}
+	if (state == 3) angle += dt*10;
 
 	return ret;
 }
@@ -228,7 +229,7 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
 	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y,0,2);
 
-	app->render->DrawTexture(logo, 160, 33);
+	app->render->DrawTexture(logo, 160, 33,0,1,1,angle);
 	app->render->DrawTexture(oneiric, positionOneiric, 145,0,1.3);
 	app->render->DrawTexture(exoria, positionExoria, 325,0,1.3);
 

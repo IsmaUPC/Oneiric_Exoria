@@ -96,6 +96,7 @@ private:
 	float logoAlpha = 0;
 	float timeCounter = 0;
 	int state = 1;
+	float angle = 0;
 };
 
 #endif // __SCENEINTRO_H__
