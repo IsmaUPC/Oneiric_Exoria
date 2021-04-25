@@ -47,12 +47,15 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 
 	void ComprobeState(int id);
+	void AbleButtons();
 
 private:
 
 	SDL_Texture* bgIntro = nullptr;
-	SDL_Texture* logoIntro = nullptr;
+	SDL_Texture* logo = nullptr;
 	SDL_Texture* cloud = nullptr;
+	SDL_Texture* oneiric = nullptr;
+	SDL_Texture* exoria = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	bool transition = false;
 
@@ -78,6 +81,21 @@ private:
 	uint startFx = -1;
 	uint exitFx = -1;
 	uint tittleFx = -1;
+
+	//Easings title
+	//DONE 1: Initialize the variables you created before with the values you desire
+	float currentIteration;
+	float totalIterations;
+	float initialPosition;
+	float deltaPosition;
+
+	float positionOneiric;
+	float positionExoria;
+
+	bool flash = false;
+	float logoAlpha = 0;
+	float timeCounter = 0;
+	int state = 1;
 };
 
 #endif // __SCENEINTRO_H__
