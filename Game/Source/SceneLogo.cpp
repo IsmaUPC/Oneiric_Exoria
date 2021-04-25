@@ -31,18 +31,22 @@ bool SceneLogo::Start()
 {
 	app->SetLastScene((Module*)this);
 
-	img = app->tex->Load("Assets/Textures/scene_logo.png");
+	logo = app->tex->Load("Assets/Textures/logo_7hd.png");
+	cracks = app->tex->Load("Assets/Textures/cracks_logo.png");
+	names = app->tex->Load("Assets/Textures/names.png");
+	license = app->tex->Load("Assets/Textures/mit_license_logo.png");
 	introFx = app->audio->LoadFx("Assets/Audio/Fx/logo.wav");
-	app->audio->PlayFx(introFx);
 
 
-	SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
+	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
-	logo = {imgX,imgY,imgW,imgH};
+	logoRect = {imgX,imgY,imgW,imgH};
+	SDL_QueryTexture(names, NULL, NULL, &imgW, &imgH);
 
 	state = 0;
 	timeCounter = 0.0f;
 	logoAlpha = 0.0f;
+	scale = 4;
 
 	// Background color
 	color.r = 20; color.g = 20; color.b = 20;
@@ -57,7 +61,6 @@ bool SceneLogo::PreUpdate()
 
 bool SceneLogo::Update(float dt)
 {
-
 	if (state == 0)
 	{
 		state = 1;
@@ -76,7 +79,7 @@ bool SceneLogo::Update(float dt)
 	{
 		// Waiting for 3 seconds
 		timeCounter += dt;
-		if (timeCounter >= 4.5f) state = 3;
+		if (timeCounter >= 2.5f) state = 3;
 	}
 	else if (state == 3)
 	{
@@ -89,6 +92,16 @@ bool SceneLogo::Update(float dt)
 		}
 	}
 
+	
+	if (scale > 1)
+	{
+		SDL_QueryTexture(logo, NULL, NULL, &logoRect.w, &logoRect.h);
+		logoRect.w *= scale;
+		logoRect.h *= scale;
+		scale -= 0.1166;
+	}
+	else app->audio->PlayFx(introFx);
+
 	return true;
 }
 
@@ -97,11 +110,19 @@ bool SceneLogo::PostUpdate()
 	app->render->SetBackgroundColor(color);
 
 	bool ret = true;
-	if (img != NULL)
+
+	SDL_SetTextureAlphaMod(names, logoAlpha);
+	app->render->DrawTexture(names, WINDOW_W / 2 - imgW/2 - 40, WINDOW_H / 2 - imgH / 2 + 250);
+
+	if (scale <= 1)
 	{
-		SDL_SetTextureAlphaMod(img, logoAlpha);
-		app->render->DrawTexture(img, 0, 0);
+		app->render->DrawTexture(cracks, WINDOW_W / 2 - logoRect.w / 2 - 40, WINDOW_H / 2 - logoRect.h / 2 - 120);
+		SDL_SetTextureAlphaMod(cracks, logoAlpha);
+		SDL_SetTextureAlphaMod(logo, logoAlpha);
+		SDL_SetTextureAlphaMod(license, logoAlpha);
 	}
+	app->render->DrawTexture(logo, WINDOW_W / 2 - logoRect.w / 2, WINDOW_H / 2 - logoRect.h / 2 -80, 0, scale);
+	app->render->DrawTexture(license, WINDOW_W -133, 0);
 
 	return ret;
 }
@@ -112,10 +133,19 @@ bool SceneLogo::CleanUp()
 		return true;
 
 	LOG("Freeing scene");
-	app->tex->UnLoad(img);
+	app->tex->UnLoad(logo);
+	app->tex->UnLoad(cracks);
+	app->tex->UnLoad(license);
+	app->tex->UnLoad(logo);
+	app->tex->UnLoad(names);
 	app->audio->Unload1Fx(introFx);
-	img = nullptr;
+
+	logo = nullptr;
+	cracks = nullptr;
+	license = nullptr;
+	names = nullptr;
 	active = false;
+
 	return true;
 }
 

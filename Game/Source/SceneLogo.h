@@ -34,17 +34,20 @@ public:
 
 private:
 
-	SDL_Rect logo;
-	SDL_Texture* img = nullptr;
+	SDL_Rect logoRect;
+	SDL_Texture* logo = nullptr;
+	SDL_Texture* cracks = nullptr;
+	SDL_Texture* license = nullptr;
+	SDL_Texture* names = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	uint introFx = -1;
 
 	SDL_Color color;		// Tint color
 
 	int state;
+	float scale = 0;
 	float timeCounter = 0;
-	float logoAlpha = 0;
-	
+	float logoAlpha = 0;	
 };
 
 #endif // __SCENELOGO_H__
