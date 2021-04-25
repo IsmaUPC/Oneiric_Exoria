@@ -63,8 +63,6 @@ bool GuiButton::Update(float dt)
 	{
 		angle += dt*5;
 		positionY = bounds.y + 4*cos(angle);
-		//bounds.y += positionY;
-		//positionY += bounds.y;
 	}
 	else
 	{
@@ -116,9 +114,9 @@ bool GuiButton::Draw()
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centerY = (bounds.h/2)-(48/4);
 	
-	if(positionY == 0)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13});
-	else 
-		app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
+	if(positionY == 0 && state != GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13});
+	else app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
+	if(state == GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 251, 195, 92 });
 
 	return true;
 }
