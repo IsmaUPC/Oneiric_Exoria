@@ -87,6 +87,7 @@ bool SceneIntro::Start()
 	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
+	flashFx = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
 
 	app->audio->PlayFx(tittleFx);
 
@@ -151,6 +152,7 @@ bool SceneIntro::Update(float dt)
 	}
 	else
 	{
+		if (logoAlpha == 0) app->audio->PlayFx(flashFx);
 		if (state == 1) flash = true;
 		if (state == 1)
 		{

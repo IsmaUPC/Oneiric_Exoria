@@ -81,6 +81,7 @@ private:
 	uint startFx = -1;
 	uint exitFx = -1;
 	uint tittleFx = -1;
+	uint flashFx = -1;
 
 	//Easings title
 	//DONE 1: Initialize the variables you created before with the values you desire
