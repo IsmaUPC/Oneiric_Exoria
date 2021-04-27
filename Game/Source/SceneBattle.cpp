@@ -900,9 +900,10 @@ bool SceneBattle::Update(float dt_)
 			if (i == enemies.Count() - 1)
 			{
 				win = true;
-				app->audio->PlayFx(winFx);
+				//app->audio->PlayFx(winFx);
 				AbleDisableButtons();
 				app->sceneManager->SetWinBattle(true);
+				app->audio->PlayMusic("Assets/Audio/Music/music_victory.ogg",0);
 			}
 		}
 		// Lose Condition
