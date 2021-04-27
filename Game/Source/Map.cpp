@@ -268,16 +268,9 @@ void Map::Draw()
 	int tileId;
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
-	{
-		if ((layer->data->properties.GetProperty("up_draw", 0) == 1)|| layer->data->properties.GetProperty("Nodraw", 0) == 1)
-		{
-			if (layerDrawUp->Count()>0)
-			{
-				if(layerDrawUp->Find(layer->data)== -1 )layerDrawUp->Add(layer->data);
-			}else layerDrawUp->Add(layer->data);
-		}else
+		// TODO isma move to load up_draw function
+		if (!(layer->data->properties.GetProperty("up_draw", 0) == 1)|| layer->data->properties.GetProperty("Nodraw", 0) == 1)
 		for (int y = 0; y < data.height; ++y)
-		{
 			for (int x = 0; x < data.width; ++x)
 			{
 				 tileId = layer->data->Get(x, y);
@@ -285,16 +278,10 @@ void Map::Draw()
 				{
 					vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
-					{
 						if (layer->data->properties.GetProperty("Nodraw", 0) == 0|| drawColl)
 							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
-						//else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0)// || drawColl2)
-							//app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
-					}
 				}
 			}
-		}
-	}
 }
 
 
@@ -529,6 +516,7 @@ bool Map::Load(const char* filenameGame)
 		MapLayer* lay = new MapLayer();
 
 		ret = LoadLayer(layer, lay);
+		LoadDrawUp();
 
 		if (ret == true)
 			data.layers.Add(lay);
@@ -603,6 +591,22 @@ bool Map::LoadMap()
 		else if (strcmp(map.attribute("orientation").as_string("MAPTYPE_UNKNOWN"), "isometric")==0)data.type = MAPTYPE_ISOMETRIC;
 		else if (strcmp(map.attribute("orientation").as_string("MAPTYPE_UNKNOWN"), "staggered")==0)data.type = MAPTYPE_STAGGERED;
 	}
+
+	return ret;
+}
+
+bool Map::LoadDrawUp() 
+{
+	bool ret = false;
+
+	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
+		if ((layer->data->properties.GetProperty("up_draw", 0) == 1) || layer->data->properties.GetProperty("Nodraw", 0) == 1)
+		{
+			ret = true;
+			if (layerDrawUp->Count() >= 0)
+				if (layerDrawUp->Find(layer->data) == -1)layerDrawUp->Add(layer->data);
+			else layerDrawUp->Add(layer->data);
+		}
 
 	return ret;
 }
@@ -722,9 +726,12 @@ void Map::LoadCollectable()
 	}
 }
 
-void Map::LoadTpNodes()
+bool Map::LoadTpNodes()
 {
 
+	
+	if (!data.layers.start) return false;
+	
 	tpNodeUpLadder.Clear();
 	tpNodeDownLadder.Clear();
 	tpNodeUpHall.Clear();
@@ -732,7 +739,7 @@ void Map::LoadTpNodes()
 	int tileId;
 	uint typeNode;
 	uint firstgidLayerCollisions; 
-	MapLayer* layer= data.layers.At(7)->data; 
+	MapLayer* layer = data.layers.At(7)->data;
 	int height = data.height;
 	int width = data.width;
 	idFloor= data.layers.At(0)->data->properties.GetProperty("IdFloor", 0);
@@ -777,7 +784,7 @@ void Map::LoadTpNodes()
 					break;
 				}
 			}
-
+		return true;
 }
 
 

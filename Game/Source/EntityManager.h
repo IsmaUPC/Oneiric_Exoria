@@ -59,8 +59,8 @@ public:
 public:
 	uint timeSave = 0;
 	List<Entity*> entities;
-	List<Entity*> partners;
 	List<Entity*> spawnQueue;
+	List<Entity*> partners;
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
 
@@ -80,4 +80,4 @@ private:
 	Enemy* current = nullptr;
 };
 
-#endif // __MODULE_H__
+#endif // __ENTITY_MANAGER_H__

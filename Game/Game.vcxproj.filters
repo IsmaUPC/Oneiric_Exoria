@@ -155,6 +155,15 @@
     <ClCompile Include="Source\GuiStatsMenu.cpp">
       <Filter>Modules\GuiControls</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Path.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParticleManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Particle.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -318,6 +327,15 @@
     </ClInclude>
     <ClInclude Include="Source\GuiStatsMenu.h">
       <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Path.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ParticleManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Particle.h">
+      <Filter>Modules\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

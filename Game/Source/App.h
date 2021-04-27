@@ -12,6 +12,7 @@
 #define SAVE_STATE_FILENAME "save_game.xml"
 #define DIALOGUE_TREE_FILENAME "Assets/XMLs/dialogue_tree.xml"
 #define LIST_MAGIC_FILENAME "Assets/XMLs/magic_list.xml"	
+#define PROPERTIES_FILE "Assets/XMLs/particles_properties.xml"
 
 // Modules
 class Window;

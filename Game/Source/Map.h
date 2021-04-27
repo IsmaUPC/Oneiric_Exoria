@@ -216,7 +216,9 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	int LoadCheckPoint();
 	void LoadCollectable();
-	void LoadTpNodes();
+	bool LoadTpNodes();
+	bool LoadDrawUp();
+
 
 	// Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
