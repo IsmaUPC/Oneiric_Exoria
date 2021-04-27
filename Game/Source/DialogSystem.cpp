@@ -22,9 +22,6 @@ bool DialogueSystem::Start()
 
 bool DialogueSystem::Update(float dt)
 {
-
-
-
 	return true;
 }
 

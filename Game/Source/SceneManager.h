@@ -7,6 +7,7 @@
 #include "SDL_ttf/include/SDL_ttf.h"
 #include "TeleportNode.h"
 #include "TpNodeManager.h"
+#include "easings.h"
 
 class GuiButton;
 

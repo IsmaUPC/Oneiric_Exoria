@@ -37,7 +37,7 @@ private:
 	 SDL_Rect button = {0,0,0,0};
 	 int rectTexW = 183;
 	 int rectTexH = 91;
-
+	 bool mouseIn = false;
 
 	 SDL_Rect slider = { 0,0,0,0 };
 	 SDL_Rect sliderImage = { 0,0,0,0 };

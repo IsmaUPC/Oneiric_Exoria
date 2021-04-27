@@ -478,7 +478,8 @@ bool SceneBattle::Update(float dt_)
 						}
 					}
 				}
-			}else if (magicInUse->type == 1){
+			}
+			else if (magicInUse->type == 1){
 				//app->render->DrawRectangle({ (int)partners.At(i)->data->entityData.position.x, (int)partners.At(i)->data->entityData.position.y ,60, 90 }, red.r, red.g, red.b, 255);
 
 				//Select ally with mouse 
@@ -761,7 +762,14 @@ bool SceneBattle::Update(float dt_)
 									}
 								}
 							}
-							newHealth = partners.At(ally)->data->stats.health - turnSort[turn].stats.attack;
+							
+							if (partners.At(ally)->data->stats.defenseOn)
+							{
+								newHealth = partners.At(ally)->data->stats.health - turnSort[turn].stats.attack / 2;
+								partners.At(ally)->data->stats.defenseOn = false;
+							}
+							else newHealth = partners.At(ally)->data->stats.health - turnSort[turn].stats.attack;
+
 							if (god) {
 								newHealth = partners.At(ally)->data->stats.health;
 							}
@@ -787,6 +795,13 @@ bool SceneBattle::Update(float dt_)
 							}
 			
 							newHealth = partners.At(ally)->data->stats.health - magicInUse->damage;
+							if (partners.At(ally)->data->stats.defenseOn)
+							{
+								newHealth = partners.At(ally)->data->stats.health - magicInUse->damage / 2;
+								partners.At(ally)->data->stats.defenseOn = false;
+							}
+							else newHealth = partners.At(ally)->data->stats.health - magicInUse->damage;
+
 							if (god){
 								newHealth = partners.At(ally)->data->stats.health;
 							}
@@ -875,6 +890,7 @@ bool SceneBattle::Update(float dt_)
 			break;
 		}
 	}
+
 	// Win Condition
 	if (!win && !lose)
 	{
@@ -884,9 +900,10 @@ bool SceneBattle::Update(float dt_)
 			if (i == enemies.Count() - 1)
 			{
 				win = true;
-				app->audio->PlayFx(winFx);
+				//app->audio->PlayFx(winFx);
 				AbleDisableButtons();
 				app->sceneManager->SetWinBattle(true);
+				app->audio->PlayMusic("Assets/Audio/Music/music_victory.ogg",0);
 			}
 		}
 		// Lose Condition
@@ -929,11 +946,6 @@ bool SceneBattle::PostUpdate()
 	{
 		app->render->DrawRectangle({ WINDOW_W - 50, WINDOW_H - 50,  50, 50 }, orange.r, orange.g, orange.b, 255);
 	}
-	//HitBox partners
-	/*for (int i = 0; i < partners.Count(); i++){
-		app->render->DrawRectangle({ (int)partners.At(i)->data->entityData.position.x, (int)partners.At(i)->data->entityData.position.y ,60, 90 }, red.r, red.g, red.b, 255);
-
-	}*/
 
 	//Icon Enemy selected
 	if (!win && !lose)
@@ -1498,22 +1510,12 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 		{
 			app->audio->PlayFx(defenseFx);
 			moveBarTurn = true;
-			switch (turnSort[turn].entityData.type)
+			for (int i = 0; i < partners.Count(); i++)
 			{
-			case 15:
-				LOG("Kenzie");
-				break;
-			case 16:
-				LOG("Keiler");
-				break;
-			case 17:
-				LOG("Isrra");
-				break;
-			case 18:
-				LOG("Brenda");
-				break;
-			default:
-				break;
+				if (partners.At(i)->data->entityData.type == turnSort[turn].entityData.type)
+				{
+					partners.At(i)->data->stats.defenseOn = true;
+				}
 			}
 		}
 		//EXIT

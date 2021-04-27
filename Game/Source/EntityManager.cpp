@@ -183,6 +183,7 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 	{
 		Entity* b = new Entity;
 		iPoint positionSpawn = app->map->MapToWorld(pX, pY);
+		if (pType == NPC) positionSpawn.y -= 12;
 		b->entityData.type = pType;
 		b->entityData.position.x = positionSpawn.x;
 		b->entityData.position.y = positionSpawn.y;

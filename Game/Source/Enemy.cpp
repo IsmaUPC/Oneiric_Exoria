@@ -219,9 +219,9 @@ bool Enemy::Update(float dt)
 		else
 		{
 			//if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
-			if (Radar(app->player->playerData.position, 75)) app->guiManager->talkCloud->Update();
+			if (Radar(app->player->playerData.position, 50)) app->guiManager->talkCloud->Update();
 
-			if (!app->dialogueSystem->onDialog && Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
+			if (!app->dialogueSystem->onDialog && Radar(app->player->playerData.position, 50) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
@@ -270,7 +270,7 @@ bool Enemy::PostUpdate()
 	}
 	else
 	{
-		if (Radar(app->player->playerData.position, 75)) app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
+		if (Radar(app->player->playerData.position, 50)) app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
 	}
 	return true;
 }

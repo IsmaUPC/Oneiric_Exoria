@@ -138,34 +138,34 @@ EASEDEF float EaseQuadInOut(float t, float b, float c, float d)
     return (-c/2.0f*(((t - 1.0f)*(t - 3.0f)) - 1.0f) + b);
 }
 // QUAD Easing functions
-EASEDEF float quartEaseIn(float t, float b, float c, float d)
+EASEDEF float QuartEaseIn(float t, float b, float c, float d)
 {
     return c * (t /= d) * t * t * t + b;
 }
 
-EASEDEF float quartEaseOut(float t, float b, float c, float d)
+EASEDEF float QuartEaseOut(float t, float b, float c, float d)
 {
     return -c * ((t = t / d - 1) * t * t * t - 1) + b;
 }
 
-EASEDEF float quartEaseInOut(float t, float b, float c, float d)
+EASEDEF float QuartEaseInOut(float t, float b, float c, float d)
 {
     if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
     return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
 }
 
 // QUINT  Easing functions
-EASEDEF float quintEaseIn(float t, float b, float c, float d)
+EASEDEF float QuintEaseIn(float t, float b, float c, float d)
 {
     return c * (t /= d) * t * t * t * t + b;
 }
 
-EASEDEF float quintEaseOut(float t, float b, float c, float d)
+EASEDEF float QuintEaseOut(float t, float b, float c, float d)
 {
     return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
 }
 
-EASEDEF float quintEaseInOut(float t, float b, float c, float d) {
+EASEDEF float QuintEaseInOut(float t, float b, float c, float d) {
     if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
     return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
 }

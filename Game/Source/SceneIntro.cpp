@@ -12,6 +12,8 @@
 #include "Defs.h"
 #include "Log.h"
 
+#define LOGO_FADE_SPEED 7
+
 SceneIntro::SceneIntro()
 {
 	active = true;
@@ -40,10 +42,12 @@ bool SceneIntro::Start()
 	int yPosition = 330 + margin;
 
 	btnPlay = new GuiButton(1, { 935 + 237/2, 470,  0, 0 }, "Play", RECTANGLE);
+	btnPlay->active = false;
 	btnPlay->SetObserver(this);
 	app->guiManager->AddGuiButton(btnPlay);
 
 	btnContinue = new GuiButton(2, { 935 + 237/2, 510,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue->active = false;
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
@@ -56,10 +60,12 @@ bool SceneIntro::Start()
 	app->guiManager->AddGuiButton(btnCredits);*/
 
 	btnSettings = new GuiButton(3, { 935 + 237/2, 550,  75, 25 }, "Settings", RECTANGLE);
+	btnSettings->active = false;
 	btnSettings->SetObserver(this);
 	app->guiManager->AddGuiButton(btnSettings);
 
 	btnExit = new GuiButton(4, { 935 + 237/2, 590,  35, 25 }, "Exit", EXIT);
+	btnExit->active = false;
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	
@@ -71,12 +77,17 @@ bool SceneIntro::Start()
 	menuSettings->MovePosition();
 
 	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
+
 	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
-	logoIntro = app->tex->Load("Assets/Textures/title_logo.png");
+	logo = app->tex->Load("Assets/Textures/logo_title.png");
 	cloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
+	oneiric = app->tex->Load("Assets/Textures/oneiric_title.png");
+	exoria = app->tex->Load("Assets/Textures/exoria_title.png");
+
 	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
 	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
+	flashFx = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
 
 	app->audio->PlayFx(tittleFx);
 
@@ -88,7 +99,6 @@ bool SceneIntro::Start()
 	sCloudPos = {WINDOW_W /2 + 500, WINDOW_H/3 - 50};
 	sCloudPos2 = { WINDOW_W/2, WINDOW_H / 3 + 250 };
 
-	SDL_QueryTexture(logoIntro, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
 	
 	ComprobeState(2);
@@ -99,6 +109,12 @@ bool SceneIntro::Start()
 		//btnRemove->state = GuiControlState::DISABLED;
 	}
 	app->sceneManager->SetPause(false);
+
+	// Easings inicialize variables
+	currentIteration = 0;
+	totalIterations = 100;
+	initialPosition = 1280;
+	deltaPosition = 1025;
 	
 	return true;
 }
@@ -123,6 +139,51 @@ bool SceneIntro::Update(float dt)
 	}
 
 	CloudsUpdate();
+
+	//Update Easings
+	//positionOneiric = 110;
+	//positionExoria = 275;
+	positionExoria = EaseCircIn(currentIteration, initialPosition, -deltaPosition, totalIterations);
+	positionOneiric = EaseCircIn(currentIteration, -895, deltaPosition, totalIterations);
+
+	if (currentIteration < totalIterations)
+	{
+		++currentIteration;
+	}
+	else
+	{
+		if (logoAlpha == 0) app->audio->PlayFx(flashFx);
+		if (state == 1) flash = true;
+		if (state == 1)
+		{
+			logoAlpha += (LOGO_FADE_SPEED);
+
+			if (logoAlpha > 255.0f)
+			{
+				logoAlpha = 255.0f;
+				state = 2;
+			}
+		}
+		else if (state == 2)
+		{
+			timeCounter += dt;
+			if (timeCounter >= 0.5f)
+			{
+				AbleButtons();
+				state = 3;
+			}
+		}
+		else if (state == 3)
+		{
+			if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
+
+			if (logoAlpha <= 0.0f)
+			{
+				flash = false;
+			}
+		}
+	}
+	if (state == 3) angle += dt*10;
 
 	return ret;
 }
@@ -170,16 +231,26 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
 	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y,0,2);
 
-	app->render->DrawTexture(logoIntro, 108, 33);
+	app->render->DrawTexture(logo, 160, 33,0,1,1,angle);
+	app->render->DrawTexture(oneiric, positionOneiric, 145,0,1.3);
+	app->render->DrawTexture(exoria, positionExoria, 325,0,1.3);
 
 	CloudsDraw();
 
-	app->render->DrawTextBox(935, 427, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
-
-	if (menuSettings->active)
+	if (state == 3)
 	{
-		app->render->DrawRectangle({ 935, 427, 237, 237 }, 0, 0, 0, 100);
-		menuSettings->Draw();
+		app->render->DrawTextBox(935, 427, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+
+		if (menuSettings->active)
+		{
+			app->render->DrawRectangle({ 935, 427, 237, 237 }, 0, 0, 0, 100);
+			menuSettings->Draw();
+		}
+	}
+	
+	if (flash)
+	{
+		app->render->DrawRectangle({ 0, 0, WINDOW_W, WINDOW_H }, 255, 255, 255, logoAlpha);
 	}
 
 	return ret;
@@ -201,8 +272,10 @@ bool SceneIntro::CleanUp()
 	LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->tex->UnLoad(bgIntro);
-	app->tex->UnLoad(logoIntro);
+	app->tex->UnLoad(logo);
 	app->tex->UnLoad(cloud);
+	app->tex->UnLoad(oneiric);
+	app->tex->UnLoad(exoria);
 
 	app->audio->Unload1Fx(startFx);
 	app->audio->Unload1Fx(exitFx);
@@ -214,7 +287,10 @@ bool SceneIntro::CleanUp()
 	menuSettings = nullptr;
 
 	bgIntro = nullptr;
-	logoIntro = nullptr;
+	logo = nullptr;
+	cloud = nullptr;
+	oneiric = nullptr;
+	exoria = nullptr;
 	active = false;
 
 	return true;
@@ -327,6 +403,13 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	return true;
 }
+void SceneIntro::AbleButtons()
+{
+	btnPlay->active = true;
+	btnContinue->active = true;
+	btnSettings->active = true;
+	btnExit->active = true;
+}
 
 void SceneIntro::CloaseMenuSettings()
 {
@@ -377,5 +460,3 @@ void SceneIntro::ComprobeState(int id)
 	}
 	sceneFile.reset();
 }
-
-

@@ -59,6 +59,18 @@ bool GuiButton::Update(float dt)
 	}
 	if(state == GuiControlState::NORMAL) mouseIn = false;
 
+	if (state == GuiControlState::FOCUSED)
+	{
+		angle += dt*5;
+		positionY = bounds.y + 4*cos(angle);
+	}
+	else
+	{
+		angle = 0;
+		positionY = 0;
+	}
+		
+
 	return ret;
 }
 
@@ -87,6 +99,7 @@ bool GuiButton::Draw()
 		break;
 	case GuiControlState::PRESSED:
 		rect.x+= 2 * rect.w;
+		app->render->DrawTexture(app->guiManager->handCursor, bounds.x - 35, bounds.y + 5, &app->guiManager->handAnim->GetCurrentFrame());
 		if (drawRectangles)app->render->DrawRectangle(bounds, 0, 255, 255, 190);
 		break;
 	case GuiControlState::SELECTED:
@@ -100,7 +113,10 @@ bool GuiButton::Draw()
 	centerX = (bounds.w / 2) - (((float)(text.Length() / 2)+0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centerY = (bounds.h/2)-(48/4);
-	app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13});
+	
+	if(positionY == 0 && state != GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13});
+	else app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
+	if(state == GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 251, 195, 92 });
 
 	return true;
 }
