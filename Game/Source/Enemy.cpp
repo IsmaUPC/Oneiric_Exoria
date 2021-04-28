@@ -270,7 +270,7 @@ bool Enemy::PostUpdate()
 	}
 	else
 	{
-		if (Radar(app->player->playerData.position, 50)) app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
+		if (Radar(app->player->playerData.position, 50)) app->render->DrawTexture(app->guiManager->uiAtlas, entityData.position.x + 10, entityData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
 	}
 	return true;
 }

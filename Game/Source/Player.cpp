@@ -625,24 +625,6 @@ void Player::PlayerControls(float dt)
 	}
 	if(!playerCollision) MovePartners();
 
-	//DialogSystem Interaction
-
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		app->dialogueSystem->PerformDialogue(1, 0);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-	
-		app->dialogueSystem->PerformDialogue(1, 1);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		app->dialogueSystem->PerformDialogue(1, 2);
-	}
-
 }
 
 void Player::MovePlayer(MoveDirection playerDirection, float dt)
