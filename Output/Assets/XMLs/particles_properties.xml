@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ParticleProperties>
+  <lightning type="0">
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-10.0" max_vx="10.0" min_vy="-10.0" max_vy="10.0"/>
+    <position min_x="0.0" max_x="0.0" min_y="0.0" max_y="0.0"/>
+    <draw width="7.0" height="7.0" min_w="5.0" max_w="10.0" min_h="5.0" max_h="10.0"/>
+  </lightning>
+  <fire_ball type="1">
+    <emitter amount="200"/>
+    <lifespan min="60.0f" max="120.0f"/>
+    <velocity min_vx="-10.0" max_vx="10.0" min_vy="-2.0" max_vy="2.0"/>
+    <draw width="105" height="105" min_w="100.0" max_w="110.0" min_h="100.0" max_h="110.0"/>
+  </fire_ball>
+</ParticleProperties>
