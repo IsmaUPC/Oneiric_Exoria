@@ -42,6 +42,7 @@ bool GuiManager::Start()
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
 	bookMenu = app->tex->Load("Assets/Textures/GUI/stats_gui.png");
+	iconsUiTex = app->tex->Load("Assets/Textures/GUI/icons_atlas.png");
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;
@@ -82,6 +83,13 @@ bool GuiManager::Start()
 	for (int i = 0; i < 8; i++)
 	{
 		talkCloud->PushBack({ 96 + 32 * i, 144, 32, 32 });
+	}
+
+	enemyCloud = new Animation();
+	enemyCloud->speed = 0.15f;
+	for (int i = 0; i < 2; i++)
+	{
+		enemyCloud->PushBack({ 352+32*i , 256, 32, 64 });
 	}
 
 	idleBook = new Animation();

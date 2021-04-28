@@ -210,7 +210,11 @@ bool Enemy::Update(float dt)
 
 		if(entityData.type != NPC)
 		{
-			if (Radar(app->player->playerData.position, range)) isDetected = true;
+			if (Radar(app->player->playerData.position, range))
+			{
+				isDetected = true;
+				app->guiManager->enemyCloud->Update();
+			}
 			else isDetected = false;
 
 			if (!Radar(entityData.positionInitial, rangeMax)) returning = true;
@@ -266,6 +270,11 @@ bool Enemy::PostUpdate()
 			playerCenter.y = app->player->playerData.position.y + app->player->playerData.pointsCollision[0].y + app->player->playerData.centerPoint.y;
 
 			app->render->DrawLine(enemyCenter.x, enemyCenter.y, playerCenter.x, playerCenter.y, 100, 100, 100);
+		}
+
+		if (isDetected)
+		{
+			app->render->DrawTexture(app->guiManager->iconsUiTex, entityData.position.x + 20, entityData.position.y - 50, &app->guiManager->enemyCloud->GetCurrentFrame());
 		}
 	}
 	else
