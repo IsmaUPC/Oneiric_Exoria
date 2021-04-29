@@ -24,6 +24,7 @@ public:
 	int maxMana = 0;
 	int exp = 0;
 	int maxExp = 0;
+	int level = 0;
 	SDL_Rect avatar;
 };
 
@@ -68,8 +69,8 @@ private:
 	int maxNumPages = 4;
 	char textStats[15] = { "\0" };
 	char textName[7] = { "\0" };
-	//char textStats[15] = { "\0" };
-	//char textStats[15] = { "\0" };
+	char textClass[10] = { "\0" };
+	char textMagicRunes[10] = { "\0" };
 	char textDescription[400] = { "\0" };
 
 	SDL_Rect rectBar = { 0,0,0,0 };

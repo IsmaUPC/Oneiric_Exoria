@@ -27,7 +27,7 @@ public:
 
 	void LoadMagics(const char* file);
 	Magic* GetMagic(int button);
-
+	void SetInitialPosition(iPoint pos) { initialPos = pos; };
 
 	void SetIdTurn(int turn);
 

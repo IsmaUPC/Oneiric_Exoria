@@ -18,16 +18,10 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 	observer = moduleObserver;
 	color = { 60, 43, 13 };
 
-	active = false;
-
 	//MenuMagic
-	menuMagic = new GuiMenuMagic({ 0, WINDOW_H / 2 +240 }, observer);
+	menuMagic = new GuiMenuMagic({ 300, WINDOW_H / 2 +140 }, observer);
 
-	//menuMagic->SetIdTurn(turnSort[turn].entityData.type);
-
-	//menuMagic->AbleDisableMagic();
-	//menuMagic->MovePosition();
-
+	active = false;
 }
 
 GuiStatsMenu::~GuiStatsMenu()
@@ -51,6 +45,7 @@ bool GuiStatsMenu::Update(float dt)
 			currentAnim = app->guiManager->idleBook;
 			menuMagic->AbleDisableMagic();
 			menuMagic->close->active = false;
+			menuMagic->MovePosition();
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -182,15 +177,46 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	posX += 60;
 	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
 	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
-
-	// Draw Spells
-
-	// Draw Avatar
+	
+	// Draw Rectangles
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
 	posY = -app->render->camera.y + 120;
 	app->render->DrawTextBox(posX, posY, wRectBar, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
-	app->render->DrawRectangle({ posX + wRectBar / 2 - 9, posY + 30,120 +14,128+8 }, 227, 207, 127);
+	app->render->DrawTextBox(posX, posY + 280, wRectBar, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	app->render->DrawRectangle({ posX + wRectBar / 2 - 9, posY + 30,120 +14,128+8 }, 60, 43, 13);
+	app->render->DrawRectangle({ posX + wRectBar / 2 - 4, posY + 35,120 +9,128+3 }, 227, 207, 127);
+
+	// Draw Avatar
+	if (page.numPage == 3 || page.numPage == 4) posX += 10;
 	app->render->DrawTexture(app->sceneManager->GetPlayerTexture(), posX + wRectBar / 2-15, posY+30, &page.avatar);
+	if (page.numPage == 3 || page.numPage == 4) posX -= 10;
+
+	// Draw Name, Class, Id
+	posY += 40;
+	app->fonts->BlitText(posX + 35, posY, 0, textName, color);
+	posY += 35;
+	app->fonts->BlitText(posX + 35, posY, 0, textClass, color);
+	posY += 20;
+	app->fonts->BlitText(posX + 35, posY, 0, "Magic", color);
+	posY += 35;
+	app->fonts->BlitText(posX + 35, posY, 0, textMagicRunes, color);
+
+	// Draw Bar Lives
+	posX = WINDOW_W / 2 - app->render->camera.x + 80;
+	posY += 80;
+	sprintf_s(textStats, 15, "Lvl.%d", page.level);
+	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	sprintf_s(textStats, 15, "%d/%d", page.exp, page.maxExp);
+	app->fonts->BlitText(posX + 250, posY, 0, textStats, color);
+
+	rectBar = { posX + 10, posY + 25, wRectBar - 30,20 };
+	app->render->DrawRectangle(rectBar, 227, 207, 127);
+	rectBar.w = page.exp * wRectBar / page.maxExp;
+	app->render->DrawRectangle(rectBar, 0, 94, 221);
+	rectBar.w = wRectBar - 30;
+	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
+
+
 }
 
 bool GuiStatsMenu::CleanUp()
@@ -219,7 +245,6 @@ void GuiStatsMenu::AbleDisableMenu()
 	{
 		MovePosition();
 	}
-
 }
 
 void GuiStatsMenu::MovePosition()
@@ -248,6 +273,7 @@ void GuiStatsMenu::InicializeStats()
 	{
 	case 1: // Kenzie
 		level = app->player->playerData.level;
+		page.level = level;
 		page.attack = level * 3.5 + 9.5;
 		page.defense = level * 1.5 + 6.5;
 		page.speed = level * 2.5 + 7.5;
@@ -260,10 +286,14 @@ void GuiStatsMenu::InicializeStats()
 
 		menuMagic->SetIdTurn(KENZIE_);
 		page.avatar = { 0,372,145,145 };
+		sprintf_s(textName, 7, "Kenzie");
+		sprintf_s(textClass, 10, "Elemental");
+		sprintf_s(textMagicRunes, 10, "0468484");
 
 		break;
 	case 2: // Keiler
 		level = app->player->GetPartners()[0].level;
+		page.level = level;
 		page.attack = 1.5 * level + 6.5;
 		page.defense = 1.5 * level + 5.5;
 		page.speed = 2.5 * level + 8.5;
@@ -276,10 +306,14 @@ void GuiStatsMenu::InicializeStats()
 
 		menuMagic->SetIdTurn(KEILER_);
 		page.avatar = { 145,372,145,145 };
+		sprintf_s(textName, 7, "Keiler");
+		sprintf_s(textClass, 10, "Nexus");
+		sprintf_s(textMagicRunes, 10, "7321044");
 
 		break;
 	case 3: // Isrra
 		level = app->player->GetPartners()[1].level;
+		page.level = level;
 		page.attack = 2 * level + 7;
 		page.defense = 2 * level + 7;
 		page.speed = 2.5 * level + 7.5;
@@ -291,11 +325,15 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(ISRRA_);
-		page.avatar = { 0,517,145,145 };
+		page.avatar = { 10,517,135,145 };
+		sprintf_s(textName, 7, "Isrra");
+		sprintf_s(textClass, 10, "Light");
+		sprintf_s(textMagicRunes, 10, "9046808");
 
 		break;
 	case 4: // Brenda
 		level = app->player->GetPartners()[2].level;
+		page.level = level;
 		page.attack = 1.5 * level + 6.5;
 		page.defense = 3.5 * level + 9.5;
 		page.speed = 1.5 * level + 6.5;
@@ -307,7 +345,10 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(BRENDA_);
-		page.avatar = { 145,517,145,145 };
+		page.avatar = { 155,517,135,145 };
+		sprintf_s(textName, 7, "Brenda");
+		sprintf_s(textClass, 10, "Aura");
+		sprintf_s(textMagicRunes, 10, "6531207");
 
 		break;
 	default:

@@ -1391,7 +1391,6 @@ bool SceneBattle::CleanUp()
 {
 	bool ret = true;
 	app->tex->UnLoad(img);
-	app->tex->UnLoad(texPlayers);
 	app->tex->UnLoad(texEnemies);
 
 	app->audio->Unload1Fx(winFx);
@@ -1414,6 +1413,7 @@ bool SceneBattle::CleanUp()
 
 	RELEASE(menuMagic);
 	magicInUse = nullptr;
+	texPlayers = nullptr;
 
 	app->sceneManager->SetWinBattle(false);
 
