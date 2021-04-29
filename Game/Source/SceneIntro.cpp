@@ -280,6 +280,7 @@ bool SceneIntro::CleanUp()
 	app->audio->Unload1Fx(startFx);
 	app->audio->Unload1Fx(exitFx);
 	app->audio->Unload1Fx(tittleFx);
+	app->audio->Unload1Fx(flashFx);
 
 	app->guiManager->DeleteList();
 

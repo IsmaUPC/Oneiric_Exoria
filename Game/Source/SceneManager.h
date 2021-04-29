@@ -80,11 +80,14 @@ public:
 	bool GetLoseBattle() { return lose; };
 	void SetLoseBattle(bool ret) { lose = ret; };
 
+	SDL_Texture* GetPlayerTexture() { return texPlayers; };
+
 private:
 
 	Input* input = nullptr;
 	Render* render = nullptr;
 	Textures* tex = nullptr;
+	SDL_Texture* texPlayers = nullptr;
 
 	uint transitionFx;
 

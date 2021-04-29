@@ -64,6 +64,7 @@ bool SceneManager::Start()
 	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
 	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
 	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
+	texPlayers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 	next = nullptr;
 
 	return true;
@@ -255,6 +256,7 @@ bool SceneManager::CleanUp()
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);
 	app->fonts->UnLoad(2);
+	app->tex->UnLoad(texPlayers);
 	app->audio->Unload1Fx(transitionFx);
 
 	input = nullptr;
@@ -263,6 +265,7 @@ bool SceneManager::CleanUp()
 	current = nullptr;
 	next = nullptr;
 	transition = nullptr;
+	texPlayers = nullptr;
 
 	scenes.Clear();
 

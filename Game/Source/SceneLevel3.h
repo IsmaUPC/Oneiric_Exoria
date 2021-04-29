@@ -71,8 +71,6 @@ private:
 	int xW = 0;
 	int xSpeed = 0;
 
-	uint loseFx;
-
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg = 0;
 

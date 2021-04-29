@@ -44,7 +44,7 @@ bool SceneLevel2::Start()
 	app->SaveConfigRequested();
 	
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
-	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
+
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
@@ -125,7 +125,6 @@ bool SceneLevel2::Update(float dt)
 	{
 		LOG("GAME OVER!");
 		lose = true;
-		app->audio->PlayFx(loseFx);
 	}
 
 	//GamePad& pad = app->input->pads[0];
@@ -213,8 +212,6 @@ bool SceneLevel2::CleanUp()
 	app->map->CleanUp();
 	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
-
-	app->audio->Unload1Fx(loseFx);
 
 	app->sceneManager->SetPause(false);
 

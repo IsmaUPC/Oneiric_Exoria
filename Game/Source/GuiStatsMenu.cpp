@@ -185,7 +185,12 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	// Draw Spells
 
-
+	// Draw Avatar
+	posX = WINDOW_W / 2 - app->render->camera.x + 80;
+	posY = -app->render->camera.y + 120;
+	app->render->DrawTextBox(posX, posY, wRectBar, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	app->render->DrawRectangle({ posX + wRectBar / 2 - 9, posY + 30,120 +14,128+8 }, 227, 207, 127);
+	app->render->DrawTexture(app->sceneManager->GetPlayerTexture(), posX + wRectBar / 2-15, posY+30, &page.avatar);
 }
 
 bool GuiStatsMenu::CleanUp()
@@ -254,6 +259,7 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(KENZIE_);
+		page.avatar = { 0,372,145,145 };
 
 		break;
 	case 2: // Keiler
@@ -269,6 +275,7 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(KEILER_);
+		page.avatar = { 145,372,145,145 };
 
 		break;
 	case 3: // Isrra
@@ -284,6 +291,7 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(ISRRA_);
+		page.avatar = { 0,517,145,145 };
 
 		break;
 	case 4: // Brenda
@@ -299,6 +307,7 @@ void GuiStatsMenu::InicializeStats()
 		page.maxExp = CalculateExp(level);
 
 		menuMagic->SetIdTurn(BRENDA_);
+		page.avatar = { 145,517,145,145 };
 
 		break;
 	default:

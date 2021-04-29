@@ -37,7 +37,7 @@ bool SceneBattle::Start()
 	app->render->camera.x = app->render->camera.y = 0;
 
 	app->sceneManager->SetEnemeyDetected(false);
-	texPalyers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+	texPlayers = app->sceneManager->GetPlayerTexture();
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
 	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
 
@@ -311,7 +311,7 @@ void SceneBattle::InicializeStats()
 			default:
 				break;
 			}
-			enemies.At(i)->data->entityData.texture = texPalyers;
+			enemies.At(i)->data->entityData.texture = texPlayers;
 		}
 		else
 		{
@@ -1134,7 +1134,7 @@ bool SceneBattle::PostUpdate()
 			else if (partners.At(i)->data->entityData.type == KEILER_)face = { 145,372,145,145 };
 			else if (partners.At(i)->data->entityData.type == ISRRA_)face = { 0,517,145,145 };
 			else if (partners.At(i)->data->entityData.type == BRENDA_)face = { 145,517,145,145 };
-			app->render->DrawTexture(texPalyers, posX + 2, posY + 2, &face);
+			app->render->DrawTexture(texPlayers, posX + 2, posY + 2, &face);
 
 			// Draw Bar Lives
 			rec = { posX, posY + 200, 150, 25 };
@@ -1274,11 +1274,11 @@ void SceneBattle::DrawTurnBar()
 				face = spritesBarTurn.At(0)->data->GetCurrentFrame();
 			}
 			else face = spritesBarTurn.At(0)->data->frames[0];
-			app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+			app->render->DrawTexture(texPlayers, 28, 64 * i + offset, &face);
 			if (moveBarTurn && i == 0)
 			{
 				face = spritesBarTurn.At(0)->data->frames[0];
-				app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+				app->render->DrawTexture(texPlayers, 28, 64 * tam + offset, &face);
 			}
 			break;
 		case KEILER_:
@@ -1287,11 +1287,11 @@ void SceneBattle::DrawTurnBar()
 				face = spritesBarTurn.At(1)->data->GetCurrentFrame();
 			}
 			else face = spritesBarTurn.At(1)->data->frames[0];
-			app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+			app->render->DrawTexture(texPlayers, 28, 64 * i + offset, &face);
 			if (moveBarTurn && i == 0)
 			{
 				face = spritesBarTurn.At(1)->data->frames[0];
-				app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+				app->render->DrawTexture(texPlayers, 28, 64 * tam + offset, &face);
 			}
 			break;
 		case ISRRA_:
@@ -1300,11 +1300,11 @@ void SceneBattle::DrawTurnBar()
 				face = spritesBarTurn.At(2)->data->GetCurrentFrame();
 			}
 			else face = spritesBarTurn.At(2)->data->frames[0];
-			app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+			app->render->DrawTexture(texPlayers, 28, 64 * i + offset, &face);
 			if (moveBarTurn && i == 0)
 			{
 				face = spritesBarTurn.At(2)->data->frames[0];
-				app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+				app->render->DrawTexture(texPlayers, 28, 64 * tam + offset, &face);
 			}
 			break;
 		case BRENDA_:
@@ -1313,11 +1313,11 @@ void SceneBattle::DrawTurnBar()
 				face = spritesBarTurn.At(3)->data->GetCurrentFrame();
 			}
 			else face = spritesBarTurn.At(3)->data->frames[0];
-			app->render->DrawTexture(texPalyers, 28, 64 * i + offset, &face);
+			app->render->DrawTexture(texPlayers, 28, 64 * i + offset, &face);
 			if (moveBarTurn && i == 0)
 			{
 				face = spritesBarTurn.At(3)->data->frames[0];
-				app->render->DrawTexture(texPalyers, 28, 64 * tam + offset, &face);
+				app->render->DrawTexture(texPlayers, 28, 64 * tam + offset, &face);
 			}
 			break;
 
@@ -1364,7 +1364,7 @@ void SceneBattle::DrawTurnBar()
 			break;
 		}
 		face = { 416,0, 32,14 };
-		if (i < tam - numArrows)app->render->DrawTexture(texPalyers, 28, 64 * i + 40 + offset, &face);
+		if (i < tam - numArrows)app->render->DrawTexture(texPlayers, 28, 64 * i + 40 + offset, &face);
 	}
 	if (moveBarTurn)
 	{
@@ -1391,7 +1391,7 @@ bool SceneBattle::CleanUp()
 {
 	bool ret = true;
 	app->tex->UnLoad(img);
-	app->tex->UnLoad(texPalyers);
+	app->tex->UnLoad(texPlayers);
 	app->tex->UnLoad(texEnemies);
 
 	app->audio->Unload1Fx(winFx);

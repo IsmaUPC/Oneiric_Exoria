@@ -127,6 +127,8 @@ bool Coins::CleanUp()
 	RELEASE(particleAnimation);
 	RELEASE(pointsCollision);
 
+	app->audio->Unload1Fx(coinFx);
+
 	pendingToDelete = true;
 	active = false;
 
