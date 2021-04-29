@@ -77,6 +77,7 @@ struct Stats
 	float health = 0;
 	int maxHealth = 0;
 	int mana = 0;
+	int maxMana = 0;
 	float exp = 0;
 	bool defenseOn = false;
 };

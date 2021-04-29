@@ -268,8 +268,9 @@ void SceneBattle::InicializeStats()
 				enemies.At(i)->data->stats.attack = 3.5 * level + 9.5;
 				enemies.At(i)->data->stats.defense = 1.5 * level + 6.5;
 				enemies.At(i)->data->stats.health = app->player->playerData.health;
-				enemies.At(i)->data->stats.maxHealth = 2 * level + 6;;
-				enemies.At(i)->data->stats.mana = 3 * level +8;
+				enemies.At(i)->data->stats.maxHealth = 2 * level + 6;
+				enemies.At(i)->data->stats.mana = app->player->playerData.mana;
+				enemies.At(i)->data->stats.maxMana = 3 * level +8;
 				enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
 				enemies.At(i)->data->stats.exp = app->player->playerData.exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(0)->data;
@@ -278,8 +279,9 @@ void SceneBattle::InicializeStats()
 				enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
 				enemies.At(i)->data->stats.defense = 1.5 * level + 5.5;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[0].health;
-				enemies.At(i)->data->stats.maxHealth = 4 * level + 10;;
-				enemies.At(i)->data->stats.mana = 2.5 * level + 7.5;
+				enemies.At(i)->data->stats.maxHealth = 4 * level + 10;
+				enemies.At(i)->data->stats.mana = app->player->GetPartners()[0].mana;
+				enemies.At(i)->data->stats.maxMana = 2.5 * level + 7.5;
 				enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[0].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(1)->data;
@@ -289,7 +291,8 @@ void SceneBattle::InicializeStats()
 				enemies.At(i)->data->stats.defense = 2 * level + 7;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[1].health;
 				enemies.At(i)->data->stats.maxHealth = 2.5 * level + 7.5;
-				enemies.At(i)->data->stats.mana = 3.5 * level + 8.5;
+				enemies.At(i)->data->stats.mana = app->player->GetPartners()[1].mana;
+				enemies.At(i)->data->stats.maxMana = 3.5 * level + 8.5;
 				enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[1].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(2)->data;
@@ -299,7 +302,8 @@ void SceneBattle::InicializeStats()
 				enemies.At(i)->data->stats.defense = 3.5 * level + 9.5;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[2].health;
 				enemies.At(i)->data->stats.maxHealth = 3.5 * level + 9.5;
-				enemies.At(i)->data->stats.mana = 1.5 * level + 6.5;
+				enemies.At(i)->data->stats.mana = app->player->GetPartners()[2].mana;
+				enemies.At(i)->data->stats.maxMana = 1.5 * level + 6.5;
 				enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[2].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(3)->data;
@@ -1660,6 +1664,7 @@ void SceneBattle::SaveState(TypeEntity pType, int i)
 			app->player->GetPartners()[i].level = partners.At(j)->data->entityData.level;
 			app->player->GetPartners()[i].exp = partners.At(j)->data->stats.exp;
 			app->player->GetPartners()[i].health = partners.At(j)->data->stats.health;
+			app->player->GetPartners()[i].mana = partners.At(j)->data->stats.mana;
 			break;
 		}
 		else app->player->GetPartners()[i].health = 0;
@@ -1675,6 +1680,7 @@ void SceneBattle::ContinueGame()
 			app->player->playerData.level = partners.At(i)->data->entityData.level;
 			app->player->playerData.exp = partners.At(i)->data->stats.exp;
 			app->player->playerData.health = partners.At(i)->data->stats.health;
+			app->player->playerData.mana = partners.At(i)->data->stats.mana;
 			break;
 		}
 		else app->player->playerData.health = 0;

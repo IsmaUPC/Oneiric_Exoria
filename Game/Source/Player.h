@@ -14,6 +14,7 @@ struct PlayerData
 	int level = 1;
 	int exp = 0;
 	int health = 0;
+	int mana = 0;
 	uint respawns = 0;
 	uint coins = 0;
 
@@ -39,6 +40,7 @@ struct Partner
 	int level = 1;
 	int exp = 0;
 	int health = 0;
+	int mana = 0;
 	int breadcrumb = 0;
 };
 
@@ -125,6 +127,7 @@ public:
 	bool godMode = false;
 	iPoint* positionInitial= new iPoint(0,0);	
 	bool win = false;
+	bool loadStats = false;
 
 private:
 	

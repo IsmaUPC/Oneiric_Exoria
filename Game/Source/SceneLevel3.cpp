@@ -34,7 +34,7 @@ bool SceneLevel3::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
-	numThisScene = 2;
+	numThisScene = 3;
 	return ret;
 }
 
@@ -296,6 +296,6 @@ bool SceneLevel3::LoadState(pugi::xml_node& data)
 
 bool SceneLevel3::SaveState(pugi::xml_node& data) const
 {
-	data.child("level").attribute("lvl").set_value(2);
+	data.child("level").attribute("lvl").set_value(3);
 	return true;
 }

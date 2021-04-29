@@ -62,6 +62,7 @@ bool SceneManager::Start()
 
 	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
 	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
+	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
 	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 	next = nullptr;
 
@@ -124,8 +125,8 @@ bool SceneManager::Update(float dt)
 				app->player->RePositionPartners();
 
 
-				if (current->isContinue)app->LoadGameRequest();
-				else if (next->name == "scene" || next->name == "sceneLevel2")// Save
+				if (current->isContinue) app->LoadGameRequest();
+				else if (next->name == "scene" || next->name == "sceneLevel2") // AutoSave
 				{
 					app->SaveGameRequest();
 				}
@@ -185,7 +186,7 @@ bool SceneManager::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		current->TransitionToScene(SceneType::LEVEL2);
-		lastLevel =2;
+		lastLevel = 2;
 		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
@@ -210,10 +211,8 @@ bool SceneManager::PostUpdate()
 
 		if (originTpNode->typeTpNode == 3)
 		{
-
-		current->TransitionToScene(SceneType((5+originTpNode->idFloor)+1));
-		
-		return true;
+			current->TransitionToScene(SceneType((5+originTpNode->idFloor)+1));		
+			return true;
 		}
 		else
 		{
@@ -254,6 +253,7 @@ bool SceneManager::CleanUp()
 
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);
+	app->fonts->UnLoad(2);
 	app->audio->Unload1Fx(transitionFx);
 
 	input = nullptr;
@@ -272,6 +272,7 @@ bool SceneManager::LoadState(pugi::xml_node& data)
 {
 	if (current->lastLevel == 1)current = scene;
 	else if (current->lastLevel == 2)current = sceneLevel2;
+	else if (current->lastLevel == 3)current = sceneLevel3;
 	current->LoadState(data);
 	return true;
 }

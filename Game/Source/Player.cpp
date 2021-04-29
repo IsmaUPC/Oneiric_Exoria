@@ -202,11 +202,13 @@ bool Player::LoadState(pugi::xml_node& player)
 {
 	bool ret = true;
 	
-	if (app->sceneManager->GetCurrentScene()->isContinue)
+	if (loadStats)
 	{
 		playerData.level = player.child("data").attribute("level").as_int(playerData.level);
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
 		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
+		playerData.mana = player.child("data").attribute("mana").as_int(playerData.mana);
+		loadStats = false;
 	}
 	if (!app->sceneManager->GetLoseBattle())
 	{
@@ -227,6 +229,7 @@ bool Player::LoadState(pugi::xml_node& player)
 			partners[i].level = positionPartners.attribute("level").as_int();
 			partners[i].exp = positionPartners.attribute("exp").as_int();
 			partners[i].health = positionPartners.attribute("health").as_int();
+			partners[i].mana = positionPartners.attribute("mana").as_int();
 		}
 		if (!app->sceneManager->GetLoseBattle())
 		{
@@ -327,10 +330,14 @@ bool Player::SaveLevel(pugi::xml_node& player) const
 	{
 		levelPlayer.attribute("level").set_value(playerData.level);
 		levelPlayer.attribute("exp").set_value(playerData.exp);
+		levelPlayer.attribute("health").set_value(playerData.health);
+		levelPlayer.attribute("mana").set_value(playerData.mana);
 		for (int i = 0; i < numPartners; i++)
 		{
 			partnersData.append_attribute("level").set_value(partners[i].level);
 			partnersData.append_attribute("exp").set_value(partners[i].exp);
+			partnersData.append_attribute("health").set_value(partners[i].health);
+			partnersData.append_attribute("mana").set_value(partners[i].mana);
 			partnersData = partnersData.next_sibling();
 		}
 	}

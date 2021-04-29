@@ -115,6 +115,7 @@ public:
 	SceneWin* sceneWin = nullptr;
 	SceneLose* sceneLose = nullptr;
 	SceneLevel2* sceneLevel2 = nullptr;
+	SceneLevel3* sceneLevel3 = nullptr;
 	SceneBattle* sceneBattle = nullptr;
 
 	SceneControl* sceneControl = nullptr;
@@ -125,6 +126,7 @@ public:
 	int lastLevel = 0;
 	TTF_Font* guiFont = nullptr;
 	TTF_Font* titleFont = nullptr;
+	TTF_Font* statsFont = nullptr;
 };
 
 #endif // __SCENEMANAGER_H__
