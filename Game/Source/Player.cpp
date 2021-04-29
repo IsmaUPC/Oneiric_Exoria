@@ -57,6 +57,7 @@ bool Player::Start()
 		playerData.level = 1;
 		playerData.exp = 0;
 		playerData.health = 8;
+		playerData.mana = 11;
 	}
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
 	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
@@ -144,9 +145,9 @@ void Player::LoadPartners()
 		{
 			partners[i].level = 1;
 			partners[i].exp = 0;
-			if (i == 0) partners[i].health = 14;
-			if (i == 1) partners[i].health = 10;
-			if (i == 2) partners[i].health = 13;
+			if (i == 0) partners[i].health = 14, partners[i].mana = 10;
+			if (i == 1) partners[i].health = 10, partners[i].mana = 12;
+			if (i == 2) partners[i].health = 13, partners[i].mana = 8;
 		}
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;

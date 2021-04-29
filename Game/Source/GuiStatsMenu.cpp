@@ -19,6 +19,15 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 	color = { 60, 43, 13 };
 
 	active = false;
+
+	//MenuMagic
+	menuMagic = new GuiMenuMagic({ 0, WINDOW_H / 2 +240 }, observer);
+
+	//menuMagic->SetIdTurn(turnSort[turn].entityData.type);
+
+	//menuMagic->AbleDisableMagic();
+	//menuMagic->MovePosition();
+
 }
 
 GuiStatsMenu::~GuiStatsMenu()
@@ -40,6 +49,8 @@ bool GuiStatsMenu::Update(float dt)
 			app->guiManager->rightBook->Reset();
 			app->guiManager->leftBook->Reset();
 			currentAnim = app->guiManager->idleBook;
+			menuMagic->AbleDisableMagic();
+			menuMagic->close->active = false;
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -47,12 +58,13 @@ bool GuiStatsMenu::Update(float dt)
 			app->audio->PlayFx(app->guiManager->bookClose);
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
+			menuMagic->AbleDisableMagic();
 		}
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && !introBook && !changingPage)
 		{
 			page.numPage++;
 			ChangePage();
-			currentAnim = app->guiManager->rightBook;
+			currentAnim = app->guiManager->rightBook; 
 		}
 		if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && !introBook && !changingPage)
 		{
@@ -109,19 +121,28 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	rectBar = { posX + 10, posY + 25, wRectBar,20 };
 	rectBar.w = page.mana * wRectBar / page.maxMana;
-	//
+	app->render->DrawRectangle(rectBar, 157,0,208);
+	rectBar.w = wRectBar;
+	app->render->DrawRectangle(rectBar, 87,0,115,255,false);
 
 	posY += 60;
 	sprintf_s(textStats, 15, "Attack");
 	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	rectBar.y += 60;
+	rectBar.h = 10;
+	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
-	posY += 60;
+	posY += 50;
 	sprintf_s(textStats, 15, "Defense");
 	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	rectBar.y += 50;
+	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
-	posY += 60;
+	posY += 50;
 	sprintf_s(textStats, 15, "Speed");
 	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	rectBar.y += 50;
+	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
 	posY += 60;
 	sprintf_s(textStats, 15, "Spells");
@@ -129,10 +150,41 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	// Draw Numbers
 	posX = -app->render->camera.x + 220 + 280;
-	posY = -app->render->camera.y + 120 + 35;
+	posY = -app->render->camera.y + 120 + 45;
 
 	sprintf_s(textStats, 15, "%d/%d", page.health, page.maxHealth);
 	app->fonts->BlitText(posX, posY, 0, textStats, color);
+
+	posY += 60;
+	sprintf_s(textStats, 15, "%d/%d", page.mana, page.maxMana);
+	app->fonts->BlitText(posX, posY, 0, textStats, color);
+
+	posY += 60;
+	posX -= 50;
+	sprintf_s(textStats, 15, "%d", page.attack);
+	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	posX += 60;
+	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+
+	posY += 50;
+	posX -= 60;
+	sprintf_s(textStats, 15, "%d", page.defense);
+	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	posX += 60;
+	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+
+	posY += 50;
+	posX -= 60;
+	sprintf_s(textStats, 15, "%d", page.speed);
+	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	posX += 60;
+	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+
+	// Draw Spells
+
 
 }
 
@@ -145,7 +197,6 @@ bool GuiStatsMenu::CleanUp()
 
 bool GuiStatsMenu::Event(GuiControl* control)
 {
-
 	//Button stuff
 
 	return true;
@@ -163,6 +214,7 @@ void GuiStatsMenu::AbleDisableMenu()
 	{
 		MovePosition();
 	}
+
 }
 
 void GuiStatsMenu::MovePosition()
@@ -181,6 +233,7 @@ void GuiStatsMenu::ChangePage()
 	if (page.numPage > maxNumPages) page.numPage = 1;
 	if (page.numPage < 1) page.numPage = maxNumPages;
 	InicializeStats();
+	menuMagic->AbleDisableMagic();
 }
 void GuiStatsMenu::InicializeStats()
 {
@@ -196,8 +249,11 @@ void GuiStatsMenu::InicializeStats()
 		page.maxHealth = level * 2 + 6;
 		page.health = app->player->playerData.health;
 		page.maxMana = level * 3 + 8;
+		page.mana = app->player->playerData.mana;
 		page.exp = app->player->playerData.exp;
 		page.maxExp = CalculateExp(level);
+
+		menuMagic->SetIdTurn(KENZIE_);
 
 		break;
 	case 2: // Keiler
@@ -208,8 +264,11 @@ void GuiStatsMenu::InicializeStats()
 		page.maxHealth = 4 * level + 10;
 		page.health = app->player->GetPartners()[0].health;
 		page.maxMana = 2.5 * level + 7.5;
+		page.mana = app->player->GetPartners()[0].mana;
 		page.exp = app->player->GetPartners()[0].exp;
 		page.maxExp = CalculateExp(level);
+
+		menuMagic->SetIdTurn(KEILER_);
 
 		break;
 	case 3: // Isrra
@@ -220,8 +279,11 @@ void GuiStatsMenu::InicializeStats()
 		page.maxHealth = 2.5 * level + 7.5;
 		page.health = app->player->GetPartners()[1].health;
 		page.maxMana = 3.5 * level + 8.5;
+		page.mana = app->player->GetPartners()[1].mana;
 		page.exp = app->player->GetPartners()[1].exp;
 		page.maxExp = CalculateExp(level);
+
+		menuMagic->SetIdTurn(ISRRA_);
 
 		break;
 	case 4: // Brenda
@@ -232,8 +294,11 @@ void GuiStatsMenu::InicializeStats()
 		page.maxHealth = 3.5 * level + 9.5;
 		page.health = app->player->GetPartners()[2].health;
 		page.maxMana = 1.5 * level + 6.5;
+		page.mana = app->player->GetPartners()[2].mana;
 		page.exp = app->player->GetPartners()[2].exp;
 		page.maxExp = CalculateExp(level);
+
+		menuMagic->SetIdTurn(BRENDA_);
 
 		break;
 	default:

@@ -136,7 +136,8 @@ bool SceneManager::Update(float dt)
 
 				// Menu pause
 				app->guiManager->CreatMenuPause(current);
-				app->guiManager->CreateStatsMenu(current);
+				if(current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3")
+					app->guiManager->CreateStatsMenu(current);
 
 				// Activate fade out effect to next loaded screen
 				fadeOutCompleted = true;

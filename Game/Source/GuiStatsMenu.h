@@ -9,6 +9,7 @@
 
 #include "GuiSettings.h"
 #include "Animation.h"
+#include "GuiMenuMagic.h"
 
 class Pages
 {
@@ -59,6 +60,8 @@ private:
 
 	iPoint initialPos = { 0,0 };
 	iPoint relativePosition = { 0,0 };
+
+	GuiMenuMagic* menuMagic = nullptr;
 
 	Pages page;
 	int maxNumPages = 4;

@@ -1,7 +1,6 @@
 #include "SceneBattle.h"
 #include "SceneManager.h"
 
-
 #include "App.h"
 #include "Audio.h"
 #include "Textures.h"
