@@ -35,7 +35,8 @@ bool GuiStatsMenu::Update(float dt)
 	if (active)
 	{
 		//Update stuff
-		if (app->guiManager->openBookAnim->HasFinished() || app->guiManager->leftBook->HasFinished() || app->guiManager->rightBook->HasFinished())
+
+		if ((app->guiManager->openBookAnim->HasFinished() || app->guiManager->leftBook->HasFinished() || app->guiManager->rightBook->HasFinished()) && !closingBook)
 		{
 			introBook = false;
 			changingPage = false;
@@ -48,37 +49,44 @@ bool GuiStatsMenu::Update(float dt)
 			menuMagic->MovePosition();
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+		if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !introBook && !changingPage && !closingBook)
 		{
-			app->audio->PlayFx(app->guiManager->bookClose);
-			app->sceneManager->SetPause(false);
-			AbleDisableMenu();
+			currentAnim = app->guiManager->closeBook;
+			closingBook = true;
 			menuMagic->AbleDisableMagic();
+			app->audio->PlayFx(app->guiManager->bookClose);
 		}
-		if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage)
+
+		if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage && !closingBook)
 		{
 			page.numPage++;
 			ChangePage();
 			currentAnim = app->guiManager->rightBook; 
 		}
-		if ((app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage)
+		if ((app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage && !closingBook)
 		{
 			page.numPage--;
 			ChangePage();
 			currentAnim = app->guiManager->leftBook;
 		}
 
-		if (currentAnim == app->guiManager->openBookAnim) app->guiManager->openBookAnim->Update();
-		if (currentAnim == app->guiManager->leftBook) app->guiManager->leftBook->Update();
-		if (currentAnim == app->guiManager->rightBook) app->guiManager->rightBook->Update();
-
-		if ((app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || app->input->pads[0].y) && !introBook && !changingPage)
+		if ((app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || app->input->pads[0].y) && !introBook && !changingPage && !closingBook)
 		{
 			if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
 			if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
 			if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
 			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
 		}
+
+		if (app->guiManager->closeBook->HasFinished())
+		{
+			AbleDisableMenu();
+			app->sceneManager->SetPause(false);
+			closingBook = false;
+			app->guiManager->closeBook->Reset();
+		}
+
+		currentAnim->Update();
 	}
 
 	return ret;
@@ -92,7 +100,7 @@ bool GuiStatsMenu::PostUpdate()
 
 		app->render->DrawTexture(app->guiManager->bookMenu, relativePosition.x, relativePosition.y, &currentAnim->GetCurrentFrame(), 5);
 
-		if (!introBook && !changingPage)
+		if (!introBook && !changingPage && !closingBook)
 		{
 			int posX = -app->render->camera.x + 220;
 			int posY = -app->render->camera.y + 120;

@@ -85,6 +85,7 @@ private:
 
 	bool active = false;
 	bool changingPage = false;
+	bool closingBook = false;
 	int wRectBar = 320;
 };
 
