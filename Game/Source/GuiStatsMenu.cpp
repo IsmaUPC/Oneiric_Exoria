@@ -131,6 +131,11 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	rectBar = { posX +10, posY+25, wRectBar,20 };
 	rectBar.w = page.health * wRectBar / page.maxHealth;
+	if (liveW < rectBar.w)
+	{
+		liveW += dt * 150;
+		if (liveW < rectBar.w) rectBar.w = liveW;
+	}
 	DrawBarLive();
 
 	posY += 60;
@@ -139,6 +144,11 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	rectBar = { posX + 10, posY + 25, wRectBar,20 };
 	rectBar.w = page.mana * wRectBar / page.maxMana;
+	if (manaW < rectBar.w)
+	{
+		manaW += dt * 150;
+		if (manaW < rectBar.w) rectBar.w = manaW;
+	}
 	app->render->DrawRectangle(rectBar, 157,0,208);
 	rectBar.w = wRectBar;
 	app->render->DrawRectangle(rectBar, 87,0,115,255,false);
@@ -224,7 +234,7 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	posY += 35;
 	app->fonts->BlitText(posX + 35, posY, 3, textMagicRunes, color, dt * velocityDraw);
 
-	// Draw Bar Lives
+	// Draw Bar Exp
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
 	posY += 80;
 	sprintf_s(textStats, 15, "Lvl.%d", page.level);
@@ -235,6 +245,11 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	rectBar = { posX + 10, posY + 25, wRectBar - 30,20 };
 	app->render->DrawRectangle(rectBar, 227, 207, 127);
 	rectBar.w = page.exp * wRectBar / page.maxExp;
+	if (expW < rectBar.w)
+	{
+		expW += dt * 150;
+		if (expW < rectBar.w) rectBar.w = expW;
+	}
 	app->render->DrawRectangle(rectBar, 0, 94, 221);
 	rectBar.w = wRectBar - 30;
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
@@ -286,6 +301,9 @@ void GuiStatsMenu::ChangePage()
 	InicializeStats();
 	menuMagic->AbleDisableMagic();
 	app->fonts->ResetH();
+	liveW = 0;
+	manaW = 0;
+	expW = 0;
 }
 void GuiStatsMenu::InicializeStats()
 {
@@ -400,6 +418,6 @@ void GuiStatsMenu::DrawBarLive()
 	{
 		app->render->DrawRectangle(rectBar, yellow.r, yellow.g, yellow.b);
 		rectBar.w = wRectBar;
-		app->render->DrawRectangle(rectBar, 130, 110, 0, 255, false);
+		app->render->DrawRectangle(rectBar, 149, 112, 0, 255, false);
 	}
 }

@@ -77,7 +77,7 @@ private:
 	SDL_Rect rectBar = { 0,0,0,0 };
 	SDL_Color color;
 	SDL_Color green = { 0,187, 45 };
-	SDL_Color yellow = { 229,190,1 };
+	SDL_Color yellow = { 211,159,0 };
 	SDL_Color red = { 203,50,52 };
 
 	SceneControl* observer = nullptr;
@@ -90,7 +90,11 @@ private:
 	int wRectBar = 320;
 
 	float dt = 0;
-	int velocityDraw = 3;
+	int velocityDraw = 1;
+
+	float liveW = 0;
+	float manaW = 0;
+	float expW = 0;
 };
 
 #endif // !__GUISTATSMENU_H__
