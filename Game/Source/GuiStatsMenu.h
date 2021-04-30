@@ -86,6 +86,9 @@ private:
 	bool active = false;
 	bool changingPage = false;
 	int wRectBar = 320;
+
+	float dt = 0;
+	int velocityDraw = 3;
 };
 
 #endif // !__GUISTATSMENU_H__

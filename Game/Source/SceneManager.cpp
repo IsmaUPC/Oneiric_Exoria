@@ -94,6 +94,7 @@ bool SceneManager::Update(float dt)
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
 		pause = !pause;
 		app->guiManager->GetMenuPause()->AbleDisableMenu();
+		app->fonts->ResetH();
 	}
 
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN || app->input->pads[0].back)
@@ -157,6 +158,7 @@ bool SceneManager::Update(float dt)
 				transitionAlpha = 0.0f;
 				fadeOutCompleted = false;
 				onTransition = false;
+				app->fonts->ResetH();
 			}
 		}
 	}

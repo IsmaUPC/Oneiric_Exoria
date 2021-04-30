@@ -50,7 +50,8 @@ public:
 	void UnLoad(int font);
 
 	// Create a surface from text
-	void BlitText(int x, int y, int fontIndex, const char* text, SDL_Color color);
+	void BlitText(int x, int y, int fontIndex, const char* text, SDL_Color color, float dt_ = 0);
+	void ResetH() { h = 0; };
 
 
 private:
@@ -58,5 +59,6 @@ private:
 	List<TTF_Font*> fonts;
 	SDL_Surface* sur = nullptr;
 	SDL_Texture* tex = nullptr;
+	float h = 0;
 };
 #endif // __ModuleFonts_H__

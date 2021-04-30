@@ -102,19 +102,20 @@ bool GuiManager::Start()
 }
 
 
-bool GuiManager::Update(float dt)
+bool GuiManager::Update(float dt_)
 {
 	bool ret = true;
-	accumulatedTime += dt;
+	accumulatedTime += dt_;
+	dt = dt_;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
 
-	handAnim->speed = (dt * 8);
+	handAnim->speed = (dt_ * 8);
 	handAnim->Update();
 
 	// Menu pause
-	if (app->sceneManager->GetIsPause() && app->guiManager->menu->GetActive()) menu->Update(dt);
+	if (app->sceneManager->GetIsPause() && app->guiManager->menu->GetActive()) menu->Update(dt_);
 	// Stats Menu
-	if (app->sceneManager->GetIsPause() && app->guiManager->stats->GetActive()) stats->Update(dt);
+	if (app->sceneManager->GetIsPause() && app->guiManager->stats->GetActive()) stats->Update(dt_);
 
 	if (doLogic == true)
 	{
@@ -127,18 +128,18 @@ bool GuiManager::Update(float dt)
 	for (int i = 0; i < buttons.Count(); i++)
 	{
 		if(buttons.At(i)->data->active) 
-			ret = buttons.At(i)->data->Update(dt);
+			ret = buttons.At(i)->data->Update(dt_);
 		if (ret == false) return false;
 	}
 	for (int i = 0; i < checkBoxs.Count(); i++)
 	{
 		if (checkBoxs.At(i)->data->active)
-			checkBoxs.At(i)->data->Update(dt);
+			checkBoxs.At(i)->data->Update(dt_);
 	}
 	for (int i = 0; i < sliders.Count(); i++)
 	{
 		if (sliders.At(i)->data->active)
-			sliders.At(i)->data->Update(dt);
+			sliders.At(i)->data->Update(dt_);
 	}
 	
 	return ret;

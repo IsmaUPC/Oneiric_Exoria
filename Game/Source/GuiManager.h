@@ -102,6 +102,7 @@ public:
 	Animation* enemyCloud = nullptr;
 
 	bool press = false;
+	float dt = 0;
 
 private:
 	Input* input = nullptr;

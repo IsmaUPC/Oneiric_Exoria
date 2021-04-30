@@ -28,9 +28,10 @@ GuiStatsMenu::~GuiStatsMenu()
 {
 }
 
-bool GuiStatsMenu::Update(float dt)
+bool GuiStatsMenu::Update(float dt_)
 {
 	bool ret = true;
+	dt = dt_;
 
 	if (active)
 	{
@@ -46,6 +47,7 @@ bool GuiStatsMenu::Update(float dt)
 			menuMagic->AbleDisableMagic();
 			menuMagic->close->active = false;
 			menuMagic->MovePosition();
+			app->fonts->ResetH();
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
@@ -112,7 +114,7 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	posY += 45;
 	sprintf_s(textStats, 15, "HP");
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 
 	rectBar = { posX +10, posY+25, wRectBar,20 };
 	rectBar.w = page.health * wRectBar / page.maxHealth;
@@ -120,7 +122,7 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	posY += 60;
 	sprintf_s(textStats, 15, "MP");
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 
 	rectBar = { posX + 10, posY + 25, wRectBar,20 };
 	rectBar.w = page.mana * wRectBar / page.maxMana;
@@ -130,20 +132,20 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	posY += 60;
 	sprintf_s(textStats, 15, "Attack");
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	rectBar.y += 60;
 	rectBar.h = 10;
 	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
 	posY += 50;
 	sprintf_s(textStats, 15, "Defense");
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	rectBar.y += 50;
 	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
 	posY += 50;
 	sprintf_s(textStats, 15, "Speed");
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	rectBar.y += 50;
 	app->render->DrawRectangle(rectBar, 0, 3, 111);
 
@@ -156,35 +158,35 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	posY = -app->render->camera.y + 120 + 45;
 
 	sprintf_s(textStats, 15, "%d/%d", page.health, page.maxHealth);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 
 	posY += 60;
 	sprintf_s(textStats, 15, "%d/%d", page.mana, page.maxMana);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 
 	posY += 60;
 	posX -= 50;
 	sprintf_s(textStats, 15, "%d", page.attack);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	posX += 60;
 	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 
 	posY += 50;
 	posX -= 60;
 	sprintf_s(textStats, 15, "%d", page.defense);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	posX += 60;
 	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 
 	posY += 50;
 	posX -= 60;
 	sprintf_s(textStats, 15, "%d", page.speed);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	posX += 60;
 	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, });
+	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 	
 	// Draw Rectangles
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
@@ -201,21 +203,21 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 
 	// Draw Name, Class, Id
 	posY += 40;
-	app->fonts->BlitText(posX + 35, posY, 0, textName, color);
+	app->fonts->BlitText(posX + 35, posY, 0, textName, color, dt * velocityDraw);
 	posY += 35;
-	app->fonts->BlitText(posX + 35, posY, 0, textClass, color);
+	app->fonts->BlitText(posX + 35, posY, 0, textClass, color, dt * velocityDraw);
 	posY += 20;
-	app->fonts->BlitText(posX + 35, posY, 0, "Magic", color);
+	app->fonts->BlitText(posX + 35, posY, 0, "Magic", color, dt * velocityDraw);
 	posY += 35;
-	app->fonts->BlitText(posX + 35, posY, 3, textMagicRunes, color);
+	app->fonts->BlitText(posX + 35, posY, 3, textMagicRunes, color, dt * velocityDraw);
 
 	// Draw Bar Lives
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
 	posY += 80;
 	sprintf_s(textStats, 15, "Lvl.%d", page.level);
-	app->fonts->BlitText(posX, posY, 0, textStats, color);
+	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 	sprintf_s(textStats, 15, "%d/%d", page.exp, page.maxExp);
-	app->fonts->BlitText(posX + 250, posY, 0, textStats, color);
+	app->fonts->BlitText(posX + 250, posY, 0, textStats, color, dt * velocityDraw);
 
 	rectBar = { posX + 10, posY + 25, wRectBar - 30,20 };
 	app->render->DrawRectangle(rectBar, 227, 207, 127);
@@ -270,6 +272,7 @@ void GuiStatsMenu::ChangePage()
 	if (page.numPage < 1) page.numPage = maxNumPages;
 	InicializeStats();
 	menuMagic->AbleDisableMagic();
+	app->fonts->ResetH();
 }
 void GuiStatsMenu::InicializeStats()
 {

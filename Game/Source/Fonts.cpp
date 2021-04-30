@@ -106,7 +106,7 @@ void Fonts::UnLoad(int font_id)
 	}
 }
 
-void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color color)
+void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color color, float dt_)
 {
 	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts.At(font_id)->data == NULL)
 	{
@@ -119,7 +119,22 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 		SDL_DestroyTexture(tex);
 		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
 		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
-		if(tex != NULL)app->render->DrawTexture(tex, x, y);
+		
+		if (tex != NULL)
+		{
+			if (dt_ != 0)
+			{
+				SDL_Rect rect = { 0,0,0,0 };
+				SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
+				if (h < rect.h)
+				{
+					h += dt_;
+					if (h < rect.h) rect.h = h;
+				}
+				app->render->DrawTexture(tex, x, y, &rect);
+			}
+			else app->render->DrawTexture(tex, x, y);
+		}
 	}
 
 }

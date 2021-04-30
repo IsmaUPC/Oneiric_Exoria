@@ -642,7 +642,7 @@ void SceneBattle::DrawSceneLose()
 	int w = 0, h = 0;
 	sprintf_s(textLoose, 28, "YOU LOOSE");
 	TTF_SizeText(app->sceneManager->titleFont, textLoose, &w, &h);
-	app->fonts->BlitText(WINDOW_W / 2 - w / 2, 180, 1, textLoose, red);
+	app->fonts->BlitText(WINDOW_W / 2 - w / 2, 180, 1, textLoose, red, dt*35);
 	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + 50, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	if (btnContinue->state == GuiControlState::FOCUSED)
 	{
