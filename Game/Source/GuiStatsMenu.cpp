@@ -207,7 +207,7 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	posY += 20;
 	app->fonts->BlitText(posX + 35, posY, 0, "Magic", color);
 	posY += 35;
-	app->fonts->BlitText(posX + 35, posY, 0, textMagicRunes, color);
+	app->fonts->BlitText(posX + 35, posY, 3, textMagicRunes, color);
 
 	// Draw Bar Lives
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
