@@ -41,7 +41,7 @@ bool SceneBattle::Start()
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
 	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
 
-	winFx = app->audio->LoadFx("Assets/Audio/Fx/music_victory.wav");
+	winFx = app->audio->LoadFx("Assets/Audio/Fx/win_start.wav");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
 	magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
@@ -903,10 +903,10 @@ bool SceneBattle::Update(float dt_)
 			if (i == enemies.Count() - 1)
 			{
 				win = true;
-				//app->audio->PlayFx(winFx);
+				app->audio->PlayFx(winFx);
 				AbleDisableButtons();
 				app->sceneManager->SetWinBattle(true);
-				app->audio->PlayMusic("Assets/Audio/Music/music_victory.ogg",0);
+				app->audio->PlayMusic("Assets/Audio/Music/win_music.ogg",0);
 			}
 		}
 		// Lose Condition
@@ -923,6 +923,7 @@ bool SceneBattle::Update(float dt_)
 				AbleDisableButtons();
 				lose = true;
 				app->audio->PlayFx(loseFx);
+				app->audio->PlayMusic("Assets/Audio/Music/lose_music.ogg", 0);
 				btnExit->active = true;
 				btnExit->state = GuiControlState::NORMAL;
 				app->sceneManager->SetLoseBattle(true);
