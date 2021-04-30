@@ -80,18 +80,23 @@ bool GuiStatsMenu::Update(float dt_)
 			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
 		}
 
-		if (app->guiManager->closeBook->HasFinished())
-		{
-			AbleDisableMenu();
-			app->sceneManager->SetPause(false);
-			closingBook = false;
-			app->guiManager->closeBook->Reset();
-		}
+		CloseBook();
 
 		currentAnim->Update();
 	}
 
 	return ret;
+}
+
+void GuiStatsMenu::CloseBook()
+{
+	if (app->guiManager->closeBook->HasFinished())
+	{
+		AbleDisableMenu();
+		app->sceneManager->SetPause(false);
+		closingBook = false;
+		app->guiManager->closeBook->Reset();
+	}
 }
 
 bool GuiStatsMenu::PostUpdate()

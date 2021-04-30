@@ -35,6 +35,7 @@ public:
 	~GuiStatsMenu();
 
 	bool Update(float dt);
+	void CloseBook();
 	bool PostUpdate();
 
 	void DrawTitleStats(int posX, int& posY);
