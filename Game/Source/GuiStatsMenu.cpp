@@ -78,7 +78,6 @@ bool GuiStatsMenu::Update(float dt)
 
 bool GuiStatsMenu::PostUpdate()
 {
-
 	if (active)
 	{
 		app->render->DrawRectangle({ screenRect.x, screenRect.y, WINDOW_W, WINDOW_H }, 0, 0, 0, 200);
@@ -90,7 +89,14 @@ bool GuiStatsMenu::PostUpdate()
 			int posX = -app->render->camera.x + 220;
 			int posY = -app->render->camera.y + 120;
 
-			DrawTitleStats(posX, posY);			
+			DrawTitleStats(posX, posY);	
+			if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+			{
+				if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+				if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+				if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+				if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+			}
 		}
 	}
 
@@ -215,8 +221,6 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	app->render->DrawRectangle(rectBar, 0, 94, 221);
 	rectBar.w = wRectBar - 30;
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
-
-
 }
 
 bool GuiStatsMenu::CleanUp()
