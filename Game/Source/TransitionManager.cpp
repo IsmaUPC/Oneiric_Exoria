@@ -63,7 +63,7 @@ bool TransitionManager::CleanUp()
 
 void TransitionManager::Transition1()
 {
-	render->DrawRectangle({ transit1 }, 0, 0, 0, 255);
+	render->DrawRectangle({ transit1 }, 20, 20, 20, 255);
 	transit1.x = -app->render->camera.x;
 	transit1.y = -app->render->camera.y;
 	transit1.h = WINDOW_H;

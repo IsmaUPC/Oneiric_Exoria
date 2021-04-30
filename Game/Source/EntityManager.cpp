@@ -78,7 +78,7 @@ bool EntityManager::Update(float dt)
 
 bool EntityManager::PostUpdate()
 {
-	if (!app->sceneManager->GetWinBattle())
+	if ((!app->sceneManager->GetWinBattle() && app->sceneManager->GetTransitionToBattleFinish() && partners.start != NULL) || partners.start == NULL)
 	{
 		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
 			entiti->data->PostUpdate();

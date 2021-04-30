@@ -143,8 +143,12 @@ bool SceneIntro::Update(float dt)
 	//Update Easings
 	//positionOneiric = 110;
 	//positionExoria = 275;
-	positionExoria = EaseCircIn(currentIteration, initialPosition, -deltaPosition, totalIterations);
-	positionOneiric = EaseCircIn(currentIteration, -895, deltaPosition, totalIterations);
+
+	if (state == 0)
+	{
+		positionExoria = EaseCircIn(currentIteration, initialPosition, -deltaPosition, totalIterations);
+		positionOneiric = EaseCircIn(currentIteration, -895, deltaPosition, totalIterations);
+	}
 
 	if (currentIteration < totalIterations)
 	{
@@ -153,9 +157,10 @@ bool SceneIntro::Update(float dt)
 	else
 	{
 		if (logoAlpha == 0) app->audio->PlayFx(flashFx);
-		if (state == 1) flash = true;
+		if (state == 0) state = 1;
 		if (state == 1)
 		{
+			flash = true;
 			logoAlpha += (LOGO_FADE_SPEED);
 
 			if (logoAlpha > 255.0f)

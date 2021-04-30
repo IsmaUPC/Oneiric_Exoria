@@ -82,6 +82,9 @@ public:
 
 	SDL_Texture* GetPlayerTexture() { return texPlayers; };
 
+	bool GetTransitionToBattleFinish() { return transitionFinish; };
+	void SetTransitionToBattleFinish(bool ret) { transitionFinish = ret; };
+
 private:
 
 	Input* input = nullptr;
@@ -95,13 +98,13 @@ private:
 	SceneControl* next = nullptr;
 	TransitionManager* transition = nullptr;
 
-
 	// Required variables to manage screen transitions (fade-in, fade-out)
-	bool onTransition =false;
+	bool onTransition = false;
 	bool fadeOutCompleted = false;
 	float transitionAlpha = 0.0f;
 	bool pause = false;
 
+	bool transitionFinish = false;
 	bool enemyDetected = false;
 
 	List<SceneControl*> scenes;

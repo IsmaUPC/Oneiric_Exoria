@@ -84,7 +84,6 @@ private:
 	uint flashFx = -1;
 
 	//Easings title
-	//DONE 1: Initialize the variables you created before with the values you desire
 	float currentIteration;
 	float totalIterations;
 	float initialPosition;
@@ -96,7 +95,7 @@ private:
 	bool flash = false;
 	float logoAlpha = 0;
 	float timeCounter = 0;
-	int state = 1;
+	int state = 0;
 	float angle = 0;
 };
 

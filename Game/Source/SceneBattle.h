@@ -56,11 +56,23 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void Transition(float dt_);
+
+	void UpdateAnimationEnemies();
+	void BattleSystem();
+	void CheckWinLose();
+
 	// Called before all Updates
 	bool PostUpdate();
+
+	void IconEnemySelected();
+	void DrawAllBattlesElements();
 	void DrawBarLives();
-	void DrawBarExperience();
 	void DrawTurnBar();
+
+	void DrawSceneWin();
+	void DrawSceneLose();
+	void DrawBarExperience();
 
 	// Called before quitting
 	bool CleanUp();
@@ -75,6 +87,7 @@ public:
 	void DisplaceToLeft();
 
 	void AbleDisableButtons();
+	void AbleButtons();
 	
 	void SaveStateLose();
 	void SaveState(TypeEntity pType, int i);
@@ -165,5 +178,20 @@ private:
 
 	int posX = 0;
 	int posY = 0;
+
+	//Easings title
+	float currentIteration;
+	float totalIterations;
+	float initialPosition;
+	float deltaPosition;
+
+	int state = 0;
+	bool flash = false;
+	bool drawEntities = false;
+	float logoAlpha = 0;
+	float timeCounter = 0;
+
+	float posBackgroundLeft = -1280;
+	float posBackgroundRight = 1280;
 };
 #endif //__SCENE_BATTLE_H__
