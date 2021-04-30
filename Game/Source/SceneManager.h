@@ -130,6 +130,7 @@ public:
 	TTF_Font* guiFont = nullptr;
 	TTF_Font* titleFont = nullptr;
 	TTF_Font* statsFont = nullptr;
+	TTF_Font* runicFont = nullptr;
 };
 
 #endif // __SCENEMANAGER_H__
