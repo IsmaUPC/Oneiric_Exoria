@@ -48,20 +48,20 @@ bool GuiStatsMenu::Update(float dt)
 			menuMagic->MovePosition();
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
 		{
 			app->audio->PlayFx(app->guiManager->bookClose);
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
 			menuMagic->AbleDisableMagic();
 		}
-		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && !introBook && !changingPage)
+		if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage)
 		{
 			page.numPage++;
 			ChangePage();
 			currentAnim = app->guiManager->rightBook; 
 		}
-		if (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN && !introBook && !changingPage)
+		if ((app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage)
 		{
 			page.numPage--;
 			ChangePage();
@@ -71,6 +71,14 @@ bool GuiStatsMenu::Update(float dt)
 		if (currentAnim == app->guiManager->openBookAnim) app->guiManager->openBookAnim->Update();
 		if (currentAnim == app->guiManager->leftBook) app->guiManager->leftBook->Update();
 		if (currentAnim == app->guiManager->rightBook) app->guiManager->rightBook->Update();
+
+		if ((app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || app->input->pads[0].y) && !introBook && !changingPage)
+		{
+			if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+			if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
+			if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
+			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
+		}
 	}
 
 	return ret;
@@ -90,13 +98,7 @@ bool GuiStatsMenu::PostUpdate()
 			int posY = -app->render->camera.y + 120;
 
 			DrawTitleStats(posX, posY);	
-			if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
-			{
-				if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
-				if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
-				if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
-				if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
-			}
+			
 		}
 	}
 

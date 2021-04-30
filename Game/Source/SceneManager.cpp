@@ -92,7 +92,7 @@ bool SceneManager::Update(float dt)
 		app->guiManager->GetMenuPause()->AbleDisableMenu();
 	}
 
-	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN || app->input->pads[0].back)
 		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
 	{
 		pause = !pause;
