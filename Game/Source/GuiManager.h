@@ -94,10 +94,13 @@ public:
 	SDL_Texture* iconsUiTex = nullptr;
 
 	Animation* handAnim = nullptr;
+
 	Animation* openBookAnim = nullptr;
 	Animation* idleBook = nullptr;
 	Animation* rightBook = nullptr;
 	Animation* leftBook = nullptr;
+	Animation* closeBook = nullptr;
+
 	Animation* talkCloud = nullptr;
 	Animation* enemyCloud = nullptr;
 

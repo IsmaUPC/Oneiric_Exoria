@@ -78,6 +78,15 @@ bool GuiManager::Start()
 		leftBook->PushBack({ i * BOOK_W, 507, BOOK_W, BOOK_H });
 	}
 
+	closeBook = new Animation();
+	closeBook->speed = 0.2f;
+	closeBook->loop = false;
+	for (int i = 8; i > 0; i--)
+	{
+		closeBook->PushBack({ i * BOOK_W - BOOK_W, 169, BOOK_W, BOOK_H });
+	}
+	closeBook->PushBack({ 1309,0,BOOK_W,BOOK_H });
+
 	talkCloud = new Animation();
 	talkCloud->speed = 0.15f;
 	for (int i = 0; i < 8; i++)
