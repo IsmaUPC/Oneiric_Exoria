@@ -17,6 +17,7 @@
 #include "Audio.h"
 #include "GuiManager.h"
 #include "TpNodeManager.h"
+#include "TransitionManager.h"
 
 #include "Defs.h"
 #include "Log.h"

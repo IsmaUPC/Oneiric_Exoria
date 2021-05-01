@@ -8,7 +8,6 @@
 #include "TeleportNode.h"
 #include "TpNodeManager.h"
 #include "easings.h"
-#include "TransitionManager.h"
 
 class GuiButton;
 

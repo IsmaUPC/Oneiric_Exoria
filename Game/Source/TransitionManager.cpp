@@ -43,7 +43,7 @@ bool TransitionManager::Update(float dt)
 		{
 			randT = rand() % MAX_TRANSITIONS;
 			randT = 0;
-			totalIterations = 50;
+			totalIterations = 60;
 			initialPos = -app->render->camera.x - WINDOW_W;
 			doorRand = false;
 		}
@@ -81,7 +81,7 @@ void TransitionManager::Transition1(float dt)
 		switch (state)
 		{
 		case 0:
-			transit1.x = EaseLinearInOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1.x = EaseLinearIn(currentIteration, initialPos, WINDOW_W, totalIterations);
 			transit1.y = -app->render->camera.y;
 			transit1.w = WINDOW_W;
 			transit1.h = WINDOW_H;
@@ -89,12 +89,13 @@ void TransitionManager::Transition1(float dt)
 			if (currentIteration >= totalIterations)
 			{
 				state = 1;
-				initialPos = transit1.x;
+				initialPos += WINDOW_W;
+				transit1.x = initialPos;
 			}
 			break;
 		case 1:
 			timeCounter += dt;
-			if (timeCounter >= 0.5f)
+			if (timeCounter >= 1.0f)
 			{
 				state = 2;
 				midTransition = true;
@@ -102,7 +103,7 @@ void TransitionManager::Transition1(float dt)
 			}
 			break;
 		case 2:
-			transit1.x = EaseLinearInOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1.x = EaseLinearOut(currentIteration, initialPos, WINDOW_W, totalIterations);
 			transit1.y = -app->render->camera.y;
 			transit1.w = WINDOW_W;
 			transit1.h = WINDOW_H;
