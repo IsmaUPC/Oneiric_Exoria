@@ -5,7 +5,7 @@
 #include "easings.h"
 #include "SDL\include\SDL_rect.h"
 
-#define MAX_TRANSITIONS 2
+#define MAX_TRANSITIONS 3
 #define MAX_RECTANGLES 4
 
 class Render;

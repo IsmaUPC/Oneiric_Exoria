@@ -130,10 +130,7 @@ void TransitionManager::Transition1(float dt)
 			transit1[3].w = EaseBounceIn(currentIteration, 0, WINDOW_W / 2 + offset, totalIterations);
 			transit1[3].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2 - offset, totalIterations);
 
-			if (currentIteration >= totalIterations)
-			{
-				state = 1;
-			}
+			if (currentIteration >= totalIterations) state = 1;
 			break;
 		case 1:
 			timeCounter += dt;
@@ -175,7 +172,41 @@ void TransitionManager::Transition1(float dt)
 			break;
 		}
 		break;
+	case 2:
+		switch (state)
+		{
+		case 0:
+			transit1[0].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2 + offset, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2 - offset, totalIterations);
+			if (currentIteration >= totalIterations) state = 1;
 
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 1.0f)
+			{
+				state = 2;
+				midTransition = true;
+				currentIteration = 0;
+			}
+			break;
+		case 2:
+			transit1[0].x = -app->render->camera.x;
+			transit1[0].y = -app->render->camera.y;
+
+			transit1[1].x = -app->render->camera.x;
+			transit1[1].y = -app->render->camera.y + WINDOW_H;
+
+			transit1[0].h = EaseBounceIn(currentIteration, WINDOW_H / 2 + offset, -WINDOW_H / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, -WINDOW_H / 2 - offset, WINDOW_H / 2, totalIterations);
+			if (currentIteration >= totalIterations) Reset();
+
+			break;
+		default:
+			break;
+		}
+
+		break;
 	default:
 		break;
 	}	
@@ -207,7 +238,19 @@ void TransitionManager::InitParameters()
 
 		transit1[3].x = -app->render->camera.x;
 		transit1[3].y = -app->render->camera.y + WINDOW_H;
+		break;
+	case 2:
+		totalIterations = 80;
+		initialPos = -app->render->camera.x;
+		transit1[0].x = -app->render->camera.x;
+		transit1[0].y = -app->render->camera.y;
 
+		transit1[1].x = -app->render->camera.x;
+		transit1[1].y = -app->render->camera.y + WINDOW_H;
+
+		transit1[0].w = WINDOW_W;
+		transit1[1].w = WINDOW_W;
+		break;
 	default:
 		break;
 	}
