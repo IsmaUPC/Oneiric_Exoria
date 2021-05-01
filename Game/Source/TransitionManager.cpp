@@ -2,7 +2,7 @@
 #include "SceneManager.h"
 
 #include "Render.h"
-#include "Textures.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "SDL/include/SDL.h"
@@ -26,6 +26,13 @@ bool TransitionManager::Awake()
 	bool ret = true;
 
 	return ret;
+}
+bool TransitionManager::Start()
+{
+	logo = app->tex->Load("Assets/Textures/logo_title.png");
+	SDL_QueryTexture(logo, NULL, NULL, &dimensionLogo.w, &dimensionLogo.h);
+
+	return true;
 }
 
 bool TransitionManager::PreUpdate()
@@ -52,7 +59,7 @@ bool TransitionManager::Update(float dt)
 		Transition1(dt);
 		if (currentIteration < totalIterations)
 		{
-			currentIteration += dt * 60;
+			currentIteration++;
 		}	
 	}
 
@@ -65,8 +72,36 @@ bool TransitionManager::PostUpdate()
 	{
 		for (int i = 0; i < MAX_RECTANGLES; i++)
 		{
-			if (transit1[i].w != 0 || transit1[i].h != 0)render->DrawRectangle(transit1[i], 20, 20, 20, 255);
-		}		
+			if (transit1[i].w != 0 || transit1[i].h != 0)render->DrawRectangle(transit1[i], 30, 30, 30, 255);
+		}	
+		
+		switch (randT)
+		{
+		case 0:
+			app->render->DrawTexture(logo, transit1[0].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[0].y + WINDOW_H / 2 - dimensionLogo.h / 2);
+			break;
+		case 1:
+			rect = { 0, 0, dimensionLogo.w / 2, dimensionLogo.h / 2 };
+			app->render->DrawTexture(logo, transit1[0].x + transit1[0].w - dimensionLogo.w / 2, transit1[0].y + transit1[0].h - dimensionLogo.h / 2, &rect);
+
+			rect = { dimensionLogo.w / 2, 0, dimensionLogo.w / 2, dimensionLogo.h / 2 };
+			app->render->DrawTexture(logo, transit1[1].x + transit1[1].w, transit1[1].y + transit1[1].h - dimensionLogo.h / 2, &rect);
+
+			rect = { dimensionLogo.w / 2, dimensionLogo.h / 2, dimensionLogo.w / 2, dimensionLogo.h / 2 };
+			app->render->DrawTexture(logo, transit1[2].x + transit1[2].w, transit1[2].y + transit1[2].h, &rect);
+
+			rect = { 0, dimensionLogo.h / 2, dimensionLogo.w / 2, dimensionLogo.h / 2 };
+			app->render->DrawTexture(logo, transit1[3].x + transit1[3].w - dimensionLogo.w / 2, transit1[3].y + transit1[3].h, &rect);
+
+			break;
+		case 2:
+			rect = { 0, 0, dimensionLogo.w,dimensionLogo.h/2 };
+			app->render->DrawTexture(logo, transit1[0].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[0].y + transit1[0].h - dimensionLogo.h / 2, &rect);
+			rect = { 0, dimensionLogo.h / 2, dimensionLogo.w,dimensionLogo.h / 2 };
+			app->render->DrawTexture(logo, transit1[1].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[1].y + transit1[1].h, &rect);
+		default:
+			break;
+		}
 	}
 	
 	return true;
@@ -74,6 +109,7 @@ bool TransitionManager::PostUpdate()
 
 bool TransitionManager::CleanUp()
 {
+	app->tex->UnLoad(logo);
 	return true;
 }
 
@@ -118,17 +154,17 @@ void TransitionManager::Transition1(float dt)
 		switch (state)
 		{
 		case 0:
-			transit1[0].w = EaseBounceIn(currentIteration, 0, WINDOW_W/2 + offset, totalIterations);
-			transit1[0].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2 + offset, totalIterations);
+			transit1[0].w = EaseBounceIn(currentIteration, 0, WINDOW_W/2, totalIterations);
+			transit1[0].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2, totalIterations);
 			
-			transit1[1].w = EaseBounceIn(currentIteration, 0, -WINDOW_W / 2 - offset, totalIterations);
-			transit1[1].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2 + offset, totalIterations);
+			transit1[1].w = EaseBounceIn(currentIteration, 0, -WINDOW_W / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2, totalIterations);
 
-			transit1[2].w = EaseBounceIn(currentIteration, 0, -WINDOW_W / 2 - offset, totalIterations);
-			transit1[2].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2 - offset, totalIterations);
+			transit1[2].w = EaseBounceIn(currentIteration, 0, -WINDOW_W / 2, totalIterations);
+			transit1[2].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2, totalIterations);
 
-			transit1[3].w = EaseBounceIn(currentIteration, 0, WINDOW_W / 2 + offset, totalIterations);
-			transit1[3].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2 - offset, totalIterations);
+			transit1[3].w = EaseBounceIn(currentIteration, 0, WINDOW_W / 2, totalIterations);
+			transit1[3].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2, totalIterations);
 
 			if (currentIteration >= totalIterations) state = 1;
 			break;
@@ -154,17 +190,17 @@ void TransitionManager::Transition1(float dt)
 			transit1[3].x = -app->render->camera.x;
 			transit1[3].y = -app->render->camera.y + WINDOW_H;
 
-			transit1[0].w = EaseBounceIn(currentIteration, WINDOW_W / 2 + offset, -WINDOW_W / 2, totalIterations);
-			transit1[0].h = EaseBounceIn(currentIteration, WINDOW_H / 2 + offset, -WINDOW_H / 2, totalIterations);
+			transit1[0].w = EaseBounceIn(currentIteration, WINDOW_W / 2, -WINDOW_W / 2, totalIterations);
+			transit1[0].h = EaseBounceIn(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
 
-			transit1[1].w = EaseBounceIn(currentIteration, -WINDOW_W / 2 - offset, WINDOW_W / 2, totalIterations);
-			transit1[1].h = EaseBounceIn(currentIteration, WINDOW_H / 2 + offset, -WINDOW_H / 2, totalIterations);
+			transit1[1].w = EaseBounceIn(currentIteration, -WINDOW_W / 2, WINDOW_W / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
 
-			transit1[2].w = EaseBounceIn(currentIteration, -WINDOW_W / 2 - offset, WINDOW_W / 2, totalIterations);
-			transit1[2].h = EaseBounceIn(currentIteration, -WINDOW_H / 2 - offset, WINDOW_H / 2, totalIterations);
+			transit1[2].w = EaseBounceIn(currentIteration, -WINDOW_W / 2, WINDOW_W / 2, totalIterations);
+			transit1[2].h = EaseBounceIn(currentIteration, -WINDOW_H / 2, WINDOW_H / 2, totalIterations);
 
-			transit1[3].w = EaseBounceIn(currentIteration, WINDOW_W / 2 + offset, -WINDOW_W / 2, totalIterations);
-			transit1[3].h = EaseBounceIn(currentIteration, -WINDOW_H / 2 - offset, WINDOW_H / 2, totalIterations);
+			transit1[3].w = EaseBounceIn(currentIteration, WINDOW_W / 2, -WINDOW_W / 2, totalIterations);
+			transit1[3].h = EaseBounceIn(currentIteration, -WINDOW_H / 2, WINDOW_H / 2, totalIterations);
 			if (currentIteration >= totalIterations) Reset();
 
 			break;
@@ -176,8 +212,8 @@ void TransitionManager::Transition1(float dt)
 		switch (state)
 		{
 		case 0:
-			transit1[0].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2 + offset, totalIterations);
-			transit1[1].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2 - offset, totalIterations);
+			transit1[0].h = EaseBounceIn(currentIteration, 0, WINDOW_H / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, 0, -WINDOW_H / 2, totalIterations);
 			if (currentIteration >= totalIterations) state = 1;
 
 			break;
@@ -197,8 +233,8 @@ void TransitionManager::Transition1(float dt)
 			transit1[1].x = -app->render->camera.x;
 			transit1[1].y = -app->render->camera.y + WINDOW_H;
 
-			transit1[0].h = EaseBounceIn(currentIteration, WINDOW_H / 2 + offset, -WINDOW_H / 2, totalIterations);
-			transit1[1].h = EaseBounceIn(currentIteration, -WINDOW_H / 2 - offset, WINDOW_H / 2, totalIterations);
+			transit1[0].h = EaseBounceIn(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, -WINDOW_H / 2, WINDOW_H / 2, totalIterations);
 			if (currentIteration >= totalIterations) Reset();
 
 			break;

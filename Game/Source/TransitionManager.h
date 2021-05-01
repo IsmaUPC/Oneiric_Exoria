@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "easings.h"
+#include "Textures.h"
 #include "SDL\include\SDL_rect.h"
 
 #define MAX_TRANSITIONS 3
@@ -24,6 +25,9 @@ public:
 
 	// Called before render is available
 	bool Awake();
+
+	// Called before the first frame
+	bool Start();
 
 	// Called before all Updates
 	bool PreUpdate();
@@ -53,17 +57,21 @@ private:
 	float deltaPos = 0.0f;
 
 	SDL_Rect transit1[MAX_RECTANGLES] = { 0,0,0,0 };
+	SDL_Rect dimensionLogo = { 0,0,0,0 };
+	SDL_Rect rect = { 0,0,0,0 };
+
 	Render* render = nullptr;
 	Textures* tex = nullptr;
-	bool activatorTransition = false;
+	SDL_Texture* logo = nullptr;
 
+	bool activatorTransition = false;
 	int randT = 0;
 	bool doorRand = true;
 	bool midTransition = false;
 	bool endTransition = true;
 	int state = 0;
 	float timeCounter = 0;
-	int offset = 5;
+
 };
 
 #endif // !__TRANSITIONMANAGER_H
