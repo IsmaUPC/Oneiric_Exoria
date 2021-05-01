@@ -6,6 +6,7 @@
 #include "SDL\include\SDL_rect.h"
 
 #define MAX_TRANSITIONS 5
+#define MAX_RECTANGLES 4
 
 class Render;
 class Textures;
@@ -38,12 +39,11 @@ public:
 
 	// A frame count system to handle the fade time and ratio
 	
-	void ActivateTransition();
 	void Transition1(float dt);
+	void InitParameters();
 	void Reset();
-	//bool GetTransitionFinish() { return transitionFinish; };
-	bool GetTransitionMid() { return midTransition; };
 
+	bool GetTransitionMid() { return midTransition; };
 
 private:
 
@@ -52,15 +52,15 @@ private:
 	float initialPos = 0.0f;
 	float deltaPos = 0.0f;
 
-	SDL_Rect transit1;
+	SDL_Rect transit1[MAX_RECTANGLES] = { 0,0,0,0 };
 	Render* render = nullptr;
 	Textures* tex = nullptr;
 	bool activatorTransition = false;
 
 	int randT = 0;
 	bool doorRand = true;
-	//bool transitionFinish = true;
 	bool midTransition = false;
+	bool endTransition = true;
 	int state = 0;
 	float timeCounter = 0;
 

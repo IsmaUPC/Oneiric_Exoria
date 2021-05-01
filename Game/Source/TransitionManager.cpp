@@ -35,16 +35,19 @@ bool TransitionManager::PreUpdate()
 
 bool TransitionManager::Update(float dt)
 {
-	if (app->sceneManager->GetOnTransition()) activatorTransition = true;
-	
+	if (app->sceneManager->GetOnTransition() && endTransition) 
+	{
+		activatorTransition = true;
+		endTransition = false;
+	}
+
 	if (activatorTransition == true)
 	{
 		if (doorRand == true)
 		{
 			randT = rand() % MAX_TRANSITIONS;
 			randT = 0;
-			totalIterations = 60;
-			initialPos = -app->render->camera.x - WINDOW_W;
+			InitParameters();
 			doorRand = false;
 		}
 		Transition1(dt);
@@ -62,7 +65,11 @@ bool TransitionManager::PostUpdate()
 {
 	if (activatorTransition == true)
 	{
-		render->DrawRectangle(transit1, 20, 20, 20, 255);
+		for (int i = 0; i < MAX_RECTANGLES; i++)
+		{
+			if (transit1[i].w != 0 || transit1[i].h != 0)render->DrawRectangle(transit1[i], 255, 0, 0, 255);
+		}
+		
 	}
 	
 	return true;
@@ -81,16 +88,13 @@ void TransitionManager::Transition1(float dt)
 		switch (state)
 		{
 		case 0:
-			transit1.x = EaseLinearIn(currentIteration, initialPos, WINDOW_W, totalIterations);
-			transit1.y = -app->render->camera.y;
-			transit1.w = WINDOW_W;
-			transit1.h = WINDOW_H;
-						
+			transit1[0].x = EaseLinearIn(currentIteration, initialPos, WINDOW_W, totalIterations);
+									
 			if (currentIteration >= totalIterations)
 			{
 				state = 1;
 				initialPos += WINDOW_W;
-				transit1.x = initialPos;
+				transit1[0].x = initialPos;
 			}
 			break;
 		case 1:
@@ -103,21 +107,112 @@ void TransitionManager::Transition1(float dt)
 			}
 			break;
 		case 2:
-			transit1.x = EaseLinearOut(currentIteration, initialPos, WINDOW_W, totalIterations);
-			transit1.y = -app->render->camera.y;
-			transit1.w = WINDOW_W;
-			transit1.h = WINDOW_H;
+			transit1[0].x = EaseLinearOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1[0].y = -app->render->camera.y;
 			if (currentIteration >= totalIterations) Reset();
+			break;
 
+		default:
+			break;
+		}		
+		break;
+
+	case 1:
+		switch (state)
+		{
+		case 0:
+			transit1[0].w = EaseBounceIn(currentIteration, initialPos, WINDOW_W/2, totalIterations);
+			transit1[0].h = EaseBounceIn(currentIteration, initialPos, WINDOW_H / 2, totalIterations);
+
+			transit1[1].w = EaseBounceIn(currentIteration, initialPos, -WINDOW_W / 2, totalIterations);
+			transit1[1].h = EaseBounceIn(currentIteration, initialPos, WINDOW_H / 2, totalIterations);
+
+			transit1[2].w = EaseBounceIn(currentIteration, initialPos, -WINDOW_W / 2, totalIterations);
+			transit1[2].h = EaseBounceIn(currentIteration, initialPos, -WINDOW_H / 2, totalIterations);
+
+			transit1[3].w = EaseBounceIn(currentIteration, initialPos, WINDOW_W / 2, totalIterations);
+			transit1[3].h = EaseBounceIn(currentIteration, initialPos, -WINDOW_H / 2, totalIterations);
+
+			if (currentIteration >= totalIterations)
+			{
+				state = 1;
+			}
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 1.0f)
+			{
+				state = 2;
+				midTransition = true;
+				currentIteration = 0;
+			}
+			break;
+		case 2:
+			transit1[0].x = -app->render->camera.x;
+			transit1[0].y = -app->render->camera.y;
+
+			transit1[1].x = -app->render->camera.x + WINDOW_W;
+			transit1[1].y = -app->render->camera.y;
+
+			transit1[2].x = -app->render->camera.x + WINDOW_W;
+			transit1[2].y = -app->render->camera.y + WINDOW_H;
+
+			transit1[3].x = -app->render->camera.x;
+			transit1[3].y = -app->render->camera.y + WINDOW_H;
+
+			transit1[0].w = EaseBounceOut(currentIteration, initialPos, -WINDOW_W / 2, totalIterations);
+			transit1[0].h = EaseBounceOut(currentIteration, initialPos, -WINDOW_H / 2, totalIterations);
+
+			transit1[1].w = EaseBounceOut(currentIteration, initialPos, WINDOW_W / 2, totalIterations);
+			transit1[1].h = EaseBounceOut(currentIteration, initialPos, -WINDOW_H / 2, totalIterations);
+
+			transit1[2].w = EaseBounceOut(currentIteration, initialPos, WINDOW_W / 2, totalIterations);
+			transit1[2].h = EaseBounceOut(currentIteration, initialPos, WINDOW_H / 2, totalIterations);
+
+			transit1[3].w = EaseBounceOut(currentIteration, initialPos, -WINDOW_W / 2, totalIterations);
+			transit1[3].h = EaseBounceOut(currentIteration, initialPos, WINDOW_H / 2, totalIterations);
+			if (currentIteration >= totalIterations) Reset();
 			break;
 		default:
 			break;
 		}
-		
 		break;
+
 	default:
 		break;
 	}	
+}
+
+void TransitionManager::InitParameters()
+{
+	switch (randT)
+	{
+	case 0:
+		totalIterations = 60;
+		initialPos = -app->render->camera.x - WINDOW_W;
+		transit1[0].y = -app->render->camera.y;
+		transit1[0].w = WINDOW_W;
+		transit1[0].h = WINDOW_H;
+		break;
+	case 1:
+		totalIterations = 60;
+		initialPos = -app->render->camera.x;
+
+		transit1[0].x = -app->render->camera.x;
+		transit1[0].y = -app->render->camera.y;
+
+		transit1[1].x = -app->render->camera.x + WINDOW_W;
+		transit1[1].y = -app->render->camera.y;
+
+		transit1[2].x = -app->render->camera.x + WINDOW_W;
+		transit1[2].y = -app->render->camera.y + WINDOW_H;
+
+		transit1[3].x = -app->render->camera.x;
+		transit1[3].y = -app->render->camera.y + WINDOW_H;
+
+	default:
+		break;
+	}
 }
 
 void TransitionManager::Reset() 
@@ -126,5 +221,12 @@ void TransitionManager::Reset()
 	doorRand = true;
 	activatorTransition = false;
 	midTransition = false;
+	endTransition = true;
 	state = 0;
+	timeCounter = 0;
+	for (int i = 0; i < MAX_RECTANGLES; i++)
+	{
+		transit1[i].h = 0;
+		transit1[i].w = 0;
+	}
 }
