@@ -5,9 +5,12 @@
 #include "easings.h"
 #include "SDL\include\SDL_rect.h"
 
+#define MAX_TRANSITIONS 5
+
 class Render;
 class Textures;
 class SceneManager;
+
 
 class TransitionManager : public Module 
 {
@@ -36,17 +39,30 @@ public:
 	// A frame count system to handle the fade time and ratio
 	
 	void ActivateTransition();
-	void Transition1();
+	void Transition1(float dt);
+	void Reset();
+	//bool GetTransitionFinish() { return transitionFinish; };
+	bool GetTransitionMid() { return midTransition; };
+
 
 private:
-	
-	float framesCounter = 0.0f;
-	float maxFadeFrames = 0.0f;
-	float deltaTime = 0.0f;
+
+	float currentIteration = 0.0f;
+	float totalIterations = 0.0f;
+	float initialPos = 0.0f;
+	float deltaPos = 0.0f;
+
 	SDL_Rect transit1;
 	Render* render = nullptr;
 	Textures* tex = nullptr;
 	bool activatorTransition = false;
+
+	int randT = 0;
+	bool doorRand = true;
+	//bool transitionFinish = true;
+	bool midTransition = false;
+	int state = 0;
+	float timeCounter = 0;
 
 };
 

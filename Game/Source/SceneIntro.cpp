@@ -140,10 +140,7 @@ bool SceneIntro::Update(float dt)
 
 	CloudsUpdate();
 
-	//Update Easings
-	//positionOneiric = 110;
-	//positionExoria = 275;
-
+	//Update Easings	
 	if (state == 0)
 	{
 		positionExoria = EaseCircIn(currentIteration, initialPosition, -deltaPosition, totalIterations);

@@ -11,9 +11,9 @@ TransitionManager::TransitionManager(Render* render, Textures* tex, SceneManager
 {
 	name.Create("transition_manager");
 
-
 	this->render = render;
 	this->tex = tex;
+
 }
 
 // Destructor
@@ -35,8 +35,26 @@ bool TransitionManager::PreUpdate()
 
 bool TransitionManager::Update(float dt)
 {
-	activatorTransition = app->sceneManager->GetOnTransition();
-	this->deltaTime=dt;
+	if (app->sceneManager->GetOnTransition()) activatorTransition = true;
+	
+	if (activatorTransition == true)
+	{
+		if (doorRand == true)
+		{
+			randT = rand() % MAX_TRANSITIONS;
+			randT = 0;
+			totalIterations = 50;
+			initialPos = -app->render->camera.x - WINDOW_W;
+			doorRand = false;
+		}
+		Transition1(dt);
+		if (currentIteration < totalIterations)
+		{
+			currentIteration += dt * 60;
+		}
+	
+	}
+
 	return true;
 }
 
@@ -44,28 +62,68 @@ bool TransitionManager::PostUpdate()
 {
 	if (activatorTransition == true)
 	{
-		framesCounter++;
-		Transition1();
+		render->DrawRectangle(transit1, 20, 20, 20, 255);
 	}
-	else
-	{
-		framesCounter = 0;
-	}
+	
 	return true;
 }
-
 
 bool TransitionManager::CleanUp()
 {
 	return true;
 }
 
-
-void TransitionManager::Transition1()
+void TransitionManager::Transition1(float dt)
 {
-	render->DrawRectangle({ transit1 }, 20, 20, 20, 255);
-	transit1.x = -app->render->camera.x;
-	transit1.y = -app->render->camera.y;
-	transit1.h = WINDOW_H;
-	transit1.w = EaseLinearInOut(framesCounter, -app->render->camera.x, WINDOW_W, 24);
+	switch (randT)
+	{
+	case 0:
+		switch (state)
+		{
+		case 0:
+			transit1.x = EaseLinearInOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1.y = -app->render->camera.y;
+			transit1.w = WINDOW_W;
+			transit1.h = WINDOW_H;
+						
+			if (currentIteration >= totalIterations)
+			{
+				state = 1;
+				initialPos = transit1.x;
+			}
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 0.5f)
+			{
+				state = 2;
+				midTransition = true;
+				currentIteration = 0;				
+			}
+			break;
+		case 2:
+			transit1.x = EaseLinearInOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1.y = -app->render->camera.y;
+			transit1.w = WINDOW_W;
+			transit1.h = WINDOW_H;
+			if (currentIteration >= totalIterations) Reset();
+
+			break;
+		default:
+			break;
+		}
+		
+		break;
+	default:
+		break;
+	}	
+}
+
+void TransitionManager::Reset() 
+{
+	currentIteration = 0;
+	doorRand = true;
+	activatorTransition = false;
+	midTransition = false;
+	state = 0;
 }

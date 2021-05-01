@@ -75,15 +75,15 @@ bool SceneLevel3::Start()
 
 
 	// Dialog System buttons
-	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
 	btn1->SetObserver(this);
 	app->guiManager->AddGuiButton(btn1);
 
-	btn2 = new GuiButton(41, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn2 = new GuiButton(41, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
 	btn2->SetObserver(this);
 	app->guiManager->AddGuiButton(btn2);
 
-	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "booooton", RECTANGLE);
+	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
 	btn3->SetObserver(this);
 	app->guiManager->AddGuiButton(btn3);
 

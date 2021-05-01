@@ -117,7 +117,7 @@ bool SceneManager::Update(float dt)
 
 			// NOTE: Due to float internal representation, condition jumps on 1.0f instead of 1.05f
 			// For that reason we compare against 1.01f, to avoid last frame loading stop
-			if (transitionAlpha > 1.01f)
+			if (transitionAlpha > 1.01f && app->transitionManager->GetTransitionMid())
 			{
 				transitionAlpha = 1.0f;
 
@@ -241,7 +241,7 @@ bool SceneManager::PostUpdate()
 	// Draw full screen rectangle in front of everything
 	if (onTransition)
 	{
-		render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
+		//render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
 	}	
 
 	return ret;

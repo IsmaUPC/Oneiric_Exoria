@@ -89,8 +89,8 @@ private:
 	float initialPosition;
 	float deltaPosition;
 
-	float positionOneiric;
-	float positionExoria;
+	float positionOneiric = -500;
+	float positionExoria = -500;
 
 	bool flash = false;
 	float logoAlpha = 0;
