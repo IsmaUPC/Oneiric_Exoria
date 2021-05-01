@@ -5,7 +5,7 @@
 #include "easings.h"
 #include "SDL\include\SDL_rect.h"
 
-#define MAX_TRANSITIONS 5
+#define MAX_TRANSITIONS 2
 #define MAX_RECTANGLES 4
 
 class Render;
@@ -63,7 +63,7 @@ private:
 	bool endTransition = true;
 	int state = 0;
 	float timeCounter = 0;
-
+	int offset = 5;
 };
 
 #endif // !__TRANSITIONMANAGER_H
