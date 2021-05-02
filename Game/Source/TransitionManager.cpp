@@ -78,7 +78,10 @@ bool TransitionManager::PostUpdate()
 		switch (randT)
 		{
 		case 0:
-			app->render->DrawTexture(logo, transit1[0].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[0].y + WINDOW_H / 2 - dimensionLogo.h / 2);
+			rect = { 0, 0, dimensionLogo.w /2,dimensionLogo.h};
+			app->render->DrawTexture(logo, transit1[0].x + transit1[0].w - dimensionLogo.w / 2, transit1[0].y + WINDOW_H /2 - dimensionLogo.h/2, &rect);
+			rect = { dimensionLogo.w / 2, 0, dimensionLogo.w /2,dimensionLogo.h };
+			app->render->DrawTexture(logo, transit1[1].x + transit1[1].w, transit1[1].y + WINDOW_H / 2 - dimensionLogo.h / 2, &rect);
 			break;
 		case 1:
 			rect = { 0, 0, dimensionLogo.w / 2, dimensionLogo.h / 2 };
@@ -121,14 +124,10 @@ void TransitionManager::Transition1(float dt)
 		switch (state)
 		{
 		case 0:
-			transit1[0].x = EaseLinearIn(currentIteration, initialPos, WINDOW_W, totalIterations);
-									
-			if (currentIteration >= totalIterations)
-			{
-				state = 1;
-				initialPos += WINDOW_W;
-				transit1[0].x = initialPos;
-			}
+			transit1[0].w = EaseBounceIn(currentIteration, 0, WINDOW_W / 2, totalIterations);
+			transit1[1].w = EaseBounceIn(currentIteration, 0, -WINDOW_W / 2, totalIterations);
+			if (currentIteration >= totalIterations) state = 1;
+
 			break;
 		case 1:
 			timeCounter += dt;
@@ -136,12 +135,18 @@ void TransitionManager::Transition1(float dt)
 			{
 				state = 2;
 				midTransition = true;
-				currentIteration = 0;				
+				currentIteration = 0;
 			}
 			break;
 		case 2:
-			transit1[0].x = EaseLinearOut(currentIteration, initialPos, WINDOW_W, totalIterations);
+			transit1[0].x = -app->render->camera.x;
 			transit1[0].y = -app->render->camera.y;
+
+			transit1[1].x = -app->render->camera.x + WINDOW_W;
+			transit1[1].y = -app->render->camera.y;
+
+			transit1[0].w = EaseBounceIn(currentIteration, WINDOW_W / 2, -WINDOW_W / 2, totalIterations);
+			transit1[1].w = EaseBounceIn(currentIteration, -WINDOW_W / 2, WINDOW_W / 2, totalIterations);
 			if (currentIteration >= totalIterations) Reset();
 			break;
 
@@ -253,11 +258,16 @@ void TransitionManager::InitParameters()
 	switch (randT)
 	{
 	case 0:
-		totalIterations = 60;
-		initialPos = -app->render->camera.x - WINDOW_W;
+		totalIterations = 80;
+		initialPos = -app->render->camera.x;
+		transit1[0].x = -app->render->camera.x;
 		transit1[0].y = -app->render->camera.y;
-		transit1[0].w = WINDOW_W;
+
+		transit1[1].x = -app->render->camera.x + WINDOW_W;
+		transit1[1].y = -app->render->camera.y;
+
 		transit1[0].h = WINDOW_H;
+		transit1[1].h = WINDOW_H;
 		break;
 	case 1:
 		totalIterations = 80;
