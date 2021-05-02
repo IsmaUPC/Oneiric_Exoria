@@ -120,6 +120,8 @@ bool Player::Start()
 	app->render->camera.y = -posCamera.y;
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
+
+	bookOpenFx = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
 	
 	return true;
 }
@@ -357,6 +359,7 @@ bool Player::Update(float dt)
 
 	if (bookAnim->HasFinished())
 	{
+		app->audio->PlayFx(bookOpenFx);
 		app->guiManager->GetStatsMenu()->introBook = true;
 		app->guiManager->GetStatsMenu()->currentAnim = app->guiManager->openBookAnim;
 		app->guiManager->GetStatsMenu()->AbleDisableMenu();
@@ -575,6 +578,7 @@ void Player::PlayerMoveAnimation(State state, MoveDirection direction, Animation
 		break;
 	case MOBILE:
 		currentAnimation = bookAnim;
+
 		break;
 
 	default:
@@ -833,6 +837,7 @@ bool Player::CleanUp()
 	app->tex->UnLoad(playerData.texture);
 	active = false;
 	pendingToDelete = true;
+	app->audio->Unload1Fx(bookOpenFx);
 
 	// Player
 	delete positionInitial;

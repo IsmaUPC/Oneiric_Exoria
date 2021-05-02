@@ -141,6 +141,8 @@ private:
 	List<iPoint*> path;
 	bool playerCollision = true;
 	int diagonal = 0;
+	
+	uint bookOpenFx = -1;
 
 
 	Animation* idleAnimR = nullptr;
