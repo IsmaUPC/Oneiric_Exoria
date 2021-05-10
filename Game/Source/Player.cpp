@@ -110,14 +110,17 @@ bool Player::Start()
 	LoadPartners();
 
 	// Camera follow the player
-	iPoint posCamera;
+	/*iPoint posCamera;
 	posCamera.x = playerData.position.x - (WINDOW_W / 2);
 	posCamera.y = playerData.position.y - (WINDOW_H / 2);
 
 	posCamera = app->map->WorldToMap(posCamera);
 
 	app->render->camera.x = -posCamera.x;
-	app->render->camera.y = -posCamera.y;
+	app->render->camera.y = -posCamera.y;*/
+
+	lerpCamera.x = playerData.position.x;
+	lerpCamera.y = playerData.position.y;
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 
@@ -379,7 +382,7 @@ bool Player::Update(float dt)
 		SpeedAnimationCheck(dt);
 		playerData.velocity = floor(1000 * dt/ 8) ;
 
-		CameraPlayer();
+		CameraPlayer(dt);
 		// Move player inputs control
 		if (!checkpointMove && !app->sceneManager->GetEnemeyDetected() && app->dialogueSystem->onDialog == false)PlayerControls(dt);
 		// Move Between CheckPoints
@@ -477,37 +480,27 @@ void Player::MoveBetweenCheckPoints()
 	}
 }
 
-void Player::CameraPlayer()
+void Player::CameraPlayer(float dt)
 {
 	// Camera follow the player
-	int followPositionPalyerX = playerData.position.x - (WINDOW_W / 2);
+	/*int followPositionPalyerX = playerData.position.x - (WINDOW_W / 2);
 	int followPositionPalyerY = playerData.position.y - (WINDOW_H / 2);
 
 	app->render->camera.x = -followPositionPalyerX;
-	app->render->camera.y = -followPositionPalyerY;
-	/*if (playerData.position.x < (WINDOW_W/2))
-		if (app->render->camera.x < 48) followPositionPalyerX = 0;*/
+	app->render->camera.y = -followPositionPalyerY;*/
 
-	//// Camera delimitation x
-	//if (app->render->camera.x <= (playerData.position.x * -1)&& app->render->camera.x >= -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W))
-	//	app->render->camera.x = followPositionPalyerX;
-	//else if (followPositionPalyerX<-1&& followPositionPalyerX>-((app->map->data.width * app->map->data.tileWidth) - WINDOW_W+32))
-	//	app->render->camera.x = followPositionPalyerX;
+	float disX = playerData.position.x - lerpCamera.x;
+	float disY = playerData.position.y - lerpCamera.y;
 
-	//// Reposition right in limit camera in X
-	//if ((playerData.position.x *-1)< -((app->map->data.width * app->map->data.tileWidth) - (WINDOW_W/2) + 32))
-	//	app->render->camera.x = -((app->map->data.width * app->map->data.tileWidth) - WINDOW_W + 32);
+	lerpCamera.x += disX * dt * 0.8;
+	lerpCamera.y += disY * dt * 0.8;
 
-	//if ((playerData.position.x *-1)> -(WINDOW_W/2) + 32)
-	//	app->render->camera.x = 0;
+	if (abs(disX) < 20 && playerData.state == IDLE) lerpCamera.x += disX * dt;
+	if (abs(disY) < 20 && playerData.state == IDLE) lerpCamera.y += disY * dt;
 
-	//// Camera delimitation y
-	//if ((app->render->camera.y <= -48) && (app->render->camera.y >= -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
-	//	app->render->camera.y = followPositionPalyerY;
-	//else if ((followPositionPalyerY < -48) && (followPositionPalyerY > -((app->map->data.height * app->map->data.tileHeight) - (WINDOW_H + (4 * app->map->data.tileHeight)))))
-	//	app->render->camera.y = followPositionPalyerY;
-	//if (app->render->camera.y >= -39)
-	//	app->render->camera.y = -39;
+	LOG("%.2f---%.2f\n", lerpCamera.x, lerpCamera.y);
+	app->render->camera.x = -int(lerpCamera.x) + WINDOW_W / 2;
+	app->render->camera.y = -int(lerpCamera.y) + WINDOW_H / 2;
 }
 
 void Player::AddBreadcrumb()

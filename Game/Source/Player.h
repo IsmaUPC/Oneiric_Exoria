@@ -71,7 +71,7 @@ public:
 
 	void MoveBetweenCheckPoints();
 
-	void CameraPlayer();
+	void CameraPlayer(float dt);
 
 	void PlayerMoveAnimation(State state, MoveDirection direction, Animation* &currentAnimation);
 
@@ -133,6 +133,7 @@ private:
 	
 	int levelScene = 0;
 	float vel = 0;
+	fPoint lerpCamera = { 0,0 };
 
 	// Partners
 	int numPartners = 3;
