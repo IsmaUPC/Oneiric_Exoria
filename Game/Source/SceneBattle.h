@@ -120,6 +120,7 @@ private:
 	SDL_Texture* img = nullptr;
 	SDL_Texture* texPlayers = nullptr;
 	SDL_Texture* texEnemies = nullptr;
+	SDL_Texture* enemySelect = nullptr;
 
 	List<Animation*> spritesBarTurn;
 	List<Animation*> animationsPlayer;

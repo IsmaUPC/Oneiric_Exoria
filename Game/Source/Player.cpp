@@ -503,7 +503,6 @@ void Player::CameraPlayer(float dt)
 		app->sceneManager->onDialog = false;
 	}	
 
-	LOG("%.2f---%.2f\n", lerpCamera.x, lerpCamera.y);
 	app->render->camera.x = -int(lerpCamera.x) + WINDOW_W / 2;
 	app->render->camera.y = -int(lerpCamera.y) + WINDOW_H / 2;
 }
