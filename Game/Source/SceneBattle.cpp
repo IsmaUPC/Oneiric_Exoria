@@ -41,6 +41,8 @@ bool SceneBattle::Start()
 	app->sceneManager->SetEnemeyDetected(false);
 	texPlayers = app->sceneManager->GetPlayerTexture();
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
+	enemySelect = app->tex->Load("Assets/Textures/GUI/enemy_selector.png");
+
 	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
 
 	winFx = app->audio->LoadFx("Assets/Audio/Fx/win_start.wav");
@@ -663,6 +665,8 @@ void SceneBattle::IconEnemySelected()
 	if (faseAction == SELECT_ENEMY) {
 		int posCursorX;
 		int posCursorY;
+		int posSelectX;
+		int posSelectY;
 
 		if (magicInUse == nullptr || magicInUse->type == 0)
 		{
@@ -716,7 +720,11 @@ void SceneBattle::IconEnemySelected()
 			}
 
 			posCursorX = (int)enemies.At(enemySelected)->data->entityData.position.x + 50;
-			posCursorY = (int)enemies.At(enemySelected)->data->entityData.position.y - 65;
+			posCursorY = (int)enemies.At(enemySelected)->data->entityData.position.y - 70;
+			
+			posSelectX = (int)enemies.At(enemySelected)->data->entityData.position.x + 13;
+			posSelectY = (int)enemies.At(enemySelected)->data->entityData.position.y + 15;
+
 		}
 		else if (magicInUse->type == 1)
 		{
@@ -771,9 +779,13 @@ void SceneBattle::IconEnemySelected()
 
 			posCursorX = (int)partners.At(enemySelected)->data->entityData.position.x - 10;
 			posCursorY = (int)partners.At(enemySelected)->data->entityData.position.y - 70;
-		}
 
+			posSelectX = (int)partners.At(enemySelected)->data->entityData.position.x - 20;
+			posSelectY = (int)partners.At(enemySelected)->data->entityData.position.y + 40;
+		
+		}
 		//app->render->DrawRectangle({ posCursorX, posCursorY ,20,20 }, red.r, red.g, red.b, 255);
+		app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
 		app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
 	}
 }
@@ -1514,6 +1526,7 @@ bool SceneBattle::CleanUp()
 	bool ret = true;
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(texEnemies);
+	app->tex->UnLoad(enemySelect);
 
 	app->audio->Unload1Fx(winFx);
 	app->audio->Unload1Fx(loseFx);
