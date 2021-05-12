@@ -128,12 +128,12 @@ public:
 	iPoint* positionInitial= new iPoint(0,0);	
 	bool win = false;
 	bool loadStats = false;
+	fPoint lerpCamera = { 0,0 };
 
 private:
 	
 	int levelScene = 0;
 	float vel = 0;
-	fPoint lerpCamera = { 0,0 };
 
 	// Partners
 	int numPartners = 3;

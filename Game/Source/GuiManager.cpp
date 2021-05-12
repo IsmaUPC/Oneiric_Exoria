@@ -406,8 +406,8 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 {
 	// Menu pause
 	delete menu;
-	menu=nullptr;
-	menu= (new GuiMenuPause({ -app->render->camera.x + WINDOW_W / 2 - 237 / 2, -app->render->camera.y + WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
+	menu = nullptr;
+	menu = (new GuiMenuPause({ WINDOW_W / 2 - 237 / 2, WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
 }
 
 void GuiManager::CreateStatsMenu(SceneControl* current)
@@ -415,5 +415,5 @@ void GuiManager::CreateStatsMenu(SceneControl* current)
 	// Stats Menu
 	delete stats;
 	stats = nullptr;
-	stats = (new GuiStatsMenu({ -app->render->camera.x + WINDOW_W / 2 - BOOK_W*5/2, -app->render->camera.y  + WINDOW_H / 2 - BOOK_H*5/2 - 43*2 }, current, btnTextureAtlas));
+	stats = (new GuiStatsMenu({ WINDOW_W / 2 - BOOK_W * 5 / 2, WINDOW_H / 2 - BOOK_H * 5 / 2 - 43 * 2 }, current, btnTextureAtlas));
 }
