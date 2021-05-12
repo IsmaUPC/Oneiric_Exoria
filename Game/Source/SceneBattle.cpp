@@ -48,9 +48,15 @@ bool SceneBattle::Start()
 	winFx = app->audio->LoadFx("Assets/Audio/Fx/win_start.wav");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
-	magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
 	defenseFx = app->audio->LoadFx("Assets/Audio/Fx/defense.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
+	fireballFx = app->audio->LoadFx("Assets/Audio/Fx/spell_fireball.wav");
+	healingFx = app->audio->LoadFx("Assets/Audio/Fx/spell_healing.wav");
+	shadowFx = app->audio->LoadFx("Assets/Audio/Fx/spell_shadow.wav");
+	banditDiesFx = app->audio->LoadFx("Assets/Audio/Fx/bandit_slain.wav");
+	saplingDiesFx = app->audio->LoadFx("Assets/Audio/Fx/sapling_slain.wav");
+	fighterDiesFx = app->audio->LoadFx("Assets/Audio/Fx/fighter_slain.wav");
+
 
 	// Load Animations
 	LoadAnimations();
@@ -916,18 +922,21 @@ void SceneBattle::BattleSystem()
 			}
 			else
 			{
-				app->audio->PlayFx(magicFx);
 				switch (magicInUse->type)
 				{
 				case 0:
 					newHealth = enemies.At(enemySelected)->data->stats.health - magicInUse->damage;
+					app->audio->PlayFx(fireballFx);
 					break;
 				case 1:
 					newHealth = partners.At(enemySelected)->data->stats.health + magicInUse->damage;
+					app->audio->PlayFx(healingFx);
 					break;
 				default:
 					break;
 				}
+
+				
 
 				activeMenuMagic = false;
 				btnAttack->state = GuiControlState::DISABLED;
@@ -940,7 +949,7 @@ void SceneBattle::BattleSystem()
 		{
 			if (magicInUse == nullptr) {
 				if (newHealth <= 0)newHealth = 0;
-				//Progres damage
+				//Progress damage
 				if (enemies.At(enemySelected)->data->stats.health > newHealth) {
 					TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
 					if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
@@ -960,7 +969,7 @@ void SceneBattle::BattleSystem()
 							break;
 						}
 					}
-					enemies.At(enemySelected)->data->stats.health -= dt * reduceLieveVelocity;
+					enemies.At(enemySelected)->data->stats.health -= dt * reduceLiveVelocity;
 				}
 				else {
 					TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
@@ -986,6 +995,25 @@ void SceneBattle::BattleSystem()
 					{
 						enemies.At(enemySelected)->data->stats.health = 0;
 						enemies.At(enemySelected)->data->entityData.state = DEAD;
+
+						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
+						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+						{
+							switch (eType)
+							{
+							case BANDIT:
+								app->audio->PlayFx(banditDiesFx);
+								break;
+							case FIGHTER:
+								app->audio->PlayFx(fighterDiesFx);
+								break;
+							case SAPLING:
+								app->audio->PlayFx(saplingDiesFx);
+								break;
+							default:
+								break;
+							}
+						}
 						assigneDone = false;
 
 						for (int i = 0; i < tam; i++) {
@@ -1006,7 +1034,7 @@ void SceneBattle::BattleSystem()
 				case 0:
 				{
 					if (newHealth <= 0)newHealth = 0;
-					//Progres damage
+					//Progress damage
 					if (enemies.At(enemySelected)->data->stats.health > newHealth) {
 						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
 						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
@@ -1026,27 +1054,9 @@ void SceneBattle::BattleSystem()
 								break;
 							}
 						}
-						enemies.At(enemySelected)->data->stats.health -= dt * reduceLieveVelocity;
+						enemies.At(enemySelected)->data->stats.health -= dt * reduceLiveVelocity;
 					}
 					else {
-						TypeEntity eType = enemies.At(enemySelected)->data->entityData.type;
-						if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
-						{
-							switch (eType)
-							{
-							case BANDIT:
-								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
-								break;
-							case FIGHTER:
-								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
-								break;
-							case SAPLING:
-								enemies.At(enemySelected)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
-								break;
-							default:
-								break;
-							}
-						}
 						enemies.At(enemySelected)->data->stats.health = newHealth;
 						if (enemies.At(enemySelected)->data->stats.health < 1)
 						{
@@ -1073,7 +1083,7 @@ void SceneBattle::BattleSystem()
 					if (newHealth >= partners.At(enemySelected)->data->stats.maxHealth) newHealth = partners.At(enemySelected)->data->stats.maxHealth;
 					//Progres damage
 					if (partners.At(enemySelected)->data->stats.health < newHealth) {
-						partners.At(enemySelected)->data->stats.health += dt * reduceLieveVelocity;
+						partners.At(enemySelected)->data->stats.health += dt * reduceLiveVelocity;
 					}
 					else {
 						partners.At(enemySelected)->data->stats.health = newHealth;
@@ -1239,7 +1249,7 @@ void SceneBattle::BattleSystem()
 							break;
 						}
 					}
-					partners.At(ally)->data->stats.health -= dt * reduceLieveVelocity;
+					partners.At(ally)->data->stats.health -= dt * reduceLiveVelocity;
 				}
 				else {
 					TypeEntity pType = partners.At(ally)->data->entityData.type;
@@ -1531,9 +1541,14 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(winFx);
 	app->audio->Unload1Fx(loseFx);
 	app->audio->Unload1Fx(attackFx);
-	app->audio->Unload1Fx(magicFx);
 	app->audio->Unload1Fx(defenseFx);
 	app->audio->Unload1Fx(exitFx);
+	app->audio->Unload1Fx(fireballFx);
+	app->audio->Unload1Fx(healingFx);
+	app->audio->Unload1Fx(shadowFx);
+	app->audio->Unload1Fx(banditDiesFx);
+	app->audio->Unload1Fx(fighterDiesFx);
+	app->audio->Unload1Fx(saplingDiesFx);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();

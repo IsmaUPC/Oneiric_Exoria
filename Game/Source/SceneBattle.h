@@ -136,9 +136,14 @@ private:
 	uint winFx = -1;
 	uint loseFx = -1;
 	uint attackFx = -1;
-	uint magicFx = -1;
 	uint defenseFx = -1;
 	uint exitFx = -1;
+	uint fireballFx = -1;
+	uint healingFx = -1;
+	uint shadowFx = -1;
+	uint banditDiesFx = -1;
+	uint fighterDiesFx = -1;
+	uint saplingDiesFx = -1;
 
 
 	GuiMenuMagic* menuMagic = nullptr;
@@ -163,7 +168,7 @@ private:
 	int ally=0;
 	bool hit=0;
 	float newHealth = 0;
-	int reduceLieveVelocity = 8;
+	int reduceLiveVelocity = 8;
 
 	bool moveBarTurn = false;
 	bool assigneDone = false;

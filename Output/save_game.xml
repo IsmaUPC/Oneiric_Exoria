@@ -6,33 +6,61 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="315" y="-90" />
+		<camera x="140" y="-73" />
 	</renderer>
 	<player>
-		<data x="325" y="450" direction="3" level="1" exp="0" health="8" mana="11" />
+		<data x="538" y="338" direction="2" level="1" exp="0" health="8" mana="11" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="482" y="434" />
+			<breadcrumb x="484" y="432" />
+			<breadcrumb x="486" y="430" />
+			<breadcrumb x="488" y="428" />
+			<breadcrumb x="490" y="426" />
+			<breadcrumb x="492" y="424" />
+			<breadcrumb x="494" y="422" />
+			<breadcrumb x="496" y="420" />
+			<breadcrumb x="498" y="418" />
+			<breadcrumb x="500" y="416" />
+			<breadcrumb x="502" y="414" />
+			<breadcrumb x="504" y="412" />
+			<breadcrumb x="506" y="410" />
+			<breadcrumb x="508" y="408" />
+			<breadcrumb x="510" y="406" />
+			<breadcrumb x="512" y="404" />
+			<breadcrumb x="514" y="402" />
+			<breadcrumb x="516" y="400" />
+			<breadcrumb x="518" y="398" />
+			<breadcrumb x="520" y="396" />
+			<breadcrumb x="522" y="394" />
+			<breadcrumb x="524" y="392" />
+			<breadcrumb x="526" y="390" />
+			<breadcrumb x="528" y="388" />
+			<breadcrumb x="530" y="386" />
+			<breadcrumb x="532" y="384" />
+			<breadcrumb x="534" y="382" />
+			<breadcrumb x="536" y="380" />
+			<breadcrumb x="538" y="378" />
+		</path>
 		<partners>
-			<partner x="325" y="410" breadcrumb="0" direction="3" level="1" exp="0" health="14" mana="10" />
-			<partner x="325" y="370" breadcrumb="0" direction="3" level="1" exp="0" health="10" mana="12" />
-			<partner x="325" y="330" breadcrumb="0" direction="3" level="1" exp="0" health="13" mana="8" />
+			<partner x="538" y="378" breadcrumb="29" direction="2" level="1" exp="0" health="14" mana="10" />
+			<partner x="498" y="418" breadcrumb="9" direction="2" level="1" exp="0" health="10" mana="12" />
+			<partner x="482" y="458" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="1" />
+		<level lvl="3" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="2010" />
 		<entities>
-			<entity type="13" x="-9" y="2" id="0" level="0" state="0" move="true" />
-			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="21" y="4" id="2" level="0" state="0" move="false" />
-			<entity type="14" x="16" y="20" id="3" level="0" state="0" move="false" />
-			<entity type="14" x="20" y="11" id="7" level="0" state="0" move="false" />
-			<entity type="14" x="10" y="2" id="9" level="0" state="0" move="false" />
-			<entity type="14" x="31" y="2" id="9" level="0" state="0" move="false" />
+			<entity type="13" x="-4" y="2" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="14" y="9" id="1" level="1" state="6" move="true" />
+			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
+			<entity type="3" x="4" y="12" id="3" level="2" state="0" move="false" />
+			<entity type="1" x="3" y="5" id="4" level="2" state="0" move="false" />
 		</entities>
 	</entity_manager>
 	<particle_manager>
