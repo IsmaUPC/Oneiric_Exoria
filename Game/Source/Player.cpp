@@ -489,14 +489,17 @@ void Player::CameraPlayer(float dt)
 	app->render->camera.x = -followPositionPalyerX;
 	app->render->camera.y = -followPositionPalyerY;*/
 
-	float disX = playerData.position.x - lerpCamera.x;
-	float disY = playerData.position.y - lerpCamera.y;
+	if (!app->dialogueSystem->onDialog)
+	{
+		float disX = playerData.position.x - lerpCamera.x;
+		float disY = playerData.position.y - lerpCamera.y;
 
-	lerpCamera.x += disX * dt * 0.8;
-	lerpCamera.y += disY * dt * 0.8;
+		lerpCamera.x += disX * dt * 0.8;
+		lerpCamera.y += disY * dt * 0.8;
 
-	if (abs(disX) < 20 && playerData.state == IDLE) lerpCamera.x += disX * dt;
-	if (abs(disY) < 20 && playerData.state == IDLE) lerpCamera.y += disY * dt;
+		if (abs(disX) < 20 && playerData.state == IDLE) lerpCamera.x += disX * dt;
+		if (abs(disY) < 20 && playerData.state == IDLE) lerpCamera.y += disY * dt;
+	}	
 
 	LOG("%.2f---%.2f\n", lerpCamera.x, lerpCamera.y);
 	app->render->camera.x = -int(lerpCamera.x) + WINDOW_W / 2;
