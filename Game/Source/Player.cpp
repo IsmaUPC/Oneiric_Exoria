@@ -499,6 +499,8 @@ void Player::CameraPlayer(float dt)
 
 		if (abs(disX) < 20 && playerData.state == IDLE) lerpCamera.x += disX * dt;
 		if (abs(disY) < 20 && playerData.state == IDLE) lerpCamera.y += disY * dt;
+
+		app->sceneManager->onDialog = false;
 	}	
 
 	LOG("%.2f---%.2f\n", lerpCamera.x, lerpCamera.y);

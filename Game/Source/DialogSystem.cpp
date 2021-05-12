@@ -27,7 +27,6 @@ bool DialogueSystem::Update(float dt)
 
 bool DialogueSystem::PostUpdate()
 {
-
 	point.x = -app->render->camera.x;
 	point.y = -app->render->camera.y;
 

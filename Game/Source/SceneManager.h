@@ -130,6 +130,7 @@ public:
 	TeleportNode* originTpNode = nullptr;
 
 	int lastLevel = 0;
+	bool onDialog = false;
 	TTF_Font* guiFont = nullptr;
 	TTF_Font* titleFont = nullptr;
 	TTF_Font* statsFont = nullptr;

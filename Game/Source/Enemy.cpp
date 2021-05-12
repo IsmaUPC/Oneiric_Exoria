@@ -231,6 +231,7 @@ bool Enemy::Update(float dt)
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
 				app->dialogueSystem->SetId(entityData.id);
 				app->dialogueSystem->onDialog = true;
+				app->sceneManager->onDialog = true;
 				app->dialogueSystem->missClick = true;
 			}
 		}

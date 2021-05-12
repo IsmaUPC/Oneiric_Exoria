@@ -107,7 +107,6 @@ bool SceneManager::Update(float dt)
 
 	if (!onTransition)
 	{
-
 		ret = current->Update(dt);
 	}
 	else
