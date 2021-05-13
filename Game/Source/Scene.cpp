@@ -271,6 +271,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
 			app->dialogueSystem->missClick = true;
 			btn1->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
 		}
 		//Option 2
 		else if (control->id == 41 && !app->dialogueSystem->missClick)
@@ -278,6 +279,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
 			app->dialogueSystem->missClick = true;
 			btn2->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
 		}
 		//Option 3
 		else if (control->id == 42 && !app->dialogueSystem->missClick)
@@ -285,6 +287,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
 			app->dialogueSystem->missClick = true;
 			btn3->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
 		}
 	}
 	default: break;
