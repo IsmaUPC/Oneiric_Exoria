@@ -33,8 +33,20 @@ bool DialogueSystem::PostUpdate()
 	if (onDialog == true) 
 	{
 		char NPCdialogue[128] = { 0 };
+		char drawNPCdialogue[128] = { 0 };
+
 		sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
+		
+		totalLetters = strlen(NPCdialogue);
+
+		if (actualLetter <= totalLetters) actualLetter++;
+		
+		for (int i = 0; i < actualLetter; i++)
+		{
+			drawNPCdialogue[i] = NPCdialogue[i];
+		}
+
+		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
 
 		char response[128] = { 0 };
 		for (int i = 0; i < currentNode->answersList.Count(); i++)

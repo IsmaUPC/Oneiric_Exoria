@@ -81,6 +81,8 @@ public:
 	bool onDialog = false;
 	void SetId(int id_) { id = id_; };
 	int id = 0;
+	int totalLetters = 0;
+	int actualLetter = 0;
 	bool missClick = false;
 
 	GuiButton* btn1 = nullptr;
