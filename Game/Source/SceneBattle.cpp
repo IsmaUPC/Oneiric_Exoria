@@ -48,9 +48,15 @@ bool SceneBattle::Start()
 	winFx = app->audio->LoadFx("Assets/Audio/Fx/win_start.wav");
 	loseFx = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
 	attackFx = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
-	magicFx = app->audio->LoadFx("Assets/Audio/Fx/magic.wav");
 	defenseFx = app->audio->LoadFx("Assets/Audio/Fx/defense.wav");
 	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
+	fireballFx = app->audio->LoadFx("Assets/Audio/Fx/spell_fireball.wav");
+	shadowFx = app->audio->LoadFx("Assets/Audio/Fx/spell_shadow.wav");
+	healingFx = app->audio->LoadFx("Assets/Audio/Fx/spell_healing.wav");
+	banditDiesFx = app->audio->LoadFx("Assets/Audio/Fx/bandit_slain.wav");
+	fighterDiesFx = app->audio->LoadFx("Assets/Audio/Fx/fighter_slain.wav");
+	saplingDiesFx = app->audio->LoadFx("Assets/Audio/Fx/sapling_slain.wav");
+	allyDiesFx = app->audio->LoadFx("Assets/Audio/Fx/ally_slain.wav");
 
 	// Load Animations
 	LoadAnimations();
@@ -916,7 +922,6 @@ void SceneBattle::BattleSystem()
 			}
 			else
 			{
-				app->audio->PlayFx(magicFx);
 				switch (magicInUse->type)
 				{
 				case 0:
@@ -927,6 +932,22 @@ void SceneBattle::BattleSystem()
 					break;
 				default:
 					break;
+				}
+
+				switch (magicInUse->element)
+				{
+				case 1:
+					app->audio->PlayFx(fireballFx);
+					break;
+				case 2:
+					app->audio->PlayFx(healingFx);
+					break;
+				case 3:
+					app->audio->PlayFx(shadowFx);
+					break;
+				default:
+					break;
+
 				}
 
 				activeMenuMagic = false;
@@ -986,6 +1007,8 @@ void SceneBattle::BattleSystem()
 					{
 						enemies.At(enemySelected)->data->stats.health = 0;
 						enemies.At(enemySelected)->data->entityData.state = DEAD;
+						switch
+						app->audio->PlayFx(banditDiesFx);
 						assigneDone = false;
 
 						for (int i = 0; i < tam; i++) {
@@ -1052,6 +1075,7 @@ void SceneBattle::BattleSystem()
 						{
 							enemies.At(enemySelected)->data->stats.health = 0;
 							enemies.At(enemySelected)->data->entityData.state = DEAD;
+							app->audio->PlayFx(banditDiesFx);
 							assigneDone = false;
 
 							for (int i = 0; i < tam; i++) {
@@ -1268,6 +1292,7 @@ void SceneBattle::BattleSystem()
 					if (partners.At(ally)->data->stats.health < 1) {
 						partners.At(ally)->data->stats.health = 0;
 						partners.At(ally)->data->entityData.state = DEAD;
+						app->audio->PlayFx(allyDiesFx);
 						assigneDone = false;
 						for (int i = 0; i < tam; i++) {
 							if (turnSort[i].entityData.positionInitial == partners.At(ally)->data->entityData.positionInitial)
@@ -1531,9 +1556,15 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(winFx);
 	app->audio->Unload1Fx(loseFx);
 	app->audio->Unload1Fx(attackFx);
-	app->audio->Unload1Fx(magicFx);
 	app->audio->Unload1Fx(defenseFx);
 	app->audio->Unload1Fx(exitFx);
+	app->audio->Unload1Fx(fireballFx);
+	app->audio->Unload1Fx(shadowFx);
+	app->audio->Unload1Fx(healingFx);
+	app->audio->Unload1Fx(banditDiesFx);
+	app->audio->Unload1Fx(fighterDiesFx);
+	app->audio->Unload1Fx(saplingDiesFx);
+	app->audio->Unload1Fx(allyDiesFx);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
