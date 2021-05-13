@@ -90,11 +90,11 @@ bool Coins::PreUpdate()
 		if (collision.IsInsidePolygons(auxPositionPlayer, app->player->playerData.numPoints, auxPositionCoin, numPoints)
 			&& collision.IsInsidePolygons(auxPositionCoin, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData.state == IDLE)
 		{
-			entityData.state = DYING;
+			entityData.state = DEADING;
 			app->audio->PlayFx(coinFx);
 			app->player->CoinPlus();
 		}
-		if (entityData.state == DYING && entityData.currentAnimation->HasFinished())
+		if (entityData.state == DEADING && entityData.currentAnimation->HasFinished())
 			entityData.state = DEAD;
 	}
 	return false;
@@ -142,7 +142,7 @@ void Coins::CurrentCoinAnimation()
 		entityData.currentAnimation = coinAnimation;
 		break;
 
-	case DYING:
+	case DEADING:
 		entityData.currentAnimation = particleAnimation;
 		break;
 

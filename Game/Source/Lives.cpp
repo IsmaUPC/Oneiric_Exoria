@@ -86,11 +86,11 @@ bool Lives::PreUpdate()
 		if (collision.IsInsidePolygons(auxPositionPlayer, app->player->playerData.numPoints, auxPositionLive, numPoints)
 			&& collision.IsInsidePolygons(auxPositionLive, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData.state == IDLE)
 		{
-			entityData.state = DYING;
+			entityData.state = DEADING;
 			app->audio->PlayFx(liveFx);
 			app->player->LivePlus();
 		}
-		if (entityData.state == DYING && entityData.currentAnimation->HasFinished())
+		if (entityData.state == DEADING && entityData.currentAnimation->HasFinished())
 			entityData.state = DEAD;
 	}
 	return false;
@@ -131,7 +131,7 @@ void Lives::CurrentLiveAnimation()
 		entityData.currentAnimation = liveAnimation;
 		break;
 
-	case DYING:
+	case DEADING:
 		entityData.currentAnimation = particleAnimation;
 		break;
 
