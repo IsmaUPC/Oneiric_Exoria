@@ -6,26 +6,43 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="125" y="-63" />
+		<camera x="128" y="-55" />
 	</renderer>
 	<player>
-		<data x="550" y="322" direction="2" level="1" exp="0" health="8" mana="11" />
+		<data x="538" y="338" direction="2" level="1" exp="0" health="8" mana="11" />
 		<coins count="0" />
 		<path>
-			<breadcrumb x="534" y="346" />
-			<breadcrumb x="536" y="344" />
-			<breadcrumb x="538" y="342" />
-			<breadcrumb x="540" y="340" />
-			<breadcrumb x="542" y="338" />
-			<breadcrumb x="544" y="336" />
-			<breadcrumb x="546" y="334" />
-			<breadcrumb x="548" y="332" />
-			<breadcrumb x="550" y="330" />
+			<breadcrumb x="488" y="456" />
+			<breadcrumb x="490" y="454" />
+			<breadcrumb x="492" y="452" />
+			<breadcrumb x="494" y="450" />
+			<breadcrumb x="496" y="448" />
+			<breadcrumb x="498" y="446" />
+			<breadcrumb x="500" y="444" />
+			<breadcrumb x="502" y="442" />
+			<breadcrumb x="504" y="440" />
+			<breadcrumb x="506" y="438" />
+			<breadcrumb x="508" y="436" />
+			<breadcrumb x="510" y="434" />
+			<breadcrumb x="512" y="432" />
+			<breadcrumb x="514" y="430" />
+			<breadcrumb x="516" y="428" />
+			<breadcrumb x="518" y="426" />
+			<breadcrumb x="520" y="424" />
+			<breadcrumb x="522" y="422" />
+			<breadcrumb x="524" y="420" />
+			<breadcrumb x="526" y="418" />
+			<breadcrumb x="528" y="416" />
+			<breadcrumb x="530" y="414" />
+			<breadcrumb x="532" y="412" />
+			<breadcrumb x="534" y="410" />
+			<breadcrumb x="536" y="408" />
+			<breadcrumb x="538" y="406" />
 		</path>
 		<partners>
-			<partner x="534" y="364" breadcrumb="0" direction="2" level="1" exp="0" health="14" mana="10" />
-			<partner x="534" y="404" breadcrumb="0" direction="2" level="1" exp="0" health="10" mana="12" />
-			<partner x="534" y="444" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" />
+			<partner x="538" y="378" breadcrumb="26" direction="2" level="1" exp="0" health="14" mana="10" />
+			<partner x="526" y="418" breadcrumb="20" direction="2" level="1" exp="0" health="10" mana="12" />
+			<partner x="486" y="458" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -34,9 +51,9 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="3090" />
+		<time value="3530" />
 		<entities>
-			<entity type="13" x="-3" y="1" id="0" level="0" state="0" move="true" />
+			<entity type="13" x="-4" y="1" id="0" level="0" state="0" move="true" />
 			<entity type="1" x="14" y="9" id="1" level="1" state="6" move="true" />
 			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
 			<entity type="3" x="4" y="12" id="3" level="2" state="0" move="false" />

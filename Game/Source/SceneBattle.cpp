@@ -1007,8 +1007,22 @@ void SceneBattle::BattleSystem()
 					{
 						enemies.At(enemySelected)->data->stats.health = 0;
 						enemies.At(enemySelected)->data->entityData.state = DEAD;
-						switch
-						app->audio->PlayFx(banditDiesFx);
+
+						switch (enemies.At(enemySelected)->data->entityData.type)
+						{
+						case BANDIT:
+							app->audio->PlayFx(banditDiesFx);
+							break;
+						case FIGHTER:
+							app->audio->PlayFx(fighterDiesFx);
+							break;
+						case SAPLING:
+							app->audio->PlayFx(saplingDiesFx);
+							break;
+						default:
+							break;
+						}
+
 						assigneDone = false;
 
 						for (int i = 0; i < tam; i++) {
@@ -1075,7 +1089,21 @@ void SceneBattle::BattleSystem()
 						{
 							enemies.At(enemySelected)->data->stats.health = 0;
 							enemies.At(enemySelected)->data->entityData.state = DEAD;
-							app->audio->PlayFx(banditDiesFx);
+
+							switch (enemies.At(enemySelected)->data->entityData.type)
+							{
+							case BANDIT:
+								app->audio->PlayFx(banditDiesFx);
+								break;
+							case FIGHTER:
+								app->audio->PlayFx(fighterDiesFx);
+								break;
+							case SAPLING:
+								app->audio->PlayFx(saplingDiesFx);
+								break;
+							default:
+								break;
+							}
 							assigneDone = false;
 
 							for (int i = 0; i < tam; i++) {
