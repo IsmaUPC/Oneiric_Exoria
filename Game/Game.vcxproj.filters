@@ -164,6 +164,9 @@
     <ClCompile Include="Source\TransitionManager.cpp">
       <Filter>Modules\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Items.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -336,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="Source\TransitionManager.h">
       <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Items.h">
+      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

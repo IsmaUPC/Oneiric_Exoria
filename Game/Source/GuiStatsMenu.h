@@ -55,7 +55,6 @@ public:
 	int CalculateExp(int level);
 	void DrawBarLive();
 
-
 	Animation* currentAnim = nullptr;
 	bool introBook = false;
 
