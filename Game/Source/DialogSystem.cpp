@@ -80,16 +80,15 @@ void DialogueSystem::DrawDialogue()
 	char NPCdialogue[128] = { 0 };
 	char drawNPCdialogue[128] = { 0 };
 
-	if (actualLetter == 0)
-	{
-		app->audio->PlayFx(dialogFx);
-	}
-
 	sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
 
 	if (dialogSpeed == 0) app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
 	else if (dialogSpeed == 1)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(dialogFx);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter += 0.5;
@@ -103,6 +102,10 @@ void DialogueSystem::DrawDialogue()
 	}
 	else if (dialogSpeed == 2)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(dialogFx);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter++;
