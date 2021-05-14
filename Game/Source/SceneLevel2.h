@@ -50,7 +50,8 @@ public:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-
+	uint fxCoffe = -1;
+	uint fxCoffeButtons = -1;
 
 private:
 

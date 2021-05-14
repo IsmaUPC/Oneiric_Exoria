@@ -40,7 +40,7 @@ private:
 	Animation* coinAnimation = new Animation();
 	Animation* particleAnimation = new Animation();
 
-	uint coinFx = -1;
+	uint fxCoin = -1;
 
 	SDL_Texture* texCoin = nullptr;
 	//SDL_Texture* texCoinParticle;

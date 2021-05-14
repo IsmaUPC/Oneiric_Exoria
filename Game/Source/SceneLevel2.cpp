@@ -45,6 +45,13 @@ bool SceneLevel2::Start()
 	
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
+	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/arcade_machine.wav");
+	fxList[1].fxName = app->audio->LoadFx("Assets/Audio/Fx/coffe_machine.wav");
+	fxList[2].fxName = fxList[1].fxName;
+	fxList[3].fxName = app->audio->LoadFx("Assets/Audio/Fx/tv.wav");
+
+	fxCount = 4;
+
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
@@ -59,6 +66,7 @@ bool SceneLevel2::Start()
 		RELEASE_ARRAY(data);
 	}
 	app->map->active = true;
+
 	// Positions initials
 	app->player->positionInitial = new iPoint(930,730);
 
@@ -67,19 +75,37 @@ bool SceneLevel2::Start()
 
 
 	// Return size image
-	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
+	// SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
-	//NPC
+	// NPC
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
 	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
 	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
 
-	//Interactive objects
-	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false);
-	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false);
-	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false);
-	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false);
-	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false);
+	// Interactive objects
+	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false); // Arcade 
+	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false); // Tv
+	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false); // Book
+	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false); // Coffe
+	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false); // Water
+
+	// Position Items
+	fxList[0].position = {24,19};
+	fxList[1].position = {46,22};
+	fxList[2].position = {11,22};
+	fxList[3].position = {33,18};
+
+	// Items Channel
+	for (int i = 0; i < fxCount; i++)
+	{
+		fxList[i].channel = app->audio->SetChannel();
+	}
+
+	// Set Max Distance
+	fxList[0].maxDistance = 214;
+	fxList[1].maxDistance = 160;
+	fxList[2].maxDistance = 214;
+	fxList[3].maxDistance = 214;
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
@@ -118,7 +144,6 @@ bool SceneLevel2::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-
 	if (app->player->win)victory = true;
 
 	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
@@ -133,6 +158,15 @@ bool SceneLevel2::Update(float dt)
 	}
 
 	UpdateDialog();
+
+	for (int i = 0; i < fxCount; i++)
+	{
+
+		if (app->audio->SetDistanceFx(fxList[i].channel, AngleToListener(app->player->playerData.position, fxList[i].position) + 90,
+			DistanceToListener(app->player->playerData.position, fxList[i].position), fxList[i].maxDistance))
+			app->audio->PlayFx(fxList[i].fxName, fxList[i].channel);
+
+	}
 
 	return true;
 }
@@ -206,6 +240,12 @@ bool SceneLevel2::CleanUp()
 
 	if (!active)
 		return true;
+
+	for (int i = 0; i < fxCount; i++)
+	{
+		app->audio->Unload1Fx(fxList[i].fxName);
+		app->audio->DeleteChannel(fxList[i].channel);
+	}
 
 	LOG("Freeing scene");
 	Mix_HaltMusic();
