@@ -1,5 +1,5 @@
 #include "ItemManager.h"
-
+#include "Player.h"
 
 
 ItemManager::ItemManager()
@@ -16,8 +16,6 @@ bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 
 	bool ret = true;
 
-	Potion* item = new Potion;
-
 	if (result == NULL)
 	{
 		LOG("Could not load xml file %s. pugi error: %s", LIST_ITEMS_FILENAME, result.description());
@@ -29,26 +27,30 @@ bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 
 		for (n; n != NULL; n = n.next_sibling("item"))
 		{
-			if (n.attribute("use").as_int() == 1)
+			int use = n.attribute("use").as_int();
+			if (use == 1)
 			{
 				int type = n.attribute("type").as_int();
 				if (type == 1)
 				{
+					Potion* item = new Potion;
 					item->attribute = n.attribute("attribute").as_string("");
 					item->value = n.attribute("value").as_int();
 					DefineItem(item, n);
-					inventory.Add(item);
+					potionList.Add(item);
+					itemList.Add(item);
 				}
 				else if (type == 3)
 				{
-					/*Ring* item = new Ring;
+					Ring* item = new Ring;
 					item->attribute = n.attribute("attribute").as_string("");
 					item->value = n.attribute("value").as_int();
 					DefineItem(item, n);
-					inventory.Add(item);*/
+					ringList.Add(item);
+					itemList.Add(item);
 				}
 			}
-			else if (n.attribute("use").as_int() == 2)
+			else if (use == 2)
 			{
 
 			}
@@ -60,6 +62,7 @@ bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 
 void ItemManager::DefineItem(GameItem* item, pugi::xml_node& n)
 {
+	item->id = n.attribute("id").as_int();
 	item->name = n.attribute("name").as_string();
 	item->description = n.attribute("description").as_string();
 	item->cost = n.attribute("cost").as_int();
@@ -67,10 +70,29 @@ void ItemManager::DefineItem(GameItem* item, pugi::xml_node& n)
 	item->obtention = static_cast<Obtention>(n.attribute("obtention").as_int());
 }
 
-bool ItemManager::UseItem(int id)
+bool ItemManager::UseItem(GameItem* id)
 {
 
-	
+	switch (id->type)
+	{
+	case Type::POTION:
+		potionList.At(id->id)->data->Heal(potionList.At(id->id)->data->attribute, potionList.At(id->id)->data->value);
+		break;
+	case Type::STONE:
+		break;
+	case Type::RING:
+		break;
+	case Type::AMULET:
+		break;
+	case Type::WISH:
+		break;
+	case Type::ABSTRACT:
+		break;
+	case Type::UNKNOW:
+		break;
+	default:
+		break;
+	}
 
 	return true;
 
@@ -78,26 +100,40 @@ bool ItemManager::UseItem(int id)
 
 bool ItemManager::AddItem(int id)
 {
+	bool ret = true;
+	int itemCount = potionList.Count() + ringList.Count();
+	if (id < 1 || id > itemCount)
+	{
+		LOG("There is no item with that id.");
+		ret = false;
+	}
+	else
+	{
+		app->player->inventory.Add(itemList.At(id)->data);
+	}
 
-
-
-	return true;
+	return ret;
 
 }
 
-bool ItemManager::DelItem(int id)
+bool ItemManager::DelItem(GameItem* id)
 {
 
-	if (inventory.At(id) == nullptr)
+	if (id == nullptr)
 	{
 		LOG("Does not exist that item at inventory.");
 		return false;
 	}
 	else
 	{
-		inventory.Del(inventory.At(id));
+		app->player->inventory.Del(app->player->inventory.At(app->player->inventory.Find(id)));
 	}
 
 	return true;
+
+}
+
+void Potion::Heal(SString att, int val)
+{
 
 }
