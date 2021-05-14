@@ -35,7 +35,22 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 	chBxVSync->active = false;
 	app->guiManager->AddGuiCheckBox(chBxVSync);
 
-	btnBack = new GuiButton(10, { initialPos.x, initialPos.y + padding * 4, 183, 91 }, "Back", BACK,btnTextureAtlas);
+	chBxTextSpeed1 = new GuiCheckBox(15, { initialPos.x - 50, initialPos.y + padding * 4, 120, 95 }, "", false, btnTextureAtlas);
+	chBxTextSpeed1->SetObserver(moduleObserver);
+	chBxTextSpeed1->active = false;
+	app->guiManager->AddGuiCheckBox(chBxTextSpeed1);
+
+	chBxTextSpeed0 = new GuiCheckBox(16, { initialPos.x, initialPos.y + padding * 4, 120, 95 }, "Text Speed", false, btnTextureAtlas);
+	chBxTextSpeed0->SetObserver(moduleObserver);
+	chBxTextSpeed0->active = false;
+	app->guiManager->AddGuiCheckBox(chBxTextSpeed0);
+
+	chBxTextSpeed2 = new GuiCheckBox(17, { initialPos.x + 50, initialPos.y + padding * 4, 120, 95 }, "", false, btnTextureAtlas);
+	chBxTextSpeed2->SetObserver(moduleObserver);
+	chBxTextSpeed2->active = false;
+	app->guiManager->AddGuiCheckBox(chBxTextSpeed2);
+
+	btnBack = new GuiButton(10, { initialPos.x, initialPos.y + padding * 5, 183, 91 }, "Back", BACK,btnTextureAtlas);
 	btnBack->SetObserver(moduleObserver);
 	btnBack->active = false;
 	app->guiManager->AddGuiButton(btnBack);
@@ -55,7 +70,7 @@ bool GuiSettings::Update(float dt)
 bool GuiSettings::Draw()
 {
 
-	app->render->DrawTextBox(initialPos.x - app->render->camera.x, initialPos.y - app->render->camera.y, 307, 350, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	app->render->DrawTextBox(initialPos.x - app->render->camera.x, initialPos.y - app->render->camera.y, 307, 400, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
 	return true;
 }
@@ -72,6 +87,9 @@ void GuiSettings::AbleDisableSetting()
 	sldFx->active = active;
 	chBxFullScreen->active = active;
 	chBxVSync->active = active;
+	chBxTextSpeed0->active = active;
+	chBxTextSpeed1->active = active;
+	chBxTextSpeed2->active = active;
 	btnBack->active = active;
 }
 
@@ -93,8 +111,17 @@ void GuiSettings::MovePosition()
 	chBxVSync->bounds.x = x;
 	chBxVSync->bounds.y = y + padding * 3;
 
+	chBxTextSpeed0->bounds.x = x;
+	chBxTextSpeed0->bounds.y = y + padding * 4;
+
+	chBxTextSpeed1->bounds.x = x - 50;
+	chBxTextSpeed1->bounds.y = y + padding * 4;
+
+	chBxTextSpeed2->bounds.x = x + 50;
+	chBxTextSpeed2->bounds.y = y + padding * 4;
+
 	btnBack->bounds.x = x;
-	btnBack->bounds.y = y + padding * 4;
+	btnBack->bounds.y = y + padding * 5;
 
 }
 

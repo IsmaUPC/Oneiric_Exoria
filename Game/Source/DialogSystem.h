@@ -85,7 +85,7 @@ public:
 	int id = 0;
 	int totalLetters = 0;
 	float actualLetter = 0;
-	int dialogSpeed = 2;
+	int dialogSpeed = 1;
 	bool missClick = false;
 
 	GuiButton* btn1 = nullptr;
