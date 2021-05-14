@@ -88,6 +88,8 @@ public:
 	int dialogSpeed = 2;
 	bool missClick = false;
 
+	uint dialogFx = -1;
+
 	GuiButton* btn1 = nullptr;
 	GuiButton* btn2 = nullptr;
 	GuiButton* btn3 = nullptr;

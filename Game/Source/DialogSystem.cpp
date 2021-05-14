@@ -5,6 +5,7 @@
 #include "Textures.h"
 #include "Fonts.h"
 #include "Scene.h"
+#include "Audio.h"
 
 #include "SDL/include/SDL.h"
 
@@ -16,6 +17,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue(DIALOGUE_TREE_FILENAME);
+	dialogFx = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 
 	return true;
 }
@@ -51,6 +53,7 @@ bool DialogueSystem::CleanUp()
 		delete dialogueTrees[i];
 	}
 	dialogueTrees.clear();
+	app->audio->Unload1Fx(dialogFx);
 
 	return true;
 }
@@ -76,6 +79,11 @@ void DialogueSystem::DrawDialogue()
 {
 	char NPCdialogue[128] = { 0 };
 	char drawNPCdialogue[128] = { 0 };
+
+	if (actualLetter == 0)
+	{
+		app->audio->PlayFx(dialogFx);
+	}
 
 	sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
 
@@ -105,6 +113,12 @@ void DialogueSystem::DrawDialogue()
 		}
 
 		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+	}
+
+	if (actualLetter >= totalLetters - 1)
+	{
+		app->audio->Unload1Fx(dialogFx);
+		app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 	}
 }
 

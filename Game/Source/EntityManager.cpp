@@ -27,7 +27,6 @@ bool EntityManager::Start()
 	LOG("EntityManager start");
 	active = true;
 
-	// Load Fx
 
 	// Load Textures
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");

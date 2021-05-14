@@ -134,6 +134,8 @@ public:
 	bool loadStats = false;
 	fPoint lerpCamera = { 0,0 };
 
+	uint stairsFx = -1;
+
 private:
 	
 	int levelScene = 0;
@@ -148,7 +150,6 @@ private:
 	int diagonal = 0;
 	
 	uint bookOpenFx = -1;
-
 
 	Animation* idleAnimR = nullptr;
 	Animation* idleAnimL = nullptr;
