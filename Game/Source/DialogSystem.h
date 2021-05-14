@@ -71,6 +71,8 @@ public:
 	bool Start();
 	bool Update(float dt);
 	bool PostUpdate();
+	void DrawDialogue();
+	void DrawOptions();
 	bool CleanUp();
 	void PerformDialogue(int treeId, int playerInput);
 	bool LoadDialogue(const char*);
@@ -82,7 +84,8 @@ public:
 	void SetId(int id_) { id = id_; };
 	int id = 0;
 	int totalLetters = 0;
-	int actualLetter = 0;
+	float actualLetter = 0;
+	int dialogSpeed = 2;
 	bool missClick = false;
 
 	GuiButton* btn1 = nullptr;

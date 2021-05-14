@@ -32,28 +32,9 @@ bool DialogueSystem::PostUpdate()
 
 	if (onDialog == true) 
 	{
-		char NPCdialogue[128] = { 0 };
-		char drawNPCdialogue[128] = { 0 };
+		DrawDialogue();
 
-		sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
-		
-		totalLetters = strlen(NPCdialogue);
-
-		if (actualLetter <= totalLetters) actualLetter++;
-		
-		for (int i = 0; i < actualLetter; i++)
-		{
-			drawNPCdialogue[i] = NPCdialogue[i];
-		}
-
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
-
-		char response[128] = { 0 };
-		for (int i = 0; i < currentNode->answersList.Count(); i++)
-		{
-			sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
-			//app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 60, 43, 13 });
-		}
+		DrawOptions();
 	}
 
 	return true;
@@ -88,6 +69,52 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 				else currentNode = dialogueTrees[treeId]->dialogueNodes[i];
 				break;
 			}
+	}
+}
+
+void DialogueSystem::DrawDialogue()
+{
+	char NPCdialogue[128] = { 0 };
+	char drawNPCdialogue[128] = { 0 };
+
+	sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
+
+	if (dialogSpeed == 0) app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
+	else if (dialogSpeed == 1)
+	{
+		totalLetters = strlen(NPCdialogue);
+
+		if (actualLetter <= totalLetters) actualLetter += 0.5;
+
+		for (int i = 0; i < actualLetter; i++)
+		{
+			drawNPCdialogue[i] = NPCdialogue[i];
+		}
+
+		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+	}
+	else if (dialogSpeed == 2)
+	{
+		totalLetters = strlen(NPCdialogue);
+
+		if (actualLetter <= totalLetters) actualLetter++;
+
+		for (int i = 0; i < actualLetter; i++)
+		{
+			drawNPCdialogue[i] = NPCdialogue[i];
+		}
+
+		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+	}
+}
+
+void DialogueSystem::DrawOptions()
+{
+	char response[128] = { 0 };
+	for (int i = 0; i < currentNode->answersList.Count(); i++)
+	{
+		sprintf_s(response, 128, currentNode->answersList.At(i)->data.c_str(), 56);
+		//app->fonts->BlitText(point.x + WINDOW_W / 2 - 400 + (175 * (i + 1)), point.y + 675, 0, response, { 60, 43, 13 });
 	}
 }
 
