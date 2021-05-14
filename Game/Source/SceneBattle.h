@@ -146,6 +146,7 @@ private:
 	uint fighterDiesFx = -1;
 	uint saplingDiesFx = -1;
 	uint allyDiesFx = -1;
+	uint cancelButton = -1;
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;

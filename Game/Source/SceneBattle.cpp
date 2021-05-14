@@ -57,6 +57,7 @@ bool SceneBattle::Start()
 	fighterDiesFx = app->audio->LoadFx("Assets/Audio/Fx/fighter_slain.wav");
 	saplingDiesFx = app->audio->LoadFx("Assets/Audio/Fx/sapling_slain.wav");
 	allyDiesFx = app->audio->LoadFx("Assets/Audio/Fx/ally_slain.wav");
+	cancelButton = app->audio->LoadFx("Assets/Audio/Fx/button_cancel.wav");
 
 	// Load Animations
 	LoadAnimations();
@@ -864,6 +865,8 @@ void SceneBattle::BattleSystem()
 			btnDefense->state = GuiControlState::NORMAL;
 			btnExit->state = GuiControlState::NORMAL;
 
+			app->audio->PlayFx(cancelButton);
+
 			faseAction = SELECT_ACTION;
 		}
 
@@ -1593,6 +1596,7 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(fighterDiesFx);
 	app->audio->Unload1Fx(saplingDiesFx);
 	app->audio->Unload1Fx(allyDiesFx);
+	app->audio->Unload1Fx(cancelButton);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
