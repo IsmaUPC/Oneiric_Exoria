@@ -126,6 +126,8 @@ public:
 	ItemManager* itemManager = nullptr;
 	pugi::xml_document	itemsFile;
 
+	List<GameItem*> inventory;
+
 	PlayerData playerData;
 	int radiusCollision = 0;
 	bool godMode = false;
