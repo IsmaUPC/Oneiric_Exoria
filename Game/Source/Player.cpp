@@ -11,6 +11,8 @@
 Player::Player() : Entity()
 {
 	name.Create("player");
+	itemManager = new ItemManager();
+	itemManager->LoadItems(itemsFile, LIST_ITEMS_FILENAME);
 }
 
 Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) 
@@ -18,7 +20,6 @@ Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Te
 {
 	playerData.state = IDLE;
 	name.Create("player");
-
 }
 
 Player::~Player()

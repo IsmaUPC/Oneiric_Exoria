@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include "Entity.h"
+#include "ItemManager.h"
 
 struct PlayerData
 {
@@ -121,6 +122,9 @@ private:
 	void OffsetPartners();
 
 public:
+
+	ItemManager* itemManager = nullptr;
+	pugi::xml_document	itemsFile;
 
 	PlayerData playerData;
 	int radiusCollision = 0;

@@ -5,6 +5,7 @@
 #include "SceneControl.h"
 #include "GuiManager.h"
 #include "Fonts.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
