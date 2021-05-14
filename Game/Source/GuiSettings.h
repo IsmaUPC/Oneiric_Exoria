@@ -32,6 +32,9 @@ public:
 	GuiSlider* sldFx = nullptr;
 	GuiCheckBox* chBxFullScreen = nullptr;
 	GuiCheckBox* chBxVSync = nullptr;
+	GuiCheckBox* chBxTextSpeed0 = nullptr;
+	GuiCheckBox* chBxTextSpeed1 = nullptr;
+	GuiCheckBox* chBxTextSpeed2 = nullptr;
 
 	GuiButton* btnBack = nullptr;
 

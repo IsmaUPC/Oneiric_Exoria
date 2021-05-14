@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "SceneControl.h"
 #include "GuiManager.h"
+#include "DialogSystem.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -188,6 +189,24 @@ bool GuiMenuPause::Event(GuiControl* control)
 			bool menuVSync;
 			menuVSync = menuSettings->chBxVSync->GetValue();
 			LOG("%d", menuVSync);
+		}
+		if (control->id == 15)
+		{
+			app->dialogueSystem->dialogSpeed = 1;
+			menuSettings->chBxTextSpeed0->SetValue(0);
+			menuSettings->chBxTextSpeed2->SetValue(0);
+		}
+		if (control->id == 16)
+		{
+			app->dialogueSystem->dialogSpeed = 2;
+			menuSettings->chBxTextSpeed1->SetValue(0);
+			menuSettings->chBxTextSpeed2->SetValue(0);
+		}
+		if (control->id == 17)
+		{
+			app->dialogueSystem->dialogSpeed = 0;
+			menuSettings->chBxTextSpeed0->SetValue(0);
+			menuSettings->chBxTextSpeed1->SetValue(0);
 		}
 	}
 	default: break;

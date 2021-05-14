@@ -5,7 +5,8 @@
 #include "Render.h"
 #include "SceneIntro.h"
 #include "SceneManager.h"
-#include "GuiManager.h"	
+#include "GuiManager.h"
+#include "DialogSystem.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -69,7 +70,7 @@ bool SceneIntro::Start()
 	btnExit->SetObserver(this);
 	app->guiManager->AddGuiButton(btnExit);
 	
-	menuSettings = new GuiSettings({ 900, 70 }, this);
+	menuSettings = new GuiSettings({ 900, 20 }, this);
 
 	app->SetLastScene((Module*)this);
 	transition = false;
@@ -401,6 +402,24 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			bool menuVSync;
 			menuVSync = menuSettings->chBxVSync->GetValue();
 			LOG("%d", menuVSync);
+		}
+		if (control->id == 15)
+		{
+			app->dialogueSystem->dialogSpeed = 1;
+			menuSettings->chBxTextSpeed0->SetValue(0);
+			menuSettings->chBxTextSpeed2->SetValue(0);
+		}
+		if (control->id == 16)
+		{
+			app->dialogueSystem->dialogSpeed = 2;
+			menuSettings->chBxTextSpeed1->SetValue(0);
+			menuSettings->chBxTextSpeed2->SetValue(0);
+		}
+		if (control->id == 17)
+		{
+			app->dialogueSystem->dialogSpeed = 0;
+			menuSettings->chBxTextSpeed0->SetValue(0);
+			menuSettings->chBxTextSpeed1->SetValue(0);
 		}
 	}
 	default: break;
