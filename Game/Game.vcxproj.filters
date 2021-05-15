@@ -167,6 +167,9 @@
     <ClCompile Include="Source\Items.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\QuestManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -342,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="Source\Items.h">
       <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\QuestManager.h">
+      <Filter>Modules\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
