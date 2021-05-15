@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <dialogueTree>
+  <!-- test -->
   <dialogueExample Id="0">
     <node text="Hello do you have a moment?"  id="0">
       <dialogue option="1: No sorry" activeID="0" completeID="0" nextNode="1"/>
@@ -27,7 +28,8 @@
     <node text ="Mision accepted R to talk again" id ="101">
     </node>
   </dialogueExample>
-
+  <!-- NPC -->
+  <!-- Librarian -->
   <dialogueExample Id="1">
     <node text="Hi welcome to the library"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="1"/>
@@ -50,7 +52,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Director (Activate Quest 1) -->
   <dialogueExample Id="2">
     <node text="Kenzie, welcome to LansDowne"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="1"/>
@@ -71,7 +73,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Book Guy -->
   <dialogueExample Id="3">
     <node text="Hmmmm...."  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="1"/>
@@ -93,7 +95,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Arcade Boy -->
   <dialogueExample Id="4">
     <node text="This level is way to hard I cant finish it"  id="0">
       <dialogue option="Hi" activeID="0" completeID="0" nextNode="1"/>
@@ -118,7 +120,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Teacher -->
   <dialogueExample Id="5">
     <node text="Hello, there is no class now"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="1"/>
@@ -155,7 +157,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Student -->
   <dialogueExample Id="6">
     <node text="The affinities will enter on the next exam"  id="0">
       <dialogue option="Affinities?" activeID="0" completeID="0" nextNode="1"/>
@@ -214,7 +216,8 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-  
+  <!-- Interactuable Object -->
+  <!-- Poster -->
   <dialogueExample Id="7">
     <node text="Director's room"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -222,7 +225,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Barrier -->
   <dialogueExample Id="8">
     <node text="Emanates magic that doesn't let me pass"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -230,7 +233,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Barrier 2 -->
   <dialogueExample Id="9">
     <node text="Seems easy to pass but it's not that simple"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -238,7 +241,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Arcade -->
   <dialogueExample Id="10">
     <node text="I could play Dino or Ian's adventure on these arcades"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -246,7 +249,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- TV -->
   <dialogueExample Id="11">
     <node text="Not in the mood for some Neetflex"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -254,7 +257,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Magic Book -->
   <dialogueExample Id="12">
     <node text="It says: 'The 12 principles of magic'"  id="0">
       <dialogue option="Continue" activeID="0" completeID="0" nextNode="100"/>
@@ -262,7 +265,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Coffe Machine -->
   <dialogueExample Id="13">
     <node text="What coffee should I get?"  id="0">
       <dialogue option="Latte" activeID="0" completeID="0" nextNode="1"/>
@@ -275,7 +278,7 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-
+  <!-- Soda Machine -->
   <dialogueExample Id="14">
     <node text="What should I take"  id="0">
       <dialogue option="Water" activeID="0" completeID="0" nextNode="1"/>
@@ -288,5 +291,20 @@
     <node text ="Bye" id ="100">
     </node>
   </dialogueExample>
-    
+  <!-- Director's Card (Quest 01) -->
+  <dialogueExample Id="15">
+    <node text="I found the Card"  id="0">
+      <dialogue option="Continue" activeID="2" completeID="1" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
+  <!-- Director (Complete Quest 1) -->
+  <dialogueExample Id="16">
+    <node text="Thanks Kenzie, my knees are not what they used to be"  id="0">
+      <dialogue option="Continue" activeID="0" completeID="2" nextNode="100"/>
+    </node>
+    <node text ="Bye" id ="100">
+    </node>
+  </dialogueExample>
 </dialogueTree>

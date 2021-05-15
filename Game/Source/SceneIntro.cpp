@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "GuiManager.h"
 #include "DialogSystem.h"
+#include "QuestManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -309,6 +310,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		
 		if (control->id == 1)
 		{
+			app->questManager->ResetQuestList();
 			app->audio->PlayFx(fxStart);
 			app->removeGame = false;
 			TransitionToScene(SceneType::LEVEL1);

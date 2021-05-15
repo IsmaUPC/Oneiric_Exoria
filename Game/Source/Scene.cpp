@@ -11,6 +11,7 @@
 #include "GuiManager.h"
 #include "Pathfinding.h"
 #include "DialogSystem.h"
+#include "QuestManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -74,7 +75,11 @@ bool Scene::Start()
 
 	//NPCs
 	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
-	app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
+	if (app->questManager->QuestState(1) == COMPLETE)
+	{
+		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
+	}
+	else app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
 	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
 
 	//Interactuable objects
@@ -82,6 +87,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(NPC, 31, 30, 8, 0, false);
 	app->entityManager->AddEntity(NPC, 10, 3, 9, 0, false);
 	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
+	app->entityManager->AddEntity(NPC, 28, 6, 15, 0, false);
 
 	// Position Items
 	fxList[0].position = { 31,24 };

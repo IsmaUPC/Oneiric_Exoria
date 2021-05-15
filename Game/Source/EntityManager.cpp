@@ -213,8 +213,20 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 
 		spawnQueue.Add(b);
 	}
-
 	return true;
+}
+
+Entity* EntityManager::FindNPC(int id)
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->entityData.type == NPC && item->data->entityData.id == id)
+		{
+			return item->data;
+		}
+	}
 }
 
 void EntityManager::SpawnEntity(Entity* info)

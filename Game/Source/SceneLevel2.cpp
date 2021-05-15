@@ -11,6 +11,7 @@
 #include "GuiManager.h"
 #include "Pathfinding.h"
 #include "DialogSystem.h"
+#include "QuestManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 

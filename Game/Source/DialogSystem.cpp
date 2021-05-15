@@ -66,13 +66,13 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
-				if (currentNode->dialogueOptions[playerInput]->activeID != 0)
-				{
-					app->questManager->ActiveQuest(currentNode->dialogueOptions[playerInput]->activeID);
-				}
 				if (currentNode->dialogueOptions[playerInput]->completeID != 0)
 				{
 					app->questManager->FinishQuest(currentNode->dialogueOptions[playerInput]->completeID);
+				}
+				if (currentNode->dialogueOptions[playerInput]->activeID != 0)
+				{
+					app->questManager->ActiveQuest(currentNode->dialogueOptions[playerInput]->activeID);
 				}
 				if (currentNode->dialogueOptions[playerInput]->nextNode == 100)
 				{

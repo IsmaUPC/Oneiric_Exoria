@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Input.h"
 #include "SceneManager.h"
+#include "EntityManager.h"
 
 #include "QuestManager.h"
 
@@ -15,7 +16,6 @@ QuestManager::QuestManager(){
 
 bool QuestManager::CleanUp()
 {
-	SaveQuestList();
 	questList.Clear();
 	activeQuestList.Clear();
 	completeQuestList.Clear();
@@ -89,8 +89,8 @@ bool QuestManager::ActiveQuest(int id)
 			}
 		}
 	}
-	(result == true)? LOG("Mision %d Activada",id) : LOG("La mision %d no pudo ser activada",id);
-
+	(result == true)? LOG("Mision %d Activada",id), SaveQuestList() : LOG("La mision %d no pudo ser activada",id);
+	
 	return result;
 }
 
@@ -104,7 +104,7 @@ bool QuestManager::FinishQuest(int id)
 		for (int i = 0; i < activeQuestList.Count(); i++) {
 
 			if (node->data->id == id) {
-
+				ChangeNPC(id);
 				// Quitar quest de la lista de activadas
 				node->data->state = COMPLETE;
 				completeQuestList.Add(node->data);
@@ -117,9 +117,22 @@ bool QuestManager::FinishQuest(int id)
 		}
 	}
 
-	(result == true) ? LOG("Mision %d Finalizada",id) : LOG("La mision %d no esta activada",id);
+	(result == true) ? LOG("Mision %d Finalizada",id), SaveQuestList() : LOG("La mision %d no esta activada",id);
 
 	return result;
+}
+
+void QuestManager::ChangeNPC(int id)
+{
+	switch (id)
+	{
+	case 1:
+		app->entityManager->DeleteEntity(app->entityManager->FindNPC(2));
+		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
+		break;
+	default:
+		break;
+	}
 }
 
 void QuestManager::LoadQuestList(const char* file)
@@ -180,6 +193,7 @@ bool QuestManager::SaveQuestList()
 	}
 	else
 	{
+		LOG("Save quest file");
 		pugi::xml_node questSaveFile = questDoc.first_child();
 		ListItem<Quest*>* node = questList.start;
 		ret = true;

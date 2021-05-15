@@ -41,6 +41,8 @@ public:
 
 	bool AddEntity(TypeEntity pType, int pX, int pY, int id, int level = 0, bool move = true, State state = IDLE);
 
+	Entity* FindNPC(int id);
+
 	void DeleteEntity(Entity* entity);
 	void DeleteHUD();
 	void DeleteSpawnEntity(Entity* entity);

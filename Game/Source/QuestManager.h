@@ -42,6 +42,8 @@ public:
     bool ActiveQuest(int id);
     bool FinishQuest(int id);
 
+	void ChangeNPC(int id);
+
     void LoadQuestList(const char* file);
     bool SaveQuestList();
 
