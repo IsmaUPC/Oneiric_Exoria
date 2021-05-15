@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <list>
-	<item id = "1" name = "Bandages" description = "Heals an ally 20 health." use = "1" cost = "50" type = "1" obtention = "1"/>
-	<item id = "2" name = "Health Potion" description = "Heals an ally 50 health." use = "1" cost = "100" type = "1" obtention = "1"/>
-	<item id = "3" name = "Mana Potion" description = "Heals an ally 25 mana." use = "1" cost = "75" type = "1" obtention = "1"/>
+	<item id = "1" name = "Bandages" description = "Heals an ally 20 health." use = "1" cost = "50" type = "1" obtention = "1" attribute ="health" value ="20"/>
+	<item id = "2" name = "Health Potion" description = "Heals an ally 50 health." use = "1" cost = "100" type = "1" obtention = "1" attribute ="health" value ="50"/>
+	<item id = "3" name = "Mana Potion" description = "Heals an ally 25 mana." use = "1" cost = "75" type = "1" obtention = "1" attribute ="mana" value ="20"/>
 	<item id = "4" name = "Smoke Orb" description = "Lets the party escape from combat when used." use = "1" cost = "50" type = "1" obtention = "1"/>
-	<item id = "5" name = "Pure Water" description = "Revives one ally with 1 health." use = "1" cost = "150" type = "1" obtention = "1"/>
+	<item id = "5" name = "Pure Water" description = "Revives one ally with 10 health." use = "1" cost = "150" type = "1" obtention = "1"/>
 	<item id = "6" name = "Fungus" description = "	Removes all negative effects on one ally." use = "1" cost = "75" type = "1" obtention = "1"/>
 	<item id = "7" name = "Fire Stone" description = "Deals 20 fire damage to one enemy." use = "1" cost = "100" type = "2" obtention = "1"/>
 	<item id = "8" name = "Water Stone" description = "Deals 20 water damage to one enemy." use = "1" cost = "100" type = "2" obtention = "1"/>
@@ -20,25 +20,25 @@
 	<item id = "17" name = "Light Wish" description = "When equipped the user light attacks deal 10% more damage" use = "1" cost = "500" type = "5" obtention = "1"/>
 	<item id = "18" name = "Shadow Wish" description = "When equipped the user shadow attacks deal 10% more damage." use = "1" cost = "500" type = "5" obtention = "1"/>
 	<item id = "19" name = "Resistance Ring" description = "When equipped the user gets 10% more defense." use = "2" cost = "0" type = "3" obtention = "2"/>
-	<item id = "20" name = "Attackers Ring" description = "When equipped the user gets 10% more attack." use = "2" cost = "0" type = "3" obtention = "2"/>
+	<item id = "20" name = "Attackers Ring" description = "When equipped the user gets 10% more attack." use = "2" cost = "0" type = "3" obtention = "2" attribute ="attack"/>
 	<item id = "21" name = "Speed Ring" description = "When equipped the user gets 10% more speed." use = "2" cost = "0" type = "3" obtention = "2"/>
 	<item id = "22" name = "Shield Ring" description = "When equipped the user gets 25% less physical damage." use = "2" cost = "0" type = "3" obtention = "2"/>
-	<item id = "23" name = "Fire Ring" description = "When equipped the user gets 25% less fire damage." use = "3" cost = "0" type = "3" obtention = "3"/>
-	<item id = "24" name = "Water Ring" description = "When equipped the user gets 25% less water damage." use = "3" cost = "0" type = "3" obtention = "3"/>
-	<item id = "25" name = "Earth Ring" description = "When equipped the user gets 25% less earth damage." use = "3" cost = "0" type = "3" obtention = "3"/>
+	<item id = "23" name = "Fire Ring" description = "When equipped the user gets 25% less fire damage." use = "2" cost = "0" type = "3" obtention = "3"/>
+	<item id = "24" name = "Water Ring" description = "When equipped the user gets 25% less water damage." use = "2" cost = "0" type = "3" obtention = "3"/>
+	<item id = "25" name = "Earth Ring" description = "When equipped the user gets 25% less earth damage." use = "2" cost = "0" type = "3" obtention = "3"/>
 	<item id = "26" name = "Electricity Ring" description = "When equipped the user gets 25% less electricity damage." use = "3" cost = "0" type = "3" obtention = "3"/>
-	<item id = "27" name = "Light Ring" description = "When equipped the user gets 25% less light damage." use = "3" cost = "0" type = "3" obtention = "3"/>
-	<item id = "28" name = "Shadow Ring" description = "When equipped the user gets 25% less shadow damage." use = "3" cost = "0" type = "3" obtention = "3"/>
+	<item id = "27" name = "Light Ring" description = "When equipped the user gets 25% less light damage." use = "2" cost = "0" type = "3" obtention = "3"/>
+	<item id = "28" name = "Shadow Ring" description = "When equipped the user gets 25% less shadow damage." use = "2" cost = "0" type = "3" obtention = "3"/>
 	<item id = "29" name = "Bastion Amulet" description = "When equipped the user gets 50 more max health." use = "2" cost = "0" type = "4" obtention = "2"/>
 	<item id = "30" name = "Preseveration Amulet" description = "When equipped the user gets 50 more max mana." use = "2" cost = "0" type = "4" obtention = "2"/>
-	<item id = "31" name = "Invisibility Amulet" description = "When equipped the user gets 10% more evasion chance." use = "3" cost = "0" type = "4" obtention = "3"/>
-	<item id = "32" name = "Sharpshooter Amulet" description = "When equipped the user gets 15% more hit chance." use = "3" cost = "0" type = "4" obtention = "3"/>
+	<item id = "31" name = "Invisibility Amulet" description = "When equipped the user gets 10% more evasion chance." use = "2" cost = "0" type = "4" obtention = "3"/>
+	<item id = "32" name = "Sharpshooter Amulet" description = "When equipped the user gets 15% more hit chance." use = "2" cost = "0" type = "4" obtention = "3"/>
 	<item id = "33" name = "Third eye" description = "When equipped the user can't get blinded." use = "2" cost = "0" type = "4" obtention = "2"/>
 	<item id = "34" name = "Blue Blood" description = "	When equipped the user can't get bleeding." use = "2" cost = "0" type = "4" obtention = "2"/>
 	<item id = "35" name = "Inmunity Ring" description = "When equipped the user can't get poison." use = "2" cost = "0" type = "3" obtention = "2"/>
 	<item id = "36" name = "Inamovible" description = "When equipped the user can't get stunned." use = "2" cost = "0" type = "5" obtention = "2"/>
 	<item id = "37" name = "Blind eye" description = "When equipped the user can't get disturbed." use = "2" cost = "0" type = "4" obtention = "2"/>
 	<item id = "38" name = "Fearless" description = "When equipped the user can't get fear." use = "2" cost = "0" type = "5" obtention = "2"/>
-	<item id = "39" name = "Dispell Disease" description = "When equipped the user can't get a negative status effect." use = "3" cost = "0" type = "5" obtention = "3"/>
-	<item id = "40" name = "Lover's Promise" description = "When equipped the user heals 10% more with his spells." use = "4" cost = "0" type = "5" obtention = "4"/>
+	<item id = "39" name = "Dispell Disease" description = "When equipped the user can't get a negative status effect." use = "2" cost = "0" type = "5" obtention = "3"/>
+	<item id = "40" name = "Lover's Promise" description = "When equipped the user heals 10% more with his spells." use = "2" cost = "0" type = "5" obtention = "4"/>
 </list>

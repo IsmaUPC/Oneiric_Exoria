@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include "Entity.h"
+#include "ItemManager.h"
 
 struct PlayerData
 {
@@ -122,6 +123,11 @@ private:
 
 public:
 
+	ItemManager* itemManager = nullptr;
+	pugi::xml_document	itemsFile;
+
+	List<GameItem*> inventory;
+
 	PlayerData playerData;
 	int radiusCollision = 0;
 	bool godMode = false;
@@ -129,6 +135,8 @@ public:
 	bool win = false;
 	bool loadStats = false;
 	fPoint lerpCamera = { 0,0 };
+
+	uint stairsFx = -1;
 
 private:
 	
@@ -144,7 +152,6 @@ private:
 	int diagonal = 0;
 	
 	uint bookOpenFx = -1;
-
 
 	Animation* idleAnimR = nullptr;
 	Animation* idleAnimL = nullptr;

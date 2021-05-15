@@ -28,6 +28,8 @@ public:
 
 	bool GetActive() { return active; }
 
+	GuiSettings* GetMenuSettings() { return menuSettings; }
+
 private:
 	int padding = 40;
 	GuiButton* btnResume = nullptr;

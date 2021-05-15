@@ -32,6 +32,9 @@ public:
 	GuiSlider* sldFx = nullptr;
 	GuiCheckBox* chBxFullScreen = nullptr;
 	GuiCheckBox* chBxVSync = nullptr;
+	GuiCheckBox* chBxTextSpeed0 = nullptr;
+	GuiCheckBox* chBxTextSpeed1 = nullptr;
+	GuiCheckBox* chBxTextSpeed2 = nullptr;
 
 	GuiButton* btnBack = nullptr;
 
@@ -39,6 +42,8 @@ public:
 
 private:
 	int padding = 60;
+
+	char textSpeedOptions[20] = { "Slow Fast Off" };
 
 	iPoint initialPos = { 0,0};
 

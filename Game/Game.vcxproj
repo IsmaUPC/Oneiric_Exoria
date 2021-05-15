@@ -107,7 +107,7 @@
     <ClCompile Include="Source\GuiSettings.cpp" />
     <ClCompile Include="Source\GuiSlider.cpp" />
     <ClCompile Include="Source\GuiStatsMenu.cpp" />
-    <ClCompile Include="Source\Items.cpp" />
+    <ClCompile Include="Source\ItemManager.cpp" />
     <ClCompile Include="Source\Lives.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
@@ -157,7 +157,7 @@
     <ClInclude Include="Source\GuiSettings.h" />
     <ClInclude Include="Source\GuiSlider.h" />
     <ClInclude Include="Source\GuiStatsMenu.h" />
-    <ClInclude Include="Source\Items.h" />
+    <ClInclude Include="Source\ItemManager.h" />
     <ClInclude Include="Source\Lives.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\ModuleFadeToBlack.h" />

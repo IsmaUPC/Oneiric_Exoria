@@ -8,6 +8,7 @@
 #include "TeleportNode.h"
 #include "TpNodeManager.h"
 #include "easings.h"
+#include "ItemManager.h"
 
 class GuiButton;
 
@@ -123,6 +124,8 @@ public:
 	SceneLevel2* sceneLevel2 = nullptr;
 	SceneLevel3* sceneLevel3 = nullptr;
 	SceneBattle* sceneBattle = nullptr;
+
+	ItemManager* itemManager = nullptr;
 
 	SceneControl* sceneControl = nullptr;
 

@@ -11,6 +11,8 @@
 Player::Player() : Entity()
 {
 	name.Create("player");
+	itemManager = new ItemManager();
+	itemManager->LoadItems(itemsFile, LIST_ITEMS_FILENAME);
 }
 
 Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) 
@@ -18,7 +20,6 @@ Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Te
 {
 	playerData.state = IDLE;
 	name.Create("player");
-
 }
 
 Player::~Player()
@@ -125,6 +126,7 @@ bool Player::Start()
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 
 	bookOpenFx = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
+	stairsFx = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
 	
 	return true;
 }
@@ -835,6 +837,7 @@ bool Player::CleanUp()
 	active = false;
 	pendingToDelete = true;
 	app->audio->Unload1Fx(bookOpenFx);
+	app->audio->Unload1Fx(stairsFx);
 
 	// Player
 	delete positionInitial;

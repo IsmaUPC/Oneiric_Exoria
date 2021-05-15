@@ -139,7 +139,7 @@ bool SceneLevel2::Update(float dt)
 
 void SceneLevel2::UpdateDialog()
 {
-	if (app->dialogueSystem->onDialog == true)
+	if ((app->dialogueSystem->onDialog == true) && (app->dialogueSystem->actualLetter == app->dialogueSystem->totalLetters || app->dialogueSystem->dialogSpeed == 0))
 	{
 		int w, h;
 		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
@@ -258,6 +258,10 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
 			app->dialogueSystem->missClick = true;
 			btn1->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
 		}
 		//Option 2
 		else if (control->id == 41 && !app->dialogueSystem->missClick)
@@ -265,6 +269,10 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
 			app->dialogueSystem->missClick = true;
 			btn2->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
 		}
 		//Option 3
 		else if (control->id == 42 && !app->dialogueSystem->missClick)
@@ -272,6 +280,10 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
 			app->dialogueSystem->missClick = true;
 			btn3->state = GuiControlState::NORMAL;
+			app->dialogueSystem->actualLetter = 0;
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
 		}
 	}
 	default: break;

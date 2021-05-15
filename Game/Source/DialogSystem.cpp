@@ -5,6 +5,7 @@
 #include "Textures.h"
 #include "Fonts.h"
 #include "Scene.h"
+#include "Audio.h"
 
 #include "SDL/include/SDL.h"
 
@@ -16,6 +17,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue(DIALOGUE_TREE_FILENAME);
+	dialogFx = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 
 	return true;
 }
@@ -51,6 +53,7 @@ bool DialogueSystem::CleanUp()
 		delete dialogueTrees[i];
 	}
 	dialogueTrees.clear();
+	app->audio->Unload1Fx(dialogFx);
 
 	return true;
 }
@@ -82,6 +85,10 @@ void DialogueSystem::DrawDialogue()
 	if (dialogSpeed == 0) app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
 	else if (dialogSpeed == 1)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(dialogFx);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter += 0.5;
@@ -95,6 +102,10 @@ void DialogueSystem::DrawDialogue()
 	}
 	else if (dialogSpeed == 2)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(dialogFx);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter++;
@@ -105,6 +116,12 @@ void DialogueSystem::DrawDialogue()
 		}
 
 		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+	}
+
+	if (actualLetter >= totalLetters - 1)
+	{
+		app->audio->Unload1Fx(dialogFx);
+		app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 	}
 }
 

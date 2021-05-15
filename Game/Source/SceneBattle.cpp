@@ -57,6 +57,7 @@ bool SceneBattle::Start()
 	fighterDiesFx = app->audio->LoadFx("Assets/Audio/Fx/fighter_slain.wav");
 	saplingDiesFx = app->audio->LoadFx("Assets/Audio/Fx/sapling_slain.wav");
 	allyDiesFx = app->audio->LoadFx("Assets/Audio/Fx/ally_slain.wav");
+	cancelButton = app->audio->LoadFx("Assets/Audio/Fx/button_cancel.wav");
 
 	// Load Animations
 	LoadAnimations();
@@ -640,7 +641,37 @@ void SceneBattle::DrawSceneWin()
 		sprintf_s(textLevel, 8, "Lvl.%d", partners.At(i)->data->entityData.level);
 		TTF_SizeText(app->sceneManager->guiFont, textLevel, &w, &h);
 		app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textLevel, { 60, 43, 13 });
+	}
+	//Item draw
+	for (int i = 0; i < 2; i++)
+	{
+		if (itemsId[i] != 0)
+		{
+			sprintf_s(textItems, 24, "%s x%d", app->player->itemManager->itemList.At(itemsId[i])->data->name.GetString(), itemMulti);
+			app->fonts->BlitText(281, rec.y + rec.h / 2 - h / 2 + 100 + i * 25, 0, textItems, { 60, 43, 13 });
+		}
+		if (itemMulti == 2)
+		{
+			break;
+		}
+	}
+}
 
+void SceneBattle::GenerateItems()
+{
+	int fnumb = rand() % 3;
+	for (int i = 0; i < fnumb; i++)
+	{
+		int numb = rand() % 5 + 1;
+		app->player->itemManager->AddItem(numb);
+		itemsId[i] = numb;
+	}
+	for (int i = 0; i < fnumb-1; i++)
+	{
+		if (itemsId[i] == itemsId[i+1])
+		{
+			itemMulti++;
+		}
 	}
 }
 
@@ -863,6 +894,8 @@ void SceneBattle::BattleSystem()
 			btnMagic->state = GuiControlState::NORMAL;
 			btnDefense->state = GuiControlState::NORMAL;
 			btnExit->state = GuiControlState::NORMAL;
+
+			app->audio->PlayFx(cancelButton);
 
 			faseAction = SELECT_ACTION;
 		}
@@ -1353,6 +1386,7 @@ void SceneBattle::CheckWinLose()
 				win = true;
 				app->audio->PlayFx(winFx);
 				AbleDisableButtons();
+				GenerateItems();
 				app->sceneManager->SetWinBattle(true);
 				app->audio->PlayMusic("Assets/Audio/Music/win_music.ogg", 0);
 			}
@@ -1593,6 +1627,7 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(fighterDiesFx);
 	app->audio->Unload1Fx(saplingDiesFx);
 	app->audio->Unload1Fx(allyDiesFx);
+	app->audio->Unload1Fx(cancelButton);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
