@@ -1,10 +1,8 @@
-
 #ifndef _TELEPORT_NODE_H_
 #define _TELEPORT_NODE_H_
 
 #include "Point.h"
 #include "Log.h"
-
 
 #include "PugiXml\src\pugixml.hpp"
 

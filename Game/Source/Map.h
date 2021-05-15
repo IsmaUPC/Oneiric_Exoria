@@ -3,7 +3,6 @@
 
 #include "Module.h"
 #include "List.h"
-#include "Point.h"
 #include "PQueue.h"
 #include "DynArray.h"
 #include "Animation.h"

@@ -93,7 +93,7 @@ private:
 	Textures* tex = nullptr;
 	SDL_Texture* texPlayers = nullptr;
 
-	uint transitionFx;
+	uint fxTransition;
 
 	SceneControl* current = nullptr;
 	SceneControl* next = nullptr;

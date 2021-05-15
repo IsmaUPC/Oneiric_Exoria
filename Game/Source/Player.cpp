@@ -135,8 +135,8 @@ bool Player::Start()
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 
-	bookOpenFx = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
-	stairsFx = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
+	fxBookOpen = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
+	fxStairs = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
 	
 	return true;
 }
@@ -407,7 +407,7 @@ bool Player::Update(float dt)
 
 	if (bookAnim->HasFinished())
 	{
-		app->audio->PlayFx(bookOpenFx);
+		app->audio->PlayFx(fxBookOpen);
 		app->guiManager->GetStatsMenu()->introBook = true;
 		app->guiManager->GetStatsMenu()->currentAnim = app->guiManager->openBookAnim;
 		app->guiManager->GetStatsMenu()->AbleDisableMenu();
@@ -879,8 +879,8 @@ bool Player::CleanUp()
 	app->tex->UnLoad(playerData.texture);
 	active = false;
 	pendingToDelete = true;
-	app->audio->Unload1Fx(bookOpenFx);
-	app->audio->Unload1Fx(stairsFx);
+	app->audio->Unload1Fx(fxBookOpen);
+	app->audio->Unload1Fx(fxStairs);
 
 	// Player
 	delete positionInitial;
@@ -976,7 +976,6 @@ void Player::SetHit()
 		playerData.respawns--;
 		playerData.state = HIT;
 		hitDirection = playerData.direction;
-		app->audio->PlayFx(damageFx);
 	}
 	
 }
@@ -1006,8 +1005,7 @@ void Player::ActiveCheckpoint(iPoint positionMapPlayer)
 
 		LOG("CHECKPOINT pos:%d,%d", positionMapPlayer.x, positionMapPlayer.y);
 		app->map->CheckPointActive(positionMapPlayer);
-		// FX
-		app->audio->PlayFx(bonfireFx);
+	
 	}
 }
 

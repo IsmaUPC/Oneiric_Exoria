@@ -42,7 +42,13 @@ bool Scene::Start()
 	app->SaveConfigRequested();
 	app->SetLastScene((Module*)this);
 
-	victory=false;
+	// Load music and Fx
+	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+
+	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/pc_typing.wav");
+	fxCount = 1;
+
+	victory = false;
 	app->player->win = false;
 
 	if (app->map->Load("school_1.tmx") == true)
@@ -61,7 +67,6 @@ bool Scene::Start()
 	// Positions Initials
 	app->player->positionInitial = new iPoint(325, 450);	
 
-
 	// Active calls
 	app->player->Init();
 	app->player->Start();
@@ -77,10 +82,19 @@ bool Scene::Start()
 	app->entityManager->AddEntity(NPC, 31, 30, 8, 0, false);
 	app->entityManager->AddEntity(NPC, 10, 3, 9, 0, false);
 	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
-	
 
-	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	// Position Items
+	fxList[0].position = { 31,24 };
+	fxList[0].position = app->map->MapToWorld(fxList[0].position);
+
+	// Items Channel
+	for (int i = 0; i < fxCount; i++)
+	{
+		fxList[i].channel = app->audio->SetChannel();
+	}
+
+	// Set Max Distance
+	fxList[0].maxDistance = 64;
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
@@ -146,12 +160,20 @@ bool Scene::Update(float dt)
 
 	UpdateDialog();
 
+	for (int i = 0; i < fxCount; i++)
+	{
+		if (app->audio->SetDistanceFx(fxList[i].channel, AngleToListener(app->player->playerData.position, fxList[i].position) + 90,
+			DistanceToListener(app->player->playerData.position, fxList[i].position), fxList[i].maxDistance))
+			app->audio->PlayFx(fxList[i].fxName, fxList[i].channel);
+		else app->audio->StopFx(fxList[i].channel);
+	}
+
 	return ret;
 }
 
 void Scene::UpdateDialog()
 {
-	if (app->dialogueSystem->onDialog == true)
+	if ((app->dialogueSystem->onDialog == true) && (app->dialogueSystem->actualLetter == app->dialogueSystem->totalLetters || app->dialogueSystem->dialogSpeed == 0))
 	{
 		int w, h;
 		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
@@ -219,6 +241,12 @@ bool Scene::CleanUp()
 	if (!active)
 		return true;
 
+	for (int i = 0; i < fxCount; i++)
+	{
+		app->audio->Unload1Fx(fxList[i].fxName);
+		app->audio->DeleteChannel(fxList[i].channel);
+	}
+
 	//////LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
@@ -269,26 +297,25 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 40 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
-			app->dialogueSystem->missClick = true;
 			btn1->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
 		}
 		//Option 2
 		else if (control->id == 41 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
-			app->dialogueSystem->missClick = true;
 			btn2->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
 		}
 		//Option 3
 		else if (control->id == 42 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
-			app->dialogueSystem->missClick = true;
 			btn3->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
 		}
+		app->dialogueSystem->missClick = true;
+		app->dialogueSystem->actualLetter = 0;
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
 	}
 	default: break;
 	}

@@ -1,9 +1,7 @@
 #ifndef __GUIMENUPAUSE_H__
 #define __GUIMENUPAUSE_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiSettings.h"
 
 class GuiMenuPause

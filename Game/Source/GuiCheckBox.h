@@ -4,7 +4,6 @@
 #include "GuiControl.h"
 #include "Audio.h"
 
-#include "Point.h"
 #include "SString.h"
 
 class GuiCheckBox : public GuiControl

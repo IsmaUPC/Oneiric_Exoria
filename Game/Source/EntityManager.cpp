@@ -188,7 +188,7 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 		b->entityData.position.y = positionSpawn.y;
 		b->entityData.positionInitial = positionSpawn;
 		b->entityData.level = level;
-		b->entityData.channel = app->audio->SetChannel();
+		//b->entityData.channel = app->audio->SetChannel();
 		b->entityData.id = id;
 		b->move = move_;
 
@@ -275,7 +275,7 @@ void EntityManager::DeleteEntity(Entity* entity)
 		if (item->data == entity)
 		{
 			// Notify the audio manager that a channel can be released 
-			app->audio->DeleteChannel(item->data->entityData.channel);
+			//app->audio->DeleteChannel(item->data->entityData.channel);
 			entities.Del(item);
 			break;
 		}

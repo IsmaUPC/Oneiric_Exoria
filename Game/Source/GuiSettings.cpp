@@ -10,7 +10,7 @@
 GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 {
 	active = false;
-
+		
 	initialPos = Position;
 
 	SDL_Texture* btnTextureAtlas = app->guiManager->uiAtlas;

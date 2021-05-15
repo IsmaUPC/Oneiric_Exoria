@@ -4,8 +4,6 @@
 #include "GuiControl.h"
 #include "Audio.h"
 #include "App.h"
-
-#include "Point.h"
 #include "SString.h"
 
 enum TypeButton {

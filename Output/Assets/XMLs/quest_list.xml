@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<questList>
+	<quests>
+		<quest id="3" requires="0" description="CALLATE!" state="0" />
+		<quest id="4" requires="3" description="OSTIA!" state="0" />
+	</quests>
+</questList>

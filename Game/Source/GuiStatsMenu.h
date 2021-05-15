@@ -1,7 +1,6 @@
 #ifndef __GUISTATSMENU_H__
 #define __GUISTATSMENU_H__
 
-#include "Point.h"
 #include "SString.h"
 
 #define BOOK_W 187

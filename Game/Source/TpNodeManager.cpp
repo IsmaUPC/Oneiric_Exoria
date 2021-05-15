@@ -146,7 +146,7 @@ void TpNodeManager::SpawnPlayerTpNode(TeleportNode* originTpNode)
 			//app->player->positionInitial = new iPoint(pos.x, pos.y);
 			app->player->playerData.position = pos;
 
-			app->audio->PlayFx(app->player->stairsFx);
+			app->audio->PlayFx(app->player->fxStairs);
 		}
 		originTpNode=nullptr;
 	}

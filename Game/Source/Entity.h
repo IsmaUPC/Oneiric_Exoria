@@ -2,7 +2,6 @@
 #define __ENTITY_H__
 
 #include "Module.h"
-#include "Point.h"
 #include "Animation.h"
 #include "App.h"
 #include "Render.h"

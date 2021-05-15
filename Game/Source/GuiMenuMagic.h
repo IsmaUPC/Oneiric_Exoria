@@ -1,9 +1,7 @@
 #ifndef __GUIMENUMAGIC_H__
 #define __GUIMENUMAGIC_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiButton.h"
 
 struct Magic;
