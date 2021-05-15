@@ -6,6 +6,7 @@
 #include "Fonts.h"
 #include "Scene.h"
 #include "Audio.h"
+#include "QuestManager.h"
 
 #include "SDL/include/SDL.h"
 
@@ -65,6 +66,14 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
+				if (currentNode->dialogueOptions[playerInput]->activeID != 0)
+				{
+					app->questManager->ActiveQuest(currentNode->dialogueOptions[playerInput]->activeID);
+				}
+				if (currentNode->dialogueOptions[playerInput]->completeID != 0)
+				{
+					app->questManager->FinishQuest(currentNode->dialogueOptions[playerInput]->completeID);
+				}
 				if (currentNode->dialogueOptions[playerInput]->nextNode == 100)
 				{
 					onDialog = false;
@@ -182,6 +191,8 @@ bool DialogueSystem::LoadOptions(pugi::xml_node& response, DialogueNode* answers
 		DialogueOption* selection = new DialogueOption;
 		selection->text.assign(option.attribute("option").as_string());
 		selection->nextNode = option.attribute("nextNode").as_int();
+		selection->activeID = option.attribute("activeID").as_int();
+		selection->completeID = option.attribute("completeID").as_int();
 		answers->dialogueOptions.push_back(selection);
 		answers->answersList.Add((option.attribute("option").as_string()));
 	}
