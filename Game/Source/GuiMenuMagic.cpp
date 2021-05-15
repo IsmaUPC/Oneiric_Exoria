@@ -111,6 +111,8 @@ bool GuiMenuMagic::Draw()
 bool GuiMenuMagic::CleanUp()
 {
 	magics.Clear();
+	magicsCharacterTurn.Clear();
+	btns.Clear();
 	return true;
 }
 
