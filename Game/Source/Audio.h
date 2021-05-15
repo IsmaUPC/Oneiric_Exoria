@@ -41,7 +41,7 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int id, int channel = -1, int repeat = 0, int volume = -1);
 
-	void SetDistanceFx(int channel, int angle, uint distance, uint maxDistance);
+	bool SetDistanceFx(int channel, int angle, uint distance, uint maxDistance);
 	int SetChannel();
 
 	void DeleteChannel(int channel);

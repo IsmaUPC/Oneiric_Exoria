@@ -49,8 +49,6 @@ public:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-
-
 private:
 
 	int numThisScene = 2;
