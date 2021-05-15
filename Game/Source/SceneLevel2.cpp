@@ -67,18 +67,16 @@ bool SceneLevel2::Start()
 		RELEASE_ARRAY(data);
 	}
 	app->map->active = true;
-
 	// Positions initials
 	app->player->positionInitial = new iPoint(930,730);
 
 	app->player->Init();
 	app->player->Start();
 
-
 	// Return size image
-	// SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
+	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
-	// NPC
+	//NPC
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
 	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
 	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
@@ -114,6 +112,13 @@ bool SceneLevel2::Start()
 	fxList[2].maxDistance = 128;
 	fxList[3].maxDistance = 128;
 	fxList[4].maxDistance = 160;
+
+	//Interactive objects
+	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false);
+	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false);
+	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false);
+	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false);
+	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false);
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
@@ -152,6 +157,7 @@ bool SceneLevel2::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
+
 	if (app->player->win)victory = true;
 
 	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
@@ -180,7 +186,7 @@ bool SceneLevel2::Update(float dt)
 
 void SceneLevel2::UpdateDialog()
 {
-	if (app->dialogueSystem->onDialog == true)
+	if ((app->dialogueSystem->onDialog == true) && (app->dialogueSystem->actualLetter == app->dialogueSystem->totalLetters || app->dialogueSystem->dialogSpeed == 0))
 	{
 		int w, h;
 		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
@@ -248,12 +254,6 @@ bool SceneLevel2::CleanUp()
 	if (!active)
 		return true;
 
-	for (int i = 0; i < fxCount; i++)
-	{
-		app->audio->Unload1Fx(fxList[i].fxName);
-		app->audio->DeleteChannel(fxList[i].channel);
-	}
-
 	LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
@@ -303,23 +303,25 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 40 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
-			app->dialogueSystem->missClick = true;
 			btn1->state = GuiControlState::NORMAL;
 		}
 		//Option 2
 		else if (control->id == 41 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
-			app->dialogueSystem->missClick = true;
 			btn2->state = GuiControlState::NORMAL;
 		}
 		//Option 3
 		else if (control->id == 42 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
-			app->dialogueSystem->missClick = true;
 			btn3->state = GuiControlState::NORMAL;
 		}
+		app->dialogueSystem->missClick = true;
+		app->dialogueSystem->actualLetter = 0;
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
 	}
 	default: break;
 	}
