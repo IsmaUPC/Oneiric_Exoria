@@ -86,6 +86,8 @@ public:
 	bool GetTransitionToBattleFinish() { return transitionFinish; };
 	void SetTransitionToBattleFinish(bool ret) { transitionFinish = ret; };
 
+	bool LoadTmxDungeonsList();
+
 private:
 
 	Input* input = nullptr;
@@ -138,6 +140,13 @@ public:
 	TTF_Font* titleFont = nullptr;
 	TTF_Font* statsFont = nullptr;
 	TTF_Font* runicFont = nullptr;
+
+	List<SString> tmxDungeonsList;
+	int levelDungeon = 0;
+
+
+	pugi::xml_document stateFile;
+	pugi::xml_node rootStateFile;
 };
 
 #endif // __SCENEMANAGER_H__

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<dungeons>
+  <dungeon name="dungeon_1.tmx"/>
+  <dungeon name="dungeon_2.tmx"/>
+  <dungeon name="dungeon_3.tmx"/>
+</dungeons>

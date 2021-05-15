@@ -14,6 +14,7 @@
 #define LIST_ITEMS_FILENAME "Assets/XMLs/items_list.xml"
 #define LIST_MAGIC_FILENAME "Assets/XMLs/magic_list.xml"	
 #define PROPERTIES_FILE "Assets/XMLs/particles_properties.xml"
+#define DUNGEONS_FILE "Assets/XMLs/dungeons.xml"
 
 // Modules
 class Window;

@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "SceneLevel2.h"
 #include "SceneLevel3.h"
+#include "SceneDungeon.h"
 #include "SceneLose.h"
 #include "SceneWin.h"
 #include "SceneBattle.h"
@@ -69,6 +70,8 @@ bool SceneManager::Start()
 	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 
 	texPlayers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+
+	LoadTmxDungeonsList();
 
 	next = nullptr;
 
@@ -176,6 +179,13 @@ bool SceneManager::Update(float dt)
 		case SceneType::LEVEL1: next = new Scene(); break;
 		case SceneType::LEVEL2: next = new SceneLevel2(); break;
 		case SceneType::LEVEL3: next = new SceneLevel3(); break;
+		case SceneType::DUNGEON: 
+			//if (current->name != "dungeon")
+				next = new SceneDungeon();
+			//else 
+				//next = current;
+			break;
+
 		case SceneType::WIN: next = new SceneWin(); break;
 		case SceneType::LOSE: next = new SceneLose(); break;
 		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(transitionFx); break;
@@ -203,6 +213,12 @@ bool SceneManager::Update(float dt)
 		lastLevel = 3;
 		originTpNode = nullptr;
 	}
+	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	{
+		current->TransitionToScene(SceneType::DUNGEON);
+		lastLevel = 8;
+		originTpNode = nullptr;
+	}
 
 	return ret;
 }
@@ -214,18 +230,41 @@ bool SceneManager::PostUpdate()
 
 	if (app->player->win== true)
 	{
+
 		app->player->win = false;
 		current->victory = false;
 
-		if (originTpNode->typeTpNode == 3)
+		if(!onTransition)
+		switch (originTpNode->typeTpNode)
 		{
-			current->TransitionToScene(SceneType((5+originTpNode->idFloor)+1));		
-			return true;
-		}
-		else
-		{
+		case UNKNOW:
+			break;
+		case DOWN_LADDER_NODE:
 			if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
-			current->TransitionToScene(SceneType((5 + originTpNode->idFloor)-1));
+			if (levelDungeon == 0)
+				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
+			else
+			{
+				if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+					levelDungeon--;
+				current->TransitionToScene(SceneType::DUNGEON);
+
+			}
+			break;
+		case UP_LADDER_NODE:
+			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) ) == SceneType::DUNGEON)
+				levelDungeon++;
+			if ((int)SceneType::LEVEL1 + originTpNode->idFloor != (int)SceneType::DUNGEON)
+				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) + 1));
+			else 
+			{
+				current->TransitionToScene(SceneType::DUNGEON);
+
+			}
+			return true;
+			break;
+		default:
+			break;
 		}
 
 	}
@@ -284,6 +323,8 @@ bool SceneManager::LoadState(pugi::xml_node& data)
 	if (current->lastLevel == 1)current = scene;
 	else if (current->lastLevel == 2)current = sceneLevel2;
 	else if (current->lastLevel == 3)current = sceneLevel3;
+
+	//TODO dungeon
 	current->LoadState(data);
 	return true;
 }
@@ -292,4 +333,29 @@ bool SceneManager::SaveState(pugi::xml_node& data) const
 {
 	current->SaveState(data);
 	return true;
+}
+
+bool SceneManager::LoadTmxDungeonsList()
+{
+
+	//tmxDungeonsList;
+	pugi::xml_parse_result result = stateFile.load_file(DUNGEONS_FILE);
+
+	bool ret = true;
+	pugi::xml_node tmxDungeon = stateFile.child("dungeons").first_child();
+	pugi::xml_node aux;
+
+	if (tmxDungeon != NULL)
+	{
+			tmxDungeonsList.Clear();
+
+		tmxDungeon.next_sibling();
+		while (tmxDungeon)
+		{
+			tmxDungeonsList.Add( tmxDungeon.attribute("name").as_string());
+			tmxDungeon = tmxDungeon.next_sibling();
+		}
+	}
+
+	return ret;
 }

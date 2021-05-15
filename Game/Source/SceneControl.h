@@ -20,6 +20,7 @@ enum class SceneType
 	LEVEL1 = 5,
 	LEVEL2 =6,
 	LEVEL3 =7,
+	DUNGEON =8,
 };
 
 class SceneControl

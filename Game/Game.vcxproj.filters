@@ -167,6 +167,9 @@
     <ClCompile Include="Source\ItemManager.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneDungeon.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -342,6 +345,9 @@
     </ClInclude>
     <ClInclude Include="Source\ItemManager.h">
       <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneDungeon.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

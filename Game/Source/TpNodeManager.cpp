@@ -107,7 +107,6 @@ TeleportNode* TpNodeManager::FindNodeTpInPlayer(uint typeTilePlayer)
 // Move to TpNode Class
 TeleportNode* TpNodeManager::FindNodeTpById(uint typeNode, int nodeId)
 {
-
 	TeleportNode* nodeById = FindTpNodeList(typeNode)->At(nodeId)->data;
 
 	return (nodeById != NULL) ? nodeById : 0;

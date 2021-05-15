@@ -109,7 +109,7 @@ int Entity::CheckCollision(iPoint positionMap)
 		int stop=0;
 	}
 
-	if (app->player->godMode == false) 
+	if (app->player->godMode == false && app->player->win != true)
 	{
 		switch (typeTilePlayer)
 		{

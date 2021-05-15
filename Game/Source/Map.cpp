@@ -287,6 +287,10 @@ void Map::Draw()
 
 void Map::DrawUp()
 {
+	if (layerDrawUp != NULL)
+	{
+
+	
 	if (layerDrawUp->Count() <= 0) return;
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layersUp = layerDrawUp->start; layersUp; layersUp = layersUp->next)
@@ -304,6 +308,7 @@ void Map::DrawUp()
 					}
 				}
 			}
+	}
 }
 
 
