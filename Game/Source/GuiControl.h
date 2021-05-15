@@ -4,8 +4,6 @@
 #include "Input.h"
 #include "Render.h"
 #include "SceneControl.h"
-
-#include "Point.h"
 #include "SString.h"
 
 #include "SDL/include/SDL.h"

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<questList>
+	<quests>
+		<quest id="1" requires="0" description="Get the Director's Card from the shelve" state="2" />
+		<quest id="2" requires="1" description="Give the Card to the Director" state="2" />
+	</quests>
+</questList>

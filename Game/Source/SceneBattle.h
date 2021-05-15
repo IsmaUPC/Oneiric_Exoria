@@ -72,6 +72,7 @@ public:
 	void DrawTurnBar();
 
 	void DrawSceneWin();
+	void GenerateItems();
 	void DrawSceneLose();
 	void DrawBarExperience();
 
@@ -134,25 +135,28 @@ private:
 	List<Entity*> partners;
 	Entity* turnSort = nullptr;
 
-	uint winFx = -1;
-	uint loseFx = -1;
-	uint attackFx = -1;
-	uint defenseFx = -1;
-	uint exitFx = -1;
-	uint fireballFx = -1;
-	uint shadowFx = -1;
-	uint healingFx = -1;
-	uint banditDiesFx = -1;
-	uint fighterDiesFx = -1;
-	uint saplingDiesFx = -1;
-	uint allyDiesFx = -1;
-	uint cancelButton = -1;
+	uint fxWin = -1;
+	uint fxLose = -1;
+	uint fxAttack = -1;
+	uint fxDefense = -1;
+	uint fxExit = -1;
+	uint fxFireball = -1;
+	uint fxShadow = -1;
+	uint fxHealing = -1;
+	uint fxBanditDies = -1;
+	uint fxFighterDies = -1;
+	uint fxSaplingDies = -1;
+	uint fxAllyDies = -1;
+	uint fxCancelButton = -1;
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
 	
 	Magic* magicInUse = nullptr;
 	bool activeMenuMagic =false;
+
+	int itemsId[2] = {0,0};
+	int itemMulti = 1;
 
 	int turn = 0;
 	int tam = 0;
@@ -163,6 +167,7 @@ private:
 	char textLoose[28] = { "YOU LOOSE" };
 	char textLive[8] = { "\0" };
 	char textLevel[7] = { "\0" };
+	char textItems[24] = { "\0" };
 	char textExperience[14] = { "\0" };
 
 	int faseAction = 0;

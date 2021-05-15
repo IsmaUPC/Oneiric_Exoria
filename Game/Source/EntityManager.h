@@ -41,6 +41,8 @@ public:
 
 	bool AddEntity(TypeEntity pType, int pX, int pY, int id, int level = 0, bool move = true, State state = IDLE);
 
+	Entity* FindNPC(int id);
+
 	void DeleteEntity(Entity* entity);
 	void DeleteHUD();
 	void DeleteSpawnEntity(Entity* entity);
@@ -63,10 +65,6 @@ public:
 	List<Entity*> partners;
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
-
-	uint chickenFx = 0;
-	uint batFx = 0;
-	uint liveFx = 0;
 
 	// Animations
 	List<Animation*> animations;

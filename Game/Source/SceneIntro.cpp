@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "GuiManager.h"
 #include "DialogSystem.h"
+#include "QuestManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -85,12 +86,12 @@ bool SceneIntro::Start()
 	oneiric = app->tex->Load("Assets/Textures/oneiric_title.png");
 	exoria = app->tex->Load("Assets/Textures/exoria_title.png");
 
-	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
-	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
-	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
-	flashFx = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
+	fxStart = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
+	fxExit = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
+	fxTittle = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
+	fxFlash = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
 
-	app->audio->PlayFx(tittleFx);
+	app->audio->PlayFx(fxTittle);
 
 	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
 	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
@@ -154,7 +155,7 @@ bool SceneIntro::Update(float dt)
 	}
 	else
 	{
-		if (logoAlpha == 0) app->audio->PlayFx(flashFx);
+		if (logoAlpha == 0) app->audio->PlayFx(fxFlash);
 		if (state == 0) state = 1;
 		if (state == 1)
 		{
@@ -280,10 +281,10 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(oneiric);
 	app->tex->UnLoad(exoria);
 
-	app->audio->Unload1Fx(startFx);
-	app->audio->Unload1Fx(exitFx);
-	app->audio->Unload1Fx(tittleFx);
-	app->audio->Unload1Fx(flashFx);
+	app->audio->Unload1Fx(fxStart);
+	app->audio->Unload1Fx(fxExit);
+	app->audio->Unload1Fx(fxTittle);
+	app->audio->Unload1Fx(fxFlash);
 
 	app->guiManager->DeleteList();
 
@@ -309,7 +310,8 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		
 		if (control->id == 1)
 		{
-			app->audio->PlayFx(startFx);
+			app->questManager->ResetQuestList();
+			app->audio->PlayFx(fxStart);
 			app->removeGame = false;
 			TransitionToScene(SceneType::LEVEL1);
 			app->sceneManager->lastLevel = 1;
@@ -345,7 +347,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		else if (control->id == 4)
 		{
 			//TransitionToScene(SceneType::LOGO);
-			app->audio->PlayFx(exitFx);
+			app->audio->PlayFx(fxExit);
 			return false;
 		}
 		else if (control->id == 5)

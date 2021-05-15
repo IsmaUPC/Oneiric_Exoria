@@ -170,6 +170,9 @@
     <ClCompile Include="Source\SceneDungeon.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
     </ClCompile>
+    <ClCompile Include="Source\QuestManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -348,6 +351,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneDungeon.h">
       <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\QuestManager.h">
+      <Filter>Modules\Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

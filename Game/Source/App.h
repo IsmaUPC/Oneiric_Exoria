@@ -5,6 +5,7 @@
 #include "List.h"
 #include "PerfTimer.h"
 #include "Timer.h"
+#include "Point.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -15,6 +16,7 @@
 #define LIST_MAGIC_FILENAME "Assets/XMLs/magic_list.xml"	
 #define PROPERTIES_FILE "Assets/XMLs/particles_properties.xml"
 #define DUNGEONS_FILE "Assets/XMLs/dungeons.xml"
+#define QUEST_FILE "Assets/XMLs/quest_list.xml"
 
 // Modules
 class Window;
@@ -33,6 +35,7 @@ class DialogueSystem;
 class Fonts;
 class TransitionManager;
 class TpNodeManager;
+class QuestManager;
 
 class App
 {
@@ -124,6 +127,7 @@ public:
 	Fonts* fonts = nullptr;
 	TransitionManager* transitionManager = nullptr;
 	TpNodeManager* tpNodeManager = nullptr;
+	QuestManager* questManager = nullptr;
 
 	bool fullScreen=0;
 	bool removeGame = false;

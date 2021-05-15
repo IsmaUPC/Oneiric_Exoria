@@ -57,7 +57,7 @@ bool GuiStatsMenu::Update(float dt_)
 			currentAnim = app->guiManager->closeBook;
 			closingBook = true;
 			menuMagic->AbleDisableMagic();
-			app->audio->PlayFx(app->guiManager->bookClose);
+			app->audio->PlayFx(app->guiManager->fxBookClose);
 		}
 
 		if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage && !closingBook)
@@ -79,6 +79,18 @@ bool GuiStatsMenu::Update(float dt_)
 			if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
 			if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
 			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		{
+			if (app->player->inventory.start != nullptr)
+			{
+				app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
+			}
+		}
+		if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		{
+			app->player->itemManager->AddItem(0);
 		}
 
 		CloseBook();
@@ -295,7 +307,7 @@ void GuiStatsMenu::MovePosition()
 
 void GuiStatsMenu::ChangePage()
 {
-	app->audio->PlayFx(app->guiManager->changePage);
+	app->audio->PlayFx(app->guiManager->fxChangePage);
 	changingPage = true;
 	if (page.numPage > maxNumPages) page.numPage = 1;
 	if (page.numPage < 1) page.numPage = maxNumPages;

@@ -1,7 +1,6 @@
 #ifndef _ITEMS_H_
 #define _ITEMS_H_
 
-#include "Point.h"
 #include "Log.h"
 #include "SString.h"
 #include "App.h"
@@ -34,6 +33,7 @@ enum class  Obtention
 struct GameItem
 {
 
+	int id = 0;
 	Type type = Type::UNKNOW;
 	SString name = "";
 	SString description = "";
@@ -61,6 +61,7 @@ struct Potion : public Consumable
 
 	SString attribute = "";
 	int value;
+	void Heal(SString att, int val, Entity* entity);
 
 };
 
@@ -83,12 +84,14 @@ public:
 	void DefineItem(GameItem* item, pugi::xml_node& n);
 
 	bool AddItem(int id);
-	bool DelItem(int id);
-	bool UseItem(int id);
+	bool DelItem(GameItem* id);
+	bool UseItem(GameItem* id, Entity* entity);
 
 public:
 
-	List<GameItem*> inventory;
+	List<GameItem*> itemList;
+	List<Potion*> potionList;
+	List<Ring*> ringList;
 
 };
 #endif // _ITEMS_H_

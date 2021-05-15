@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "ItemManager.h"
 
-struct PlayerData
+struct PlayerData : public Entity
 {
 	iPoint position = { 0,0 };
 	iPoint centerPoint = { 0,0 };
@@ -30,7 +30,7 @@ enum TypePartner
 	ISRRA,
 	BRENDA
 };
-struct Partner 
+struct Partner : public Entity
 {
 	iPoint position = {0,0};
 	State state = IDLE;
@@ -101,6 +101,8 @@ public:
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
 
+	bool UpdatePlayerStats(Entity* entity, TypeEntity type);
+
 	bool SaveLevel(pugi::xml_node& data)const;
 private:
 
@@ -126,6 +128,8 @@ public:
 	ItemManager* itemManager = nullptr;
 	pugi::xml_document	itemsFile;
 
+	List<GameItem*> inventory;
+
 	PlayerData playerData;
 	int radiusCollision = 0;
 	bool godMode = false;
@@ -134,7 +138,7 @@ public:
 	bool loadStats = false;
 	fPoint lerpCamera = { 0,0 };
 
-	uint stairsFx = -1;
+	uint fxStairs = -1;
 
 private:
 	
@@ -149,7 +153,7 @@ private:
 	bool playerCollision = true;
 	int diagonal = 0;
 	
-	uint bookOpenFx = -1;
+	uint fxBookOpen = -1;
 
 	Animation* idleAnimR = nullptr;
 	Animation* idleAnimL = nullptr;
@@ -166,9 +170,6 @@ private:
 	pugi::xml_document playerFile;
 	SString folder;
 	iPoint tmp = {0,0};
-
-	uint bonfireFx = 0;
-	uint damageFx = 0;
 
 	// CheckPoint's vars
 	bool inCheckPoint = false;

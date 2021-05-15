@@ -23,9 +23,10 @@ public:
 	DialogueOption() {};
 	~DialogueOption() {};
 
-	DialogueOption(string Text, int ReturnCode, int NextNode);
+	DialogueOption(string Text, int activeID, int NextNode);
 	string text = "";
-	int returnCode = 0;
+	int activeID = 0;
+	int completeID = 0;
 	int nextNode = 0;
 };
 
@@ -88,7 +89,7 @@ public:
 	int dialogSpeed = 1;
 	bool missClick = false;
 
-	uint dialogFx = -1;
+	uint fxDialog = -1;
 
 	GuiButton* btn1 = nullptr;
 	GuiButton* btn2 = nullptr;

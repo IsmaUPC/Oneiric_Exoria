@@ -16,6 +16,7 @@
 #include "Fonts.h"
 #include "TransitionManager.h"
 #include "TpNodeManager.h"
+#include "QuestManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -43,6 +44,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	dialogueSystem = new DialogueSystem();
 	transitionManager = new TransitionManager(render,tex,sceneManager);
 	tpNodeManager = new TpNodeManager();
+	questManager = new QuestManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -59,6 +61,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(dialogueSystem);
 	AddModule(transitionManager);
+	AddModule(questManager);
 
 	audio->active = true;
 	player->active = false;

@@ -32,7 +32,7 @@ bool Coins::Start()
 	active = true;
 
 	texCoin = entityData.texture;
-	coinFx= app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	fxCoin= app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
 	
 	numPoints = 4;
 	pointsCollision = new iPoint[4]{ { 0, 0 }, { 48 , 0 }, { 48,-48 }, { 0 ,-48 } };
@@ -91,7 +91,7 @@ bool Coins::PreUpdate()
 			&& collision.IsInsidePolygons(auxPositionCoin, numPoints, auxPositionPlayer, app->player->playerData.numPoints) && entityData.state == IDLE)
 		{
 			entityData.state = DEADING;
-			app->audio->PlayFx(coinFx);
+			app->audio->PlayFx(fxCoin);
 			app->player->CoinPlus();
 		}
 		if (entityData.state == DEADING && entityData.currentAnimation->HasFinished())
@@ -127,7 +127,7 @@ bool Coins::CleanUp()
 	RELEASE(particleAnimation);
 	RELEASE(pointsCollision);
 
-	app->audio->Unload1Fx(coinFx);
+	app->audio->Unload1Fx(fxCoin);
 
 	pendingToDelete = true;
 	active = false;

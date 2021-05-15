@@ -6,6 +6,7 @@
 #include "Fonts.h"
 #include "Scene.h"
 #include "Audio.h"
+#include "QuestManager.h"
 
 #include "SDL/include/SDL.h"
 
@@ -17,7 +18,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue(DIALOGUE_TREE_FILENAME);
-	dialogFx = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
+	fxDialog = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 
 	return true;
 }
@@ -53,7 +54,7 @@ bool DialogueSystem::CleanUp()
 		delete dialogueTrees[i];
 	}
 	dialogueTrees.clear();
-	app->audio->Unload1Fx(dialogFx);
+	app->audio->Unload1Fx(fxDialog);
 
 	return true;
 }
@@ -65,6 +66,14 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 		for (int i = 0; i < dialogueTrees[treeId]->dialogueNodes.size(); i++)
 			if (currentNode->dialogueOptions[playerInput]->nextNode == dialogueTrees[treeId]->dialogueNodes[i]->nodeId)
 			{
+				if (currentNode->dialogueOptions[playerInput]->completeID != 0)
+				{
+					app->questManager->FinishQuest(currentNode->dialogueOptions[playerInput]->completeID);
+				}
+				if (currentNode->dialogueOptions[playerInput]->activeID != 0)
+				{
+					app->questManager->ActiveQuest(currentNode->dialogueOptions[playerInput]->activeID);
+				}
 				if (currentNode->dialogueOptions[playerInput]->nextNode == 100)
 				{
 					onDialog = false;
@@ -80,16 +89,15 @@ void DialogueSystem::DrawDialogue()
 	char NPCdialogue[128] = { 0 };
 	char drawNPCdialogue[128] = { 0 };
 
-	if (actualLetter == 0)
-	{
-		app->audio->PlayFx(dialogFx);
-	}
-
 	sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
 
 	if (dialogSpeed == 0) app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
 	else if (dialogSpeed == 1)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(fxDialog, 1);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter += 0.5;
@@ -103,6 +111,10 @@ void DialogueSystem::DrawDialogue()
 	}
 	else if (dialogSpeed == 2)
 	{
+		if (actualLetter == 0)
+		{
+			app->audio->PlayFx(fxDialog);
+		}
 		totalLetters = strlen(NPCdialogue);
 
 		if (actualLetter <= totalLetters) actualLetter++;
@@ -117,8 +129,7 @@ void DialogueSystem::DrawDialogue()
 
 	if (actualLetter >= totalLetters - 1)
 	{
-		app->audio->Unload1Fx(dialogFx);
-		app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
+		app->audio->StopFx(1);
 	}
 }
 
@@ -179,6 +190,8 @@ bool DialogueSystem::LoadOptions(pugi::xml_node& response, DialogueNode* answers
 		DialogueOption* selection = new DialogueOption;
 		selection->text.assign(option.attribute("option").as_string());
 		selection->nextNode = option.attribute("nextNode").as_int();
+		selection->activeID = option.attribute("activeID").as_int();
+		selection->completeID = option.attribute("completeID").as_int();
 		answers->dialogueOptions.push_back(selection);
 		answers->answersList.Add((option.attribute("option").as_string()));
 	}

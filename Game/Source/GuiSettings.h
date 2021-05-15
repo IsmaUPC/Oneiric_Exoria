@@ -1,9 +1,7 @@
 #ifndef __GUISETTINGS_H__
 #define __GUISETTINGS_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
 #include "GuiSlider.h"
@@ -42,6 +40,8 @@ public:
 
 private:
 	int padding = 60;
+
+	char textSpeedOptions[20] = { "Slow Fast Off" };
 
 	iPoint initialPos = { 0,0};
 
