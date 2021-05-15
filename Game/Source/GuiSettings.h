@@ -43,6 +43,8 @@ public:
 private:
 	int padding = 60;
 
+	char textSpeedOptions[20] = { "Slow Fast Off" };
+
 	iPoint initialPos = { 0,0};
 
 };
