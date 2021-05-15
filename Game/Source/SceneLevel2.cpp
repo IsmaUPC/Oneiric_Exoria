@@ -49,8 +49,9 @@ bool SceneLevel2::Start()
 	fxList[1].fxName = app->audio->LoadFx("Assets/Audio/Fx/coffe_machine.wav");
 	fxList[2].fxName = fxList[1].fxName;
 	fxList[3].fxName = app->audio->LoadFx("Assets/Audio/Fx/tv.wav");
+	fxList[4].fxName = app->audio->LoadFx("Assets/Audio/Fx/washing_machine.wav");
 
-	fxCount = 4;
+	fxCount = 5;
 
 	// Load map
 	app->SetLastScene((Module*)this);
@@ -91,9 +92,15 @@ bool SceneLevel2::Start()
 
 	// Position Items
 	fxList[0].position = {24,19};
+	fxList[0].position = app->map->MapToWorld(fxList[0].position);
 	fxList[1].position = {46,22};
+	fxList[1].position = app->map->MapToWorld(fxList[1].position);
 	fxList[2].position = {11,22};
+	fxList[2].position = app->map->MapToWorld(fxList[2].position);
 	fxList[3].position = {33,18};
+	fxList[3].position = app->map->MapToWorld(fxList[3].position);
+	fxList[4].position = { 8,7 };
+	fxList[4].position = app->map->MapToWorld(fxList[4].position);
 
 	// Items Channel
 	for (int i = 0; i < fxCount; i++)
@@ -102,10 +109,11 @@ bool SceneLevel2::Start()
 	}
 
 	// Set Max Distance
-	fxList[0].maxDistance = 214;
-	fxList[1].maxDistance = 160;
-	fxList[2].maxDistance = 214;
-	fxList[3].maxDistance = 214;
+	fxList[0].maxDistance = 96;
+	fxList[1].maxDistance = 32;
+	fxList[2].maxDistance = 128;
+	fxList[3].maxDistance = 128;
+	fxList[4].maxDistance = 160;
 
 	// Dialog System buttons
 	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
@@ -161,11 +169,10 @@ bool SceneLevel2::Update(float dt)
 
 	for (int i = 0; i < fxCount; i++)
 	{
-
 		if (app->audio->SetDistanceFx(fxList[i].channel, AngleToListener(app->player->playerData.position, fxList[i].position) + 90,
 			DistanceToListener(app->player->playerData.position, fxList[i].position), fxList[i].maxDistance))
 			app->audio->PlayFx(fxList[i].fxName, fxList[i].channel);
-
+		else app->audio->StopFx(fxList[i].channel);
 	}
 
 	return true;

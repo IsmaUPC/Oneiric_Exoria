@@ -77,7 +77,7 @@ private:
 
 	// TODO: Create the varaibles you need
 	int maxNumChannels = 10;
-	int numChannels = 0;
+	int numChannels = 1;
 	int volumeMusic = 128; // 128 = MIX_MAX_VOLUME
 	int volumeFx = 128;
 	bool pendingToDelete = false;

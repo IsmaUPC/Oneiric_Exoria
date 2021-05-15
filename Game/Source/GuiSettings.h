@@ -1,9 +1,7 @@
 #ifndef __GUISETTINGS_H__
 #define __GUISETTINGS_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
 #include "GuiSlider.h"

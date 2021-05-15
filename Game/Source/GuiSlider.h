@@ -3,8 +3,6 @@
 
 #include "GuiControl.h"
 #include "Audio.h"
-
-#include "Point.h"
 #include "SString.h"
 
 #define MIX_MAX_VOLUME 128

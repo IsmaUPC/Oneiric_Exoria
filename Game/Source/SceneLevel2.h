@@ -2,7 +2,6 @@
 #define __SCENE_LEVEL_2_H__
 
 #include "SceneControl.h"
-#include "Point.h"
 #include "Animation.h"
 #include "GuiManager.h"
 #include "PugiXml\src\pugixml.hpp"
