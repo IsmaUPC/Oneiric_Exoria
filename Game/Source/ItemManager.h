@@ -39,6 +39,7 @@ struct GameItem
 	SString description = "";
 	Obtention obtention = Obtention::UNKNOW;
 	int cost = 0;
+	int multi = 0;
 
 };
 

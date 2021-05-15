@@ -41,7 +41,11 @@ bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 					potionList.Add(item);
 					itemList.Add(item);
 				}
-				else if (type == 3)
+			}
+			else if (use == 2)
+			{
+				int type = n.attribute("type").as_int();
+				if (type == 3)
 				{
 					Ring* item = new Ring;
 					item->attribute = n.attribute("attribute").as_string("");
@@ -50,10 +54,6 @@ bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 					ringList.Add(item);
 					itemList.Add(item);
 				}
-			}
-			else if (use == 2)
-			{
-
 			}
 		}
 	}
@@ -85,7 +85,7 @@ bool ItemManager::UseItem(GameItem* id, Entity* entity)
 		{
 		case Type::POTION:
 			potionList.At((id->id)-1)->data->Heal(potionList.At((id->id)-1)->data->attribute, potionList.At((id->id)-1)->data->value, entity);
-			//DelItem(app->player->inventory.At(app->player->inventory.Find(id))->data);
+			DelItem(app->player->inventory.At(app->player->inventory.Find(id))->data);
 			break;
 		case Type::STONE:
 			break;
@@ -119,7 +119,15 @@ bool ItemManager::AddItem(int id)
 	}
 	else
 	{
-		app->player->inventory.Add(itemList.At(id)->data);
+		for (int i = 0; i < app->player->inventory.Count(); i++)
+		{
+			if (app->player->inventory.At(i)->data == app->player->itemManager->itemList.At(id)->data)
+			{
+				app->player->inventory.At(i)->data->multi++;
+				return ret;
+			}
+		}
+		app->player->inventory.Add(itemList.At(id)->data)->data->multi++;
 	}
 
 	return ret;
@@ -136,7 +144,15 @@ bool ItemManager::DelItem(GameItem* id)
 	}
 	else
 	{
-		app->player->inventory.Del(app->player->inventory.At(app->player->inventory.Find(id)));
+		if (app->player->inventory.At(app->player->inventory.Find(id))->data->multi > 1)
+		{
+			app->player->inventory.At(app->player->inventory.Find(id))->data->multi--;
+		}
+		else
+		{
+			app->player->inventory.At(app->player->inventory.Find(id))->data->multi--;
+			app->player->inventory.Del(app->player->inventory.At(app->player->inventory.Find(id)));
+		}
 	}
 
 	return true;

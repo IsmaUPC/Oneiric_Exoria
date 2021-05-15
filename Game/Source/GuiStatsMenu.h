@@ -9,8 +9,20 @@
 #include "GuiSettings.h"
 #include "Animation.h"
 #include "GuiMenuMagic.h"
+#include "ItemManager.h"
 
-class Pages
+enum PageType
+{
+	STATS = 1,
+	INVENTORY = 2
+};
+
+class  InventoryPage
+{
+	GameItem* currentItem = nullptr;
+};
+
+class StatsPage
 {
 public:
 	int numPage = 1;
@@ -34,10 +46,14 @@ public:
 	~GuiStatsMenu();
 
 	bool Update(float dt);
+	void UpdateInventory();
+	void UpdateStats();
 	void CloseBook();
 	bool PostUpdate();
 
 	void DrawTitleStats(int posX, int& posY);
+	void DrawBookMarks(int posX, int& posY);
+	void DrawInventory(int posX, int& posY);
 
 	bool CleanUp();
 
@@ -49,10 +65,12 @@ public:
 
 	bool GetActive() { return active; }
 
-	void ChangePage();
+	void ChangeStatCharacter();
 	void InicializeStats();
 	int CalculateExp(int level);
 	void DrawBarLive();
+
+	void ChangePages();
 
 	Animation* currentAnim = nullptr;
 	bool introBook = false;
@@ -64,13 +82,17 @@ private:
 
 	GuiMenuMagic* menuMagic = nullptr;
 
-	Pages page;
+	StatsPage page;
+	PageType pageType = INVENTORY;
+
 	int maxNumPages = 4;
 	char textStats[15] = { "\0" };
 	char textName[7] = { "\0" };
 	char textClass[10] = { "\0" };
 	char textMagicRunes[10] = { "\0" };
 	char textDescription[400] = { "\0" };
+	char textItemName[30] = { "\0" };
+	char itemQuantity[3] = { "\0" };
 
 	SDL_Rect rectBar = { 0,0,0,0 };
 	SDL_Color color;

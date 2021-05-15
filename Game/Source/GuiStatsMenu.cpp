@@ -45,10 +45,13 @@ bool GuiStatsMenu::Update(float dt_)
 			app->guiManager->openBookAnim->Reset();
 			app->guiManager->rightBook->Reset();
 			app->guiManager->leftBook->Reset();
+			if (pageType == STATS)
+			{
+				menuMagic->AbleDisableMagic();
+				menuMagic->close->active = false;
+				menuMagic->MovePosition();
+			}
 			currentAnim = app->guiManager->idleBook;
-			menuMagic->AbleDisableMagic();
-			menuMagic->close->active = false;
-			menuMagic->MovePosition();
 			app->fonts->ResetH();
 		}
 
@@ -56,41 +59,33 @@ bool GuiStatsMenu::Update(float dt_)
 		{
 			currentAnim = app->guiManager->closeBook;
 			closingBook = true;
-			menuMagic->AbleDisableMagic();
+			if (pageType == STATS) menuMagic->AbleDisableMagic();
 			app->audio->PlayFx(app->guiManager->fxBookClose);
 		}
 
-		if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage && !closingBook)
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN && !introBook && !changingPage && !closingBook)
 		{
-			page.numPage++;
-			ChangePage();
-			currentAnim = app->guiManager->rightBook; 
-		}
-		if ((app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage && !closingBook)
-		{
-			page.numPage--;
-			ChangePage();
+			pageType = static_cast<PageType>(pageType - 1);
+			ChangePages();
 			currentAnim = app->guiManager->leftBook;
 		}
-
-		if ((app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || app->input->pads[0].y) && !introBook && !changingPage && !closingBook)
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN && !introBook && !changingPage && !closingBook)
 		{
-			if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
-			if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
-			if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
-			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
+			pageType = static_cast<PageType>(pageType + 1);
+			ChangePages();
+			currentAnim = app->guiManager->rightBook;
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		switch (pageType)
 		{
-			if (app->player->inventory.start != nullptr)
-			{
-				app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
-			}
-		}
-		if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
-		{
-			app->player->itemManager->AddItem(0);
+		case STATS:
+			UpdateStats();
+			break;
+		case INVENTORY:
+			UpdateInventory();
+			break;
+		default:
+			break;
 		}
 
 		CloseBook();
@@ -99,6 +94,45 @@ bool GuiStatsMenu::Update(float dt_)
 	}
 
 	return ret;
+}
+
+void GuiStatsMenu::UpdateInventory()
+{
+	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	{
+		if (app->player->inventory.start != nullptr)
+		{
+			app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
+		}
+	}
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		app->player->itemManager->AddItem(0);
+	}
+}
+
+void GuiStatsMenu::UpdateStats()
+{
+	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage && !closingBook)
+	{
+		page.numPage++;
+		ChangeStatCharacter();
+		currentAnim = app->guiManager->rightBook;
+	}
+	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage && !closingBook)
+	{
+		page.numPage--;
+		ChangeStatCharacter();
+		currentAnim = app->guiManager->leftBook;
+	}
+
+	if ((app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN || app->input->pads[0].y) && !introBook && !changingPage && !closingBook)
+	{
+		if (menuMagic->magic1->state != GuiControlState::NORMAL) menuMagic->magic1->state = GuiControlState::NORMAL;
+		if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
+		if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
+		if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
+	}
 }
 
 void GuiStatsMenu::CloseBook()
@@ -120,14 +154,44 @@ bool GuiStatsMenu::PostUpdate()
 
 		app->render->DrawTexture(app->guiManager->bookMenu, relativePosition.x, relativePosition.y, &currentAnim->GetCurrentFrame(), 5);
 
+		int posX = -app->render->camera.x + 220;
+		int posY = -app->render->camera.y + 120;
+
 		if (!introBook && !changingPage && !closingBook)
 		{
-			int posX = -app->render->camera.x + 220;
-			int posY = -app->render->camera.y + 120;
-
-			DrawTitleStats(posX, posY);	
+			switch (pageType)
+			{
+			case STATS:
+				DrawTitleStats(posX, posY);
+				break;
+			case INVENTORY:
+				DrawInventory(posX, posY);
+				break;
+			default:
+				break;
+			}
 			
 		}
+
+		int posY2 = -app->render->camera.y + 120;
+
+		if (!introBook && !closingBook)
+		{
+			SDL_Rect bookMarkRect = { 80,374,50,36 };
+			switch (pageType)
+			{
+			case STATS:
+				//Draw bookmarks
+				DrawBookMarks(posX, posY2);
+				break;
+			case INVENTORY:
+				for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
+				break;
+			default:
+				break;
+			}
+		}
+
 	}
 
 	return true;
@@ -268,6 +332,103 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
 }
 
+void GuiStatsMenu::DrawBookMarks(int posX, int& posY)
+{
+	SDL_Rect bookMarkRect;
+	switch (page.numPage)
+	{
+	case 1:
+		bookMarkRect = { 0,374,68,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 840, posY + 200, &bookMarkRect);
+		bookMarkRect = { 80,374,50,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 240, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 280, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 320, &bookMarkRect);
+		bookMarkRect = { 178,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 204, &bookMarkRect);
+		bookMarkRect = { 146,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 244, &bookMarkRect);
+		bookMarkRect = { 208,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 284, &bookMarkRect);
+		bookMarkRect = { 240,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 324, &bookMarkRect);
+		break;
+	case 2:
+		bookMarkRect = { 0,374,68,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 840, posY + 240, &bookMarkRect);
+		bookMarkRect = { 80,374,50,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 200, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 280, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 320, &bookMarkRect);
+		bookMarkRect = { 178,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 204, &bookMarkRect);
+		bookMarkRect = { 146,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 244, &bookMarkRect);
+		bookMarkRect = { 208,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 284, &bookMarkRect);
+		bookMarkRect = { 240,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 324, &bookMarkRect);
+		break;
+	case 3:
+		bookMarkRect = { 0,374,68,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 840, posY + 280, &bookMarkRect);
+		bookMarkRect = { 80,374,50,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 200, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 240, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 320, &bookMarkRect);
+		bookMarkRect = { 178,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 204, &bookMarkRect);
+		bookMarkRect = { 146,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 244, &bookMarkRect);
+		bookMarkRect = { 208,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 284, &bookMarkRect);
+		bookMarkRect = { 240,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 324, &bookMarkRect);
+		break;
+	case 4:
+		bookMarkRect = { 0,374,68,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 840, posY + 320, &bookMarkRect);
+		bookMarkRect = { 80,374,50,36 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 200, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 280, &bookMarkRect);
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY + 240, &bookMarkRect);
+		bookMarkRect = { 178,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 204, &bookMarkRect);
+		bookMarkRect = { 146,370,28,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 244, &bookMarkRect);
+		bookMarkRect = { 208,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 284, &bookMarkRect);
+		bookMarkRect = { 240,370,32,28 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 870, posY + 324, &bookMarkRect);
+		break;
+	default:
+		break;
+	}
+}
+
+void GuiStatsMenu::DrawInventory(int posX, int& posY)
+{
+
+	sprintf_s(textStats, 15, "Inventory");
+	app->fonts->BlitText(posX, posY, 2, textStats, color);
+
+	sprintf_s(textStats, 15, "Name");
+	app->fonts->BlitText(posX + 25, posY + 45, 0, textStats, color, dt * 20);
+	sprintf_s(textStats, 15, "Stock");
+	app->fonts->BlitText(posX + 320, posY + 45, 0, textStats, color, dt * 20);
+
+	app->render->DrawRectangle({ posX, posY + 70, 390, 5 },color.r,color.g, color.b);
+
+	for (int i = 0; i < app->player->inventory.Count(); i++)
+	{
+		sprintf_s(textItemName, 30, app->player->inventory.At(i)->data->name.GetString());
+		app->fonts->BlitText(posX + 10, posY + 80 + (i * 30), 0, textItemName, color, dt * 20);
+
+		sprintf_s(itemQuantity, 3, "%d", app->player->inventory.At(i)->data->multi);
+		app->fonts->BlitText(posX + 340, posY + 80 + (i * 30), 0, itemQuantity, color, dt * 20);
+	}
+}
+
 bool GuiStatsMenu::CleanUp()
 {
 	active = false;
@@ -305,7 +466,7 @@ void GuiStatsMenu::MovePosition()
 	InicializeStats();
 }
 
-void GuiStatsMenu::ChangePage()
+void GuiStatsMenu::ChangeStatCharacter()
 {
 	app->audio->PlayFx(app->guiManager->fxChangePage);
 	changingPage = true;
@@ -432,5 +593,19 @@ void GuiStatsMenu::DrawBarLive()
 		app->render->DrawRectangle(rectBar, yellow.r, yellow.g, yellow.b);
 		rectBar.w = wRectBar;
 		app->render->DrawRectangle(rectBar, 149, 112, 0, 255, false);
+	}
+}
+
+void GuiStatsMenu::ChangePages()
+{
+	app->audio->PlayFx(app->guiManager->fxChangePage);
+	changingPage = true;
+
+	if (pageType > 2) pageType = static_cast<PageType>(1);
+	if (pageType < 1) pageType = static_cast<PageType>(2);
+	if (pageType == INVENTORY)
+	{
+		menuMagic->AbleDisableMagic();
+		menuMagic->close->active = false;
 	}
 }

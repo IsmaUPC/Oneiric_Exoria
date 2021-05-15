@@ -367,7 +367,7 @@ bool Player::UpdatePlayerStats(Entity* entity, TypeEntity type)
 	default:
 		break;
 	}
-
+	app->guiManager->GetStatsMenu()->InicializeStats();
 	return false;
 }
 
