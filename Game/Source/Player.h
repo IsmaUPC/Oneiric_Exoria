@@ -4,7 +4,7 @@
 #include "Entity.h"
 #include "ItemManager.h"
 
-struct PlayerData
+struct PlayerData : public Entity
 {
 	iPoint position = { 0,0 };
 	iPoint centerPoint = { 0,0 };
@@ -30,7 +30,7 @@ enum TypePartner
 	ISRRA,
 	BRENDA
 };
-struct Partner 
+struct Partner : public Entity
 {
 	iPoint position = {0,0};
 	State state = IDLE;
@@ -100,6 +100,8 @@ public:
 	int GetNumPartners() { return numPartners; };
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
+
+	bool UpdatePlayerStats(Entity* entity, TypeEntity type);
 
 	bool SaveLevel(pugi::xml_node& data)const;
 private:

@@ -81,6 +81,18 @@ bool GuiStatsMenu::Update(float dt_)
 			if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
 		}
 
+		if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		{
+			if (app->player->inventory.start != nullptr)
+			{
+				app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
+			}
+		}
+		if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		{
+			app->player->itemManager->AddItem(0);
+		}
+
 		CloseBook();
 
 		currentAnim->Update();

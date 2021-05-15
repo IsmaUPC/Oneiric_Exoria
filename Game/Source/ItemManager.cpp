@@ -1,5 +1,6 @@
 #include "ItemManager.h"
 #include "Player.h"
+#include "SceneManager.h"
 
 
 ItemManager::ItemManager()
@@ -70,31 +71,40 @@ void ItemManager::DefineItem(GameItem* item, pugi::xml_node& n)
 	item->obtention = static_cast<Obtention>(n.attribute("obtention").as_int());
 }
 
-bool ItemManager::UseItem(GameItem* id)
+bool ItemManager::UseItem(GameItem* id, Entity* entity)
 {
-
-	switch (id->type)
+	bool ret = true;
+	if (app->player->inventory.At(app->player->inventory.Find(id)) == nullptr)
 	{
-	case Type::POTION:
-		potionList.At(id->id)->data->Heal(potionList.At(id->id)->data->attribute, potionList.At(id->id)->data->value);
-		break;
-	case Type::STONE:
-		break;
-	case Type::RING:
-		break;
-	case Type::AMULET:
-		break;
-	case Type::WISH:
-		break;
-	case Type::ABSTRACT:
-		break;
-	case Type::UNKNOW:
-		break;
-	default:
-		break;
+		LOG("There is no item with that id.");
+		ret = false;
+	}
+	else
+	{
+		switch (id->type)
+		{
+		case Type::POTION:
+			potionList.At((id->id)-1)->data->Heal(potionList.At((id->id)-1)->data->attribute, potionList.At((id->id)-1)->data->value, entity);
+			//DelItem(app->player->inventory.At(app->player->inventory.Find(id))->data);
+			break;
+		case Type::STONE:
+			break;
+		case Type::RING:
+			break;
+		case Type::AMULET:
+			break;
+		case Type::WISH:
+			break;
+		case Type::ABSTRACT:
+			break;
+		case Type::UNKNOW:
+			break;
+		default:
+			break;
+		}
 	}
 
-	return true;
+	return ret;
 
 }
 
@@ -102,7 +112,7 @@ bool ItemManager::AddItem(int id)
 {
 	bool ret = true;
 	int itemCount = potionList.Count() + ringList.Count();
-	if (id < 1 || id > itemCount)
+	if (id < 0 || id > itemCount)
 	{
 		LOG("There is no item with that id.");
 		ret = false;
@@ -119,7 +129,7 @@ bool ItemManager::AddItem(int id)
 bool ItemManager::DelItem(GameItem* id)
 {
 
-	if (id == nullptr)
+	if (app->player->inventory.At(app->player->inventory.Find(id)) == nullptr)
 	{
 		LOG("Does not exist that item at inventory.");
 		return false;
@@ -133,7 +143,20 @@ bool ItemManager::DelItem(GameItem* id)
 
 }
 
-void Potion::Heal(SString att, int val)
+void Potion::Heal(SString att, int val, Entity* entity)
 {
-
+	if (att == "health")
+	{
+		entity->stats.health += val;
+		if (entity->stats.health > entity->stats.maxHealth) entity->stats.health = entity->stats.maxHealth;
+	}
+	else if (att == "mana")
+	{
+		entity->stats.mana += val;
+		if (entity->stats.mana > entity->stats.maxMana) entity->stats.mana = entity->stats.maxMana;
+	}
+	if (app->sceneManager->GetCurrentScene()->name != "sceneBattle")
+	{
+		app->player->UpdatePlayerStats(entity, entity->entityData.type);
+	}
 }

@@ -13,6 +13,10 @@ Player::Player() : Entity()
 	name.Create("player");
 	itemManager = new ItemManager();
 	itemManager->LoadItems(itemsFile, LIST_ITEMS_FILENAME);
+	entityData.type = KENZIE_;
+	partners[0].entityData.type = KEILER_;
+	partners[1].entityData.type = ISRRA_;
+	partners[2].entityData.type = BRENDA_;
 }
 
 Player::Player(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture) 
@@ -53,8 +57,14 @@ bool Player::Start()
 	
 	playerData.direction = playerData.direction;
 	lastDirection = playerData.direction;
+
 	if (!app->sceneManager->GetCurrentScene()->isContinue)
 	{
+		stats.health = 8;
+		stats.maxHealth = 8;
+		stats.mana = 11;
+		stats.maxMana = 11;
+
 		playerData.level = 1;
 		playerData.exp = 0;
 		playerData.health = 8;
@@ -155,6 +165,9 @@ void Player::LoadPartners()
 			if (i == 0) partners[i].health = 14, partners[i].mana = 10;
 			if (i == 1) partners[i].health = 10, partners[i].mana = 12;
 			if (i == 2) partners[i].health = 13, partners[i].mana = 8;
+
+			partners[i].stats.health = partners[i].health;
+			partners[i].stats.mana = partners[i].mana;
 		}
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
@@ -216,6 +229,8 @@ bool Player::LoadState(pugi::xml_node& player)
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
 		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
 		playerData.mana = player.child("data").attribute("mana").as_int(playerData.mana);
+		stats.health = playerData.health;
+		stats.mana = playerData.mana;
 		loadStats = false;
 	}
 	if (!app->sceneManager->GetLoseBattle())
@@ -328,6 +343,34 @@ bool Player::SaveState(pugi::xml_node& player) const
 
 	return true;
 }
+
+bool Player::UpdatePlayerStats(Entity* entity, TypeEntity type)
+{
+	switch (type)
+	{
+	case KENZIE_:
+		playerData.health = entity->stats.health;
+		playerData.mana = entity->stats.mana;
+		break;
+	case KEILER_:
+		partners[0].health = entity->stats.health;
+		partners[0].mana = entity->stats.mana;
+		break;
+	case ISRRA_:
+		partners[1].health = entity->stats.health;
+		partners[1].mana = entity->stats.mana;
+		break;
+	case BRENDA_:
+		partners[2].health = entity->stats.health;
+		partners[2].mana = entity->stats.mana;
+		break;
+	default:
+		break;
+	}
+
+	return false;
+}
+
 bool Player::SaveLevel(pugi::xml_node& player) const
 {
 	pugi::xml_node levelPlayer = player.child("data");

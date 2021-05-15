@@ -62,7 +62,7 @@ struct Potion : public Consumable
 
 	SString attribute = "";
 	int value;
-	void Heal(SString att, int val);
+	void Heal(SString att, int val, Entity* entity);
 
 };
 
@@ -86,7 +86,7 @@ public:
 
 	bool AddItem(int id);
 	bool DelItem(GameItem* id);
-	bool UseItem(GameItem* id);
+	bool UseItem(GameItem* id, Entity* entity);
 
 public:
 
