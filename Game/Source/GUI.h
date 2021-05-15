@@ -23,6 +23,8 @@ public:
 
 	bool PostUpdate();
 
+	void DrawPlayerStats();
+
 	void Chronometer();
 
 	bool CleanUp();
@@ -40,6 +42,7 @@ private:
 
 	bool inCheckPoint = false;
 
+	SDL_Rect playerLivesBar;
 	SDL_Texture* playerUi = nullptr;
 	char textLive[8] = { "\0" };
 

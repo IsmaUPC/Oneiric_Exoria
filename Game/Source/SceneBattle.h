@@ -72,7 +72,6 @@ public:
 	void DrawTurnBar();
 
 	void DrawSceneWin();
-	void GenerateItems();
 	void DrawSceneLose();
 	void DrawBarExperience();
 
@@ -155,9 +154,6 @@ private:
 	Magic* magicInUse = nullptr;
 	bool activeMenuMagic =false;
 
-	int itemsId[2] = {0,0};
-	int itemMulti = 1;
-
 	int turn = 0;
 	int tam = 0;
 	int numArrows = 0;
@@ -167,7 +163,6 @@ private:
 	char textLoose[28] = { "YOU LOOSE" };
 	char textLive[8] = { "\0" };
 	char textLevel[7] = { "\0" };
-	char textItems[24] = { "\0" };
 	char textExperience[14] = { "\0" };
 
 	int faseAction = 0;
