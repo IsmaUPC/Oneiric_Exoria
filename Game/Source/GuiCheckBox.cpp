@@ -48,7 +48,7 @@ bool GuiCheckBox::Update(float dt)
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			if (!mouseIn)app->audio->PlayFx(app->guiManager->fxBtnSelected), mouseIn = true;
+			if (!mouseIn)app->audio->PlayFx(app->guiManager->btnSelected), mouseIn = true;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				state = GuiControlState::PRESSED;
@@ -57,7 +57,7 @@ bool GuiCheckBox::Update(float dt)
 			// If mouse button pressed -> Generate event!
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
-				app->audio->PlayFx(app->guiManager->fxBtnPressed);
+				app->audio->PlayFx(app->guiManager->btnPressed);
 				checked = !checked;
 				state = GuiControlState::NORMAL;
 				ret = NotifyObserver();

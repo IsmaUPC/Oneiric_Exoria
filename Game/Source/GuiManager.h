@@ -79,12 +79,12 @@ public:
 	float updateMsCycle = 0.0f;
 	bool doLogic = false;
 
-	uint fxBtnSelected = 0;
-	uint fxBtnPressed = 0;
-	uint fxBtnDisabled = 0;
-	uint fxBtnSlider = 0;
-	uint fxBookClose = 0;
-	uint fxChangePage = 0;
+	uint btnSelected = 0;
+	uint btnPressed = 0;
+	uint btnDisabled = 0;
+	uint btnSlider = 0;
+	uint bookClose = 0;
+	uint changePage = 0;
 
 	SDL_Texture* btnTextureAtlas = nullptr;
 	SDL_Texture* moonCorner = nullptr;

@@ -39,7 +39,7 @@ private:
 	Animation* liveAnimation = new Animation();
 	Animation* particleAnimation = new Animation();
 
-	uint fxLive = 0;
+	uint liveFx = 0;
 
 	SDL_Texture* texLive = nullptr;
 

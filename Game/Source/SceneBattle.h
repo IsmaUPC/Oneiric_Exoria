@@ -135,19 +135,19 @@ private:
 	List<Entity*> partners;
 	Entity* turnSort = nullptr;
 
-	uint fxWin = -1;
-	uint fxLose = -1;
-	uint fxAttack = -1;
-	uint fxDefense = -1;
-	uint fxExit = -1;
-	uint fxFireball = -1;
-	uint fxShadow = -1;
-	uint fxHealing = -1;
-	uint fxBanditDies = -1;
-	uint fxFighterDies = -1;
-	uint fxSaplingDies = -1;
-	uint fxAllyDies = -1;
-	uint fxCancelButton = -1;
+	uint winFx = -1;
+	uint loseFx = -1;
+	uint attackFx = -1;
+	uint defenseFx = -1;
+	uint exitFx = -1;
+	uint fireballFx = -1;
+	uint shadowFx = -1;
+	uint healingFx = -1;
+	uint banditDiesFx = -1;
+	uint fighterDiesFx = -1;
+	uint saplingDiesFx = -1;
+	uint allyDiesFx = -1;
+	uint cancelButton = -1;
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;

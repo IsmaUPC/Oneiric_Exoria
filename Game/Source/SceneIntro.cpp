@@ -85,12 +85,12 @@ bool SceneIntro::Start()
 	oneiric = app->tex->Load("Assets/Textures/oneiric_title.png");
 	exoria = app->tex->Load("Assets/Textures/exoria_title.png");
 
-	fxStart = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
-	fxExit = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
-	fxTittle = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
-	fxFlash = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
+	startFx = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
+	exitFx = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
+	tittleFx = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
+	flashFx = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
 
-	app->audio->PlayFx(fxTittle);
+	app->audio->PlayFx(tittleFx);
 
 	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
 	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
@@ -154,7 +154,7 @@ bool SceneIntro::Update(float dt)
 	}
 	else
 	{
-		if (logoAlpha == 0) app->audio->PlayFx(fxFlash);
+		if (logoAlpha == 0) app->audio->PlayFx(flashFx);
 		if (state == 0) state = 1;
 		if (state == 1)
 		{
@@ -280,10 +280,10 @@ bool SceneIntro::CleanUp()
 	app->tex->UnLoad(oneiric);
 	app->tex->UnLoad(exoria);
 
-	app->audio->Unload1Fx(fxStart);
-	app->audio->Unload1Fx(fxExit);
-	app->audio->Unload1Fx(fxTittle);
-	app->audio->Unload1Fx(fxFlash);
+	app->audio->Unload1Fx(startFx);
+	app->audio->Unload1Fx(exitFx);
+	app->audio->Unload1Fx(tittleFx);
+	app->audio->Unload1Fx(flashFx);
 
 	app->guiManager->DeleteList();
 
@@ -309,7 +309,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		
 		if (control->id == 1)
 		{
-			app->audio->PlayFx(fxStart);
+			app->audio->PlayFx(startFx);
 			app->removeGame = false;
 			TransitionToScene(SceneType::LEVEL1);
 			app->sceneManager->lastLevel = 1;
@@ -345,7 +345,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		else if (control->id == 4)
 		{
 			//TransitionToScene(SceneType::LOGO);
-			app->audio->PlayFx(fxExit);
+			app->audio->PlayFx(exitFx);
 			return false;
 		}
 		else if (control->id == 5)

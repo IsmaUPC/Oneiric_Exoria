@@ -40,7 +40,7 @@ private:
 	SDL_Texture* license = nullptr;
 	SDL_Texture* names = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	uint fxIntro = -1;
+	uint introFx = -1;
 
 	SDL_Color color;		// Tint color
 

@@ -31,12 +31,12 @@ bool GuiManager::Awake(pugi::xml_node&)
 
 bool GuiManager::Start()
 {
-	fxBtnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_travel.wav");
-	fxBtnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_click.wav");
-	fxBtnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
-	fxBtnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
-	fxBookClose = app->audio->LoadFx("Assets/Audio/Fx/close_book.wav");
-	fxChangePage = app->audio->LoadFx("Assets/Audio/Fx/page1.wav");
+	btnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_travel.wav");
+	btnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_click.wav");
+	btnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
+	btnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	bookClose = app->audio->LoadFx("Assets/Audio/Fx/close_book.wav");
+	changePage = app->audio->LoadFx("Assets/Audio/Fx/page1.wav");
 
 	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
@@ -188,12 +188,12 @@ bool GuiManager::CleanUp()
 	app->tex->UnLoad(bookMenu);
 	DeleteList();
 
-	app->audio->Unload1Fx(fxBtnSelected);
-	app->audio->Unload1Fx(fxBtnPressed);
-	app->audio->Unload1Fx(fxBtnDisabled);
-	app->audio->Unload1Fx(fxBtnSlider);
-	app->audio->Unload1Fx(fxBookClose);
-	app->audio->Unload1Fx(fxChangePage);
+	app->audio->Unload1Fx(btnSelected);
+	app->audio->Unload1Fx(btnPressed);
+	app->audio->Unload1Fx(btnDisabled);
+	app->audio->Unload1Fx(btnSlider);
+	app->audio->Unload1Fx(bookClose);
+	app->audio->Unload1Fx(changePage);
 
 	delete stats;
 	stats = nullptr;
@@ -399,7 +399,7 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 
 	if (controls.At(i)->data->state == GuiControlState::DISABLED && controls.At(i)->data->active)
 		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-			app->audio->PlayFx(fxBtnDisabled);
+			app->audio->PlayFx(btnDisabled);
 }
 
 void GuiManager::CreatMenuPause(SceneControl* current)

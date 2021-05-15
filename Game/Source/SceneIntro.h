@@ -78,10 +78,10 @@ private:
 	GuiButton* btnExit = nullptr;
 
 	GuiSettings* menuSettings = nullptr;
-	uint fxStart = -1;
-	uint fxExit = -1;
-	uint fxTittle = -1;
-	uint fxFlash = -1;
+	uint startFx = -1;
+	uint exitFx = -1;
+	uint tittleFx = -1;
+	uint flashFx = -1;
 
 	//Easings title
 	float currentIteration;

@@ -17,7 +17,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue(DIALOGUE_TREE_FILENAME);
-	fxDialog = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
+	dialogFx = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 
 	return true;
 }
@@ -53,7 +53,7 @@ bool DialogueSystem::CleanUp()
 		delete dialogueTrees[i];
 	}
 	dialogueTrees.clear();
-	app->audio->Unload1Fx(fxDialog);
+	app->audio->Unload1Fx(dialogFx);
 
 	return true;
 }
@@ -87,7 +87,7 @@ void DialogueSystem::DrawDialogue()
 	{
 		if (actualLetter == 0)
 		{
-			app->audio->PlayFx(fxDialog, 1);
+			app->audio->PlayFx(dialogFx);
 		}
 		totalLetters = strlen(NPCdialogue);
 
@@ -104,7 +104,7 @@ void DialogueSystem::DrawDialogue()
 	{
 		if (actualLetter == 0)
 		{
-			app->audio->PlayFx(fxDialog);
+			app->audio->PlayFx(dialogFx);
 		}
 		totalLetters = strlen(NPCdialogue);
 
@@ -120,7 +120,8 @@ void DialogueSystem::DrawDialogue()
 
 	if (actualLetter >= totalLetters - 1)
 	{
-		app->audio->StopFx(1);
+		app->audio->Unload1Fx(dialogFx);
+		app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
 	}
 }
 

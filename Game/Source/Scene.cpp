@@ -79,7 +79,7 @@ bool Scene::Start()
 	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
 	
 
-	// Load music and Fx
+	// Load music
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
 	// Dialog System buttons

@@ -64,6 +64,10 @@ public:
 	iPoint mapDimensions = { 0,0 };
 	int score = 0;
 
+	uint chickenFx = 0;
+	uint batFx = 0;
+	uint liveFx = 0;
+
 	// Animations
 	List<Animation*> animations;
 	// Animation exclamation when enemy detected you, with Pokemon
