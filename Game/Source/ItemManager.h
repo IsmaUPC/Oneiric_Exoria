@@ -1,7 +1,6 @@
 #ifndef _ITEMS_H_
 #define _ITEMS_H_
 
-#include "Point.h"
 #include "Log.h"
 #include "SString.h"
 #include "App.h"

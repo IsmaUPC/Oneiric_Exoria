@@ -35,7 +35,7 @@ bool SceneLogo::Start()
 	cracks = app->tex->Load("Assets/Textures/cracks_logo.png");
 	names = app->tex->Load("Assets/Textures/names.png");
 	license = app->tex->Load("Assets/Textures/mit_license_logo.png");
-	introFx = app->audio->LoadFx("Assets/Audio/Fx/logo.wav");
+	fxIntro = app->audio->LoadFx("Assets/Audio/Fx/logo.wav");
 
 
 	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);
@@ -103,7 +103,7 @@ bool SceneLogo::Update(float dt)
 	else if (!cracksOn)
 	{
 		cracksOn = true;
-		app->audio->PlayFx(introFx);
+		app->audio->PlayFx(fxIntro);
 	}
 
 	return true;
@@ -142,7 +142,7 @@ bool SceneLogo::CleanUp()
 	app->tex->UnLoad(license);
 	app->tex->UnLoad(logo);
 	app->tex->UnLoad(names);
-	app->audio->Unload1Fx(introFx);
+	app->audio->Unload1Fx(fxIntro);
 
 	logo = nullptr;
 	cracks = nullptr;

@@ -3,7 +3,6 @@
 
 #include "SceneControl.h"
 #include "Animation.h"
-#include "Point.h"
 #include "GuiManager.h"
 
 #include "PugiXml\src\pugixml.hpp"

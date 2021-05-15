@@ -66,7 +66,7 @@ bool SceneManager::Start()
 	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
 	runicFont = app->fonts->Load("Assets/Fonts/runic_font.ttf", 15);
 
-	transitionFx = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
+	fxTransition = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 
 	texPlayers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
 
@@ -178,7 +178,7 @@ bool SceneManager::Update(float dt)
 		case SceneType::LEVEL3: next = new SceneLevel3(); break;
 		case SceneType::WIN: next = new SceneWin(); break;
 		case SceneType::LOSE: next = new SceneLose(); break;
-		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(transitionFx); break;
+		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(fxTransition); break;
 		default: break;
 		}
 
@@ -264,7 +264,7 @@ bool SceneManager::CleanUp()
 	app->fonts->UnLoad(2);
 	app->fonts->UnLoad(3);
 	app->tex->UnLoad(texPlayers);
-	app->audio->Unload1Fx(transitionFx);
+	app->audio->Unload1Fx(fxTransition);
 
 	input = nullptr;
 	render = nullptr;

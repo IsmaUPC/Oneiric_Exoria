@@ -250,11 +250,15 @@ int Audio::SetChannel()
 
 // Assign the distance and direction to which the entity of the listener is located 
 // 0 = very close, 254 = far away, 255 = out of range (Volume = 0)
-void Audio::SetDistanceFx(int channel, int angle, uint distance, uint maxDistance)
+bool Audio::SetDistanceFx(int channel, int angle, uint distance, uint maxDistance)
 {
+	bool ret = false;
+	if (distance < maxDistance) ret = true;
 	distance = distance * 255 / maxDistance;
 	if (distance > 255) distance = 255;
 	Mix_SetPosition(channel, angle, distance);
+
+	return ret;
 }
 
 // Activate the boolean variable 

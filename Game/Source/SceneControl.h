@@ -22,6 +22,16 @@ enum class SceneType
 	LEVEL3 =7,
 };
 
+class Fx
+{
+public:
+	uint fxName = 0;
+	int channel = -1;
+	iPoint position = { 0,0 };
+	int maxDistance = 0;
+};
+
+
 class SceneControl
 {
 public:
@@ -74,7 +84,24 @@ public:
 	{
 		return true;
 	}
+	// Distance Fx
+	int DistanceToListener(iPoint player, iPoint channel)
+	{
+		iPoint pos;
+		pos.x = player.x - channel.x;
+		pos.y = player.y - channel.y;
 
+		return sqrt(pow(pos.x, 2) + pow(pos.y, 2));
+	}
+	// Angle Fx
+	int AngleToListener(iPoint player, iPoint channel)
+	{
+		iPoint pos;
+		pos.x = player.x - channel.x;
+		pos.y = player.y - channel.y;
+
+		return atan2(pos.y, pos.x);
+	}
 public:
 
 	bool active = true;
@@ -90,6 +117,10 @@ public:
 	SceneType nextScene;
 	int lastLevel = 0;
 	bool isContinue = false;
+
+	//Fx list
+	Fx fxList[10];
+	int fxCount = 0;
 };
 
 #endif // __SCENECONTROL_H__

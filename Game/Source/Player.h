@@ -136,7 +136,7 @@ public:
 	bool loadStats = false;
 	fPoint lerpCamera = { 0,0 };
 
-	uint stairsFx = -1;
+	uint fxStairs = -1;
 
 private:
 	
@@ -151,7 +151,7 @@ private:
 	bool playerCollision = true;
 	int diagonal = 0;
 	
-	uint bookOpenFx = -1;
+	uint fxBookOpen = -1;
 
 	Animation* idleAnimR = nullptr;
 	Animation* idleAnimL = nullptr;
@@ -168,9 +168,6 @@ private:
 	pugi::xml_document playerFile;
 	SString folder;
 	iPoint tmp = {0,0};
-
-	uint bonfireFx = 0;
-	uint damageFx = 0;
 
 	// CheckPoint's vars
 	bool inCheckPoint = false;

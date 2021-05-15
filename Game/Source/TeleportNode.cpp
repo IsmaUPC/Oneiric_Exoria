@@ -1,7 +1,5 @@
 #include "TeleportNode.h"
 
-
-
 TeleportNode::TeleportNode(iPoint pos, int idFloor, int nextIdFloor, TpNodesTypes typeTpNode)
 {
 	position = pos;

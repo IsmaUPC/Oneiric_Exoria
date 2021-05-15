@@ -45,6 +45,14 @@ bool SceneLevel2::Start()
 	
 	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 
+	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/arcade_machine.wav");
+	fxList[1].fxName = app->audio->LoadFx("Assets/Audio/Fx/coffe_machine.wav");
+	fxList[2].fxName = fxList[1].fxName;
+	fxList[3].fxName = app->audio->LoadFx("Assets/Audio/Fx/tv.wav");
+	fxList[4].fxName = app->audio->LoadFx("Assets/Audio/Fx/washing_machine.wav");
+
+	fxCount = 5;
+
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
@@ -65,7 +73,6 @@ bool SceneLevel2::Start()
 	app->player->Init();
 	app->player->Start();
 
-
 	// Return size image
 	//SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 
@@ -73,6 +80,38 @@ bool SceneLevel2::Start()
 	app->entityManager->AddEntity(NPC, 23, 21, 4, 0, false);
 	app->entityManager->AddEntity(NPC, 11, 38, 5, 0, false);
 	app->entityManager->AddEntity(NPC, 12, 34, 6, 0, false);
+
+	// Interactive objects
+	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false); // Arcade 
+	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false); // Tv
+	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false); // Book
+	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false); // Coffe
+	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false); // Water
+
+	// Position Items
+	fxList[0].position = {24,19};
+	fxList[0].position = app->map->MapToWorld(fxList[0].position);
+	fxList[1].position = {46,22};
+	fxList[1].position = app->map->MapToWorld(fxList[1].position);
+	fxList[2].position = {11,22};
+	fxList[2].position = app->map->MapToWorld(fxList[2].position);
+	fxList[3].position = {33,18};
+	fxList[3].position = app->map->MapToWorld(fxList[3].position);
+	fxList[4].position = { 8,7 };
+	fxList[4].position = app->map->MapToWorld(fxList[4].position);
+
+	// Items Channel
+	for (int i = 0; i < fxCount; i++)
+	{
+		fxList[i].channel = app->audio->SetChannel();
+	}
+
+	// Set Max Distance
+	fxList[0].maxDistance = 96;
+	fxList[1].maxDistance = 32;
+	fxList[2].maxDistance = 128;
+	fxList[3].maxDistance = 128;
+	fxList[4].maxDistance = 160;
 
 	//Interactive objects
 	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false);
@@ -133,6 +172,14 @@ bool SceneLevel2::Update(float dt)
 	}
 
 	UpdateDialog();
+
+	for (int i = 0; i < fxCount; i++)
+	{
+		if (app->audio->SetDistanceFx(fxList[i].channel, AngleToListener(app->player->playerData.position, fxList[i].position) + 90,
+			DistanceToListener(app->player->playerData.position, fxList[i].position), fxList[i].maxDistance))
+			app->audio->PlayFx(fxList[i].fxName, fxList[i].channel);
+		else app->audio->StopFx(fxList[i].channel);
+	}
 
 	return true;
 }
@@ -256,35 +303,25 @@ bool SceneLevel2::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 40 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
-			app->dialogueSystem->missClick = true;
 			btn1->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
-			btn1->active = false;
-			btn2->active = false;
-			btn3->active = false;
 		}
 		//Option 2
 		else if (control->id == 41 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
-			app->dialogueSystem->missClick = true;
 			btn2->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
-			btn1->active = false;
-			btn2->active = false;
-			btn3->active = false;
 		}
 		//Option 3
 		else if (control->id == 42 && !app->dialogueSystem->missClick)
 		{
 			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
-			app->dialogueSystem->missClick = true;
 			btn3->state = GuiControlState::NORMAL;
-			app->dialogueSystem->actualLetter = 0;
-			btn1->active = false;
-			btn2->active = false;
-			btn3->active = false;
 		}
+		app->dialogueSystem->missClick = true;
+		app->dialogueSystem->actualLetter = 0;
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
 	}
 	default: break;
 	}
