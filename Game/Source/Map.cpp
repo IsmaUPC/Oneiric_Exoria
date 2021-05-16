@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "SceneLevel2.h"
+#include "SceneDungeon.h"
 #include "Map.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
@@ -268,7 +269,6 @@ void Map::Draw()
 	int tileId;
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
-		// TODO isma move to load up_draw function
 		if (!(layer->data->properties.GetProperty("up_draw", 0) == 1)|| layer->data->properties.GetProperty("Nodraw", 0) == 1)
 		for (int y = 0; y < data.height; ++y)
 			for (int x = 0; x < data.width; ++x)
@@ -730,6 +730,53 @@ void Map::LoadCollectable()
 		}
 	}
 }
+
+bool Map::LoadObstaclesDungeon()
+{
+	app->entityManager->boxes.Clear();
+	app->entityManager->holes.Clear();
+
+
+	iPoint auxPos = { 0, 0 };
+
+	if (!data.layers.start) return false;
+	int height = data.height;
+	int width = data.width;
+	int tileId;
+	uint obstacle;
+	uint firstgidLayerCollisions;
+	MapLayer* layer = data.layers.At(7)->data;
+
+
+
+	for (int y = 0; y < height; ++y)
+		for (int x = 0; x < width; ++x)
+		{
+			auxPos.x = x;
+			auxPos.y = y;
+
+			obstacle = layer->Get(x, y);
+			firstgidLayerCollisions = data.tilesets.At(0)->data->firstgid;
+			obstacle -= firstgidLayerCollisions;
+
+			switch (obstacle)
+			{
+			case TypeCollision::BOX:
+				//TypeEntity pType, int pX, int pY, int id, int level, bool move_, State state
+				app->entityManager->AddEntity(TypeEntity::BOX_ENTITY, MapToWorld(auxPos));
+				break;
+
+			case TypeCollision::HOLE:
+				app->entityManager->AddEntity(TypeEntity::HOLE_ENTITY, MapToWorld(auxPos));
+				break;
+
+			default:
+				break;
+			}
+		}
+	return true;
+}
+
 
 bool Map::LoadTpNodes()
 {

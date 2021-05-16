@@ -33,7 +33,9 @@ enum TypeEntity {
 	KENZIE_ = 15,
 	KEILER_ = 16,
 	ISRRA_ = 17,
-	BRENDA_ = 18
+	BRENDA_ = 18,
+	BOX_ENTITY,
+	HOLE_ENTITY,
 };
 
 
@@ -59,13 +61,15 @@ enum MoveDirection {
 };
 enum TypeCollision {
 
-	VICTORY=1,
-	COLLISION= 0, // Change to id tile of collision
+	VICTORY = 1,
+	COLLISION = 0, // Change to id tile of collision
 	DOWN_LADDER = 2,
 	UP_LADDER = 3,
 	DOWN_HALL = 4,
 	UP_HALL = 5,
-	CHECK_POINT=7,
+	HOLE = 6,
+	BOX = 7,
+	CHECK_POINT = 8, 
 	AIR,
 };
 struct Stats

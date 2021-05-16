@@ -7,6 +7,8 @@
 #include "Enemy.h"
 #include "Coins.h"
 #include "Lives.h"
+#include "ObstacleObjects.h"
+
 
 
 class EntityManager : public Module
@@ -40,6 +42,7 @@ public:
 	bool SaveState(pugi::xml_node&) const;
 
 	bool AddEntity(TypeEntity pType, int pX, int pY, int id, int level = 0, bool move = true, State state = IDLE);
+	bool AddEntity(TypeEntity pType, iPoint pos);
 
 	Entity* FindNPC(int id);
 
@@ -70,10 +73,16 @@ public:
 	List<Animation*> animations;
 	// Animation exclamation when enemy detected you, with Pokemon
 	//Animation* isDetectedAnim = new Animation();
+		
+	//Dungeon Objects
+	ObstacleObjects* auxObstacle= nullptr;
+	List<ObstacleObjects*> boxes;
+	List<ObstacleObjects*> holes;
 
 private:
 	// Textures
 	SDL_Texture* texEnemies = nullptr;
+	SDL_Texture* texObstacles = nullptr;
 	Enemy* current = nullptr;
 };
 

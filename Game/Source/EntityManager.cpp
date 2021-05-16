@@ -30,6 +30,7 @@ bool EntityManager::Start()
 
 	// Load Textures
 	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");
+	texObstacles = app->tex->Load("Assets/Textures/Objects/objects.png");
 
 	// Animations
 	int numEnemies = 3;
@@ -79,8 +80,8 @@ bool EntityManager::PostUpdate()
 {
 	if ((!app->sceneManager->GetWinBattle() && app->sceneManager->GetTransitionToBattleFinish() && partners.start != NULL) || partners.start == NULL)
 	{
-		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
-			entiti->data->PostUpdate();
+		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next)		
+			entity->data->PostUpdate();
 		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
 			partner->data->PostUpdate();
 	}
@@ -175,6 +176,14 @@ void EntityManager::CheckDespawnEntities()
 		}
 	}
 }
+bool EntityManager::AddEntity(TypeEntity pType, iPoint pos)
+{
+	Entity* ent = new Entity;
+	ent->entityData.type = pType;
+	ent->entityData.position =fPoint(pos.x,pos.y);
+	spawnQueue.Add(ent);
+	return true;
+}
 
 bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int level, bool move_, State state)
 {
@@ -265,6 +274,20 @@ void EntityManager::SpawnEntity(Entity* info)
 
 	case NPC:
 		entities.Add(new Enemy(info));
+		entities.end->data->Start();
+		break;
+
+	case TypeEntity::BOX_ENTITY:
+		auxObstacle = new ObstacleObjects(info, texObstacles);
+		entities.Add(auxObstacle);
+		boxes.Add(auxObstacle);
+		entities.end->data->Start();
+		break;
+
+	case TypeEntity::HOLE_ENTITY:
+		auxObstacle = new ObstacleObjects(info, texObstacles);
+		entities.Add(auxObstacle);
+		holes.Add(auxObstacle);
 		entities.end->data->Start();
 		break;
 	}

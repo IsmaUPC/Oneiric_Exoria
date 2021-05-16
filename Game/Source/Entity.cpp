@@ -141,6 +141,11 @@ int Entity::CheckCollision(iPoint positionMap)
 			return CHECK_POINT;
 			break;
 
+		case HOLE:
+		case BOX:
+			//return COLLISION;
+			break;
+
 		default:
 			return -1;
 			break;

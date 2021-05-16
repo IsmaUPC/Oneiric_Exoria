@@ -40,7 +40,8 @@
 	<character ID = "17">
 		<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
 		<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
-	</character>
+    <magic level = "1" type = "2" name="Restoration" damage="4" mana ="5" description ="Hechizo de curacion en area" element = "2"/>
+  </character>
 	
 	<!-- Benda -->
 	<character ID = "18">

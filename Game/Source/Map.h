@@ -206,6 +206,7 @@ public:
 		drawColl2 = !drawColl2;
 	};
 	bool GetDraw() { return drawColl; };
+	bool LoadObstaclesDungeon();
 private:
 
 	// Methods to load all required map data
@@ -268,6 +269,9 @@ private:
 
 	iPoint vec = { 0,0 };
 	int idFloor = 0;
+
+
+
 };
 
 #endif // __MAP_H__

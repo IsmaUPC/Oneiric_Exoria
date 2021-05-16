@@ -865,7 +865,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="9" name="down_objects" width="11" height="25">
+ <layer id="9" name="down_objects" width="11" height="25" visible="0">
   <data>
    <tile/>
    <tile/>
@@ -1044,8 +1044,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="5851"/>
-   <tile gid="5852"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1055,8 +1053,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="5867"/>
-   <tile gid="5868"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="6000"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1066,8 +1066,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="5883"/>
-   <tile gid="5884"/>
+   <tile/>
+   <tile gid="6016"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1990,7 +1990,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="collisions" width="11" height="25">
+ <layer id="2" name="collisions" width="11" height="25" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="1"/>
   </properties>

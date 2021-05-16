@@ -46,13 +46,16 @@ bool SceneDungeon::Start()
 	//app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
 	app->player->positionInitial = new iPoint(200, 500);
 
-	// TODO dangeon
+	// TODO dungoen
 	tmxDungeon = app->sceneManager->tmxDungeonsList.At(app->sceneManager->levelDungeon)->data.GetString();
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
 	app->player->win = false;
 	LoadDungeon(tmxDungeon);
+
+	app->map->LoadObstaclesDungeon();
+
 	app->map->active = true;
 	// Positions initials
 	//app->player->positionInitial = new iPoint(930,730);
