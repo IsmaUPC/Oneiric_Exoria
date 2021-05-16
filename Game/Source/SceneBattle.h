@@ -97,7 +97,8 @@ public:
 
 private:
 
-	void HealTeam();
+	void HealArea();
+	void AttackArea();
 
 	void UseAMagic();
 

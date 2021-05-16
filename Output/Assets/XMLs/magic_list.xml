@@ -2,35 +2,49 @@
 
 <magics>
 
-	<!-- type 0 = attack / 1 = heal / 2 = healTeam -->
+	<!-- type 0 = Attack / 1 = Heal / 2 = HealTeam / 3 = AttackArea-->
+	<!-- 
+	-Magic List
+	
+		-Attack-
+	<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
+	<magic level = "1" type = "0" name="Super Fire" damage="40" mana ="18" description ="Una bola de fuego muy grande" element = "1"/>
+	<magic level = "1" type = "0" name="Shadow" damage="20" mana ="10" description ="Invoca una sombra que ataca" element = "3"/>	
+		
+		-Heal-
+	<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		
+		-HealTeam-
+	<magic level = "1" type = "2" name="Restoration" damage="4" mana ="5" description ="Hechizo de curacion en area" element = "2"/>
+	
+		-AttackArea-
+	<magic level = "1" type = "3" name="Dead Area" damage="7" mana ="10" description ="Crea una zona de sufrimiento" element = "3"/>
+	-->
 	
 	<!-- Kenzie -->
 	<character ID= "15">
 		<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
 		<magic level = "1" type = "0" name="Super Fire" damage="40" mana ="18" description ="Una bola de fuego muy grande" element = "1"/>
-		<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
-		<magic level = "1" type = "2" name="Healing Team" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
 	</character>
 	
 	<!-- Keiler -->
 	<character ID= "16">
 		<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
 		<magic level = "1" type = "0" name="Shadow" damage="20" mana ="10" description ="Invoca una sombra que ataca" element = "3"/>		
-		<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
-		<magic level = "1" type = "2" name="Healing Team" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		<magic level = "1" type = "3" name="Dead Area" damage="7" mana ="5" description ="Crea una zona de sufrimiento" element = "3"/>
 	</character>
 	
 	<!-- Isrra -->
 	<character ID = "17">
-		<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
 		<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
-		<magic level = "1" type = "2" name="Healing Team" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
 	</character>
 	
 	<!-- Benda -->
 	<character ID = "18">
-		<magic level = "1" type = "1" name="Healing" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
+		<magic level = "1" type = "1" name="Healing" damage="7" mana ="5" description ="Hechizo de curacion" element = "2"/>
 		<magic level = "1" type = "0" name="Fire Ball" damage="10" mana ="5" description ="Una bola de fuego" element = "1"/>
-		<magic level = "1" type = "2" name="Healing Team" damage="5" mana ="5" description ="Hechizo de curacion" element = "2"/>
   </character>
 </magics>

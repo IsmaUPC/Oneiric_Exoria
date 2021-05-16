@@ -824,7 +824,6 @@ void SceneBattle::IconEnemySelected()
 		}
 		else if (magicInUse->type == 2)
 		{
-			// PUTA
 			for (int i = 0; i < partners.Count(); i++) {
 				posCursorX = (int)partners.At(i)->data->entityData.position.x - 10;
 				posCursorY = (int)partners.At(i)->data->entityData.position.y - 70;
@@ -836,7 +835,21 @@ void SceneBattle::IconEnemySelected()
 				app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
 			}
 		}
+		else if (magicInUse->type == 3)
+		{
+		for (int i = 0; i < enemies.Count(); i++) {
+			posCursorX = (int)enemies.At(i)->data->entityData.position.x + 50;
+			posCursorY = (int)enemies.At(i)->data->entityData.position.y - 70;
+
+			posSelectX = (int)enemies.At(i)->data->entityData.position.x + 13;
+			posSelectY = (int)enemies.At(i)->data->entityData.position.y + 15;
+
+			app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
+			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
+		}
+		}
 		// PUTA otro if para las magias de area, solo habria que marcar a todos sin mas, facil
+
 		//app->render->DrawRectangle({ posCursorX, posCursorY ,20,20 }, red.r, red.g, red.b, 255);
 
 	}
@@ -963,6 +976,19 @@ void SceneBattle::BattleSystem()
 				}
 			}
 		}
+		else if (magicInUse->type == 3) {
+			int mouseX, mouseY;
+			app->input->GetMousePosition(mouseX, mouseY);
+			bool click;
+			for (int i = 0; i < enemies.Count(); i++) {
+				if ((mouseX > (enemies.At(i)->data->entityData.position.x) && (mouseX < (enemies.At(i)->data->entityData.position.x + 60)) &&
+					(mouseY > (enemies.At(i)->data->entityData.position.y)) && (mouseY < (enemies.At(i)->data->entityData.position.y + 90)))) {
+					if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT) {
+						faseAction = DO_ACITON;
+					}
+				}
+			}
+		}
 
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a && !missClick)) {
 			faseAction = DO_ACITON;
@@ -995,6 +1021,12 @@ void SceneBattle::BattleSystem()
 					for (int i = 0; i < partners.Count(); i++)
 					{
 						newHealthTeam[i] = partners.At(i)->data->stats.health + magicInUse->damage;
+					}
+					break;
+				case 3:
+					for (int i = 0; i < enemies.Count(); i++)
+					{
+						newHealthTeam[i] = enemies.At(i)->data->stats.health - magicInUse->damage;
 					}
 					break;
 				default:
@@ -1202,8 +1234,12 @@ void SceneBattle::BattleSystem()
 					}
 				}
 					break;
-				case 2: // PUTA 
-					HealTeam();
+				case 2:
+					HealArea();
+					break;
+				case 3:
+					AttackArea();
+					break;
 				default:
 					break;
 				}
@@ -1410,7 +1446,96 @@ void SceneBattle::BattleSystem()
 	}
 }
 
-void SceneBattle::HealTeam()
+void SceneBattle::AttackArea()
+{
+	int fullAttack = 0;
+
+	for (int i = 0; i < enemies.Count(); i++) {
+
+		if (newHealthTeam[i] <= 0)newHealthTeam[i] = 0;
+		//Progres damage
+		if (enemies.At(i)->data->stats.health > newHealthTeam[i]) {
+			TypeEntity eType = enemies.At(i)->data->entityData.type;
+			if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+			{
+				switch (eType)
+				{
+				case BANDIT:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(1)->data;
+					break;
+				case FIGHTER:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(4)->data;
+					break;
+				case SAPLING:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(7)->data;
+					break;
+				default:
+					break;
+				}
+			}
+			enemies.At(i)->data->stats.health -= dt * reduceLieveVelocity;
+		}
+		else {
+			TypeEntity eType = enemies.At(i)->data->entityData.type;
+			if (eType == BANDIT || eType == FIGHTER || eType == SAPLING)
+			{
+				switch (eType)
+				{
+				case BANDIT:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(0)->data;
+					break;
+				case FIGHTER:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(3)->data;
+					break;
+				case SAPLING:
+					enemies.At(i)->data->entityData.currentAnimation = animationsEnemies.At(6)->data;
+					break;
+				default:
+					break;
+				}
+			}
+			enemies.At(i)->data->stats.health = newHealthTeam[i];
+			if (enemies.At(i)->data->stats.health < 1)
+			{
+				enemies.At(i)->data->stats.health = 0;
+				enemies.At(i)->data->entityData.state = DEAD;
+
+				switch (enemies.At(i)->data->entityData.type)
+				{
+				case BANDIT:
+					app->audio->PlayFx(fxBanditDies);
+					break;
+				case FIGHTER:
+					app->audio->PlayFx(fxFighterDies);
+					break;
+				case SAPLING:
+					app->audio->PlayFx(fxSaplingDies);
+					break;
+				default:
+					break;
+				}
+				assigneDone = false;
+
+				for (int i = 0; i < enemies.Count(); i++) {
+					if (turnSort[i].entityData.positionInitial == enemies.At(i)->data->entityData.positionInitial)
+					{
+						indexTurnBar = i;
+						break;
+					}
+				}
+			}
+			fullAttack++;
+		}
+	}
+	if (fullAttack == enemies.Count()) {
+
+		hit = false;
+		magicInUse = nullptr;
+		faseAction = END_ACTION;
+	}
+}
+
+void SceneBattle::HealArea()
 {
 	int fullHeal = 0;
 
