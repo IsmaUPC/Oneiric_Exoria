@@ -79,11 +79,14 @@ public:
 	List<ObstacleObjects*> boxes;
 	List<ObstacleObjects*> holes;
 
+	Entity* entityHUD = nullptr;
+
 private:
 	// Textures
 	SDL_Texture* texEnemies = nullptr;
 	SDL_Texture* texObstacles = nullptr;
 	Enemy* current = nullptr;
+
 };
 
 #endif // __ENTITY_MANAGER_H__

@@ -268,8 +268,10 @@ void EntityManager::SpawnEntity(Entity* info)
 		break;
 
 	case HUD:
-		entities.Add(new GUI(info, texEnemies));
-		entities.end->data->Start();
+		//entities.Add(new GUI(info, texEnemies));
+		entityHUD = new GUI(info, texEnemies);
+		entityHUD->Start();
+		//entities.end->data->Start();
 		break;
 
 	case NPC:
