@@ -3,6 +3,7 @@
 
 #include "GuiMenuPause.h"
 #include "GuiSettings.h"
+#include "EntityManager.h"
 
 #include "Textures.h"
 
@@ -113,6 +114,8 @@ bool GuiManager::Start()
 
 bool GuiManager::Update(float dt_)
 {
+	if(app->entityManager->entityHUD != nullptr) app->entityManager->entityHUD->Update(dt_);
+
 	bool ret = true;
 	accumulatedTime += dt_;
 	dt = dt_;
@@ -150,12 +153,14 @@ bool GuiManager::Update(float dt_)
 		if (sliders.At(i)->data->active)
 			sliders.At(i)->data->Update(dt_);
 	}
-	
+
 	return ret;
 }
 
 bool GuiManager::PostUpdate()
 {
+
+	if (app->entityManager->entityHUD != nullptr) app->entityManager->entityHUD->PostUpdate();
 
 	if (app->sceneManager->GetIsPause() && app->guiManager->menu->GetActive()) menu->PostUpdate();
 
