@@ -51,5 +51,8 @@ private:
 
 	// We store the created path here
 	DynArray<iPoint>* lastPath = nullptr;
+
+	uint fxCoffeButtons = -1;
+	uint fxEnemyFound = -1;
 };
 #endif // _ENEMY_H_
