@@ -9,7 +9,7 @@ class SceneLogo : public SceneControl
 {
 public:
 
-	SceneLogo();
+	SceneLogo(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneLogo();

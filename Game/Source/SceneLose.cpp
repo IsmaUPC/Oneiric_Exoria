@@ -11,7 +11,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneLose::SceneLose()
+SceneLose::SceneLose(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLose");

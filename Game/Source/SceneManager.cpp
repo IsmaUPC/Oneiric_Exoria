@@ -57,7 +57,7 @@ bool SceneManager::Awake()
 // Called before the first frame
 bool SceneManager::Start()
 {
-	current = new SceneLogo();
+	current = new SceneLogo(SceneType::LOGO);
 	current->Start();
 
 	tpManager = new TpNodeManager();
@@ -174,21 +174,21 @@ bool SceneManager::Update(float dt)
 
 		switch (current->nextScene)
 		{
-		case SceneType::LOGO: next = new SceneLogo(); break;
-		case SceneType::INTRO: next = new SceneIntro(); break;
-		case SceneType::LEVEL1: next = new Scene(); break;
-		case SceneType::LEVEL2: next = new SceneLevel2(); break;
-		case SceneType::LEVEL3: next = new SceneLevel3(); break;
+		case SceneType::LOGO: next = new SceneLogo(SceneType::LOGO ); break;
+		case SceneType::INTRO: next = new SceneIntro(SceneType::INTRO ); break;
+		case SceneType::LEVEL1: next = new Scene(SceneType::LEVEL1 ); break;
+		case SceneType::LEVEL2: next = new SceneLevel2(SceneType::LEVEL2 ); break;
+		case SceneType::LEVEL3: next = new SceneLevel3(SceneType::LEVEL3); break;
 		case SceneType::DUNGEON: 
 			//if (current->name != "dungeon")
-				next = new SceneDungeon();
+				next = new SceneDungeon(SceneType::DUNGEON);
 			//else 
 				//next = current;
 			break;
 
-		case SceneType::WIN: next = new SceneWin(); break;
-		case SceneType::LOSE: next = new SceneLose(); break;
-		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(fxTransition); break;
+		case SceneType::WIN: next = new SceneWin(SceneType::WIN); break;
+		case SceneType::LOSE: next = new SceneLose(SceneType::LOSE); break;
+		case SceneType::BATTLE: next = new SceneBattle(SceneType::BATTLE); app->audio->PlayFx(fxTransition); break;
 		default: break;
 		}
 

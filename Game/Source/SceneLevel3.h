@@ -12,7 +12,7 @@ class SceneLevel3 : public SceneControl
 {
 public:
 
-	SceneLevel3();
+	SceneLevel3(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneLevel3();

@@ -18,7 +18,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene()
+Scene::Scene(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("scene");

@@ -16,7 +16,7 @@
 
 #define LOGO_FADE_SPEED 7
 
-SceneIntro::SceneIntro()
+SceneIntro::SceneIntro(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneIntro");

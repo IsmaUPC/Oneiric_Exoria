@@ -439,8 +439,43 @@ bool Player::Update(float dt)
 		OffsetPartners();
 	}
 	PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
+
+	UpdatePointCheker();
 	
 	return true;
+}
+
+void Player::UpdatePointCheker()
+{
+	pointCheker = iPoint(playerData.position.x+16, playerData.position.y+35);
+
+	switch (playerData.direction)
+	{
+	case WALK_L:
+		pointCheker.x-= 20;
+
+		break;
+	case WALK_R:
+		pointCheker.x += 20;
+
+		break;
+	case WALK_UP:
+		pointCheker.y -= 16;
+
+		break;
+	case WALK_DOWN:
+		pointCheker.y += 16;
+
+		break;
+	default:
+		break;
+	}
+	if (CheckCollisionObstacle(app->map->WorldToMap(pointCheker)))
+	{
+		LOG("TOCADO");
+	}else
+		LOG("NO TOCADO");
+
 }
 
 void Player::OffsetPartners()
@@ -923,6 +958,9 @@ bool Player::CollisionPlayer(iPoint nextPosition)
 		// Convert position player WorldToMap 
 		positionMapPlayer = app->map->WorldToMap(x+playerData.pointsCollision[i].x, y+playerData.pointsCollision[i].y);
 		if (CheckCollision(positionMapPlayer) == COLLISION) return true;
+
+		if(app->sceneManager->GetCurrentScene()->type== SceneType::DUNGEON)
+			if (CheckCollisionObstacle(positionMapPlayer)) return true;
 	}
 	return false;
 }

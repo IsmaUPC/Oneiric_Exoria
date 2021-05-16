@@ -939,6 +939,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -948,6 +949,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -976,6 +978,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1001,6 +1004,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1010,6 +1014,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1021,6 +1026,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1068,13 +1074,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="7715"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1774,7 +1774,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="10" name="up_objects" width="11" height="26" visible="0">
+ <layer id="10" name="up_objects" width="11" height="26">
   <properties>
    <property name="up_draw" type="int" value="1"/>
   </properties>
@@ -1905,7 +1905,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="7715"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2067,7 +2067,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="2" name="collisions" width="11" height="26">
+ <layer id="2" name="collisions" width="11" height="26" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="1"/>
   </properties>

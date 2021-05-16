@@ -20,7 +20,7 @@
 
 #define PARALLAX_SPEED -1.3f
 
-SceneLevel3::SceneLevel3()
+SceneLevel3::SceneLevel3(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLevel3");

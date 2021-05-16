@@ -104,11 +104,6 @@ int Entity::CheckCollision(iPoint positionMap)
 	uint firstgidLayerCollisions = app->map->data.tilesets.At(0)->data->firstgid;
 	typeTilePlayer -= firstgidLayerCollisions;
 
-	if (typeTilePlayer == UP_LADDER)
-	{
-		int stop=0;
-	}
-
 	if (app->player->godMode == false && app->player->win != true)
 	{
 		switch (typeTilePlayer)
@@ -142,15 +137,38 @@ int Entity::CheckCollision(iPoint positionMap)
 			break;
 
 		case HOLE:
-		case BOX:
-			//return COLLISION;
+			return HOLE;
 			break;
+		case BOX:
+			return BOX;
+		break;
 
 		default:
 			return -1;
 			break;
 		}
 	}
+
+	return false;
+}
+bool Entity::CheckCollisionObstacle(iPoint positionMap)
+{
+
+	for (int i = 0; i < app->entityManager->boxes.Count(); i++)
+		if (positionMap == app->entityManager->boxes.At(i)->data->tilePosition)
+			return true;
+
+	for (int i = 0; i < app->entityManager->holes.Count(); i++)
+		if (positionMap == app->entityManager->holes.At(i)->data->tilePosition)
+			return true;
+	
+	return false;
+}
+bool Entity::CheckCollisionObstacle(iPoint positionMap)
+{
+	for (int i = 0; i < app->entityManager->boxes.Count(); i++)
+		if (positionMap == app->entityManager->boxes.At(i)->data->tilePosition)
+			return true;
 
 	return false;
 }

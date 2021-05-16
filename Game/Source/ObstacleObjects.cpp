@@ -1,6 +1,5 @@
 #include "ObstacleObjects.h"
 
-
 #include "Defs.h"
 #include "Log.h"
 
@@ -14,6 +13,7 @@ ObstacleObjects::ObstacleObjects(Entity* entity, SDL_Texture* tex)
 {
 	entityData = entity->entityData;
 	entityData.texture = tex;
+	this->tilePosition = app->map->WorldToMap(entityData.position.x, entityData.position.y);
 	name.Create("ObstacleObjects");
 }
 
@@ -54,7 +54,7 @@ bool ObstacleObjects::Update(float dt)
 bool ObstacleObjects::PostUpdate()
 {
 	SDL_Rect rect;
-
+	
 	if (entityData.type== TypeEntity::HOLE_ENTITY) {
 		rect = { 32,32,32,32 };
 		app->render->DrawTexture(this->entityData.texture, entityData.position.x, entityData.position.y , &rect);
@@ -89,3 +89,4 @@ bool ObstacleObjects::SaveState(pugi::xml_node& data) const
 {
 	return true;
 }
+

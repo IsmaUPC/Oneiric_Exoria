@@ -68,6 +68,8 @@ public:
 
 	bool Update(float dt);
 
+	void UpdatePointCheker();
+
 	void SpeedAnimationCheck(float dt);
 
 	void MoveBetweenCheckPoints();
@@ -183,6 +185,8 @@ private:
 	State lastState;
 	MoveDirection hitDirection;
 	List<SDL_Texture*> texPartners;
+
+	iPoint pointCheker = { 0,0 };
 
 };
 

@@ -16,7 +16,7 @@
 
 #define LOGO_FADE_SPEED 7
 
-SceneBattle::SceneBattle()
+SceneBattle::SceneBattle(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneBattle");

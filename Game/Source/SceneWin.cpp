@@ -11,7 +11,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneWin::SceneWin()
+SceneWin::SceneWin(SceneType type) : SceneControl(type)
 {
 	name.Create("sceneWin");
 	active = true;

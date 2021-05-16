@@ -10,7 +10,7 @@
 
 #define LOGO_FADE_SPEED 500.0f
 
-SceneLogo::SceneLogo()
+SceneLogo::SceneLogo(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLogo");

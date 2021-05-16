@@ -17,7 +17,7 @@ class SceneLose : public SceneControl
 {
 public:
 
-	SceneLose();
+	SceneLose(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneLose();

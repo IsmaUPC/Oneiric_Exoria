@@ -13,7 +13,7 @@ class SceneDungeon : public SceneControl
 {
 public:
 
-	SceneDungeon();
+	SceneDungeon(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneDungeon();
@@ -52,6 +52,8 @@ public:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
+	bool checkCollisionObstacle();
+
 
 
 private:
@@ -79,6 +81,8 @@ private:
 	GuiButton* btn1 = nullptr;
 	GuiButton* btn2 = nullptr;
 	GuiButton* btn3 = nullptr;
+
+
 
 };
 

@@ -17,7 +17,7 @@ class SceneWin :public SceneControl
 {
 public:
 
-	SceneWin();
+	SceneWin(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneWin();

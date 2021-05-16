@@ -143,6 +143,7 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
+	bool CheckCollisionObstacle(iPoint positionMap);
 
 	int CalculateDistance(iPoint origin, iPoint destination);
 	
