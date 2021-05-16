@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@master
     
     - name: Setup Release Version
       run: |
@@ -26,8 +26,8 @@ jobs:
     - name: Setup Environment
       run: | 
         dir
-        mkdir build
-        cd build
+        mkdir Build
+        cd Build
         mkdir ${{ env.RELEASE_NAME }}
         cd ../../Oneiric_Exoria
         dir
@@ -39,16 +39,16 @@ jobs:
     - name: Build Solution (MSVC16)
       run: |
         msbuild.exe Development.sln  /property:Configuration=Release
-        copy /Y Build\Release\oneiric_exoria.exe build\${{ env.RELEASE_NAME }}\oneiric_exoria.exe
+        copy /Y Build\Release\oneiric_exoria.exe Build\${{ env.RELEASE_NAME }}\oneiric_exoria.exe
       shell: cmd
       
     - name: Generate Artifacts
       run: |
-        robocopy .\Output .\build\${{ env.RELEASE_NAME }}\Output /S
-        robocopy .\build\${{ env.RELEASE_NAME }} .\build\${{ env.RELEASE_NAME }}\Output oneiric_exoria.exe /MOVE
-        copy /Y .\README.md .\build\${{ env.RELEASE_NAME }}\README.md
-        copy /Y .\LICENSE .\build\${{ env.RELEASE_NAME }}\LICENSE
-        cd build
+        robocopy .\Output .\Build\${{ env.RELEASE_NAME }}\Output /S
+        robocopy .\Build\${{ env.RELEASE_NAME }} .\Build\${{ env.RELEASE_NAME }}\Output oneiric_exoria.exe /MOVE
+        copy /Y .\README.md .\Build\${{ env.RELEASE_NAME }}\README.md
+        copy /Y .\LICENSE .\Build\${{ env.RELEASE_NAME }}\LICENSE
+        cd Build
         7z a ./${{ env.RELEASE_NAME }}.zip ./${{ env.RELEASE_NAME }}
         dir
       shell: cmd
@@ -57,7 +57,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ${{ env.RELEASE_NAME }}.zip
-        path: ./build/${{ env.RELEASE_NAME }}.zip
+        path: ./Build/${{ env.RELEASE_NAME }}.zip
         
     - name: Upload Artifact to Release
       uses: actions/upload-release-asset@v1.0.1
@@ -65,7 +65,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./build/${{ env.RELEASE_NAME }}.zip
+          asset_path: ./Build/${{ env.RELEASE_NAME }}.zip
           asset_name: ${{ env.RELEASE_NAME }}.zip
           asset_content_type: application/zip
       if: github.event_name == 'release' && github.event.action == 'published'
