@@ -62,14 +62,14 @@ bool SceneManager::Start()
 
 	tpManager = new TpNodeManager();
 
-	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
-	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
-	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
-	runicFont = app->fonts->Load("Assets/Fonts/runic_font.ttf", 15);
+	guiFont = app->fonts->Load("Fonts/RPGSystem.ttf", 25);
+	titleFont = app->fonts->Load("Fonts/title_font.ttf", 48);
+	statsFont = app->fonts->Load("Fonts/title_font.ttf", 32);
+	runicFont = app->fonts->Load("Fonts/runic_font.ttf", 15);
 
-	fxTransition = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
+	fxTransition = app->audio->LoadFx("Audio/Fx/combat_transition.wav");
 
-	texPlayers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+	texPlayers = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	LoadTmxDungeonsList();
 
@@ -337,9 +337,11 @@ bool SceneManager::SaveState(pugi::xml_node& data) const
 
 bool SceneManager::LoadTmxDungeonsList()
 {
-
 	//tmxDungeonsList;
-	pugi::xml_parse_result result = stateFile.load_file(DUNGEONS_FILE);
+	int size = app->assets->MakeLoad(DUNGEONS_FILE);
+
+	pugi::xml_parse_result result = stateFile.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	bool ret = true;
 	pugi::xml_node tmxDungeon = stateFile.child("dungeons").first_child();

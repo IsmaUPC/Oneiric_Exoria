@@ -6,17 +6,18 @@
 #include "PerfTimer.h"
 #include "Timer.h"
 #include "Point.h"
+#include "AssetsManager.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
 #define CONFIG_FILENAME		"config.xml"
 #define SAVE_STATE_FILENAME "save_game.xml"
-#define DIALOGUE_TREE_FILENAME "Assets/XMLs/dialogue_tree.xml"
-#define LIST_ITEMS_FILENAME "Assets/XMLs/items_list.xml"
-#define LIST_MAGIC_FILENAME "Assets/XMLs/magic_list.xml"	
-#define PROPERTIES_FILE "Assets/XMLs/particles_properties.xml"
-#define DUNGEONS_FILE "Assets/XMLs/dungeons.xml"
-#define QUEST_FILE "Assets/XMLs/quest_list.xml"
+#define DIALOGUE_TREE_FILENAME "XMLs/dialogue_tree.xml"
+#define LIST_ITEMS_FILENAME "XMLs/items_list.xml"
+#define LIST_MAGIC_FILENAME "XMLs/magic_list.xml"	
+#define PROPERTIES_FILE "XMLs/particles_properties.xml"
+#define DUNGEONS_FILE "XMLs/dungeons.xml"
+#define QUEST_FILE "XMLs/quest_list.xml"
 
 // Modules
 class Window;
@@ -36,6 +37,7 @@ class Fonts;
 class TransitionManager;
 class TpNodeManager;
 class QuestManager;
+class AssetsManager;
 
 class App
 {
@@ -128,6 +130,7 @@ public:
 	TransitionManager* transitionManager = nullptr;
 	TpNodeManager* tpNodeManager = nullptr;
 	QuestManager* questManager = nullptr;
+	AssetsManager* assets = nullptr;
 
 	bool fullScreen=0;
 	bool removeGame = false;

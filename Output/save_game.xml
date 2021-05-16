@@ -6,34 +6,36 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="315" y="-90" />
+		<camera x="190" y="144" />
 	</renderer>
 	<player>
-		<data x="325" y="450" direction="3" level="1" exp="0" health="8" mana="11" />
+		<data x="406" y="194" direction="1" level="1" exp="0" health="8" mana="11" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="480" y="168" />
+			<breadcrumb x="402" y="168" />
+			<breadcrumb x="400" y="170" />
+			<breadcrumb x="400" y="194" />
+		</path>
 		<partners>
-			<partner x="325" y="410" breadcrumb="0" direction="3" level="1" exp="0" health="14" mana="10" />
-			<partner x="325" y="370" breadcrumb="0" direction="3" level="1" exp="0" health="10" mana="12" />
-			<partner x="325" y="330" breadcrumb="0" direction="3" level="1" exp="0" health="13" mana="8" />
+			<partner x="412" y="168" breadcrumb="1" direction="0" level="1" exp="0" health="14" mana="10" />
+			<partner x="452" y="168" breadcrumb="1" direction="0" level="1" exp="0" health="10" mana="12" />
+			<partner x="480" y="156" breadcrumb="0" direction="3" level="1" exp="0" health="13" mana="8" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="1" />
+		<level lvl="3" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="2070" />
 		<entities>
-			<entity type="13" x="0" y="0" id="0" level="0" state="0" move="true" />
-			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="21" y="4" id="2" level="0" state="0" move="false" />
-			<entity type="14" x="16" y="20" id="3" level="0" state="0" move="false" />
-			<entity type="14" x="20" y="11" id="7" level="0" state="0" move="false" />
-			<entity type="14" x="10" y="2" id="9" level="0" state="0" move="false" />
-			<entity type="14" x="31" y="2" id="9" level="0" state="0" move="false" />
-			<entity type="14" x="28" y="5" id="15" level="0" state="0" move="false" />
+			<entity type="13" x="-5" y="-4" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="14" y="9" id="1" level="1" state="6" move="true" />
+			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
+			<entity type="3" x="4" y="12" id="3" level="2" state="0" move="false" />
+			<entity type="1" x="3" y="5" id="4" level="2" state="0" move="false" />
 		</entities>
 	</entity_manager>
 	<particle_manager>

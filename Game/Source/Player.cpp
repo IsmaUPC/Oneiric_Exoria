@@ -135,8 +135,8 @@ bool Player::Start()
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 
-	fxBookOpen = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
-	fxStairs = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
+	fxBookOpen = app->audio->LoadFx("Audio/Fx/open_book.wav");
+	fxStairs = app->audio->LoadFx("Audio/Fx/stairs.wav");
 	
 	return true;
 }
@@ -144,10 +144,10 @@ bool Player::Start()
 void Player::LoadTexCharacters()
 {
 
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/keiler.png"));
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
+	playerData.texture = app->tex->Load("Textures/Characters/kenzie.png");
+	texPartners.Add(app->tex->Load("Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/brenda.png"));
 }
 
 void Player::LoadPartners()

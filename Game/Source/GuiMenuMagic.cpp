@@ -56,7 +56,10 @@ GuiMenuMagic::~GuiMenuMagic()
 
 void GuiMenuMagic::LoadMagics(const char* file)
 {
-	pugi::xml_parse_result result = magicDoc.load_file(file);
+	int size = app->assets->MakeLoad(file);
+
+	pugi::xml_parse_result result = magicDoc.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	if (result == NULL)
 	{

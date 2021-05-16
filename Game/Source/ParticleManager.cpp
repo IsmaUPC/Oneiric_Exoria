@@ -29,7 +29,7 @@
 //	// Load Fx
 //
 //	// Load Textures
-//	texParticles = app->tex->Load("Assets/Textures/");
+//	texParticles = app->tex->Load("Textures/");
 //
 //	// Animations
 //

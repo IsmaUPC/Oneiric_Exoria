@@ -44,7 +44,7 @@ bool SceneLevel3::Start()
 {
 	app->SaveConfigRequested();
 
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
 	// Load map
 	app->SetLastScene((Module*)this);
