@@ -35,7 +35,7 @@ struct SDL_Texture;
 class SceneBattle : public SceneControl
 {
 public:
-	SceneBattle();
+	SceneBattle(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneBattle();

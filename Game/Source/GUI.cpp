@@ -6,6 +6,7 @@
 #include "DialogSystem.h"
 #include "GuiManager.h"
 #include "SceneBattle.h"
+#include "EntityManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -41,7 +42,7 @@ bool GUI::Start()
 	int imgH = 0;
 	int imgW = 0;
 
-	//playerUi = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+	//playerUi = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	activeFPS = false;
 	timer.Start();
@@ -77,7 +78,11 @@ bool GUI::PostUpdate()
 	{
 		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565, 600, 150, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
-
+	if (app->entityManager->drawCloud == true)
+	{
+		app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
+		app->entityManager->drawCloud = false;
+	}
 	point0.x = -app->render->camera.x;
 	point0.y = -app->render->camera.y;
 

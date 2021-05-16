@@ -29,8 +29,8 @@ bool EntityManager::Start()
 
 
 	// Load Textures
-	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");
-	texObstacles = app->tex->Load("Assets/Textures/Objects/objects.png");
+	texEnemies = app->tex->Load("Textures/Enemies/enemies_map.png");
+	texObstacles = app->tex->Load("Textures/Objects/objects.png");
 
 	// Animations
 	int numEnemies = 3;
@@ -268,8 +268,10 @@ void EntityManager::SpawnEntity(Entity* info)
 		break;
 
 	case HUD:
-		entities.Add(new GUI(info, texEnemies));
-		entities.end->data->Start();
+		//entities.Add(new GUI(info, texEnemies));
+		entityHUD = new GUI(info, texEnemies);
+		entityHUD->Start();
+		//entities.end->data->Start();
 		break;
 
 	case NPC:

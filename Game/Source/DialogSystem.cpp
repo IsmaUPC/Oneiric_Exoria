@@ -18,7 +18,7 @@ DialogueSystem::~DialogueSystem() {}
 bool DialogueSystem::Start()
 {
 	LoadDialogue(DIALOGUE_TREE_FILENAME);
-	fxDialog = app->audio->LoadFx("Assets/Audio/Fx/dialogue.wav");
+	fxDialog = app->audio->LoadFx("Audio/Fx/dialogue.wav");
 
 	return true;
 }
@@ -145,7 +145,10 @@ void DialogueSystem::DrawOptions()
 
 bool DialogueSystem::LoadDialogue(const char* file)
 {
-	pugi::xml_parse_result result = dialogues.load_file(file);
+	int size = app->assets->MakeLoad(file);
+
+	pugi::xml_parse_result result = dialogues.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	bool ret = true;
 

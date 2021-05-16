@@ -18,7 +18,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene()
+Scene::Scene(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("scene");
@@ -44,9 +44,9 @@ bool Scene::Start()
 	app->SetLastScene((Module*)this);
 
 	// Load music and Fx
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
-	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/pc_typing.wav");
+	fxList[0].fxName = app->audio->LoadFx("Audio/Fx/pc_typing.wav");
 	fxCount = 1;
 
 	victory = false;

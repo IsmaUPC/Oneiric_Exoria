@@ -20,7 +20,7 @@
 
 #define PARALLAX_SPEED -1.3f
 
-SceneLevel3::SceneLevel3()
+SceneLevel3::SceneLevel3(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLevel3");
@@ -44,7 +44,7 @@ bool SceneLevel3::Start()
 {
 	app->SaveConfigRequested();
 
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
 	// Load map
 	app->SetLastScene((Module*)this);

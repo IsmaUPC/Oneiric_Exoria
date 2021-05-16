@@ -486,7 +486,10 @@ bool Map::Load(const char* filenameGame)
 	bool ret = true;
 	SString tmp("%s%s", folder.GetString(), filenameGame);
 
-	pugi::xml_parse_result result = mapFile.load_file(tmp.GetString());
+	int size = app->assets->MakeLoad(tmp.GetString());
+
+	pugi::xml_parse_result result = mapFile.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	if(result == NULL)
 	{
@@ -681,7 +684,7 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 int Map::LoadCheckPoint()
 {
 	if (checKpointsMap.texture != nullptr) app->tex->UnLoad(checKpointsMap.texture);
-	checKpointsMap.texture = app->tex->Load("Assets/Textures/checkpoint.png");
+	checKpointsMap.texture = app->tex->Load("Textures/checkpoint.png");
 
 	int texW, texH;
 	SDL_QueryTexture(checKpointsMap.texture, NULL, NULL, &texW, &texH);

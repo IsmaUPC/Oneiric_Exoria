@@ -57,20 +57,20 @@ bool SceneManager::Awake()
 // Called before the first frame
 bool SceneManager::Start()
 {
-	current = new SceneLogo();
+	current = new SceneLogo(SceneType::LOGO);
 	current->Start();
 
 	tpManager = new TpNodeManager();
 
-	guiFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 25);
-	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
-	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
-	runicFont = app->fonts->Load("Assets/Fonts/runic_font.ttf", 15);
-	itemFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 35);
+	guiFont = app->fonts->Load("Fonts/RPGSystem.ttf", 25);
+	titleFont = app->fonts->Load("Fonts/title_font.ttf", 48);
+	statsFont = app->fonts->Load("Fonts/title_font.ttf", 32);
+	runicFont = app->fonts->Load("Fonts/runic_font.ttf", 15);
+	itemFont = app->fonts->Load("Fonts/RPGSystem.ttf", 35);
 
-	fxTransition = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
+	fxTransition = app->audio->LoadFx("Audio/Fx/combat_transition.wav");
 
-	texPlayers = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+	texPlayers = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	LoadTmxDungeonsList();
 
@@ -175,21 +175,21 @@ bool SceneManager::Update(float dt)
 
 		switch (current->nextScene)
 		{
-		case SceneType::LOGO: next = new SceneLogo(); break;
-		case SceneType::INTRO: next = new SceneIntro(); break;
-		case SceneType::LEVEL1: next = new Scene(); break;
-		case SceneType::LEVEL2: next = new SceneLevel2(); break;
-		case SceneType::LEVEL3: next = new SceneLevel3(); break;
+		case SceneType::LOGO: next = new SceneLogo(SceneType::LOGO ); break;
+		case SceneType::INTRO: next = new SceneIntro(SceneType::INTRO ); break;
+		case SceneType::LEVEL1: next = new Scene(SceneType::LEVEL1 ); break;
+		case SceneType::LEVEL2: next = new SceneLevel2(SceneType::LEVEL2 ); break;
+		case SceneType::LEVEL3: next = new SceneLevel3(SceneType::LEVEL3); break;
 		case SceneType::DUNGEON: 
 			//if (current->name != "dungeon")
-				next = new SceneDungeon();
+				next = new SceneDungeon(SceneType::DUNGEON);
 			//else 
 				//next = current;
 			break;
 
-		case SceneType::WIN: next = new SceneWin(); break;
-		case SceneType::LOSE: next = new SceneLose(); break;
-		case SceneType::BATTLE: next = new SceneBattle(); app->audio->PlayFx(fxTransition); break;
+		case SceneType::WIN: next = new SceneWin(SceneType::WIN); break;
+		case SceneType::LOSE: next = new SceneLose(SceneType::LOSE); break;
+		case SceneType::BATTLE: next = new SceneBattle(SceneType::BATTLE); app->audio->PlayFx(fxTransition); break;
 		default: break;
 		}
 
@@ -243,22 +243,35 @@ bool SceneManager::PostUpdate()
 		case DOWN_LADDER_NODE:
 			if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
 			if (levelDungeon == 0)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
+			}
 			else
 			{
 				if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+				{
 					levelDungeon--;
-				current->TransitionToScene(SceneType::DUNGEON);
+					app->audio->PlayFx(app->player->fxStairs);
+					current->TransitionToScene(SceneType::DUNGEON);
+				}
 
 			}
 			break;
 		case UP_LADDER_NODE:
-			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) ) == SceneType::DUNGEON)
+			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				levelDungeon++;
+			}
 			if ((int)SceneType::LEVEL1 + originTpNode->idFloor != (int)SceneType::DUNGEON)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) + 1));
+			}
 			else 
 			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType::DUNGEON);
 
 			}
@@ -339,9 +352,11 @@ bool SceneManager::SaveState(pugi::xml_node& data) const
 
 bool SceneManager::LoadTmxDungeonsList()
 {
-
 	//tmxDungeonsList;
-	pugi::xml_parse_result result = stateFile.load_file(DUNGEONS_FILE);
+	int size = app->assets->MakeLoad(DUNGEONS_FILE);
+
+	pugi::xml_parse_result result = stateFile.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	bool ret = true;
 	pugi::xml_node tmxDungeon = stateFile.child("dungeons").first_child();

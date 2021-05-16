@@ -151,10 +151,10 @@ bool Player::Start()
 void Player::LoadTexCharacters()
 {
 
-	playerData.texture = app->tex->Load("Assets/Textures/Characters/kenzie.png");
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/keiler.png"));
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/isrra.png"));
-	texPartners.Add(app->tex->Load("Assets/Textures/Characters/brenda.png"));
+	playerData.texture = app->tex->Load("Textures/Characters/kenzie.png");
+	texPartners.Add(app->tex->Load("Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/brenda.png"));
 }
 
 void Player::LoadPartners()
@@ -499,8 +499,49 @@ bool Player::Update(float dt)
 		OffsetPartners();
 	}
 	PlayerMoveAnimation(playerData.state, playerData.direction, playerData.currentAnimation);
+
+	UpdatePointCheker();
 	
 	return true;
+}
+
+void Player::UpdatePointCheker()
+{
+	pointCheker = iPoint(playerData.position.x+16, playerData.position.y+35);
+
+	switch (playerData.direction)
+	{
+	case WALK_L:
+		pointCheker.x-= 20;
+
+		break;
+	case WALK_R:
+		pointCheker.x += 20;
+
+		break;
+	case WALK_UP:
+		pointCheker.y -= 16;
+
+		break;
+	case WALK_DOWN:
+		pointCheker.y += 26;
+
+		break;
+	default:
+		break;
+	}
+	if (CheckCollisionBoxes(app->map->WorldToMap(pointCheker)))
+	{
+		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
+		{
+			LOG("TOCADO");
+			MoveBox();
+
+		}
+
+	}else
+		LOG("NO TOCADO");
+
 }
 
 void Player::OffsetPartners()
@@ -983,6 +1024,9 @@ bool Player::CollisionPlayer(iPoint nextPosition)
 		// Convert position player WorldToMap 
 		positionMapPlayer = app->map->WorldToMap(x+playerData.pointsCollision[i].x, y+playerData.pointsCollision[i].y);
 		if (CheckCollision(positionMapPlayer) == COLLISION) return true;
+
+		if(app->sceneManager->GetCurrentScene()->type== SceneType::DUNGEON)
+			if (CheckCollisionObstacle(positionMapPlayer)) return true;
 	}
 	return false;
 }

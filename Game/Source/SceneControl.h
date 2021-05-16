@@ -37,7 +37,7 @@ class SceneControl
 {
 public:
 
-	SceneControl() : active(true), loaded(false), transitionRequired(false) {}
+	SceneControl(SceneType type) : active(true), loaded(false), transitionRequired(false),type(type) {}
 
 	virtual bool Start()
 	{
@@ -116,6 +116,7 @@ public:
 
 	bool transitionRequired = false;
 	SceneType nextScene;
+	SceneType type;
 	int lastLevel = 0;
 	bool isContinue = false;
 

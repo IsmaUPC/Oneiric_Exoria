@@ -19,7 +19,7 @@
 
 #define PARALLAX_SPEED -1.3f
 
-SceneDungeon::SceneDungeon()
+SceneDungeon::SceneDungeon(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("dungeon");
@@ -43,7 +43,7 @@ bool SceneDungeon::Start()
 {
 	//app->SaveConfigRequested();
 	
-	//app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	//app->audio->PlayMusic("Audio/Music/level_music.ogg");
 	app->player->positionInitial = new iPoint(200, 500);
 
 	// TODO dungoen
@@ -285,3 +285,5 @@ bool SceneDungeon::SaveState(pugi::xml_node& data) const
 	data.child("level").attribute("lvl").set_value(lastLevel+1);
 	return true;
 }
+
+

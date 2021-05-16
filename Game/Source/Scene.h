@@ -13,7 +13,7 @@ class Scene : public SceneControl
 {
 public:
 
-	Scene();
+	Scene(SceneType type) ;
 
 	// Destructor
 	virtual ~Scene();

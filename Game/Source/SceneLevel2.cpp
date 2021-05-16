@@ -20,7 +20,7 @@
 
 #define PARALLAX_SPEED -1.3f
 
-SceneLevel2::SceneLevel2()
+SceneLevel2::SceneLevel2(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLevel2");
@@ -44,13 +44,13 @@ bool SceneLevel2::Start()
 {
 	app->SaveConfigRequested();
 	
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
-	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/arcade_machine.wav");
-	fxList[1].fxName = app->audio->LoadFx("Assets/Audio/Fx/coffe_machine.wav");
+	fxList[0].fxName = app->audio->LoadFx("Audio/Fx/arcade_machine.wav");
+	fxList[1].fxName = app->audio->LoadFx("Audio/Fx/coffe_machine.wav");
 	fxList[2].fxName = fxList[1].fxName;
-	fxList[3].fxName = app->audio->LoadFx("Assets/Audio/Fx/tv.wav");
-	fxList[4].fxName = app->audio->LoadFx("Assets/Audio/Fx/washing_machine.wav");
+	fxList[3].fxName = app->audio->LoadFx("Audio/Fx/tv.wav");
+	fxList[4].fxName = app->audio->LoadFx("Audio/Fx/washing_machine.wav");
 
 	fxCount = 5;
 

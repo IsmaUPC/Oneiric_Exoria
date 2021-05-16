@@ -11,7 +11,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneWin::SceneWin()
+SceneWin::SceneWin(SceneType type) : SceneControl(type)
 {
 	name.Create("sceneWin");
 	active = true;
@@ -33,9 +33,9 @@ bool SceneWin::Start()
 	app->SetLastScene((Module*)this);
 	transition = false;
 
-	app->audio->PlayMusic("Assets/Audio/Music/music_victory.ogg");
-	img = app->tex->Load("Assets/Textures/scene_win.png");
-	animationSon.texture = app->tex->Load("Assets/Textures/dino_sprites.png");
+	app->audio->PlayMusic("Audio/Music/music_victory.ogg");
+	img = app->tex->Load("Textures/scene_win.png");
+	animationSon.texture = app->tex->Load("Textures/dino_sprites.png");
 	animationSon.position = { 340 , 372 };
 	idleAnimSon.loop = true;
 	idleAnimSon.speed = 0.01;
@@ -45,7 +45,7 @@ bool SceneWin::Start()
 
 	animationSon.currentAnimation = &idleAnimSon;
 
-	animationFather.texture = app->tex->Load("Assets/Textures/dino_orange_big.png");
+	animationFather.texture = app->tex->Load("Textures/dino_orange_big.png");
 	animationFather.position = { 540 , 180 };
 	idleAnimFather.loop = true;
 	idleAnimFather.speed = 0.01;

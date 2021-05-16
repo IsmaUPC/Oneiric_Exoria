@@ -72,7 +72,7 @@ TTF_Font* Fonts::Load(const char* fontPath, int size, int style, int outline)
 	else
 	{
 
-		font = TTF_OpenFont(fontPath, size);
+		font = TTF_OpenFontRW(app->assets->Load(fontPath), 1, size);
 
 		TTF_SetFontStyle(font, style);
 
@@ -90,7 +90,6 @@ TTF_Font* Fonts::Load(const char* fontPath, int size, int style, int outline)
 			LOG("Successfully loaded BMP font from %s", fontPath);
 		}
 	}
-
 	return font;
 }
 
@@ -117,7 +116,7 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 	{
 		SDL_FreeSurface(sur);
 		SDL_DestroyTexture(tex);
-		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color);
+		sur = TTF_RenderText_Blended(fonts.At(font_id)->data, text, color); 
 		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
 		
 		if (tex != NULL)

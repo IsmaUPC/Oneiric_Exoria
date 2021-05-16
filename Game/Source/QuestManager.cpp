@@ -9,8 +9,6 @@
 #include "Log.h"
 
 QuestManager::QuestManager(){ 
-	
-	LoadQuestList(QUEST_FILE);
 
 }
 
@@ -30,6 +28,7 @@ bool QuestManager::Awake(pugi::xml_node& config)
 
 bool QuestManager::Start()
 {
+	LoadQuestList(QUEST_FILE);
 	return true;
 }
 bool QuestManager::Update(float dt)
@@ -137,7 +136,9 @@ void QuestManager::ChangeNPC(int id)
 
 void QuestManager::LoadQuestList(const char* file)
 {
-	pugi::xml_parse_result doc = questDoc.load_file(file);
+	int size = app->assets->MakeLoad(file);
+	pugi::xml_parse_result doc = questDoc.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	if (doc == NULL)
 	{

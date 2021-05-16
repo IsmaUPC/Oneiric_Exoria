@@ -29,7 +29,7 @@ bool TransitionManager::Awake()
 }
 bool TransitionManager::Start()
 {
-	logo = app->tex->Load("Assets/Textures/logo_title.png");
+	logo = app->tex->Load("Textures/logo_title.png");
 	SDL_QueryTexture(logo, NULL, NULL, &dimensionLogo.w, &dimensionLogo.h);
 
 	return true;

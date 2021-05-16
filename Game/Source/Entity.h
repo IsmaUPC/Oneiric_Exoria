@@ -145,9 +145,14 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
+	bool CheckCollisionObstacle(iPoint positionMap);
+	bool CheckCollisionBoxes(iPoint positionMap);
+	bool CheckCollisionHoles(iPoint positionMap);
 
 	int CalculateDistance(iPoint origin, iPoint destination);
-	
+	bool MoveBox();
+
+
 public:
 
 	bool isAlive= false;
@@ -159,6 +164,8 @@ public:
 	bool move = true;
 
 	ListItem<TeleportNode*>* node=nullptr;
+	int posBox;
+	int posHole;
 };
 
 #endif // __MODULE_H__
