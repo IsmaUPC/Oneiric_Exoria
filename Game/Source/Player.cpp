@@ -470,9 +470,15 @@ void Player::UpdatePointCheker()
 	default:
 		break;
 	}
-	if (CheckCollisionObstacle(app->map->WorldToMap(pointCheker)))
+	if (CheckCollisionBoxes(app->map->WorldToMap(pointCheker)))
 	{
-		LOG("TOCADO");
+		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
+		{
+			LOG("TOCADO");
+			MoveBox();
+
+		}
+
 	}else
 		LOG("NO TOCADO");
 

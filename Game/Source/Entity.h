@@ -147,7 +147,9 @@ public:
 	bool CheckCollisionBoxes(iPoint positionMap);
 
 	int CalculateDistance(iPoint origin, iPoint destination);
-	
+	bool MoveBox();
+
+
 public:
 
 	bool isAlive= false;
@@ -159,6 +161,7 @@ public:
 	bool move = true;
 
 	ListItem<TeleportNode*>* node=nullptr;
+	int posBox;
 };
 
 #endif // __MODULE_H__

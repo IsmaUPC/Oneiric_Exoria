@@ -15,8 +15,8 @@
 		<fullscreen_window value="false" />
 	</window>
 	<audio>
-		<music volume="80" />
-		<fx volume="90" />
+		<music volume="1" />
+		<fx volume="2" />
 	</audio>
 	<map>
 		<folder>Maps/</folder>

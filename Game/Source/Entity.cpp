@@ -168,7 +168,36 @@ bool Entity::CheckCollisionBoxes(iPoint positionMap)
 {
 	for (int i = 0; i < app->entityManager->boxes.Count(); i++)
 		if (positionMap == app->entityManager->boxes.At(i)->data->tilePosition)
+		{
+			posBox = i;
 			return true;
+		}
 
+	return false;
+}
+// TODO move to Obstacle Object
+bool Entity::MoveBox()
+{	
+	 switch (app->player->playerData.direction)
+	 {
+	 case WALK_L:
+		 app->entityManager->boxes.At(posBox)->data->entityData.position.x-=32;
+
+		 break;
+	 case WALK_R:
+		 app->entityManager->boxes.At(posBox)->data->entityData.position.x += 32;
+
+		 break;
+	 case WALK_UP:
+		 app->entityManager->boxes.At(posBox)->data->entityData.position.y -= 32;
+
+		 break;
+	 case WALK_DOWN:
+		 app->entityManager->boxes.At(posBox)->data->entityData.position.y += 32;
+
+		 break;
+	 default:
+		 break;
+	 }
 	return false;
 }
