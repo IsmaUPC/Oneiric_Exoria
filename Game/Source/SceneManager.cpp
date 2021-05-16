@@ -242,22 +242,35 @@ bool SceneManager::PostUpdate()
 		case DOWN_LADDER_NODE:
 			if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
 			if (levelDungeon == 0)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
+			}
 			else
 			{
 				if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+				{
 					levelDungeon--;
-				current->TransitionToScene(SceneType::DUNGEON);
+					app->audio->PlayFx(app->player->fxStairs);
+					current->TransitionToScene(SceneType::DUNGEON);
+				}
 
 			}
 			break;
 		case UP_LADDER_NODE:
-			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) ) == SceneType::DUNGEON)
+			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				levelDungeon++;
+			}
 			if ((int)SceneType::LEVEL1 + originTpNode->idFloor != (int)SceneType::DUNGEON)
+			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) + 1));
+			}
 			else 
 			{
+				app->audio->PlayFx(app->player->fxStairs);
 				current->TransitionToScene(SceneType::DUNGEON);
 
 			}
