@@ -49,15 +49,15 @@ jobs:
         copy /Y .\README.md .\Build\${{ env.RELEASE_NAME }}\README.md
         copy /Y .\LICENSE .\Build\${{ env.RELEASE_NAME }}\LICENSE
         cd Build
+        7z a ./${{ env.RELEASE_NAME }}.zip ./${{ env.RELEASE_NAME }}
         dir
       shell: cmd
-        # 7z a ./${{ env.RELEASE_NAME }}.zip ./${{ env.RELEASE_NAME }}
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ env.RELEASE_NAME }}.zip
-        path: ./Build/${{ env.RELEASE_NAME }}.zip
+   # - name: Upload Artifacts
+   #   uses: actions/upload-artifact@v2
+   #   with:
+   #     name: ${{ env.RELEASE_NAME }}.zip
+   #     path: ./Build/${{ env.RELEASE_NAME }}.zip
         
     - name: Upload Artifact to Release
       uses: actions/upload-release-asset@v1.0.1
