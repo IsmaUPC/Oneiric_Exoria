@@ -13,7 +13,10 @@ ItemManager::~ItemManager()
 
 bool ItemManager::LoadItems(pugi::xml_document& file, const char* filePath)
 {
-	pugi::xml_parse_result result = file.load_file(LIST_ITEMS_FILENAME);
+	int size = app->assets->MakeLoad(LIST_ITEMS_FILENAME);
+
+	pugi::xml_parse_result result = file.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	bool ret = true;
 
