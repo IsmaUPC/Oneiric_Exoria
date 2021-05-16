@@ -80,6 +80,7 @@ public:
 	List<ObstacleObjects*> holes;
 
 	Entity* entityHUD = nullptr;
+	bool drawCloud = false;
 
 private:
 	// Textures

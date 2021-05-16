@@ -188,7 +188,16 @@ bool GuiMenuPause::Event(GuiControl* control)
 		{
 			bool menuVSync;
 			menuVSync = menuSettings->chBxVSync->GetValue();
-			LOG("%d", menuVSync);
+			if (menuVSync)
+			{
+				SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+				LOG("Using vsync");
+			}
+			else
+			{
+				SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
+				LOG("Not using vsync");
+			}
 		}
 		if (control->id == 15)
 		{

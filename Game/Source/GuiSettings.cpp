@@ -32,7 +32,6 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 
 	chBxVSync = new GuiCheckBox(14, { initialPos.x, initialPos.y + padding * 3, 120, 95 }, "V-Sync",false, btnTextureAtlas);
 	chBxVSync->SetObserver(moduleObserver);
-	chBxVSync->state = GuiControlState::DISABLED;
 	chBxVSync->active = false;
 	app->guiManager->AddGuiCheckBox(chBxVSync);
 
