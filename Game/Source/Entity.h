@@ -11,6 +11,7 @@
 #include "Collisions.h"
 #include "Defs.h"
 #include "Log.h"
+#include "ItemManager.h"
 
 
 enum TypeEntity {
@@ -102,6 +103,7 @@ struct EntityData
 	int level = 0;
 	int id = 0;
 	int channel = -1;
+	Equipable* equipedItem = nullptr;
 
 public:
 	EntityData(TypeEntity pTypeEntity, fPoint pPosition, float pVelocity, SDL_Texture* pTexture) :

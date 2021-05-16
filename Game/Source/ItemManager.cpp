@@ -90,6 +90,7 @@ bool ItemManager::UseItem(GameItem* id, Entity* entity)
 		case Type::STONE:
 			break;
 		case Type::RING:
+			ringList.At(itemList.Find(itemList.At((id->id) - 4)->data))->data->EquipItem(ringList.At(itemList.Find(itemList.At((id->id) - 4)->data))->data, entity);
 			break;
 		case Type::AMULET:
 			break;
@@ -106,6 +107,41 @@ bool ItemManager::UseItem(GameItem* id, Entity* entity)
 
 	return ret;
 
+}
+
+const char* ItemManager::TypeToString(Type type)
+{
+	switch (type)
+	{
+	case Type::POTION:
+		return "Potion";
+		break;
+	case Type::STONE:
+		return "Stone";
+		break;
+	case Type::RING:
+		return "Ring";
+		break;
+	case Type::AMULET:
+		return "Amulet";
+		break;
+	case Type::WISH:
+		return "Wish";
+		break;
+	case Type::ABSTRACT:
+		return "Abstract";
+		break;
+	case Type::UNKNOW:
+		return "Unknow";
+		break;
+	default:
+		return nullptr;
+		break;
+	}
+}
+
+void ItemManager::SetItemEquip(Equipable* item)
+{
 }
 
 bool ItemManager::AddItem(int id)
@@ -174,5 +210,62 @@ void Potion::Heal(SString att, int val, Entity* entity)
 	if (app->sceneManager->GetCurrentScene()->name != "sceneBattle")
 	{
 		app->player->UpdatePlayerStats(entity, entity->entityData.type);
+	}
+}
+
+void Equipable::EquipItem(Equipable* item, Entity* entity)
+{
+	if (entity->entityData.equipedItem != nullptr)
+	{
+		if (entity->entityData.equipedItem->attribute == "attack")
+		{
+			entity->stats.attack -= entity->entityData.equipedItem->value;
+		}
+		else if (entity->entityData.equipedItem->attribute == "defense")
+		{
+			entity->stats.defense -= entity->entityData.equipedItem->value;
+		}
+		else if (entity->entityData.equipedItem->attribute == "speed")
+		{
+			entity->stats.speed -= entity->entityData.equipedItem->value;
+		}
+		entity->entityData.equipedItem->currentOwner = NULL;
+		entity->entityData.equipedItem->equiped = false;
+		entity->entityData.equipedItem = NULL;
+	}
+	if (item->currentOwner != entity)
+	{
+		if (item->attribute == "attack")
+		{
+			if (item->equiped == true)
+			{
+				currentOwner->stats.attack -= item->value;
+				currentOwner->entityData.equipedItem = NULL;
+			}
+			entity->stats.attack += item->value;
+			entity->entityData.equipedItem = item;
+		}
+		else if (item->attribute == "defense")
+		{
+			if (item->equiped == true)
+			{
+				currentOwner->stats.defense -= item->value;
+				currentOwner->entityData.equipedItem = NULL;
+			}
+			entity->stats.defense += item->value;
+			entity->entityData.equipedItem = item;
+		}
+		else if (item->attribute == "speed")
+		{
+			if (item->equiped == true)
+			{
+				currentOwner->stats.speed -= item->value;
+				currentOwner->entityData.equipedItem = NULL;
+			}
+			entity->stats.speed += item->value;
+			entity->entityData.equipedItem = item;
+		}
+		item->currentOwner = entity;
+		item->equiped = true;
 	}
 }

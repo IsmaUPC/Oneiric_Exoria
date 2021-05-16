@@ -14,6 +14,8 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 {
 	screenRect = { 0, 0, WINDOW_W, WINDOW_H };
 
+	padding = 30;
+
 	initialPos = position;
 
 	observer = moduleObserver;
@@ -21,6 +23,19 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 
 	//MenuMagic
 	menuMagic = new GuiMenuMagic({ 300, WINDOW_H / 2 +140 }, observer);
+
+	//Item options buttons
+	btnUseItem = new GuiButton(7, { -app->render->camera.x + position.x + WINDOW_W/4 - 50, -app->render->camera.y + position.y + WINDOW_H/2 + padding * 1 + 300, 183, 91 }, "Use", RECTANGLE, textureAtlas);
+	btnUseItem->SetObserver(moduleObserver);
+	btnUseItem->active = false;
+	btnUseItem->state = GuiControlState::DISABLED;
+	app->guiManager->AddGuiButton(btnUseItem);
+
+	btnDelItem = new GuiButton(8, { -app->render->camera.x + position.x + WINDOW_W / 4 - 50, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2 + 300, 183, 91 }, "Delete", RECTANGLE, textureAtlas);
+	btnDelItem->SetObserver(moduleObserver);
+	btnDelItem->active = false;
+	btnDelItem->state = GuiControlState::DISABLED;
+	app->guiManager->AddGuiButton(btnDelItem);
 
 	active = false;
 }
@@ -50,30 +65,51 @@ bool GuiStatsMenu::Update(float dt_)
 				menuMagic->AbleDisableMagic();
 				menuMagic->close->active = false;
 				menuMagic->MovePosition();
+				InicializeStats();
+			}
+			if (pageType == INVENTORY && app->player->inventory.start != nullptr)
+			{
+				btnUseItem->active = true;
+				btnDelItem->active = true;
+				currentItem = app->player->inventory.start->data;
 			}
 			currentAnim = app->guiManager->idleBook;
 			app->fonts->ResetH();
+
+			btnUseItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
+			btnUseItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 1 + 200;
+
+			btnDelItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
+			btnDelItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 2 + 200;
 		}
 
-		if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !introBook && !changingPage && !closingBook)
+		if (btnUseItem->state == GuiControlState::DISABLED && !introBook && !changingPage && !closingBook && !selectingPlayer)
 		{
-			currentAnim = app->guiManager->closeBook;
-			closingBook = true;
-			if (pageType == STATS) menuMagic->AbleDisableMagic();
-			app->audio->PlayFx(app->guiManager->fxBookClose);
-		}
-
-		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN && !introBook && !changingPage && !closingBook)
-		{
-			pageType = static_cast<PageType>(pageType - 1);
-			ChangePages();
-			currentAnim = app->guiManager->leftBook;
-		}
-		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN && !introBook && !changingPage && !closingBook)
-		{
-			pageType = static_cast<PageType>(pageType + 1);
-			ChangePages();
-			currentAnim = app->guiManager->rightBook;
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || app->input->pads[0].l1)
+			{
+				pageType = static_cast<PageType>(pageType - 1);
+				ChangePages();
+				currentAnim = app->guiManager->leftBook;
+				btnUseItem->active = false;
+				btnDelItem->active = false;
+			}
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || app->input->pads[0].r1)
+			{
+				pageType = static_cast<PageType>(pageType + 1);
+				ChangePages();
+				currentAnim = app->guiManager->rightBook;
+				btnUseItem->active = false;
+				btnDelItem->active = false;
+			}
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+			{
+				currentAnim = app->guiManager->closeBook;
+				closingBook = true;
+				if (pageType == STATS) menuMagic->AbleDisableMagic();
+				app->audio->PlayFx(app->guiManager->fxBookClose);
+				btnUseItem->active = false;
+				btnDelItem->active = false;
+			}
 		}
 
 		switch (pageType)
@@ -98,6 +134,62 @@ bool GuiStatsMenu::Update(float dt_)
 
 void GuiStatsMenu::UpdateInventory()
 {
+	if (!introBook && !changingPage && !closingBook && currentItem != nullptr)
+	{
+		if (btnUseItem->state == GuiControlState::DISABLED && !selectingPlayer)
+		{
+			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up)
+			{
+				if (currentItem == app->player->inventory.start->data) currentItem = app->player->inventory.end->data;
+				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->prev->data;
+			}
+			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down)
+			{
+				if (currentItem == app->player->inventory.end->data) currentItem = app->player->inventory.start->data;
+				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->next->data;
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a)
+			{
+				btnUseItem->state = GuiControlState::FOCUSED;
+				btnDelItem->state = GuiControlState::NORMAL;
+				CheckSelectPlayer();
+			}
+		}
+		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b && !selectingPlayer)
+		{
+			btnUseItem->state = GuiControlState::DISABLED;
+			btnDelItem->state = GuiControlState::DISABLED;
+		}
+		if (selectingPlayer)
+		{
+			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up)
+			{
+				if (characterSelected == 1) characterSelected = 4;
+				else characterSelected--;
+				CheckSelectPlayer();
+			}
+			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down)
+			{
+				if (characterSelected == 4) characterSelected = 1;
+				else characterSelected++;
+				CheckSelectPlayer();
+			}
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a)
+			{
+				app->player->itemManager->UseItem(currentItem, selectPlayer);
+				currentItem = app->player->inventory.start->data;
+				selectingPlayer = false;
+			}
+			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+			{
+				btnUseItem->state = GuiControlState::FOCUSED;
+				btnDelItem->state = GuiControlState::NORMAL;
+				selectingPlayer = false;
+			}
+		}
+	}
+	//debugg
 	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
 	{
 		if (app->player->inventory.start != nullptr)
@@ -107,19 +199,43 @@ void GuiStatsMenu::UpdateInventory()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 	{
-		app->player->itemManager->AddItem(0);
+		app->player->itemManager->AddItem(3);
+		app->player->itemManager->AddItem(4);
+		app->player->itemManager->AddItem(5);
+		app->player->itemManager->AddItem(6);
+	}
+}
+
+void GuiStatsMenu::CheckSelectPlayer()
+{
+	switch (characterSelected)
+	{
+	case 1:
+		selectPlayer = app->player;
+		break;
+	case 2:
+		selectPlayer = &app->player->GetPartners()[0];
+		break;
+	case 3:
+		selectPlayer = &app->player->GetPartners()[1];
+		break;
+	case 4:
+		selectPlayer = &app->player->GetPartners()[2];
+		break;
+	default:
+		break;
 	}
 }
 
 void GuiStatsMenu::UpdateStats()
 {
-	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].r1) && !introBook && !changingPage && !closingBook)
+	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down) && !introBook && !changingPage && !closingBook)
 	{
 		page.numPage++;
 		ChangeStatCharacter();
 		currentAnim = app->guiManager->rightBook;
 	}
-	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].l1) && !introBook && !changingPage && !closingBook)
+	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up) && !introBook && !changingPage && !closingBook)
 	{
 		page.numPage--;
 		ChangeStatCharacter();
@@ -157,6 +273,46 @@ bool GuiStatsMenu::PostUpdate()
 		int posX = -app->render->camera.x + 220;
 		int posY = -app->render->camera.y + 120;
 
+		int posY2 = -app->render->camera.y + 120;
+
+		if (!introBook && !closingBook)
+		{
+			SDL_Rect bookMarkRect = { 80,374,50,36 };
+			switch (pageType)
+			{
+			case STATS:
+				//Draw bookmarks
+				DrawBookMarks(posX, posY2, page.numPage);
+				break;
+			case INVENTORY:
+				if (selectingPlayer)
+				{
+					DrawBookMarks(posX, posY2, characterSelected);
+					switch (characterSelected)
+					{
+					case 1:
+						app->render->DrawTextureFlip(app->guiManager->handCursor, posX + 912, posY + 200, &app->guiManager->handAnim->GetCurrentFrame());
+						break;
+					case 2:
+						app->render->DrawTextureFlip(app->guiManager->handCursor, posX + 912, posY + 240, &app->guiManager->handAnim->GetCurrentFrame());
+						break;
+					case 3:
+						app->render->DrawTextureFlip(app->guiManager->handCursor, posX + 912, posY + 280, &app->guiManager->handAnim->GetCurrentFrame());
+						break;
+					case 4:
+						app->render->DrawTextureFlip(app->guiManager->handCursor, posX + 912, posY + 320, &app->guiManager->handAnim->GetCurrentFrame());
+						break;
+					default:
+						break;
+					}
+				}
+				else for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
+				break;
+			default:
+				break;
+			}
+		}
+
 		if (!introBook && !changingPage && !closingBook)
 		{
 			switch (pageType)
@@ -171,25 +327,6 @@ bool GuiStatsMenu::PostUpdate()
 				break;
 			}
 			
-		}
-
-		int posY2 = -app->render->camera.y + 120;
-
-		if (!introBook && !closingBook)
-		{
-			SDL_Rect bookMarkRect = { 80,374,50,36 };
-			switch (pageType)
-			{
-			case STATS:
-				//Draw bookmarks
-				DrawBookMarks(posX, posY2);
-				break;
-			case INVENTORY:
-				for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
-				break;
-			default:
-				break;
-			}
 		}
 
 	}
@@ -265,28 +402,18 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
 
 	posY += 60;
+	int boostPosY = posY;
 	posX -= 50;
 	sprintf_s(textStats, 15, "%d", page.attack);
 	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
-	posX += 60;
-	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 
 	posY += 50;
-	posX -= 60;
 	sprintf_s(textStats, 15, "%d", page.defense);
 	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
-	posX += 60;
-	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 
 	posY += 50;
-	posX -= 60;
 	sprintf_s(textStats, 15, "%d", page.speed);
 	app->fonts->BlitText(posX, posY, 0, textStats, color, dt * velocityDraw);
-	posX += 60;
-	sprintf_s(textStats, 15, "(+0)"); // Change for boost %d
-	app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
 	
 	// Draw Rectangles
 	posX = WINDOW_W / 2 - app->render->camera.x + 80;
@@ -330,12 +457,64 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	app->render->DrawRectangle(rectBar, 0, 94, 221);
 	rectBar.w = wRectBar - 30;
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
+
+	DrawBoost(boostPosY, posX);
 }
 
-void GuiStatsMenu::DrawBookMarks(int posX, int& posY)
+void GuiStatsMenu::DrawBoost(int& posY, int posX)
+{
+	posX -= 210;
+	switch (page.numPage)
+	{
+	case 1:
+		if (app->player->entityData.equipedItem != nullptr)
+		{
+			if (app->player->entityData.equipedItem->attribute == "defense") posY += 50;
+			else if (app->player->entityData.equipedItem->attribute == "speed") posY += 100;
+
+			sprintf_s(textStats, 15, "(+%d)", app->player->entityData.equipedItem->value);
+			app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
+		}
+		break;
+	case 2:
+		if (app->player->GetPartners()[0].entityData.equipedItem != nullptr)
+		{
+			if (app->player->GetPartners()[0].entityData.equipedItem->attribute == "defense") posY += 50;
+			else if (app->player->GetPartners()[0].entityData.equipedItem->attribute == "speed") posY += 100;
+
+			sprintf_s(textStats, 15, "(+%d)", app->player->GetPartners()[0].entityData.equipedItem->value);
+			app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
+		}
+		break;
+	case 3:
+		if (app->player->GetPartners()[1].entityData.equipedItem != nullptr)
+		{
+			if (app->player->GetPartners()[1].entityData.equipedItem->attribute == "defense") posY += 50;
+			else if (app->player->GetPartners()[1].entityData.equipedItem->attribute == "speed") posY += 100;
+
+			sprintf_s(textStats, 15, "(+%d)", app->player->GetPartners()[1].entityData.equipedItem->value);
+			app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
+		}
+		break;
+	case 4:
+		if (app->player->GetPartners()[2].entityData.equipedItem != nullptr)
+		{
+			if (app->player->GetPartners()[2].entityData.equipedItem->attribute == "defense") posY += 50;
+			else if (app->player->GetPartners()[2].entityData.equipedItem->attribute == "speed") posY += 100;
+
+			sprintf_s(textStats, 15, "(+%d)", app->player->GetPartners()[2].entityData.equipedItem->value);
+			app->fonts->BlitText(posX, posY, 0, textStats, { 0, 98, 0, }, dt * velocityDraw);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void GuiStatsMenu::DrawBookMarks(int posX, int& posY, int switcher)
 {
 	SDL_Rect bookMarkRect;
-	switch (page.numPage)
+	switch (switcher)
 	{
 	case 1:
 		bookMarkRect = { 0,374,68,36 };
@@ -418,14 +597,83 @@ void GuiStatsMenu::DrawInventory(int posX, int& posY)
 	app->fonts->BlitText(posX + 320, posY + 45, 0, textStats, color, dt * 20);
 
 	app->render->DrawRectangle({ posX, posY + 70, 390, 5 },color.r,color.g, color.b);
+	SDL_Rect itemTextRect;
+	//Draw item info
+	if (currentItem != nullptr)
+	{
+		DrawItemInfo(posX, posY, itemTextRect);
+	}
 
+	DrawItemList(posX, posY, itemTextRect);
+
+	if (currentItem != nullptr)
+	{
+		int w, h;
+		posY += 100 + app->player->inventory.Find(currentItem) * 30;
+		TTF_SizeText(app->sceneManager->guiFont, currentItem->name.GetString(), &w, &h);
+		app->render->DrawRectangle({ posX + 20, posY, w, 4 }, color.r, color.g, color.b);
+	}
+
+}
+
+void GuiStatsMenu::DrawItemList(int posX, int& posY, SDL_Rect& itemTextRect)
+{
 	for (int i = 0; i < app->player->inventory.Count(); i++)
 	{
 		sprintf_s(textItemName, 30, app->player->inventory.At(i)->data->name.GetString());
-		app->fonts->BlitText(posX + 10, posY + 80 + (i * 30), 0, textItemName, color, dt * 20);
+		app->fonts->BlitText(posX + 20, posY + 80 + (i * 30), 0, textItemName, color, dt * 20);
 
 		sprintf_s(itemQuantity, 3, "%d", app->player->inventory.At(i)->data->multi);
 		app->fonts->BlitText(posX + 340, posY + 80 + (i * 30), 0, itemQuantity, color, dt * 20);
+
+		switch (app->player->inventory.At(i)->data->type)
+		{
+		case Type::POTION:
+			itemTextRect = { 272, 0, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiAtlas, posX - 8, posY + 80 + (i * 30), &itemTextRect, 1.5f);
+			break;
+		case Type::RING:
+			itemTextRect = { 272, 16, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiAtlas, posX - 8, posY + 80 + (i * 30), &itemTextRect, 1.5f);
+			break;
+		default:
+			break;
+		}
+		if (app->player->inventory.At(i)->data->equiped)
+		{
+			app->fonts->BlitText(posX + 220, posY + 80 + (i * 30), 0, "E", color, dt * 20);
+		}
+	}
+}
+
+void GuiStatsMenu::DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect)
+{
+	app->render->DrawTextBox(posX + 600, posY + 280, 230, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	app->render->DrawTextBox(posX + 477, posY + 280, 110, 200, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+
+	int w, h;
+	TTF_SizeText(app->sceneManager->itemFont, currentItem->name.GetString(), &w, &h);
+	sprintf_s(textItemName, 30, currentItem->name.GetString());
+	app->fonts->BlitText(posX + 650 - w / 2, posY, 4, textItemName, color);
+
+	sprintf_s(textItemName, 30, "Type: %s", app->player->itemManager->TypeToString(currentItem->type));
+	app->fonts->BlitText(posX + 473, posY + 250, 0, textItemName, color);
+
+	sprintf_s(textDescription, 400, currentItem->description.GetString());
+	app->fonts->BlitMarginText(posX + 620, posY + 315, 0, textDescription, color, 190);
+
+	switch (currentItem->type)
+	{
+	case Type::POTION:
+		itemTextRect = { 256, 0, 16, 16 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 570, posY + 60, &itemTextRect, 10.0f);
+		break;
+	case Type::RING:
+		itemTextRect = { 256, 16, 16, 16 };
+		app->render->DrawTexture(app->guiManager->uiAtlas, posX + 570, posY + 60, &itemTextRect, 10.0f);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -439,6 +687,20 @@ bool GuiStatsMenu::CleanUp()
 bool GuiStatsMenu::Event(GuiControl* control)
 {
 	//Button stuff
+
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+		if (control->id == 7)
+		{
+			btnUseItem->state = GuiControlState::DISABLED;
+			btnDelItem->state = GuiControlState::DISABLED;
+			selectingPlayer = true;
+		}
+		break;
+	default:
+		break;
+	}
 
 	return true;
 }
@@ -488,9 +750,9 @@ void GuiStatsMenu::InicializeStats()
 	case 1: // Kenzie
 		level = app->player->playerData.level;
 		page.level = level;
-		page.attack = level * 3.5 + 9.5;
-		page.defense = level * 1.5 + 6.5;
-		page.speed = level * 2.5 + 7.5;
+		page.attack = app->player->stats.attack;
+		page.defense = app->player->stats.defense;
+		page.speed = app->player->stats.speed;
 		page.maxHealth = level * 2 + 6;
 		page.health = app->player->playerData.health;
 		page.maxMana = level * 3 + 8;
@@ -508,9 +770,9 @@ void GuiStatsMenu::InicializeStats()
 	case 2: // Keiler
 		level = app->player->GetPartners()[0].level;
 		page.level = level;
-		page.attack = 1.5 * level + 6.5;
-		page.defense = 1.5 * level + 5.5;
-		page.speed = 2.5 * level + 8.5;
+		page.attack = app->player->GetPartners()[0].stats.attack;
+		page.defense = app->player->GetPartners()[0].stats.defense;
+		page.speed = app->player->GetPartners()[0].stats.speed;
 		page.maxHealth = 4 * level + 10;
 		page.health = app->player->GetPartners()[0].health;
 		page.maxMana = 2.5 * level + 7.5;
@@ -528,9 +790,9 @@ void GuiStatsMenu::InicializeStats()
 	case 3: // Isrra
 		level = app->player->GetPartners()[1].level;
 		page.level = level;
-		page.attack = 2 * level + 7;
-		page.defense = 2 * level + 7;
-		page.speed = 2.5 * level + 7.5;
+		page.attack = app->player->GetPartners()[1].stats.attack;
+		page.defense = app->player->GetPartners()[1].stats.defense;
+		page.speed = app->player->GetPartners()[1].stats.speed;
 		page.maxHealth = 2.5 * level + 7.5;
 		page.health = app->player->GetPartners()[1].health;
 		page.maxMana = 3.5 * level + 8.5;
@@ -548,9 +810,9 @@ void GuiStatsMenu::InicializeStats()
 	case 4: // Brenda
 		level = app->player->GetPartners()[2].level;
 		page.level = level;
-		page.attack = 1.5 * level + 6.5;
-		page.defense = 3.5 * level + 9.5;
-		page.speed = 1.5 * level + 6.5;
+		page.attack = app->player->GetPartners()[2].stats.attack;
+		page.defense = app->player->GetPartners()[2].stats.defense;
+		page.speed = app->player->GetPartners()[2].stats.speed;
 		page.maxHealth = 3.5 * level + 9.5;
 		page.health = app->player->GetPartners()[2].health;
 		page.maxMana = 1.5 * level + 6.5;

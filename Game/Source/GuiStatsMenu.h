@@ -17,11 +17,6 @@ enum PageType
 	INVENTORY = 2
 };
 
-class  InventoryPage
-{
-	GameItem* currentItem = nullptr;
-};
-
 class StatsPage
 {
 public:
@@ -47,13 +42,19 @@ public:
 
 	bool Update(float dt);
 	void UpdateInventory();
+	void CheckSelectPlayer();
 	void UpdateStats();
 	void CloseBook();
 	bool PostUpdate();
 
 	void DrawTitleStats(int posX, int& posY);
-	void DrawBookMarks(int posX, int& posY);
+	void DrawBoost(int& posY, int posX);
+	void DrawBookMarks(int posX, int& posY, int switcher);
 	void DrawInventory(int posX, int& posY);
+
+	void DrawItemList(int posX, int& posY, SDL_Rect& itemTextRect);
+
+	void DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect);
 
 	bool CleanUp();
 
@@ -81,9 +82,16 @@ private:
 	iPoint relativePosition = { 0,0 };
 
 	GuiMenuMagic* menuMagic = nullptr;
+	int padding;
 
 	StatsPage page;
+	GameItem* currentItem = nullptr;
 	PageType pageType = INVENTORY;
+	GuiButton* btnUseItem = nullptr;
+	GuiButton* btnDelItem = nullptr;
+	Entity* selectPlayer = nullptr;
+	int characterSelected = 1;
+	bool selectingPlayer = false;
 
 	int maxNumPages = 4;
 	char textStats[15] = { "\0" };

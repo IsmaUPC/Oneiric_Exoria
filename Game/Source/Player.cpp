@@ -60,16 +60,21 @@ bool Player::Start()
 
 	if (!app->sceneManager->GetCurrentScene()->isContinue)
 	{
-		stats.health = 8;
-		stats.maxHealth = 8;
-		stats.mana = 11;
-		stats.maxMana = 11;
-
 		playerData.level = 1;
 		playerData.exp = 0;
 		playerData.health = 8;
 		playerData.mana = 11;
+
+		stats.health = 8;
+		stats.maxHealth = stats.health;
+		stats.mana = 11;
+		stats.maxMana = stats.mana;
+		stats.attack = 3.5 + 9.5;
+		stats.defense = 1.5 + 6.5;
+		stats.speed = 2.5 + 7.5;
+
 	}
+
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
 	playerData.centerPoint.x = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[1]) / 2;
 	playerData.centerPoint.y = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[3]) / 2;
@@ -137,6 +142,8 @@ bool Player::Start()
 
 	fxBookOpen = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
 	fxStairs = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
+
+	loadStats = true;
 	
 	return true;
 }
@@ -166,8 +173,30 @@ void Player::LoadPartners()
 			if (i == 1) partners[i].health = 10, partners[i].mana = 12;
 			if (i == 2) partners[i].health = 13, partners[i].mana = 8;
 
+			partners[i].stats.maxHealth = partners[i].health;
 			partners[i].stats.health = partners[i].health;
+			partners[i].stats.maxMana = partners[i].mana;
 			partners[i].stats.mana = partners[i].mana;
+			switch (i)
+			{
+			case 0:
+				partners[i].stats.attack = 1.5 * partners[i].level + 6.5;
+				partners[i].stats.defense = 1.5 * partners[i].level + 5.5;
+				partners[i].stats.speed = 2.5 * partners[i].level + 8.5;
+				break;
+			case 1:
+				partners[i].stats.attack = 2 * partners[i].level + 7;
+				partners[i].stats.defense = 2 * partners[i].level + 7;
+				partners[i].stats.speed = 2.5 * partners[i].level + 7.5;
+				break;
+			case 2:
+				partners[i].stats.attack = 1.5 * partners[i].level + 6.5;
+				partners[i].stats.defense = 3.5 * partners[i].level + 9.5;
+				partners[i].stats.speed = 1.5 * partners[i].level + 6.5;
+				break;
+			default:
+				break;
+			}
 		}
 		if (i == 0)partners[i].type = KEILER;
 		else if (i == 1)partners[i].type = ISRRA;
@@ -229,8 +258,13 @@ bool Player::LoadState(pugi::xml_node& player)
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
 		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
 		playerData.mana = player.child("data").attribute("mana").as_int(playerData.mana);
+		stats.attack = player.child("data").attribute("atack").as_int(stats.attack);
+		stats.defense = player.child("data").attribute("atack").as_int(stats.defense);
+		stats.speed = player.child("data").attribute("atack").as_int(stats.speed);
 		stats.health = playerData.health;
+		stats.maxHealth = 2 * playerData.level + 6;
 		stats.mana = playerData.mana;
+		stats.maxHealth = 3 * playerData.level + 8;
 		loadStats = false;
 	}
 	if (!app->sceneManager->GetLoseBattle())
@@ -253,6 +287,26 @@ bool Player::LoadState(pugi::xml_node& player)
 			partners[i].exp = positionPartners.attribute("exp").as_int();
 			partners[i].health = positionPartners.attribute("health").as_int();
 			partners[i].mana = positionPartners.attribute("mana").as_int();
+			partners[i].stats.attack = positionPartners.attribute("attack").as_int();
+			partners[i].stats.defense = positionPartners.attribute("defense").as_int();
+			partners[i].stats.speed = positionPartners.attribute("speed").as_int();
+			switch (i)
+			{
+			case 0:
+				partners[i].stats.maxHealth = 4 * partners[i].level + 10;
+				partners[i].stats.maxMana = 2.5 * partners[i].level + 7.5;
+				break;
+			case 1:
+				partners[i].stats.maxHealth = 2.5 * partners[i].level + 7.5;
+				partners[i].stats.maxMana = 3.5 * partners[i].level + 8.5;
+				break;
+			case 2:
+				partners[i].stats.maxHealth = 3.5 * partners[i].level + 9.5;
+				partners[i].stats.maxMana = 1.5 * partners[i].level + 6.5;
+				break;
+			default:
+				break;
+			}
 		}
 		if (!app->sceneManager->GetLoseBattle())
 		{
@@ -383,12 +437,18 @@ bool Player::SaveLevel(pugi::xml_node& player) const
 		levelPlayer.attribute("exp").set_value(playerData.exp);
 		levelPlayer.attribute("health").set_value(playerData.health);
 		levelPlayer.attribute("mana").set_value(playerData.mana);
+		levelPlayer.attribute("attack").set_value(stats.attack);
+		levelPlayer.attribute("defense").set_value(stats.defense);
+		levelPlayer.attribute("speed").set_value(stats.speed);
 		for (int i = 0; i < numPartners; i++)
 		{
 			partnersData.append_attribute("level").set_value(partners[i].level);
 			partnersData.append_attribute("exp").set_value(partners[i].exp);
 			partnersData.append_attribute("health").set_value(partners[i].health);
 			partnersData.append_attribute("mana").set_value(partners[i].mana);
+			partnersData.append_attribute("attack").set_value(partners[i].stats.attack);
+			partnersData.append_attribute("defense").set_value(partners[i].stats.defense);
+			partnersData.append_attribute("speed").set_value(partners[i].stats.speed);
 			partnersData = partnersData.next_sibling();
 		}
 	}

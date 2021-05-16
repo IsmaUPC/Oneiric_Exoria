@@ -137,6 +137,7 @@ public:
 	int lastLevel = 0;
 	bool onDialog = false;
 	TTF_Font* guiFont = nullptr;
+	TTF_Font* itemFont = nullptr;
 	TTF_Font* titleFont = nullptr;
 	TTF_Font* statsFont = nullptr;
 	TTF_Font* runicFont = nullptr;

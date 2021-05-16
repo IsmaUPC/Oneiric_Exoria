@@ -138,3 +138,36 @@ void Fonts::BlitText(int x, int y, int font_id, const char* text, SDL_Color colo
 	}
 
 }
+
+void Fonts::BlitMarginText(int x, int y, int font_id, const char* text, SDL_Color color, Uint32 marginH, float dt_)
+{
+	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts.At(font_id)->data == NULL)
+	{
+		LOG("Unable to render text with bmp font id %d", font_id);
+		return;
+	}
+	else
+	{
+		SDL_FreeSurface(sur);
+		SDL_DestroyTexture(tex);
+		sur = TTF_RenderText_Blended_Wrapped(fonts.At(font_id)->data, text, color, marginH);
+		tex = SDL_CreateTextureFromSurface(app->render->renderer, sur);
+
+		if (tex != NULL)
+		{
+			if (dt_ != 0)
+			{
+				SDL_Rect rect = { 0,0,0,0 };
+				SDL_QueryTexture(tex, NULL, NULL, &rect.w, &rect.h);
+				if (h < rect.h)
+				{
+					h += dt_;
+					if (h < rect.h) rect.h = h;
+				}
+				app->render->DrawTexture(tex, x, y, &rect);
+			}
+			else app->render->DrawTexture(tex, x, y);
+		}
+	}
+
+}

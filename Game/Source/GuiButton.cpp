@@ -117,7 +117,7 @@ bool GuiButton::Draw()
 	if(app->sceneManager->onDialog) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 60, 43, 13 });
 	else if(positionY == 0 && state != GuiControlState::FOCUSED) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13}, app->guiManager->dt * 20);
 	else app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
-	if(state == GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 251, 195, 92 });
+	if(state == GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 38, 79, 85 });
 
 	return true;
 }

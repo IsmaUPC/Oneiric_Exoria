@@ -278,46 +278,46 @@ void SceneBattle::InicializeStats()
 			switch (pType)
 			{
 			case KENZIE_ :
-				enemies.At(i)->data->stats.attack = 3.5 * level + 9.5;
-				enemies.At(i)->data->stats.defense = 1.5 * level + 6.5;
+				enemies.At(i)->data->stats.attack = app->player->stats.attack;
+				enemies.At(i)->data->stats.defense = app->player->stats.defense;
 				enemies.At(i)->data->stats.health = app->player->playerData.health;
 				enemies.At(i)->data->stats.maxHealth = 2 * level + 6;
 				enemies.At(i)->data->stats.mana = app->player->playerData.mana;
-				enemies.At(i)->data->stats.maxMana = 3 * level +8;
-				enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+				enemies.At(i)->data->stats.maxMana = 3 * level + 8;
+				enemies.At(i)->data->stats.speed = app->player->stats.speed;
 				enemies.At(i)->data->stats.exp = app->player->playerData.exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(0)->data;
 				break;
 			case KEILER_:
-				enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
-				enemies.At(i)->data->stats.defense = 1.5 * level + 5.5;
+				enemies.At(i)->data->stats.attack = app->player->GetPartners()[0].stats.attack;
+				enemies.At(i)->data->stats.defense = app->player->GetPartners()[0].stats.defense;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[0].health;
 				enemies.At(i)->data->stats.maxHealth = 4 * level + 10;
 				enemies.At(i)->data->stats.mana = app->player->GetPartners()[0].mana;
 				enemies.At(i)->data->stats.maxMana = 2.5 * level + 7.5;
-				enemies.At(i)->data->stats.speed = 2.5 * level + 8.5;
+				enemies.At(i)->data->stats.speed = app->player->GetPartners()[0].stats.speed;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[0].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(1)->data;
 				break;
 			case ISRRA_:
-				enemies.At(i)->data->stats.attack = 2 * level + 7;
-				enemies.At(i)->data->stats.defense = 2 * level + 7;
+				enemies.At(i)->data->stats.attack = app->player->GetPartners()[1].stats.attack;
+				enemies.At(i)->data->stats.defense = app->player->GetPartners()[1].stats.defense;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[1].health;
 				enemies.At(i)->data->stats.maxHealth = 2.5 * level + 7.5;
 				enemies.At(i)->data->stats.mana = app->player->GetPartners()[1].mana;
 				enemies.At(i)->data->stats.maxMana = 3.5 * level + 8.5;
-				enemies.At(i)->data->stats.speed = 2.5 * level + 7.5;
+				enemies.At(i)->data->stats.speed = app->player->GetPartners()[1].stats.speed;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[1].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(2)->data;
 				break;
 			case BRENDA_:
-				enemies.At(i)->data->stats.attack = 1.5 * level + 6.5;
-				enemies.At(i)->data->stats.defense = 3.5 * level + 9.5;
+				enemies.At(i)->data->stats.attack = app->player->GetPartners()[2].stats.attack;
+				enemies.At(i)->data->stats.defense = app->player->GetPartners()[2].stats.defense;
 				enemies.At(i)->data->stats.health = app->player->GetPartners()[2].health;
 				enemies.At(i)->data->stats.maxHealth = 3.5 * level + 9.5;
 				enemies.At(i)->data->stats.mana = app->player->GetPartners()[2].mana;
 				enemies.At(i)->data->stats.maxMana = 1.5 * level + 6.5;
-				enemies.At(i)->data->stats.speed = 1.5 * level + 6.5;
+				enemies.At(i)->data->stats.speed = app->player->GetPartners()[2].stats.speed;
 				enemies.At(i)->data->stats.exp = app->player->GetPartners()[2].exp;
 				enemies.At(i)->data->entityData.currentAnimation = animationsPlayer.At(3)->data;
 				break;
@@ -2081,6 +2081,26 @@ void SceneBattle::SaveState(TypeEntity pType, int i)
 			app->player->GetPartners()[i].exp = partners.At(j)->data->stats.exp;
 			app->player->GetPartners()[i].health = partners.At(j)->data->stats.health;
 			app->player->GetPartners()[i].mana = partners.At(j)->data->stats.mana;
+			switch (i)
+			{
+			case 0:
+				app->player->GetPartners()[i].stats.attack = 1.5 * partners.At(j)->data->entityData.level + 6.5;
+				app->player->GetPartners()[i].stats.defense = 1.5 * partners.At(j)->data->entityData.level + 5.5;
+				app->player->GetPartners()[i].stats.speed = 2.5 * partners.At(j)->data->entityData.level + 8.5;
+				break;
+			case 1:
+				app->player->GetPartners()[i].stats.attack = 2 * partners.At(j)->data->entityData.level + 7;
+				app->player->GetPartners()[i].stats.defense = 2 * partners.At(j)->data->entityData.level + 7;
+				app->player->GetPartners()[i].stats.speed = 2.5 * partners.At(j)->data->entityData.level + 7.5;
+				break;
+			case 2:
+				app->player->GetPartners()[i].stats.attack = 1.5 * partners.At(j)->data->entityData.level + 6.5;
+				app->player->GetPartners()[i].stats.defense = 3.5 * partners.At(j)->data->entityData.level + 9.5;
+				app->player->GetPartners()[i].stats.speed = 1.5 * partners.At(j)->data->entityData.level + 6.5;
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 		else app->player->GetPartners()[i].health = 0;

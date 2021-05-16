@@ -66,6 +66,7 @@ bool SceneManager::Start()
 	titleFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 48);
 	statsFont = app->fonts->Load("Assets/Fonts/title_font.ttf", 32);
 	runicFont = app->fonts->Load("Assets/Fonts/runic_font.ttf", 15);
+	itemFont = app->fonts->Load("Assets/Fonts/RPGSystem.ttf", 35);
 
 	fxTransition = app->audio->LoadFx("Assets/Audio/Fx/combat_transition.wav");
 
@@ -302,6 +303,7 @@ bool SceneManager::CleanUp()
 	app->fonts->UnLoad(1);
 	app->fonts->UnLoad(2);
 	app->fonts->UnLoad(3);
+	app->fonts->UnLoad(4);
 	app->tex->UnLoad(texPlayers);
 	app->audio->Unload1Fx(fxTransition);
 

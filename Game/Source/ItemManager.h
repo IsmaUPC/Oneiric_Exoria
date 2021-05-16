@@ -40,7 +40,7 @@ struct GameItem
 	Obtention obtention = Obtention::UNKNOW;
 	int cost = 0;
 	int multi = 0;
-
+	bool equiped = false;
 };
 
 struct Consumable : public GameItem
@@ -52,8 +52,15 @@ struct Consumable : public GameItem
 
 struct Equipable : public GameItem
 {
+public:
 
-	bool equiped = false;
+	void EquipItem(Equipable* item, Entity* entity);
+	void UnEquipItem(Equipable* item);
+
+	SString attribute = "";
+	int value = 0;
+
+	Entity* currentOwner = nullptr;
 
 };
 
@@ -61,16 +68,13 @@ struct Potion : public Consumable
 {
 
 	SString attribute = "";
-	int value;
+	int value = 0;
 	void Heal(SString att, int val, Entity* entity);
 
 };
 
 struct Ring : public Equipable
 {
-
-	SString attribute = "";
-	int value;
 
 };
 
@@ -87,6 +91,9 @@ public:
 	bool AddItem(int id);
 	bool DelItem(GameItem* id);
 	bool UseItem(GameItem* id, Entity* entity);
+
+	const char* TypeToString(Type type);
+	void SetItemEquip(Equipable* item);
 
 public:
 

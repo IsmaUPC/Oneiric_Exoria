@@ -86,12 +86,12 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 
 void DialogueSystem::DrawDialogue()
 {
-	char NPCdialogue[128] = { 0 };
-	char drawNPCdialogue[128] = { 0 };
+	char NPCdialogue[420] = { 0 };
+	char drawNPCdialogue[420] = { 0 };
 
-	sprintf_s(NPCdialogue, 128, currentNode->text.c_str(), 56);
+	sprintf_s(NPCdialogue, 420, currentNode->text.c_str(), 56);
 
-	if (dialogSpeed == 0) app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 });
+	if (dialogSpeed == 0) app->fonts->BlitMarginText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, NPCdialogue, { 60, 43, 13 }, 520);
 	else if (dialogSpeed == 1)
 	{
 		if (actualLetter == 0)
@@ -107,7 +107,7 @@ void DialogueSystem::DrawDialogue()
 			drawNPCdialogue[i] = NPCdialogue[i];
 		}
 
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+		app->fonts->BlitMarginText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 }, 520);
 	}
 	else if (dialogSpeed == 2)
 	{
@@ -124,7 +124,7 @@ void DialogueSystem::DrawDialogue()
 			drawNPCdialogue[i] = NPCdialogue[i];
 		}
 
-		app->fonts->BlitText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 });
+		app->fonts->BlitMarginText(point.x + WINDOW_W / 2 - 300 + 45, point.y + 600, 0, drawNPCdialogue, { 60, 43, 13 }, 520);
 	}
 
 	if (actualLetter >= totalLetters - 1)

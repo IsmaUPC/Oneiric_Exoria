@@ -51,6 +51,7 @@ public:
 
 	// Create a surface from text
 	void BlitText(int x, int y, int fontIndex, const char* text, SDL_Color color, float dt_ = 0);
+	void BlitMarginText(int x, int y, int fontIndex, const char* text, SDL_Color color, Uint32 marginH, float dt_ = 0);
 	void ResetH() { h = 0; };
 
 
