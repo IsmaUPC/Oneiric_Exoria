@@ -97,6 +97,8 @@ public:
 
 private:
 
+	void HealTeam();
+
 	void UseAMagic();
 
 	SDL_Rect rec = { 0,0,0,0 };
@@ -175,6 +177,8 @@ private:
 	int ally=0;
 	bool hit=0;
 	float newHealth = 0;
+	float newHealthTeam[4] = { 0 };
+
 	int reduceLieveVelocity = 8;
 
 	bool moveBarTurn = false;

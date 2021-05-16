@@ -705,25 +705,23 @@ void SceneBattle::IconEnemySelected()
 		int posSelectX;
 		int posSelectY;
 
-		if (magicInUse == nullptr || magicInUse->type == 0)
-		{
+		if (magicInUse == nullptr || magicInUse->type == 0){
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || (app->input->pads[0].left && !missClick)) {
 				missClick = true;
 				enemySelected--;
-				if (enemySelected < 0)
-				{
+				if (enemySelected < 0){
 					enemySelected = enemies.Count() - 1;
 				}
 				if (enemies.At(enemySelected)->data->stats.health <= 0) {
-					for (int i = enemySelected; i >= 0; i--) {
-						if (enemies.At(i)->data->stats.health > 0) {
+					for (int i = enemySelected; i >= 0; i--){
+						if (enemies.At(i)->data->stats.health > 0){
 							enemySelected = i;
 							break;
 						}
 					}
-					if (enemies.At(enemySelected)->data->stats.health <= 0) {
-						for (int i = enemies.Count() - 1; i >= 0; i--) {
-							if (enemies.At(i)->data->stats.health > 0) {
+					if (enemies.At(enemySelected)->data->stats.health <= 0){
+						for (int i = enemies.Count() - 1; i >= 0; i--){
+							if (enemies.At(i)->data->stats.health > 0){
 								enemySelected = i;
 								break;
 							}
@@ -734,8 +732,7 @@ void SceneBattle::IconEnemySelected()
 			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || (app->input->pads[0].right && !missClick)) {
 				missClick = true;
 				enemySelected++;
-				if (enemySelected >= enemies.Count())
-				{
+				if (enemySelected >= enemies.Count()){
 					enemySelected = 0;
 				}
 				if (enemies.At(enemySelected)->data->stats.health <= 0) {
@@ -762,6 +759,8 @@ void SceneBattle::IconEnemySelected()
 			posSelectX = (int)enemies.At(enemySelected)->data->entityData.position.x + 13;
 			posSelectY = (int)enemies.At(enemySelected)->data->entityData.position.y + 15;
 
+			app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
+			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
 		}
 		else if (magicInUse->type == 1)
 		{
@@ -820,10 +819,26 @@ void SceneBattle::IconEnemySelected()
 			posSelectX = (int)partners.At(enemySelected)->data->entityData.position.x - 20;
 			posSelectY = (int)partners.At(enemySelected)->data->entityData.position.y + 40;
 		
+			app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
+			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
 		}
+		else if (magicInUse->type == 2)
+		{
+			// PUTA
+			for (int i = 0; i < partners.Count(); i++) {
+				posCursorX = (int)partners.At(i)->data->entityData.position.x - 10;
+				posCursorY = (int)partners.At(i)->data->entityData.position.y - 70;
+
+				posSelectX = (int)partners.At(i)->data->entityData.position.x - 20;
+				posSelectY = (int)partners.At(i)->data->entityData.position.y + 40;
+
+				app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
+				app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
+			}
+		}
+		// PUTA otro if para las magias de area, solo habria que marcar a todos sin mas, facil
 		//app->render->DrawRectangle({ posCursorX, posCursorY ,20,20 }, red.r, red.g, red.b, 255);
-		app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
-		app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
+
 	}
 }
 
@@ -900,6 +915,7 @@ void SceneBattle::BattleSystem()
 			faseAction = SELECT_ACTION;
 		}
 
+
 		if (magicInUse == nullptr || magicInUse->type == 0)
 		{
 			//Select enemy with mouse 
@@ -933,7 +949,20 @@ void SceneBattle::BattleSystem()
 				}
 			}
 		}
-
+		else if (magicInUse->type == 2)
+		{
+			int mouseX, mouseY;
+			app->input->GetMousePosition(mouseX, mouseY);
+			bool click;
+			for (int i = 0; i < partners.Count(); i++) {
+				if ((mouseX > (partners.At(i)->data->entityData.position.x) && (mouseX < (partners.At(i)->data->entityData.position.x + 60)) &&
+					(mouseY > (partners.At(i)->data->entityData.position.y)) && (mouseY < (partners.At(i)->data->entityData.position.y + 90)))) {
+					if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT) {
+						faseAction = DO_ACITON;
+					}
+				}
+			}
+		}
 
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a && !missClick)) {
 			faseAction = DO_ACITON;
@@ -945,7 +974,6 @@ void SceneBattle::BattleSystem()
 	{
 		if (!hit)
 		{
-
 			hit = true;
 			if (magicInUse == nullptr)
 			{
@@ -962,6 +990,12 @@ void SceneBattle::BattleSystem()
 					break;
 				case 1:
 					newHealth = partners.At(enemySelected)->data->stats.health + magicInUse->damage;
+					break;
+				case 2:
+					for (int i = 0; i < partners.Count(); i++)
+					{
+						newHealthTeam[i] = partners.At(i)->data->stats.health + magicInUse->damage;
+					}
 					break;
 				default:
 					break;
@@ -1152,7 +1186,7 @@ void SceneBattle::BattleSystem()
 						faseAction = END_ACTION;
 					}
 				}
-				break;
+					break;
 				case 1:
 				{
 					if (newHealth >= partners.At(enemySelected)->data->stats.maxHealth) newHealth = partners.At(enemySelected)->data->stats.maxHealth;
@@ -1167,7 +1201,9 @@ void SceneBattle::BattleSystem()
 						faseAction = END_ACTION;
 					}
 				}
-				break;
+					break;
+				case 2: // PUTA 
+					HealTeam();
 				default:
 					break;
 				}
@@ -1372,6 +1408,31 @@ void SceneBattle::BattleSystem()
 	default:
 		break;
 	}
+}
+
+void SceneBattle::HealTeam()
+{
+	int fullHeal = 0;
+
+	for (int i = 0; i < partners.Count(); i++){
+
+		if (newHealthTeam[i] >= partners.At(i)->data->stats.maxHealth) newHealthTeam[i] = partners.At(i)->data->stats.maxHealth;
+		//Progres damage
+		if (partners.At(i)->data->stats.health < newHealthTeam[i]) {
+			partners.At(i)->data->stats.health += dt * reduceLieveVelocity;
+		}
+		else{
+			partners.At(i)->data->stats.health = newHealthTeam[i];
+			fullHeal++;
+		}
+	}
+	if (fullHeal == partners.Count()){
+		
+		hit = false;
+		magicInUse = nullptr;
+		faseAction = END_ACTION;
+	}
+
 }
 
 void SceneBattle::CheckWinLose()
@@ -1865,6 +1926,7 @@ int SceneBattle::CalculateExp(int level)
 {
 	return (0.04 * (level * level * level) + 0.8 * (level * level) + 2 * level) * 3.5;
 }
+
 void SceneBattle::SaveStateLose()
 {
 	iPoint playerPos;
@@ -1883,6 +1945,7 @@ void SceneBattle::SaveStateLose()
 		app->player->GetPartners()[i].position.y = playerPos.y;
 	}
 }
+
 void SceneBattle::SaveState(TypeEntity pType, int i)
 {
 	for (int j = 0; j < partners.Count(); j++)
