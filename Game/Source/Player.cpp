@@ -534,13 +534,14 @@ void Player::UpdatePointCheker()
 	{
 		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
 		{
-			LOG("TOCADO");
+			//LOG("TOCADO");
 			MoveBox();
 
 		}
 
-	}else
-		LOG("NO TOCADO");
+	}
+	//else
+		//LOG("NO TOCADO");
 
 }
 
