@@ -144,7 +144,7 @@ int Entity::CheckCollision(iPoint positionMap)
 		break;
 
 		default:
-			return -1;
+			return AIR;
 			break;
 		}
 	}
@@ -174,13 +174,26 @@ bool Entity::CheckCollisionBoxes(iPoint positionMap)
 		}
 
 	return false;
+}bool Entity::CheckCollisionHoles(iPoint positionMap)
+{
+	for (int i = 0; i < app->entityManager->holes.Count(); i++)
+		if (positionMap == app->entityManager->holes.At(i)->data->tilePosition)
+		{
+			posHole = i;
+			return true;
+		}
+	return false;
 }
 // TODO move to Obstacle Object
 bool Entity::MoveBox()
 {	
+
+	fPoint tmp= app->entityManager->boxes.At(posBox)->data->entityData.position;
+	fPoint aux;
 	 switch (app->player->playerData.direction)
 	 {
 	 case WALK_L:
+
 		 app->entityManager->boxes.At(posBox)->data->entityData.position.x-=32;
 
 		 break;
@@ -199,5 +212,34 @@ bool Entity::MoveBox()
 	 default:
 		 break;
 	 }
+	 aux = app->entityManager->boxes.At(posBox)->data->entityData.position;
+	 iPoint check = app->map->WorldToMap(iPoint(aux.x,aux.y));
+	 
+
+	 if (CheckCollision(check) == AIR || CheckCollision(check) == HOLE) {
+
+
+		 aux = fPoint(app->entityManager->boxes.At(posBox)->data->entityData.position);
+
+		 app->entityManager->boxes.At(posBox)->data->tilePosition = app->map->WorldToMap(aux.x, aux.y);
+
+		 if (CheckCollisionHoles(app->entityManager->boxes.At(posBox)->data->tilePosition))
+		 {
+			 app->entityManager->boxes.At(posBox)->data->pendingToDelete = true;
+			 app->entityManager->boxes.At(posBox)->data->entityData.state = DEAD;
+			 app->entityManager->boxes.Del(app->entityManager->boxes.At(posBox));
+			 app->entityManager->holes.At(posHole)->data->pendingToDelete = true;
+			 app->entityManager->holes.At(posHole)->data->entityData.state = DEAD;
+			 app->entityManager->holes.Del(app->entityManager->holes.At(posHole));
+
+		 }
+
+	 }
+	 else
+	 {
+		 app->entityManager->boxes.At(posBox)->data->entityData.position = tmp;
+
+	 }
+
 	return false;
 }
