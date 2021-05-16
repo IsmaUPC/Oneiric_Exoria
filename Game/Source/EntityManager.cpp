@@ -29,12 +29,8 @@ bool EntityManager::Start()
 
 
 	// Load Textures
-<<<<<<< Updated upstream
-	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_map.png");
-	texObstacles = app->tex->Load("Assets/Textures/Objects/objects.png");
-=======
 	texEnemies = app->tex->Load("Textures/Enemies/enemies_map.png");
->>>>>>> Stashed changes
+	texObstacles = app->tex->Load("Textures/Objects/objects.png");
 
 	// Animations
 	int numEnemies = 3;

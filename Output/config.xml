@@ -15,10 +15,10 @@
 		<fullscreen_window value="false" />
 	</window>
 	<audio>
-		<music volume="3" />
-		<fx volume="53" />
+		<music volume="80" />
+		<fx volume="90" />
 	</audio>
 	<map>
-		<folder>Assets/Maps/</folder>
+		<folder>Maps/</folder>
 	</map>
 </config>

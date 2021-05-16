@@ -6,25 +6,21 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="-115" y="63" />
+		<camera x="190" y="144" />
 	</renderer>
 	<player>
-		<data x="786" y="270" direction="2" level="1" exp="0" health="8" mana="11" />
+		<data x="406" y="194" direction="1" level="1" exp="0" health="8" mana="11" />
 		<coins count="0" />
 		<path>
-			<breadcrumb x="772" y="308" />
-			<breadcrumb x="774" y="306" />
-			<breadcrumb x="776" y="304" />
-			<breadcrumb x="778" y="302" />
-			<breadcrumb x="780" y="300" />
-			<breadcrumb x="782" y="298" />
-			<breadcrumb x="784" y="296" />
-			<breadcrumb x="786" y="294" />
+			<breadcrumb x="480" y="168" />
+			<breadcrumb x="402" y="168" />
+			<breadcrumb x="400" y="170" />
+			<breadcrumb x="400" y="194" />
 		</path>
 		<partners>
-			<partner x="768" y="308" breadcrumb="0" direction="1" level="1" exp="0" health="13" mana="10" />
-			<partner x="728" y="308" breadcrumb="0" direction="1" level="1" exp="0" health="10" mana="12" />
-			<partner x="688" y="308" breadcrumb="0" direction="1" level="1" exp="0" health="13" mana="8" />
+			<partner x="412" y="168" breadcrumb="1" direction="0" level="1" exp="0" health="14" mana="10" />
+			<partner x="452" y="168" breadcrumb="1" direction="0" level="1" exp="0" health="10" mana="12" />
+			<partner x="480" y="156" breadcrumb="0" direction="3" level="1" exp="0" health="13" mana="8" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -33,10 +29,11 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="55540" />
+		<time value="2070" />
 		<entities>
-			<entity type="13" x="3" y="-1" id="0" level="0" state="0" move="true" />
-			<entity type="2" x="24" y="8" id="2" level="1" state="6" move="false" />
+			<entity type="13" x="-5" y="-4" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="14" y="9" id="1" level="1" state="6" move="true" />
+			<entity type="2" x="24" y="8" id="2" level="1" state="0" move="false" />
 			<entity type="3" x="4" y="12" id="3" level="2" state="0" move="false" />
 			<entity type="1" x="3" y="5" id="4" level="2" state="0" move="false" />
 		</entities>

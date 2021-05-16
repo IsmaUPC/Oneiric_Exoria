@@ -337,9 +337,11 @@ bool SceneManager::SaveState(pugi::xml_node& data) const
 
 bool SceneManager::LoadTmxDungeonsList()
 {
-
 	//tmxDungeonsList;
-	pugi::xml_parse_result result = stateFile.load_file(DUNGEONS_FILE);
+	int size = app->assets->MakeLoad(DUNGEONS_FILE);
+
+	pugi::xml_parse_result result = stateFile.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	bool ret = true;
 	pugi::xml_node tmxDungeon = stateFile.child("dungeons").first_child();
