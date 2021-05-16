@@ -464,7 +464,7 @@ void Player::UpdatePointCheker()
 
 		break;
 	case WALK_DOWN:
-		pointCheker.y += 16;
+		pointCheker.y += 26;
 
 		break;
 	default:

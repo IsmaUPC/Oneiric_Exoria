@@ -47,7 +47,6 @@ bool ObstacleObjects::PreUpdate()
 bool ObstacleObjects::Update(float dt)
 {
 
-	tilePosition = app->map->WorldToMap(entityData.position.x, entityData.position.y);
 
 
 	return true;
