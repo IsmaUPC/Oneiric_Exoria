@@ -140,8 +140,8 @@ bool Player::Start()
 
 	app->entityManager->AddEntity(HUD, app->render->camera.x, app->render->camera.y, 0);
 
-	fxBookOpen = app->audio->LoadFx("Assets/Audio/Fx/open_book.wav");
-	fxStairs = app->audio->LoadFx("Assets/Audio/Fx/stairs.wav");
+	fxBookOpen = app->audio->LoadFx("Audio/Fx/open_book.wav");
+	fxStairs = app->audio->LoadFx("Audio/Fx/stairs.wav");
 
 	loadStats = true;
 	
