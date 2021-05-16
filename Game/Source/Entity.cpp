@@ -164,7 +164,7 @@ bool Entity::CheckCollisionObstacle(iPoint positionMap)
 	
 	return false;
 }
-bool Entity::CheckCollisionObstacle(iPoint positionMap)
+bool Entity::CheckCollisionBoxes(iPoint positionMap)
 {
 	for (int i = 0; i < app->entityManager->boxes.Count(); i++)
 		if (positionMap == app->entityManager->boxes.At(i)->data->tilePosition)

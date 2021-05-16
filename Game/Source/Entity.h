@@ -144,6 +144,7 @@ public:
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
 	bool CheckCollisionObstacle(iPoint positionMap);
+	bool CheckCollisionBoxes(iPoint positionMap);
 
 	int CalculateDistance(iPoint origin, iPoint destination);
 	
