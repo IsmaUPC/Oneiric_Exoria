@@ -44,15 +44,15 @@ bool Scene::Start()
 	app->SetLastScene((Module*)this);
 
 	// Load music and Fx
-	app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
-	fxList[0].fxName = app->audio->LoadFx("Assets/Audio/Fx/pc_typing.wav");
+	fxList[0].fxName = app->audio->LoadFx("Audio/Fx/pc_typing.wav");
 	fxCount = 1;
 
 	victory = false;
 	app->player->win = false;
 
-	if (app->map->Load("school_1.tmx") == true)
+	if (app->map->Load("/school_1.tmx") == true)
 	//if (app->map->Load("level.tmx") == true)
 	//if (app->map->Load("room.tmx") == true)
 	{
@@ -75,11 +75,12 @@ bool Scene::Start()
 
 	//NPCs
 	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
-	if (app->questManager->QuestState(1) == COMPLETE)
-	{
-		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
-	}
-	else app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
+	//if (app->questManager->QuestState(1) == COMPLETE)
+	//{
+		//app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
+	//}
+	//else
+	app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
 	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
 
 	//Interactuable objects

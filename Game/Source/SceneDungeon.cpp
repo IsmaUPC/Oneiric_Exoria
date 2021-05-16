@@ -43,7 +43,7 @@ bool SceneDungeon::Start()
 {
 	//app->SaveConfigRequested();
 	
-	//app->audio->PlayMusic("Assets/Audio/Music/level_music.ogg");
+	//app->audio->PlayMusic("Audio/Music/level_music.ogg");
 	app->player->positionInitial = new iPoint(200, 500);
 
 	// TODO dungoen

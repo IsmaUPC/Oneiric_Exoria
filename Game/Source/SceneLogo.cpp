@@ -31,11 +31,11 @@ bool SceneLogo::Start()
 {
 	app->SetLastScene((Module*)this);
 
-	logo = app->tex->Load("Assets/Textures/logo_7hd.png");
-	cracks = app->tex->Load("Assets/Textures/cracks_logo.png");
-	names = app->tex->Load("Assets/Textures/names.png");
-	license = app->tex->Load("Assets/Textures/mit_license_logo.png");
-	fxIntro = app->audio->LoadFx("Assets/Audio/Fx/logo.wav");
+	logo = app->tex->Load("Textures/logo_7hd.png");
+	cracks = app->tex->Load("Textures/cracks_logo.png");
+	names = app->tex->Load("Textures/names.png");
+	license = app->tex->Load("Textures/mit_license_logo.png");
+	fxIntro = app->audio->LoadFx("Audio/Fx/logo.wav");
 
 
 	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);

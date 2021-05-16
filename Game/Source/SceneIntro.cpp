@@ -78,18 +78,18 @@ bool SceneIntro::Start()
 
 	menuSettings->MovePosition();
 
-	app->audio->PlayMusic("Assets/Audio/Music/music_intro.ogg");
+	app->audio->PlayMusic("Audio/Music/music_intro.ogg");
 
-	bgIntro = app->tex->Load("Assets/Textures/title_background.png");
-	logo = app->tex->Load("Assets/Textures/logo_title.png");
-	cloud = app->tex->Load("Assets/Textures/GUI/cloud.png");
-	oneiric = app->tex->Load("Assets/Textures/oneiric_title.png");
-	exoria = app->tex->Load("Assets/Textures/exoria_title.png");
+	bgIntro = app->tex->Load("Textures/title_background.png");
+	logo = app->tex->Load("Textures/logo_title.png");
+	cloud = app->tex->Load("Textures/GUI/cloud.png");
+	oneiric = app->tex->Load("Textures/oneiric_title.png");
+	exoria = app->tex->Load("Textures/exoria_title.png");
 
-	fxStart = app->audio->LoadFx("Assets/Audio/Fx/start_button.wav");
-	fxExit = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
-	fxTittle = app->audio->LoadFx("Assets/Audio/Fx/tittle.wav");
-	fxFlash = app->audio->LoadFx("Assets/Audio/Fx/sparkle.wav");
+	fxStart = app->audio->LoadFx("Audio/Fx/start_button.wav");
+	fxExit = app->audio->LoadFx("Audio/Fx/exit.wav");
+	fxTittle = app->audio->LoadFx("Audio/Fx/tittle.wav");
+	fxFlash = app->audio->LoadFx("Audio/Fx/sparkle.wav");
 
 	app->audio->PlayFx(fxTittle);
 

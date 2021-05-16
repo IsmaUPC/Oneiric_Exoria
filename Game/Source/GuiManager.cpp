@@ -31,18 +31,18 @@ bool GuiManager::Awake(pugi::xml_node&)
 
 bool GuiManager::Start()
 {
-	fxBtnSelected = app->audio->LoadFx("Assets/Audio/Fx/button_travel.wav");
-	fxBtnPressed = app->audio->LoadFx("Assets/Audio/Fx/button_click.wav");
-	fxBtnDisabled = app->audio->LoadFx("Assets/Audio/Fx/button_disabled.wav");
-	fxBtnSlider = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
-	fxBookClose = app->audio->LoadFx("Assets/Audio/Fx/close_book.wav");
-	fxChangePage = app->audio->LoadFx("Assets/Audio/Fx/page1.wav");
+	fxBtnSelected = app->audio->LoadFx("Audio/Fx/button_travel.wav");
+	fxBtnPressed = app->audio->LoadFx("Audio/Fx/button_click.wav");
+	fxBtnDisabled = app->audio->LoadFx("Audio/Fx/button_disabled.wav");
+	fxBtnSlider = app->audio->LoadFx("Audio/Fx/coin.wav");
+	fxBookClose = app->audio->LoadFx("Audio/Fx/close_book.wav");
+	fxChangePage = app->audio->LoadFx("Audio/Fx/page1.wav");
 
-	uiAtlas = app->tex->Load("Assets/Textures/GUI/ui_atlas.png");
-	moonCorner = app->tex->Load("Assets/Textures/GUI/corner.png");
-	handCursor = app->tex->Load("Assets/Textures/GUI/hand_cursor.png");
-	bookMenu = app->tex->Load("Assets/Textures/GUI/stats_gui.png");
-	iconsUiTex = app->tex->Load("Assets/Textures/GUI/icons_atlas.png");
+	uiAtlas = app->tex->Load("Textures/GUI/ui_atlas.png");
+	moonCorner = app->tex->Load("Textures/GUI/corner.png");
+	handCursor = app->tex->Load("Textures/GUI/hand_cursor.png");
+	bookMenu = app->tex->Load("Textures/GUI/stats_gui.png");
+	iconsUiTex = app->tex->Load("Textures/GUI/icons_atlas.png");
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;

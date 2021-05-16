@@ -66,7 +66,8 @@ bool Textures::CleanUp()
 SDL_Texture* const Textures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
+	SDL_Surface* surface;
+	surface = IMG_Load_RW(app->assets->Load(path), 1);
 
 	if(surface == NULL)
 	{
@@ -77,7 +78,7 @@ SDL_Texture* const Textures::Load(const char* path)
 		texture = LoadSurface(surface);
 		SDL_FreeSurface(surface);
 	}
-
+	app->assets->DeleteBuffer();
 	return texture;
 }
 

@@ -41,7 +41,7 @@ bool GUI::Start()
 	int imgH = 0;
 	int imgW = 0;
 
-	//playerUi = app->tex->Load("Assets/Textures/Characters/atlas_players_battle.png");
+	//playerUi = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	activeFPS = false;
 	timer.Start();

@@ -40,24 +40,24 @@ bool SceneBattle::Start()
 
 	app->sceneManager->SetEnemeyDetected(false);
 	texPlayers = app->sceneManager->GetPlayerTexture();
-	texEnemies = app->tex->Load("Assets/Textures/Enemies/enemies_battle.png");
-	enemySelect = app->tex->Load("Assets/Textures/GUI/enemy_selector.png");
+	texEnemies = app->tex->Load("Textures/Enemies/enemies_battle.png");
+	enemySelect = app->tex->Load("Textures/GUI/enemy_selector.png");
 
-	app->audio->PlayMusic("Assets/Audio/Music/battle_music.ogg");
+	app->audio->PlayMusic("Audio/Music/battle_music.ogg");
 
-	fxWin = app->audio->LoadFx("Assets/Audio/Fx/win_start.wav");
-	fxLose = app->audio->LoadFx("Assets/Audio/Fx/lose.wav");
-	fxAttack = app->audio->LoadFx("Assets/Audio/Fx/attack.wav");
-	fxDefense = app->audio->LoadFx("Assets/Audio/Fx/defense.wav");
-	fxExit = app->audio->LoadFx("Assets/Audio/Fx/exit.wav");
-	fxFireball = app->audio->LoadFx("Assets/Audio/Fx/spell_fireball.wav");
-	fxShadow = app->audio->LoadFx("Assets/Audio/Fx/spell_shadow.wav");
-	fxHealing = app->audio->LoadFx("Assets/Audio/Fx/spell_healing.wav");
-	fxBanditDies = app->audio->LoadFx("Assets/Audio/Fx/bandit_slain.wav");
-	fxFighterDies = app->audio->LoadFx("Assets/Audio/Fx/fighter_slain.wav");
-	fxSaplingDies = app->audio->LoadFx("Assets/Audio/Fx/sapling_slain.wav");
-	fxAllyDies = app->audio->LoadFx("Assets/Audio/Fx/ally_slain.wav");
-	fxCancelButton = app->audio->LoadFx("Assets/Audio/Fx/button_cancel.wav");
+	fxWin = app->audio->LoadFx("Audio/Fx/win_start.wav");
+	fxLose = app->audio->LoadFx("Audio/Fx/lose.wav");
+	fxAttack = app->audio->LoadFx("Audio/Fx/attack.wav");
+	fxDefense = app->audio->LoadFx("Audio/Fx/defense.wav");
+	fxExit = app->audio->LoadFx("Audio/Fx/exit.wav");
+	fxFireball = app->audio->LoadFx("Audio/Fx/spell_fireball.wav");
+	fxShadow = app->audio->LoadFx("Audio/Fx/spell_shadow.wav");
+	fxHealing = app->audio->LoadFx("Audio/Fx/spell_healing.wav");
+	fxBanditDies = app->audio->LoadFx("Audio/Fx/bandit_slain.wav");
+	fxFighterDies = app->audio->LoadFx("Audio/Fx/fighter_slain.wav");
+	fxSaplingDies = app->audio->LoadFx("Audio/Fx/sapling_slain.wav");
+	fxAllyDies = app->audio->LoadFx("Audio/Fx/ally_slain.wav");
+	fxCancelButton = app->audio->LoadFx("Audio/Fx/button_cancel.wav");
 
 	// Load Animations
 	LoadAnimations();
@@ -181,7 +181,7 @@ void SceneBattle::AddEntities()
 	{
 	case 1:
 		// Load textures
-		img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
 		// Add Enemies
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
@@ -196,7 +196,7 @@ void SceneBattle::AddEntities()
 
 	case 2:
 		// Load textures
-		img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
 		// Add Enemies
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
@@ -209,7 +209,7 @@ void SceneBattle::AddEntities()
 
 	case 3:
 		// Load textures
-		img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
 		// Add Enemies
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
@@ -219,7 +219,7 @@ void SceneBattle::AddEntities()
 		break;
 	case 4:
 		// Load textures
-		img = app->tex->Load("Assets/Textures/Backgrounds/background_1.png");
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
 		// Add Enemies
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
@@ -1574,7 +1574,7 @@ void SceneBattle::CheckWinLose()
 				AbleDisableButtons();
 				GenerateItems();
 				app->sceneManager->SetWinBattle(true);
-				app->audio->PlayMusic("Assets/Audio/Music/win_music.ogg", 0);
+				app->audio->PlayMusic("Audio/Music/win_music.ogg", 0);
 			}
 		}
 		// Lose Condition
@@ -1591,7 +1591,7 @@ void SceneBattle::CheckWinLose()
 				AbleDisableButtons();
 				lose = true;
 				app->audio->PlayFx(fxLose);
-				app->audio->PlayMusic("Assets/Audio/Music/lose_music.ogg", 0);
+				app->audio->PlayMusic("Audio/Music/lose_music.ogg", 0);
 				btnExit->active = true;
 				btnExit->state = GuiControlState::NORMAL;
 				app->sceneManager->SetLoseBattle(true);

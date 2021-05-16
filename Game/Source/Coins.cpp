@@ -32,7 +32,7 @@ bool Coins::Start()
 	active = true;
 
 	texCoin = entityData.texture;
-	fxCoin= app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+	fxCoin= app->audio->LoadFx("Audio/Fx/coin.wav");
 	
 	numPoints = 4;
 	pointsCollision = new iPoint[4]{ { 0, 0 }, { 48 , 0 }, { 48,-48 }, { 0 ,-48 } };

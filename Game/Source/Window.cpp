@@ -48,7 +48,7 @@ bool Window::Awake(pugi::xml_node& config)
 		if(borderless == true) flags |= SDL_WINDOW_BORDERLESS;
 		if(resizable == true) flags |= SDL_WINDOW_RESIZABLE;
 		if(fullscreen_window == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
-		icon = IMG_Load("Assets/textures/logo.png");
+		icon = IMG_Load("textures/logo.png");
 
 		if (fullscreen_window == true)app->fullScreen = true;
 
@@ -77,7 +77,7 @@ bool Window::Awake(pugi::xml_node& config)
 			{
 				flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 			}
-			window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+			window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK, width, height, flags);
 			SDL_SetWindowIcon(window, icon);
 
 			if (window == NULL)

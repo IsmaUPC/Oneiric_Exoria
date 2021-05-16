@@ -131,7 +131,7 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 		Mix_FreeMusic(music);
 	}
 
-	music = Mix_LoadMUS(path);
+	music = Mix_LoadMUS_RW(app->assets->Load(path), 1);
 
 	if (music == NULL)
 	{
@@ -170,7 +170,7 @@ unsigned int Audio::LoadFx(const char* path)
 	if (!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
+	Mix_Chunk* chunk = Mix_LoadWAV_RW(app->assets->Load(path),1);
 
 	if (chunk == NULL)
 	{
@@ -189,6 +189,7 @@ unsigned int Audio::LoadFx(const char* path)
 		LOG("Sucesfully loaded wav %s.", path);
 	}
 
+	app->assets->DeleteBuffer();
 	return ret;
 }
 
