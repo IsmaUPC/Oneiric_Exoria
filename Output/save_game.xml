@@ -24,7 +24,7 @@
 	<entities />
 	<entity_manager>
 		<score value="0" />
-		<time value="0" />
+		<time value="130" />
 		<entities>
 			<entity type="13" x="-9" y="2" id="0" level="0" state="0" move="true" />
 			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
