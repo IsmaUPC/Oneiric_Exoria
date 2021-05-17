@@ -25,13 +25,13 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 	menuMagic = new GuiMenuMagic({ 300, WINDOW_H / 2 +140 }, observer);
 
 	//Item options buttons
-	btnUseItem = new GuiButton(7, { -app->render->camera.x + position.x + WINDOW_W/4 - 50, -app->render->camera.y + position.y + WINDOW_H/2 + padding * 1 + 300, 183, 91 }, "Use", RECTANGLE, textureAtlas);
+	btnUseItem = new GuiButton(7, { -app->render->camera.x + position.x + WINDOW_W/4 - 40, -app->render->camera.y + position.y + WINDOW_H/2 + padding * 1, 183, 91 }, "Use", RECTANGLE, textureAtlas);
 	btnUseItem->SetObserver(moduleObserver);
 	btnUseItem->active = false;
 	btnUseItem->state = GuiControlState::DISABLED;
 	app->guiManager->AddGuiButton(btnUseItem);
 
-	btnDelItem = new GuiButton(8, { -app->render->camera.x + position.x + WINDOW_W / 4 - 50, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2 + 300, 183, 91 }, "Delete", RECTANGLE, textureAtlas);
+	btnDelItem = new GuiButton(8, { -app->render->camera.x + position.x + WINDOW_W / 4 - 40, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2, 183, 91 }, "Delete", RECTANGLE, textureAtlas);
 	btnDelItem->SetObserver(moduleObserver);
 	btnDelItem->active = false;
 	btnDelItem->state = GuiControlState::DISABLED;
@@ -77,10 +77,10 @@ bool GuiStatsMenu::Update(float dt_)
 			app->fonts->ResetH();
 
 			btnUseItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
-			btnUseItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 1 + 200;
+			btnUseItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 1 + 220;
 
 			btnDelItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
-			btnDelItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 2 + 200;
+			btnDelItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 2 + 220;
 		}
 
 		if (btnUseItem->state == GuiControlState::DISABLED && !introBook && !changingPage && !closingBook && !selectingPlayer)
@@ -458,6 +458,8 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	rectBar.w = wRectBar - 30;
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
 
+	app->fonts->BlitMarginText(posX + 30, posY + 102, 0, textDescription, color, 270);
+
 	DrawBoost(boostPosY, posX);
 }
 
@@ -660,7 +662,7 @@ void GuiStatsMenu::DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect)
 	app->fonts->BlitText(posX + 473, posY + 250, 0, textItemName, color);
 
 	sprintf_s(textDescription, 400, currentItem->description.GetString());
-	app->fonts->BlitMarginText(posX + 620, posY + 315, 0, textDescription, color, 190);
+	app->fonts->BlitMarginText(posX + 620, posY + 335, 0, textDescription, color, 190);
 
 	switch (currentItem->type)
 	{
@@ -766,6 +768,8 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Elemental");
 		sprintf_s(textMagicRunes, 10, "0468484");
 
+		sprintf_s(textDescription, 400, "The leader of the group. Specializing in high-powered ranged sorcery, she is instrumental in finishing fights with precision.");
+
 		break;
 	case 2: // Keiler
 		level = app->player->GetPartners()[0].level;
@@ -785,6 +789,8 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textName, 7, "Keiler");
 		sprintf_s(textClass, 10, "Nexus");
 		sprintf_s(textMagicRunes, 10, "7321044");
+
+		sprintf_s(textDescription, 400, "Despite being somewhat clueless, he is specialized in one of the less frequent aspects of magic and with great potential, voodoo.");
 
 		break;
 	case 3: // Isrra
@@ -806,6 +812,8 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Light");
 		sprintf_s(textMagicRunes, 10, "9046808");
 
+		sprintf_s(textDescription, 400, "The specialist in healing magic. He loves to learn and knows every spell from the Introduction to healing magic word by word.");
+
 		break;
 	case 4: // Brenda
 		level = app->player->GetPartners()[2].level;
@@ -825,6 +833,8 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textName, 7, "Brenda");
 		sprintf_s(textClass, 10, "Aura");
 		sprintf_s(textMagicRunes, 10, "6531207");
+
+		sprintf_s(textDescription, 400, "She is capable of standing between the enemy and you, although sometimes she is the cause of the fight by throwing herself into danger without thinking.");
 
 		break;
 	default:

@@ -61,13 +61,13 @@ bool SceneLevel3::Start()
 	}
 	app->map->active = true;
 	// Positions initials
-	app->player->positionInitial = new iPoint(480, 490);
+	app->player->positionInitial = new iPoint(480, 600);
 
 	app->player->Init();
 	app->player->Start();
 
 	// Add Entities
-	app->entityManager->AddEntity(BANDIT, 14, 9, 1, 1);
+	app->entityManager->AddEntity(BANDIT, 14, 14, 1, 1);
 	app->entityManager->AddEntity(FIGHTER, 24, 8, 2, 1, false);
 	app->entityManager->AddEntity(SAPLING, 4, 12, 3, 2, false);
 	app->entityManager->AddEntity(BANDIT, 3, 5, 4, 2, false);
@@ -257,6 +257,7 @@ void SceneLevel3::DebugKeys()
 }
 bool SceneLevel3::OnGuiMouseClickEvent(GuiControl* control)
 {
+	bool ret = true;
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
@@ -287,9 +288,10 @@ bool SceneLevel3::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	default: break;
 	}
-	app->guiManager->GetMenuPause()->Event(control);
+	ret = app->guiManager->GetMenuPause()->Event(control);
 	app->guiManager->GetStatsMenu()->Event(control);
-	return true;
+
+	return ret;
 }
 
 bool SceneLevel3::LoadState(pugi::xml_node& data)

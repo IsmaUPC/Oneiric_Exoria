@@ -328,6 +328,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	ret = app->guiManager->GetMenuPause()->Event(control);
 	app->guiManager->GetStatsMenu()->Event(control);
+
 	return ret;
 }
 
