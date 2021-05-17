@@ -114,6 +114,10 @@ bool GuiManager::Start()
 
 bool GuiManager::Update(float dt_)
 {
+	if (missClick && !app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		missClick = false;
+	}
+
 	if(app->entityManager->entityHUD != nullptr) app->entityManager->entityHUD->Update(dt_);
 
 	bool ret = true;

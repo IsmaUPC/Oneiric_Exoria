@@ -104,7 +104,8 @@ public:
 	Animation* talkCloud = nullptr;
 	Animation* enemyCloud = nullptr;
 
-	bool press = false;
+	bool press = false; //To Gamepad
+	bool missClick = false; // To KeyBoard
 	float dt = 0;
 
 private:

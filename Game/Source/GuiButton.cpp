@@ -42,16 +42,17 @@ bool GuiButton::Update(float dt)
 		if (state != GuiControlState::DISABLED)
 		{
 			if (!mouseIn)app->audio->PlayFx(app->guiManager->fxBtnSelected), mouseIn = true;
-			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) && !app->guiManager->press)
+			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && !app->guiManager->press && !app->guiManager->missClick)
 			{
 				app->guiManager->press = true;
 				state = GuiControlState::PRESSED;
 			}
 
 			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->guiManager->missClick)
 			{
 				app->guiManager->press = true;
+				app->guiManager->missClick = true;
 				app->audio->PlayFx(app->guiManager->fxBtnPressed);
 				ret = NotifyObserver();
 			}
@@ -115,9 +116,10 @@ bool GuiButton::Draw()
 	centerY = (bounds.h/2)-(48/4);
 	
 	if(app->sceneManager->onDialog) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 60, 43, 13 });
-	else if(positionY == 0 && state != GuiControlState::FOCUSED) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13}, app->guiManager->dt * 20);
-	else app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
-	if(state == GuiControlState::PRESSED)app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 38, 79, 85 });
+	else if(positionY == 0 && state != GuiControlState::FOCUSED && state != GuiControlState::DISABLED) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), {60, 43, 13}, app->guiManager->dt * 20);
+	else if(state != GuiControlState::DISABLED) app->fonts->BlitText(bounds.x + 5, positionY + 5, 0, text.GetString(), { 199, 147, 55 });
+	if(state == GuiControlState::PRESSED) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 38, 79, 85 });
+	if(state == GuiControlState::DISABLED) app->fonts->BlitText(bounds.x + 5, bounds.y + 5, 0, text.GetString(), { 88, 88, 88 });
 
 	return true;
 }

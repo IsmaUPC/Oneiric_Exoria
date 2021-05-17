@@ -25,13 +25,19 @@ GuiStatsMenu::GuiStatsMenu(iPoint position, SceneControl* moduleObserver, SDL_Te
 	menuMagic = new GuiMenuMagic({ 300, WINDOW_H / 2 +140 }, observer);
 
 	//Item options buttons
-	btnUseItem = new GuiButton(7, { -app->render->camera.x + position.x + WINDOW_W/4 - 40, -app->render->camera.y + position.y + WINDOW_H/2 + padding * 1, 183, 91 }, "Use", RECTANGLE, textureAtlas);
+	btnUseItem = new GuiButton(7, { -app->render->camera.x + position.x + WINDOW_W/4 - 40, -app->render->camera.y + position.y + WINDOW_H/2 + padding * 1, 183, 91 }, "Equip", RECTANGLE, textureAtlas);
 	btnUseItem->SetObserver(moduleObserver);
 	btnUseItem->active = false;
 	btnUseItem->state = GuiControlState::DISABLED;
 	app->guiManager->AddGuiButton(btnUseItem);
 
-	btnDelItem = new GuiButton(8, { -app->render->camera.x + position.x + WINDOW_W / 4 - 40, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2, 183, 91 }, "Delete", RECTANGLE, textureAtlas);
+	btnUnEquipItem = new GuiButton(8, { -app->render->camera.x + position.x + WINDOW_W / 4 - 40, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2, 183, 91 }, "Unequip", RECTANGLE, textureAtlas);
+	btnUnEquipItem->SetObserver(moduleObserver);
+	btnUnEquipItem->active = false;
+	btnUnEquipItem->state = GuiControlState::DISABLED;
+	app->guiManager->AddGuiButton(btnUnEquipItem);
+
+	btnDelItem = new GuiButton(9, { -app->render->camera.x + position.x + WINDOW_W / 4 - 40, -app->render->camera.y + position.y + WINDOW_H / 2 + padding * 2, 183, 91 }, "Delete", RECTANGLE, textureAtlas);
 	btnDelItem->SetObserver(moduleObserver);
 	btnDelItem->active = false;
 	btnDelItem->state = GuiControlState::DISABLED;
@@ -71,18 +77,23 @@ bool GuiStatsMenu::Update(float dt_)
 			{
 				btnUseItem->active = true;
 				btnDelItem->active = true;
+				btnUnEquipItem->active = true;
 				currentItem = app->player->inventory.start->data;
 			}
 			currentAnim = app->guiManager->idleBook;
 			app->fonts->ResetH();
 
 			btnUseItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
-			btnUseItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 1 + 220;
+			btnUseItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 1 + 205;
+
+			btnUnEquipItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
+			btnUnEquipItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 2 + 205;
 
 			btnDelItem->bounds.x = -app->render->camera.x + initialPos.x + WINDOW_W / 2 - 100;
-			btnDelItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 2 + 220;
-		}
+			btnDelItem->bounds.y = -app->render->camera.y + initialPos.y + WINDOW_H / 2 + padding * 3 + 205;
 
+		}
+		
 		if (btnUseItem->state == GuiControlState::DISABLED && !introBook && !changingPage && !closingBook && !selectingPlayer)
 		{
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || app->input->pads[0].l1)
@@ -92,6 +103,7 @@ bool GuiStatsMenu::Update(float dt_)
 				currentAnim = app->guiManager->leftBook;
 				btnUseItem->active = false;
 				btnDelItem->active = false;
+				btnUnEquipItem->active = false;
 			}
 			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || app->input->pads[0].r1)
 			{
@@ -100,6 +112,7 @@ bool GuiStatsMenu::Update(float dt_)
 				currentAnim = app->guiManager->rightBook;
 				btnUseItem->active = false;
 				btnDelItem->active = false;
+				btnUnEquipItem->active = false;
 			}
 			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
 			{
@@ -109,6 +122,7 @@ bool GuiStatsMenu::Update(float dt_)
 				app->audio->PlayFx(app->guiManager->fxBookClose);
 				btnUseItem->active = false;
 				btnDelItem->active = false;
+				btnUnEquipItem->active = false;
 			}
 		}
 
@@ -151,15 +165,20 @@ void GuiStatsMenu::UpdateInventory()
 
 			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a)
 			{
+				app->guiManager->missClick = true;
 				btnUseItem->state = GuiControlState::FOCUSED;
 				btnDelItem->state = GuiControlState::NORMAL;
+				btnUnEquipItem->state = GuiControlState::NORMAL;
 				CheckSelectPlayer();
 			}
+			if(currentItem->equiped) btnUnEquipItem->state = GuiControlState::NORMAL;
+			else btnUnEquipItem->state = GuiControlState::DISABLED;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b && !selectingPlayer)
 		{
 			btnUseItem->state = GuiControlState::DISABLED;
 			btnDelItem->state = GuiControlState::DISABLED;
+			btnUnEquipItem->state = GuiControlState::DISABLED;
 		}
 		if (selectingPlayer)
 		{
@@ -185,6 +204,7 @@ void GuiStatsMenu::UpdateInventory()
 			{
 				btnUseItem->state = GuiControlState::FOCUSED;
 				btnDelItem->state = GuiControlState::NORMAL;
+				btnUnEquipItem->state = GuiControlState::NORMAL;
 				selectingPlayer = false;
 			}
 		}
@@ -697,7 +717,23 @@ bool GuiStatsMenu::Event(GuiControl* control)
 		{
 			btnUseItem->state = GuiControlState::DISABLED;
 			btnDelItem->state = GuiControlState::DISABLED;
+			btnUnEquipItem->state = GuiControlState::DISABLED;
 			selectingPlayer = true;
+		}
+		else if (control->id == 8)
+		{
+			if (currentItem->equiped) app->player->itemManager->UnEquipItem(currentItem);
+			currentItem->equiped = false;
+			btnUseItem->state = GuiControlState::DISABLED;
+			btnDelItem->state = GuiControlState::DISABLED;
+			btnUnEquipItem->state = GuiControlState::DISABLED;
+		}
+		else if (control->id == 9)
+		{
+			btnUseItem->state = GuiControlState::DISABLED;
+			btnDelItem->state = GuiControlState::DISABLED;
+			btnUnEquipItem->state = GuiControlState::DISABLED;
+			app->player->itemManager->DelItem(currentItem);
 		}
 		break;
 	default:

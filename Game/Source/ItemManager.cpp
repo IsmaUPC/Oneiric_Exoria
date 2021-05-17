@@ -112,6 +112,11 @@ bool ItemManager::UseItem(GameItem* id, Entity* entity)
 
 }
 
+void ItemManager::UnEquipItem(GameItem* item)
+{
+	app->player->entityData.equipedItem->UnEquipItem(ringList.At(itemList.Find(itemList.At((item->id) - 4)->data))->data);
+}
+
 const char* ItemManager::TypeToString(Type type)
 {
 	switch (type)
@@ -183,6 +188,7 @@ bool ItemManager::DelItem(GameItem* id)
 	}
 	else
 	{
+		if(id->equiped) app->player->entityData.equipedItem->UnEquipItem(ringList.At(itemList.Find(itemList.At((id->id) - 4)->data))->data);
 		if (app->player->inventory.At(app->player->inventory.Find(id))->data->multi > 1)
 		{
 			app->player->inventory.At(app->player->inventory.Find(id))->data->multi--;
@@ -270,5 +276,27 @@ void Equipable::EquipItem(Equipable* item, Entity* entity)
 		}
 		item->currentOwner = entity;
 		item->equiped = true;
+	}
+}
+
+void Equipable::UnEquipItem(Equipable* item)
+{
+	if (item->equiped == true)
+	{
+		if (item->attribute == "attack")
+		{
+			currentOwner->stats.attack -= item->value;
+			currentOwner->entityData.equipedItem = NULL;
+		}
+		if (item->attribute == "defense")
+		{
+			currentOwner->stats.defense -= item->value;
+			currentOwner->entityData.equipedItem = NULL;
+		}
+		if (item->attribute == "speed")
+		{
+			currentOwner->stats.speed -= item->value;
+			currentOwner->entityData.equipedItem = NULL;
+		}
 	}
 }

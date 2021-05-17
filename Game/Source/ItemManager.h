@@ -91,6 +91,7 @@ public:
 	bool AddItem(int id);
 	bool DelItem(GameItem* id);
 	bool UseItem(GameItem* id, Entity* entity);
+	void UnEquipItem(GameItem* item);
 
 	const char* TypeToString(Type type);
 	void SetItemEquip(Equipable* item);

@@ -88,6 +88,7 @@ private:
 	GameItem* currentItem = nullptr;
 	PageType pageType = INVENTORY;
 	GuiButton* btnUseItem = nullptr;
+	GuiButton* btnUnEquipItem = nullptr;
 	GuiButton* btnDelItem = nullptr;
 	Entity* selectPlayer = nullptr;
 	int characterSelected = 1;
