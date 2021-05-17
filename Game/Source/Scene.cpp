@@ -295,6 +295,7 @@ void Scene::DebugKeys()
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
+	bool ret = true;
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
@@ -325,9 +326,9 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	default: break;
 	}
-	app->guiManager->GetMenuPause()->Event(control);
+	ret = app->guiManager->GetMenuPause()->Event(control);
 	app->guiManager->GetStatsMenu()->Event(control);
-	return true;
+	return ret;
 }
 
 bool Scene::LoadState(pugi::xml_node& data)

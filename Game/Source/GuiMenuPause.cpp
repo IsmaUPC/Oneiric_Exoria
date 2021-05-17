@@ -109,7 +109,6 @@ bool GuiMenuPause::CleanUp()
 
 bool GuiMenuPause::Event(GuiControl* control)
 {
-
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:

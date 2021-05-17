@@ -138,6 +138,8 @@ public:
 	iPoint* positionInitial= new iPoint(0,0);	
 	bool win = false;
 	bool loadStats = false;
+	bool play = false;
+	bool load = false;
 	fPoint lerpCamera = { 0,0 };
 
 	uint fxStairs = -1;

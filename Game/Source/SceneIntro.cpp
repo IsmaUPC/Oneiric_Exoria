@@ -316,6 +316,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			TransitionToScene(SceneType::LEVEL1);
 			app->sceneManager->lastLevel = 1;
 			isContinue = false;
+			app->player->play = true;
 		}
 		else if (control->id == 2 && lastLevel != 0)
 		{

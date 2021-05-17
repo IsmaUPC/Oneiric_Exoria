@@ -58,7 +58,7 @@ bool Player::Start()
 	playerData.direction = playerData.direction;
 	lastDirection = playerData.direction;
 
-	if (!app->sceneManager->GetCurrentScene()->isContinue)
+	if (play)
 	{
 		playerData.level = 1;
 		playerData.exp = 0;
@@ -72,7 +72,6 @@ bool Player::Start()
 		stats.attack = 3.5 + 9.5;
 		stats.defense = 1.5 + 6.5;
 		stats.speed = 2.5 + 7.5;
-
 	}
 
 	radiusCollision = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[2]) / 2;
@@ -142,8 +141,6 @@ bool Player::Start()
 
 	fxBookOpen = app->audio->LoadFx("Audio/Fx/open_book.wav");
 	fxStairs = app->audio->LoadFx("Audio/Fx/stairs.wav");
-
-	loadStats = true;
 	
 	return true;
 }
@@ -165,7 +162,7 @@ void Player::LoadPartners()
 		partners[i].texture = texPartners.At(i)->data;
 
 		partners[i].breadcrumb = 0;
-		if (!app->sceneManager->GetCurrentScene()->isContinue)
+		if (play)
 		{
 			partners[i].level = 1;
 			partners[i].exp = 0;
@@ -202,6 +199,8 @@ void Player::LoadPartners()
 		else if (i == 1)partners[i].type = ISRRA;
 		else partners[i].type = BRENDA;		
 	}
+	play = false;
+	load = true;
 }
 
 void Player::RePositionPartners()
@@ -258,9 +257,9 @@ bool Player::LoadState(pugi::xml_node& player)
 		playerData.exp = player.child("data").attribute("exp").as_int(playerData.exp);
 		playerData.health = player.child("data").attribute("health").as_int(playerData.health);
 		playerData.mana = player.child("data").attribute("mana").as_int(playerData.mana);
-		stats.attack = player.child("data").attribute("atack").as_int(stats.attack);
-		stats.defense = player.child("data").attribute("atack").as_int(stats.defense);
-		stats.speed = player.child("data").attribute("atack").as_int(stats.speed);
+		stats.attack = player.child("data").attribute("attack").as_int(stats.attack);
+		stats.defense = player.child("data").attribute("defense").as_int(stats.defense);
+		stats.speed = player.child("data").attribute("speed").as_int(stats.speed);
 		stats.health = playerData.health;
 		stats.maxHealth = 2 * playerData.level + 6;
 		stats.mana = playerData.mana;

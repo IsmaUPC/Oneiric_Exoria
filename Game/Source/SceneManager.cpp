@@ -198,24 +198,28 @@ bool SceneManager::Update(float dt)
 	
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
+		if (!app->player->load) app->player->play = true;
 		current->TransitionToScene(SceneType::LEVEL1);
 		lastLevel = 1;
 		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
+		if (!app->player->load) app->player->play = true;
 		current->TransitionToScene(SceneType::LEVEL2);
 		lastLevel = 2;
 		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
+		if (!app->player->load) app->player->play = true;
 		current->TransitionToScene(SceneType::LEVEL3);
 		lastLevel = 3;
 		originTpNode = nullptr;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
 	{
+		if (!app->player->load) app->player->play = true;
 		current->TransitionToScene(SceneType::DUNGEON);
 		lastLevel = 8;
 		originTpNode = nullptr;
