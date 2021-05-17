@@ -93,7 +93,7 @@ bool SceneManager::Update(float dt)
 {
 	bool ret = true;
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) 
-		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
+		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3" || current->name == "dungeon"))
 	{
 		currentVolume = app->audio->GetVolumeMusic();
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
@@ -103,7 +103,7 @@ bool SceneManager::Update(float dt)
 	}
 
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN || app->input->pads[0].back)
-		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3"))
+		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3" || current->name == "dungeon"))
 	{
 		pause = !pause;
 		app->player->playerData.state = MOBILE;
@@ -146,7 +146,7 @@ bool SceneManager::Update(float dt)
 
 				// Menu pause
 				app->guiManager->CreatMenuPause(current);
-				if(current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3")
+				if(current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3" || current->name == "dungeon")
 					app->guiManager->CreateStatsMenu(current);
 
 				// Activate fade out effect to next loaded screen

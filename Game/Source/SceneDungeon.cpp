@@ -242,6 +242,7 @@ void SceneDungeon::DebugKeys()
 }
 bool SceneDungeon::OnGuiMouseClickEvent(GuiControl* control)
 {
+	bool ret = true;
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
@@ -270,9 +271,10 @@ bool SceneDungeon::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	default: break;
 	}
-	app->guiManager->GetMenuPause()->Event(control);
+	ret = app->guiManager->GetMenuPause()->Event(control);
 	app->guiManager->GetStatsMenu()->Event(control);
-	return true;
+
+	return ret;
 }
 
 bool SceneDungeon::LoadState(pugi::xml_node& data)
