@@ -189,40 +189,48 @@ bool Entity::MoveBox()
 {	
 
 	fPoint tmp= app->entityManager->boxes.At(posBox)->data->entityData.position;
+	fPoint tmp2= tmp;
 	fPoint aux;
 	 switch (app->player->playerData.direction)
 	 {
 	 case WALK_L:
 
-		 app->entityManager->boxes.At(posBox)->data->entityData.position.x-=32;
+		 //app->entityManager->boxes.At(posBox)->data->entityData.position.x-=32;
+		  tmp2.x-=32;
 
 		 break;
 	 case WALK_R:
-		 app->entityManager->boxes.At(posBox)->data->entityData.position.x += 32;
+		 //app->entityManager->boxes.At(posBox)->data->entityData.position.x += 32;
+		 tmp2.x += 32;
 
 		 break;
 	 case WALK_UP:
-		 app->entityManager->boxes.At(posBox)->data->entityData.position.y -= 32;
+		 //app->entityManager->boxes.At(posBox)->data->entityData.position.y -= 32;
+		 tmp2.y -= 32;
 
 		 break;
 	 case WALK_DOWN:
-		 app->entityManager->boxes.At(posBox)->data->entityData.position.y += 32;
+		 //app->entityManager->boxes.At(posBox)->data->entityData.position.y += 32;
+		 tmp2.y += 32;
 
 		 break;
 	 default:
 		 break;
 	 }
+	// aux = app->entityManager->boxes.At(posBox)->data->entityData.position;
 	 aux = app->entityManager->boxes.At(posBox)->data->entityData.position;
-	 iPoint check = app->map->WorldToMap(iPoint(aux.x,aux.y));
+	 //iPoint check = app->map->WorldToMap(iPoint(aux.x,aux.y));
+	 iPoint check = app->map->WorldToMap(iPoint(tmp2.x,tmp2.y));
 	 
 
-	 if (CheckCollision(check) == AIR || CheckCollision(check) == HOLE 
-		 || CheckCollision(check) == BOX && !CheckCollisionBoxes(check)) {
+	 if ((CheckCollision(check) == AIR || CheckCollision(check) == HOLE 
+		 || CheckCollision(check) == BOX) && 
+		 !CheckCollisionBoxes(check)) {
 
-
+		 app->entityManager->boxes.At(posBox)->data->entityData.position = tmp2;
 		 aux = fPoint(app->entityManager->boxes.At(posBox)->data->entityData.position);
 
-		 app->entityManager->boxes.At(posBox)->data->tilePosition = app->map->WorldToMap(aux.x, aux.y);
+		 app->entityManager->boxes.At(posBox)->data->tilePosition = app->map->WorldToMap(tmp2.x, tmp2.y);
 
 		 if (CheckCollisionHoles(app->entityManager->boxes.At(posBox)->data->tilePosition))
 		 {
@@ -238,7 +246,7 @@ bool Entity::MoveBox()
 	 }
 	 else
 	 {
-		 app->entityManager->boxes.At(posBox)->data->entityData.position = tmp;
+		 tmp2 = tmp;
 
 	 }
 
