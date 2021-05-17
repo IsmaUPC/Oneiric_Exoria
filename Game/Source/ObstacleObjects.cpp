@@ -47,6 +47,8 @@ bool ObstacleObjects::PreUpdate()
 bool ObstacleObjects::Update(float dt)
 {
 
+	//this->tilePosition = app->map->WorldToMap(entityData.position.x, entityData.position.y);
+	//app->entityManager->boxes.At(posBox)->data->tilePosition = app->map->WorldToMap(aux.x, aux.y);
 
 
 	return true;

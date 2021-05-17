@@ -26,9 +26,8 @@
 		<score value="0" />
 		<time value="130" />
 		<entities>
-			<entity type="13" x="-9" y="2" id="0" level="0" state="0" move="true" />
 			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="21" y="4" id="16" level="0" state="0" move="false" />
+			<entity type="14" x="21" y="4" id="2" level="0" state="0" move="false" />
 			<entity type="14" x="16" y="20" id="3" level="0" state="0" move="false" />
 			<entity type="14" x="20" y="11" id="7" level="0" state="0" move="false" />
 			<entity type="14" x="10" y="2" id="9" level="0" state="0" move="false" />

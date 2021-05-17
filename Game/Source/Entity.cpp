@@ -216,7 +216,8 @@ bool Entity::MoveBox()
 	 iPoint check = app->map->WorldToMap(iPoint(aux.x,aux.y));
 	 
 
-	 if (CheckCollision(check) == AIR || CheckCollision(check) == HOLE) {
+	 if (CheckCollision(check) == AIR || CheckCollision(check) == HOLE 
+		 || CheckCollision(check) == BOX && !CheckCollisionBoxes(check)) {
 
 
 		 aux = fPoint(app->entityManager->boxes.At(posBox)->data->entityData.position);
