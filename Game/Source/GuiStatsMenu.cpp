@@ -252,12 +252,14 @@ void GuiStatsMenu::UpdateStats()
 	if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down) && !introBook && !changingPage && !closingBook)
 	{
 		page.numPage++;
+		selectingMagic = false;
 		ChangeStatCharacter();
 		currentAnim = app->guiManager->rightBook;
 	}
 	if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up) && !introBook && !changingPage && !closingBook)
 	{
 		page.numPage--;
+		selectingMagic = false;
 		ChangeStatCharacter();
 		currentAnim = app->guiManager->leftBook;
 	}
@@ -268,7 +270,12 @@ void GuiStatsMenu::UpdateStats()
 		if (menuMagic->magic2->state != GuiControlState::NORMAL) menuMagic->magic2->state = GuiControlState::NORMAL;
 		if (menuMagic->magic3->state != GuiControlState::NORMAL) menuMagic->magic3->state = GuiControlState::NORMAL;
 		if (menuMagic->magic4->state != GuiControlState::NORMAL) menuMagic->magic4->state = GuiControlState::NORMAL;
+		selectingMagic = false;
 	}
+	if (menuMagic->magic1->state != GuiControlState::NORMAL) magicSelected = 1, selectingMagic = true;
+	if (menuMagic->magic2->state != GuiControlState::NORMAL) magicSelected = 2, selectingMagic = true;
+	if (menuMagic->magic3->state != GuiControlState::NORMAL) magicSelected = 3, selectingMagic = true;
+	if (menuMagic->magic4->state != GuiControlState::NORMAL) magicSelected = 4, selectingMagic = true;
 }
 
 void GuiStatsMenu::CloseBook()
@@ -478,7 +485,8 @@ void GuiStatsMenu::DrawTitleStats(int posX, int& posY)
 	rectBar.w = wRectBar - 30;
 	app->render->DrawRectangle(rectBar, 0, 47, 111, 255, false);
 
-	app->fonts->BlitMarginText(posX + 30, posY + 102, 0, textDescription, color, 270);
+	if(!selectingMagic) app->fonts->BlitMarginText(posX + 30, posY + 102, 0, textDescription, color, 270);
+	else if (menuMagic->GetMagic(magicSelected) != nullptr) app->fonts->BlitMarginText(posX + 40, posY + 110, 0, menuMagic->GetMagic(magicSelected)->description.GetString(), color, 270);
 
 	DrawBoost(boostPosY, posX);
 }
@@ -681,7 +689,7 @@ void GuiStatsMenu::DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect)
 	sprintf_s(textItemName, 30, "Type: %s", app->player->itemManager->TypeToString(currentItem->type));
 	app->fonts->BlitText(posX + 473, posY + 250, 0, textItemName, color);
 
-	sprintf_s(textDescription, 400, currentItem->description.GetString());
+	sprintf_s(textDescription, 200, currentItem->description.GetString());
 	app->fonts->BlitMarginText(posX + 620, posY + 335, 0, textDescription, color, 190);
 
 	switch (currentItem->type)
@@ -804,7 +812,7 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Elemental");
 		sprintf_s(textMagicRunes, 10, "0468484");
 
-		sprintf_s(textDescription, 400, "The leader of the group. Specializing in high-powered ranged sorcery, she is instrumental in finishing fights with precision.");
+		sprintf_s(textDescription, 200, "The leader of the group. Specializing in high-powered ranged sorcery, she is instrumental in finishing fights with precision.");
 
 		break;
 	case 2: // Keiler
@@ -826,7 +834,7 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Nexus");
 		sprintf_s(textMagicRunes, 10, "7321044");
 
-		sprintf_s(textDescription, 400, "Despite being somewhat clueless, he is specialized in one of the less frequent aspects of magic and with great potential, voodoo.");
+		sprintf_s(textDescription, 200, "Despite being somewhat clueless, he is specialized in one of the less frequent aspects of magic and with great potential, voodoo.");
 
 		break;
 	case 3: // Isrra
@@ -848,7 +856,7 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Light");
 		sprintf_s(textMagicRunes, 10, "9046808");
 
-		sprintf_s(textDescription, 400, "The specialist in healing magic. He loves to learn and knows every spell from the Introduction to healing magic word by word.");
+		sprintf_s(textDescription, 200, "The specialist in healing magic. He loves to learn and knows every spell from the Introduction to healing magic word by word.");
 
 		break;
 	case 4: // Brenda
@@ -870,7 +878,7 @@ void GuiStatsMenu::InicializeStats()
 		sprintf_s(textClass, 10, "Aura");
 		sprintf_s(textMagicRunes, 10, "6531207");
 
-		sprintf_s(textDescription, 400, "She is capable of standing between the enemy and you, although sometimes she is the cause of the fight by throwing herself into danger without thinking.");
+		sprintf_s(textDescription, 200, "She is capable of standing between the enemy and you, although sometimes she is the cause of the fight by throwing herself into danger without thinking.");
 
 		break;
 	default:

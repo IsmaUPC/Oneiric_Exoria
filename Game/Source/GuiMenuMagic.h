@@ -4,7 +4,17 @@
 #include "SString.h"
 #include "GuiButton.h"
 
-struct Magic;
+struct Magic
+{
+	int id = 0;
+	int type = 0;
+	int level = 0;
+	SString name = "";
+	int damage = 0;
+	int mana = 0;
+	SString description = "";
+	int element = 0;
+};
 
 class GuiMenuMagic
 {

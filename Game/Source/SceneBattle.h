@@ -10,18 +10,6 @@
 #include "PugiXml\src\pugixml.hpp"
 #include <string>
 
-struct Magic
-{
-	int id = 0;
-	int type = 0;
-	int level = 0;
-	SString name = "";
-	int damage = 0;
-	int mana = 0;
-	SString description = "";
-	int element = 0;
-};
-
 enum FaseAttack
 {
 	SELECT_ACTION,

@@ -87,19 +87,25 @@ private:
 	StatsPage page;
 	GameItem* currentItem = nullptr;
 	PageType pageType = INVENTORY;
+
 	GuiButton* btnUseItem = nullptr;
 	GuiButton* btnUnEquipItem = nullptr;
 	GuiButton* btnDelItem = nullptr;
-	Entity* selectPlayer = nullptr;
-	int characterSelected = 1;
-	bool selectingPlayer = false;
 
+	Entity* selectPlayer = nullptr;
+
+	int characterSelected = 1;
+	int magicSelected = 1;
+	bool selectingPlayer = false;
+	bool selectingMagic = false;
 	int maxNumPages = 4;
+
 	char textStats[15] = { "\0" };
 	char textName[7] = { "\0" };
 	char textClass[10] = { "\0" };
 	char textMagicRunes[10] = { "\0" };
-	char textDescription[400] = { "\0" };
+	char textDescription[200] = { "\0" };
+	char textDescriptionMagics[150] = { "\0" };
 	char textItemName[30] = { "\0" };
 	char itemQuantity[3] = { "\0" };
 
