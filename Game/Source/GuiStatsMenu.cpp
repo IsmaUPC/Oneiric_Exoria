@@ -742,6 +742,8 @@ bool GuiStatsMenu::Event(GuiControl* control)
 			btnDelItem->state = GuiControlState::DISABLED;
 			btnUnEquipItem->state = GuiControlState::DISABLED;
 			app->player->itemManager->DelItem(currentItem);
+			if (currentItem->equiped) currentItem->equiped = false;
+			currentItem = app->player->inventory.start->data;
 		}
 		break;
 	default:
