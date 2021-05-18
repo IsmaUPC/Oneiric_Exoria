@@ -114,7 +114,7 @@ bool GuiStatsMenu::Update(float dt_)
 				btnDelItem->active = false;
 				btnUnEquipItem->active = false;
 			}
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+			if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b ) && btnUseItem->state == GuiControlState::DISABLED && !selectingPlayer && !app->guiManager->press)
 			{
 				currentAnim = app->guiManager->closeBook;
 				closingBook = true;
@@ -152,50 +152,57 @@ void GuiStatsMenu::UpdateInventory()
 	{
 		if (btnUseItem->state == GuiControlState::DISABLED && !selectingPlayer)
 		{
-			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up)
+			if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up) && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				if (currentItem == app->player->inventory.start->data) currentItem = app->player->inventory.end->data;
 				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->prev->data;
 			}
-			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down)
+			if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down) && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				if (currentItem == app->player->inventory.end->data) currentItem = app->player->inventory.start->data;
 				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->next->data;
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a)
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a && !app->guiManager->press)
 			{
 				app->guiManager->missClick = true;
+				app->guiManager->press = true;
 				btnUseItem->state = GuiControlState::FOCUSED;
 				btnDelItem->state = GuiControlState::NORMAL;
 				btnUnEquipItem->state = GuiControlState::NORMAL;
 				CheckSelectPlayer();
 			}
-			if(currentItem->equiped) btnUnEquipItem->state = GuiControlState::NORMAL;
+			if(currentItem->equiped && btnUseItem->state != GuiControlState::DISABLED) btnUnEquipItem->state = GuiControlState::NORMAL;
 			else btnUnEquipItem->state = GuiControlState::DISABLED;
 		}
-		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b && !selectingPlayer)
+		if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b && !selectingPlayer && !app->guiManager->press)
 		{
+			app->guiManager->press = true;
 			btnUseItem->state = GuiControlState::DISABLED;
 			btnDelItem->state = GuiControlState::DISABLED;
 			btnUnEquipItem->state = GuiControlState::DISABLED;
 		}
 		if (selectingPlayer)
 		{
-			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up)
+			if ((app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->pads[0].up) && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				if (characterSelected == 1) characterSelected = 4;
 				else characterSelected--;
 				CheckSelectPlayer();
 			}
-			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down)
+			if ((app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->pads[0].down) && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				if (characterSelected == 4) characterSelected = 1;
 				else characterSelected++;
 				CheckSelectPlayer();
 			}
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a)
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a && !app->guiManager->press)
 			{
+				app->guiManager->press = true;
 				app->player->itemManager->UseItem(currentItem, selectPlayer);
 				currentItem = app->player->inventory.start->data;
 				selectingPlayer = false;
@@ -206,6 +213,7 @@ void GuiStatsMenu::UpdateInventory()
 				btnDelItem->state = GuiControlState::NORMAL;
 				btnUnEquipItem->state = GuiControlState::NORMAL;
 				selectingPlayer = false;
+				app->guiManager->press = true;
 			}
 		}
 	}
@@ -717,38 +725,40 @@ bool GuiStatsMenu::CleanUp()
 bool GuiStatsMenu::Event(GuiControl* control)
 {
 	//Button stuff
-
-	switch (control->type)
+	if (!app->guiManager->press)
 	{
-	case GuiControlType::BUTTON:
-		if (control->id == 7)
+		switch (control->type)
 		{
-			btnUseItem->state = GuiControlState::DISABLED;
-			btnDelItem->state = GuiControlState::DISABLED;
-			btnUnEquipItem->state = GuiControlState::DISABLED;
-			selectingPlayer = true;
+		case GuiControlType::BUTTON:
+			if (control->id == 7)
+			{
+				btnUseItem->state = GuiControlState::DISABLED;
+				btnDelItem->state = GuiControlState::DISABLED;
+				btnUnEquipItem->state = GuiControlState::DISABLED;
+				selectingPlayer = true;
+			}
+			else if (control->id == 8)
+			{
+				if (currentItem->equiped) app->player->itemManager->UnEquipItem(currentItem);
+				currentItem->equiped = false;
+				btnUseItem->state = GuiControlState::DISABLED;
+				btnDelItem->state = GuiControlState::DISABLED;
+				btnUnEquipItem->state = GuiControlState::DISABLED;
+			}
+			else if (control->id == 9)
+			{
+				btnUseItem->state = GuiControlState::DISABLED;
+				btnDelItem->state = GuiControlState::DISABLED;
+				btnUnEquipItem->state = GuiControlState::DISABLED;
+				app->player->itemManager->DelItem(currentItem);
+				if (currentItem->equiped) currentItem->equiped = false;
+				currentItem = app->player->inventory.start->data;
+			}
+			break;
+		default:
+			break;
 		}
-		else if (control->id == 8)
-		{
-			if (currentItem->equiped) app->player->itemManager->UnEquipItem(currentItem);
-			currentItem->equiped = false;
-			btnUseItem->state = GuiControlState::DISABLED;
-			btnDelItem->state = GuiControlState::DISABLED;
-			btnUnEquipItem->state = GuiControlState::DISABLED;
-		}
-		else if (control->id == 9)
-		{
-			btnUseItem->state = GuiControlState::DISABLED;
-			btnDelItem->state = GuiControlState::DISABLED;
-			btnUnEquipItem->state = GuiControlState::DISABLED;
-			app->player->itemManager->DelItem(currentItem);
-			if (currentItem->equiped) currentItem->equiped = false;
-			currentItem = app->player->inventory.start->data;
-		}
-		break;
-	default:
-		break;
-	}
+	}	
 
 	return true;
 }

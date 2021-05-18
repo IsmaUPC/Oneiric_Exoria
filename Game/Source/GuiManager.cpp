@@ -318,7 +318,7 @@ void GuiManager::SelectControl()
 		}
 	}
 	
-	if (pad.l_y >= -0.2f && pad.l_y <= 0.2f && pad.l_x >= -0.2f && pad.l_x <= 0.2f && pad.up == false && pad.down == false && pad.left == false && pad.right == false && pad.a == false) {
+	if (pad.l_y >= -0.2f && pad.l_y <= 0.2f && pad.l_x >= -0.2f && pad.l_x <= 0.2f && pad.up == false && pad.down == false && pad.left == false && pad.right == false && pad.a == false && pad.b == false) {
 		press = false;
 	}
 	ComprobeMouseOnControl(pad);

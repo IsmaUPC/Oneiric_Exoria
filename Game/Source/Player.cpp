@@ -531,7 +531,7 @@ void Player::UpdatePointCheker()
 	}
 	if (CheckCollisionBoxes(app->map->WorldToMap(pointCheker)))
 	{
-		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) 
+		if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].a)
 		{
 			//LOG("TOCADO");
 			MoveBox();
@@ -1096,7 +1096,7 @@ void Player::ActiveCheckpoint(iPoint positionMapPlayer)
 				if (checkPoints.Count() > 1)
 				{
 					inCheckPoint = true;
-					if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN && endUpdate)
+					if ((app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || app->input->pads[0].a) && endUpdate)
 					{
 						endUpdate = false;
 						checkpointMove = !checkpointMove;

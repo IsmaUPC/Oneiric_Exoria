@@ -255,6 +255,12 @@ bool SceneLevel2::CleanUp()
 	if (!active)
 		return true;
 
+	for (int i = 0; i < fxCount; i++)
+	{
+		app->audio->Unload1Fx(fxList[i].fxName);
+		app->audio->DeleteChannel(fxList[i].channel);
+	}
+
 	LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
