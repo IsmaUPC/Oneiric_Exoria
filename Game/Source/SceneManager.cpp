@@ -99,7 +99,7 @@ bool SceneManager::Update(float dt)
 		currentVolume = app->audio->GetVolumeMusic();
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
 		pause = !pause;
-		app->guiManager->GetMenuPause()->AbleDisableMenu();
+		app->guiManager->GetMenuPause()->SetActive(true);
 		app->fonts->ResetH();
 	}
 

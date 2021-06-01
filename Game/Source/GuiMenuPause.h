@@ -11,6 +11,8 @@ public:
 	~GuiMenuPause();
 
 	bool Update(float dt);
+	void UpdateSpawnPosition();
+	void AssignRandomAnimation();
 	bool PostUpdate();
 
 	bool CleanUp();
@@ -18,6 +20,7 @@ public:
 	bool Event(GuiControl* control);
 
 	void AbleDisableMenu();
+	void DisableButtons();
 	void AbleDisableSetting();
 
 	void CloaseMenuSettings();
@@ -25,6 +28,7 @@ public:
 	void MovePosition();
 
 	bool GetActive() { return active; }
+	void SetActive(bool active_) { active = active_; }
 
 	GuiSettings* GetMenuSettings() { return menuSettings; }
 
@@ -46,6 +50,16 @@ private:
 
 	bool active = false;
 	bool activeSettings = false;
+	bool activePause = false;
+	bool doorRand = true;
+	int randT = 0;
+	float offsetSpawnX = 0;
+	float offsetSpawnY = 0;
+
+	// Easings variables
+	int currentIteration = 0;
+	int totalIterations = 80;
+	int spawnPos = 0;
 };
 
 #endif // !__GUIMENUPAUSE_H__

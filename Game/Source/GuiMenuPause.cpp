@@ -46,6 +46,7 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 
 	active = false;
 	activeSettings = false;	
+	activePause = false;	
 }
 
 GuiMenuPause::~GuiMenuPause()
@@ -58,7 +59,22 @@ bool GuiMenuPause::Update(float dt)
 
 	if (active)
 	{
-		if (activeSettings) 
+		if (doorRand == true)
+		{
+			AssignRandomAnimation();
+			currentIteration = 0;
+			offsetSpawnY = 0;
+			offsetSpawnX = 0;
+		}		
+
+		if (currentIteration >= totalIterations && !activePause) active = !active, AbleDisableMenu(), activePause = true;
+		if (currentIteration < totalIterations)
+		{
+			UpdateSpawnPosition();
+			currentIteration++;
+		}
+
+		if (activeSettings)
 		{
 			menuSettings->Update(dt);
 			if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick)
@@ -68,19 +84,29 @@ bool GuiMenuPause::Update(float dt)
 				CloaseMenuSettings();
 				btnResume->PressButtonSound();
 			}
-		}		
-		else if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick)
+		}
+		else if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick && currentIteration >= totalIterations)
 		{
 			app->guiManager->press = true;
 			app->guiManager->missClick = true;
 			btnResume->PressButtonSound();
+			DisableButtons();
+			currentIteration = 0;
+			spawnPos = 0;			
+		}
+		if (currentIteration >= totalIterations && spawnPos == 0)
+		{
 			app->sceneManager->SetPause(false);
-			AbleDisableMenu();
+			active = !active;
+			currentIteration = 0;
+			activePause = false;
+			doorRand = true;
 		}
 	}
 
 	return ret;
 }
+
 
 bool GuiMenuPause::PostUpdate()
 {
@@ -90,7 +116,7 @@ bool GuiMenuPause::PostUpdate()
 		screenRect.x = -app->render->camera.x;
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
-		app->render->DrawTextBox(-app->render->camera.x + initialPos.x, -app->render->camera.y + initialPos.y, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		app->render->DrawTextBox(-app->render->camera.x + initialPos.x + offsetSpawnX, -app->render->camera.y + initialPos.y + offsetSpawnY, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
 
 	if (menuSettings->active)
@@ -106,6 +132,7 @@ bool GuiMenuPause::CleanUp()
 {
 	active = false;
 	activeSettings = false;
+	activePause = false;
 
 	return true;
 }
@@ -118,8 +145,11 @@ bool GuiMenuPause::Event(GuiControl* control)
 	{
 		if (control->id == 1) 
 		{
-			app->sceneManager->SetPause(false);
-			AbleDisableMenu();
+			btnResume->PressButtonSound();
+			DisableButtons();
+			currentIteration = 0;
+			spawnPos = 0;
+
 			activeSettings = false;
 			if (!app->audio->GetHasBeenModificated())
 				app->audio->SetVolumeMusic(app->sceneManager->GetCurrentVolume());
@@ -225,6 +255,74 @@ bool GuiMenuPause::Event(GuiControl* control)
 	return true;
 }
 
+void GuiMenuPause::AssignRandomAnimation()
+{
+	randT = rand() % 4;
+	switch (randT)
+	{
+	case 0:
+		spawnPos = -WINDOW_H / 2;
+		break;
+	case 1:
+		spawnPos = WINDOW_H / 2;
+		break;
+	case 2:
+		spawnPos = -WINDOW_W / 2;
+		break;
+	case 3:
+		spawnPos = WINDOW_W / 2;
+		break;
+	default:
+		break;
+	}
+	doorRand = false;
+}
+
+void GuiMenuPause::UpdateSpawnPosition()
+{
+	if (spawnPos != 0)
+	{
+		switch (randT)
+		{
+		case 0:
+			offsetSpawnY = EaseBackOut(currentIteration, spawnPos, WINDOW_H / 2, totalIterations);
+			break;
+		case 1:
+			offsetSpawnY = EaseBackOut(currentIteration, spawnPos, -WINDOW_H / 2, totalIterations);
+			break;
+		case 2:
+			offsetSpawnX = EaseBackOut(currentIteration, spawnPos, WINDOW_W / 2, totalIterations);
+			break;
+		case 3:
+			offsetSpawnX = EaseBackOut(currentIteration, spawnPos, -WINDOW_W / 2, totalIterations);
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		switch (randT)
+		{
+		case 0:
+			offsetSpawnY = EaseCubicIn(currentIteration, spawnPos, WINDOW_H / 2 + 120, totalIterations - 20);
+			break;
+		case 1:
+			offsetSpawnY = EaseCubicIn(currentIteration, spawnPos, -WINDOW_H / 2 - 120, totalIterations - 20);
+			break;
+		case 2:
+			offsetSpawnX = EaseCubicIn(currentIteration, spawnPos, WINDOW_W / 2 + 120, totalIterations - 20);
+			break;
+		case 3:
+			offsetSpawnX = EaseCubicIn(currentIteration, spawnPos, -WINDOW_W / 2 - 120, totalIterations - 20);
+			break;
+		default:
+			break;
+		}
+	}
+	
+}
+
 void GuiMenuPause::AbleDisableMenu()
 {
 	active = !active;
@@ -241,6 +339,14 @@ void GuiMenuPause::AbleDisableMenu()
 	{
 		MovePosition();
 	}
+}
+void GuiMenuPause::DisableButtons()
+{
+	btnResume->active = false;
+	btnSettings->active = false;
+	btnBackToTitle->active = false;
+	btnSave->active = false;
+	btnExit->active = false;
 }
 
 void GuiMenuPause::AbleDisableSetting()
