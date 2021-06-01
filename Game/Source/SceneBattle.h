@@ -45,6 +45,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void UpdateAnimationWinLoseScenes();
+
 	void Transition(float dt_);
 
 	void UpdateAnimationEnemies();
@@ -186,10 +188,11 @@ private:
 	int posY = 0;
 
 	//Easings title
-	float currentIteration;
-	float totalIterations;
-	float initialPosition;
-	float deltaPosition;
+	int currentIteration = 0;
+	int totalIterations = 0;
+	int initialPosition = 0;
+	int deltaPosition = 0;
+	int hight = 0;
 
 	int state = 0;
 	bool flash = false;

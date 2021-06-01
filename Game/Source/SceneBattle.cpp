@@ -435,59 +435,10 @@ bool SceneBattle::Update(float dt_)
 
 		// Win/Lose Condition
 		CheckWinLose();
+		UpdateAnimationWinLoseScenes();
 	}	
 
 	return true;
-}
-
-void SceneBattle::Transition(float dt_)
-{
-	if (state == 0)
-	{
-		posBackgroundLeft = EaseCircIn(currentIteration, initialPosition, deltaPosition, totalIterations);
-		posBackgroundRight = EaseCircIn(currentIteration, -initialPosition, -deltaPosition, totalIterations);
-	}
-
-	if (currentIteration < totalIterations)
-	{
-		++currentIteration;
-	}
-	else
-	{
-		if (logoAlpha == 0) app->audio->PlayFx(fxAttack);
-		if (state == 0) state = 1;
-		if (state == 1)
-		{
-			flash = true;
-			logoAlpha += (LOGO_FADE_SPEED);
-
-			if (logoAlpha > 255.0f)
-			{
-				logoAlpha = 255.0f;
-				state = 2;
-			}
-		}
-		else if (state == 2)
-		{
-			timeCounter += dt_;
-			if (timeCounter >= 0.5f)
-			{
-				drawEntities = true;
-				app->sceneManager->SetTransitionToBattleFinish(true);
-				AbleButtons();
-				state = 3;
-			}
-		}
-		else if (state == 3)
-		{
-			if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
-
-			if (logoAlpha <= 0.0f)
-			{
-				flash = false;
-			}
-		}
-	}
 }
 
 bool SceneBattle::PostUpdate()
@@ -541,6 +492,87 @@ bool SceneBattle::PostUpdate()
 
 	return true;
 }
+void SceneBattle::UpdateAnimationWinLoseScenes()
+{
+	if (win)
+	{
+		if (currentIteration < totalIterations)
+		{
+			hight = EaseBackOut(currentIteration, -WINDOW_H / 2 - 200, WINDOW_H / 2 + 200, totalIterations);
+			currentIteration++;
+		}
+		else
+		{
+			hight = 0;
+			btnContinue->active = true;
+		}
+	}
+	if (lose)
+	{
+		if (currentIteration < totalIterations)
+		{
+			hight = EaseBackOut(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
+			currentIteration++;
+		}
+		else
+		{
+			hight = 0;
+			btnContinue->active = true;
+			btnExit->active = true;
+			btnExit->state = GuiControlState::NORMAL;
+		}
+	}
+}
+
+void SceneBattle::Transition(float dt_)
+{
+	if (state == 0)
+	{
+		posBackgroundLeft = EaseCircIn(currentIteration, initialPosition, deltaPosition, totalIterations);
+		posBackgroundRight = EaseCircIn(currentIteration, -initialPosition, -deltaPosition, totalIterations);
+	}
+
+	if (currentIteration < totalIterations)
+	{
+		++currentIteration;
+	}
+	else
+	{
+		if (logoAlpha == 0) app->audio->PlayFx(fxAttack);
+		if (state == 0) state = 1;
+		if (state == 1)
+		{
+			flash = true;
+			logoAlpha += (LOGO_FADE_SPEED);
+
+			if (logoAlpha > 255.0f)
+			{
+				logoAlpha = 255.0f;
+				state = 2;
+			}
+		}
+		else if (state == 2)
+		{
+			timeCounter += dt_;
+			if (timeCounter >= 0.5f)
+			{
+				drawEntities = true;
+				app->sceneManager->SetTransitionToBattleFinish(true);
+				AbleButtons();
+				state = 3;
+			}
+		}
+		else if (state == 3)
+		{
+			if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
+
+			if (logoAlpha <= 0.0f)
+			{
+				flash = false;
+			}
+		}
+	}
+}
 
 void SceneBattle::DrawAllBattlesElements()
 {
@@ -586,12 +618,12 @@ void SceneBattle::DrawSceneWin()
 	int w = 0, h = 0;
 	TTF_SizeText(app->sceneManager->titleFont, textVictory, &w, &h);
 	app->fonts->BlitText(WINDOW_W / 2 - w / 2, 80, 1, textVictory, white);
+	app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200 + hight, 800, 400, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 
-	app->render->DrawTextBox(WINDOW_W / 2 - 400, WINDOW_H / 2 - 200, 800, 400, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	for (int i = 0; i < partners.Count(); i++)
 	{
 		posX = WINDOW_W / 2 - 400 + 40 + (i * 190);
-		posY = WINDOW_H / 2 - 200 + 40;
+		posY = WINDOW_H / 2 - 200 + 40 + hight;
 		app->render->DrawRectangle({ posX, posY , 150, 150 }, black.r, black.g, black.b, 100);
 		app->render->DrawRectangle({ posX, posY , 150, 150 }, 60, 43, 13, 255, false);
 
@@ -625,6 +657,7 @@ void SceneBattle::DrawSceneWin()
 				if (partners.At(i)->data->entityData.state != DEAD)
 				{
 					partners.At(i)->data->stats.exp += dt * 2;
+					// Level Up
 					if (partners.At(i)->data->stats.exp > exp)
 					{
 						partners.At(i)->data->stats.exp = 0;
@@ -681,8 +714,10 @@ void SceneBattle::DrawSceneLose()
 	int w = 0, h = 0;
 	sprintf_s(textLoose, 28, "YOU LOOSE");
 	TTF_SizeText(app->sceneManager->titleFont, textLoose, &w, &h);
-	app->fonts->BlitText(WINDOW_W / 2 - w / 2, 180, 1, textLoose, red, dt*35);
-	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + 50, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+
+	app->fonts->BlitText(WINDOW_W / 2 - w / 2, 180, 1, textLoose, red, dt*20);
+	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + 50 + hight, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+
 	if (btnContinue->state == GuiControlState::FOCUSED)
 	{
 		sprintf_s(textLoose, 28, "Continue from the last save");
@@ -1564,15 +1599,20 @@ void SceneBattle::CheckWinLose()
 {
 	if (!win && !lose)
 	{
+		// Win Condition
 		for (int i = 0; i < enemies.Count(); i++)
 		{
 			if (enemies.At(i)->data->entityData.state != DEAD) break;
 			if (i == enemies.Count() - 1)
 			{
 				win = true;
+				currentIteration = 0;
+				totalIterations = 100;
+
 				app->audio->PlayFx(fxWin);
 				AbleDisableButtons();
 				GenerateItems();
+
 				app->sceneManager->SetWinBattle(true);
 				app->audio->PlayMusic("Audio/Music/win_music.ogg", 0);
 			}
@@ -1583,17 +1623,21 @@ void SceneBattle::CheckWinLose()
 			if (partners.At(i)->data->entityData.state != DEAD) break;
 			if (i == partners.Count() - 1)
 			{
+				lose = true;
+				currentIteration = 0;
+				totalIterations = 80;
+
 				btnContinue->bounds.y -= 70;
 				btnContinue->bounds.x += 5;
 				btnExit->bounds = btnContinue->bounds;
 				btnExit->bounds.y += 40;
 				btnExit->bounds.x = WINDOW_W / 2 - 25;
 				AbleDisableButtons();
-				lose = true;
+				btnContinue->active = false;
+
 				app->audio->PlayFx(fxLose);
 				app->audio->PlayMusic("Audio/Music/lose_music.ogg", 0);
-				btnExit->active = true;
-				btnExit->state = GuiControlState::NORMAL;
+
 				app->sceneManager->SetLoseBattle(true);
 				for (int i = 0; i < enemies.Count(); i++)
 				{

@@ -15,7 +15,7 @@
 		<fullscreen_window value="false" />
 	</window>
 	<audio>
-		<music volume="10" />
+		<music volume="81" />
 		<fx volume="98" />
 	</audio>
 	<map>
