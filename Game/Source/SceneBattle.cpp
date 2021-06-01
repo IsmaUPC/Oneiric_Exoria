@@ -671,7 +671,7 @@ void SceneBattle::DrawSceneWin()
 		// Draw Level
 		rec.y -= 70;
 		live.y -= 70;
-		sprintf_s(textLevel, 8, "Lvl.%d", partners.At(i)->data->entityData.level);
+		sprintf_s(textLevel, 7, "Lvl.%d", partners.At(i)->data->entityData.level);
 		TTF_SizeText(app->sceneManager->guiFont, textLevel, &w, &h);
 		app->fonts->BlitText(rec.x + rec.w / 2 - w / 2, rec.y + rec.h / 2 - h / 2, 0, textLevel, { 60, 43, 13 });
 	}
@@ -1611,6 +1611,7 @@ void SceneBattle::CheckWinLose()
 
 				app->audio->PlayFx(fxWin);
 				AbleDisableButtons();
+				btnContinue->active = false;
 				GenerateItems();
 
 				app->sceneManager->SetWinBattle(true);
