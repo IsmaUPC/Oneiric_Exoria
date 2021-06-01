@@ -131,7 +131,12 @@ bool SceneIntro::Update(float dt)
 	bool ret = true;
 	if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && (menuSettings->GetActiveSettings()))
 	{
-		menuSettings->btnBack->PressButtonSound();
+		menuSettings->DesactiveSettingMenu();
+		closeSettings = true;
+	}
+	if (closeSettings && menuSettings->pendingDesactive == false)
+	{
+		closeSettings = false;
 		CloaseMenuSettings();
 	}
 
@@ -371,7 +376,8 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 		}
 		else if (control->id == 10)
 		{
-			CloaseMenuSettings();
+			menuSettings->DesactiveSettingMenu();
+			closeSettings = true;
 		}
 	}
 	case GuiControlType::SLIDER:
@@ -448,9 +454,9 @@ void SceneIntro::AbleButtons()
 
 void SceneIntro::CloaseMenuSettings()
 {
+	//btnCredits->state = GuiControlState::NORMAL;
 	btnPlay->state = GuiControlState::NORMAL;
 	btnSettings->state = GuiControlState::NORMAL;
-	//btnCredits->state = GuiControlState::NORMAL;
 	btnExit->state = GuiControlState::NORMAL;
 	if (lastLevel != 0)
 	{

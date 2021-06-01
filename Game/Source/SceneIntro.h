@@ -57,7 +57,9 @@ private:
 	SDL_Texture* oneiric = nullptr;
 	SDL_Texture* exoria = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
+
 	bool transition = false;
+	bool closeSettings = false;
 
 	fPoint sBackCloudPos = { 0,0 };
 	fPoint bBackCloudPos = { 0,0 };

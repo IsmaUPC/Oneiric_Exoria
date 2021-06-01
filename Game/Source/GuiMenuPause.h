@@ -29,6 +29,7 @@ public:
 
 	bool GetActive() { return active; }
 	void SetActive(bool active_) { active = active_; }
+	GuiButton* GetButtonResume() { return btnResume; };
 
 	GuiSettings* GetMenuSettings() { return menuSettings; }
 

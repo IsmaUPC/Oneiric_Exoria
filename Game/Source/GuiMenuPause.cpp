@@ -40,7 +40,7 @@ GuiMenuPause::GuiMenuPause(iPoint Position, SceneControl* moduleObserver, SDL_Te
 	btnExit->active = false;
 	app->guiManager->AddGuiButton(btnExit);
 
-	menuSettings = new GuiSettings({ WINDOW_W / 2 + 140, Position.y - 50}, moduleObserver);
+	menuSettings = new GuiSettings({ WINDOW_W / 2 + 140, Position.y - 82}, moduleObserver);
 
 	observer = moduleObserver;
 
@@ -81,8 +81,7 @@ bool GuiMenuPause::Update(float dt)
 			{
 				app->guiManager->press = true;
 				app->guiManager->missClick = true;
-				CloaseMenuSettings();
-				btnResume->PressButtonSound();
+				menuSettings->DesactiveSettingMenu();
 			}
 		}
 		else if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick && currentIteration >= totalIterations)
@@ -185,7 +184,7 @@ bool GuiMenuPause::Event(GuiControl* control)
 		}
 		else if (control->id == 10)
 		{
-			CloaseMenuSettings();
+			menuSettings->DesactiveSettingMenu();
 		}
 
 	}

@@ -16,12 +16,15 @@ public:
 	~GuiSettings();
 
 	bool Update(float dt);
+	void AbleDisableButtons();
 	bool Draw();
 
 	bool CleanUp();
 
 	void AbleDisableSetting();
 	bool GetActiveSettings() { return active; };
+
+	void DesactiveSettingMenu();
 
 	void MovePosition();
 
@@ -37,6 +40,7 @@ public:
 	GuiButton* btnBack = nullptr;
 
 	bool active = false;
+	bool pendingDesactive = false;
 
 private:
 	int padding = 60;
@@ -44,6 +48,11 @@ private:
 	char textSpeedOptions[20] = { "Slow Fast Off" };
 
 	iPoint initialPos = { 0,0};
+
+	// Easings variables
+	int currentIteration = 0;
+	int totalIterations = 60;
+	int hight = 10;
 
 };
 #endif // __GUISETTINGS_H__
