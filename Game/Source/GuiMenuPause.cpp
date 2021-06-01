@@ -61,19 +61,22 @@ bool GuiMenuPause::Update(float dt)
 		if (activeSettings) 
 		{
 			menuSettings->Update(dt);
-			if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+			if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick)
 			{
+				app->guiManager->press = true;
+				app->guiManager->missClick = true;
 				CloaseMenuSettings();
 				btnResume->PressButtonSound();
 			}
-		}
-		/*
-		else if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b)
+		}		
+		else if ((app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].b) && !app->guiManager->press && !app->guiManager->missClick)
 		{
+			app->guiManager->press = true;
+			app->guiManager->missClick = true;
 			btnResume->PressButtonSound();
 			app->sceneManager->SetPause(false);
 			AbleDisableMenu();
-		}*/
+		}
 	}
 
 	return ret;

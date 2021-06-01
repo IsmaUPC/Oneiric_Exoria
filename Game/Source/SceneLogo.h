@@ -37,8 +37,6 @@ private:
 	SDL_Rect logoRect;
 	SDL_Texture* logo = nullptr;
 	SDL_Texture* cracks = nullptr;
-	SDL_Texture* license = nullptr;
-	SDL_Texture* names = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	uint fxIntro = -1;
 
