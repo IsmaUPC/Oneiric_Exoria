@@ -45,28 +45,58 @@ bool GUI::Start()
 	//playerUi = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	activeFPS = false;
-	timer.Start();
-	minuts = app->entityManager->timeSave / 60000;
+	/*timer.Start();
+	minuts = app->entityManager->timeSave / 60000;*/
 	return true;
 }
 
 bool GUI::PreUpdate()
 {
-
 	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 	{
 		activeFPS = !activeFPS;
-
 	}
 	return true;
 }
 
 bool GUI::Update(float dt)
 {
-	miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
-	Chronometer();
+	//miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
+	//Chronometer();
 	entityData.position.x = -app->render->camera.x;
-	entityData.position.y = -app->render->camera.y;
+	entityData.position.y = -app->render->camera.y;		
+	
+	if (app->dialogueSystem->pendingDialog)
+	{
+		if (app->dialogueSystem->despawnDialog)
+		{
+			initSpawnPos = true;
+			app->dialogueSystem->despawnDialog = false;
+		}			
+
+		if (initSpawnPos)
+		{
+			if (app->dialogueSystem->spawnDialog) InitPosBoxText(160, -160);
+			else InitPosBoxText(0, 160);
+			initSpawnPos = false;
+		}		
+
+		if (currentIteration < totalIterations)
+		{
+			hight = EaseCubicIn(currentIteration, spawnPos, deltaPos, totalIterations);
+			currentIteration++;
+		}
+		else
+		{
+			if (!app->dialogueSystem->spawnDialog)
+				app->dialogueSystem->pendingDialog = false;
+			else
+			{
+				hight = 0;
+				app->dialogueSystem->onDialog = true;
+			}
+		}
+	}	
 
 	return true;
 }
@@ -74,9 +104,9 @@ bool GUI::Update(float dt)
 bool GUI::PostUpdate()
 {
 	// Text box
-	if (app->dialogueSystem->onDialog == true)
+	if (app->dialogueSystem->pendingDialog == true)
 	{
-		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565, 600, 150, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565 + hight, 600, 150, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
 	if (app->entityManager->drawCloud == true)
 	{
@@ -119,9 +149,16 @@ bool GUI::PostUpdate()
 	return true;
 }
 
+void GUI::InitPosBoxText(int spawnPos_, int deltaPos_)
+{
+	spawnPos = spawnPos_;
+	deltaPos = deltaPos_;
+	currentIteration = 0;
+}
+
 void GUI::Chronometer()
 {
-	if (miliseconds >= 60000 && !stopTime)
+	/*if (miliseconds >= 60000 && !stopTime)
 	{
 		minuts++;
 	}
@@ -132,7 +169,7 @@ void GUI::Chronometer()
 	{
 		centenas = miliseconds / 100;
 		miliseconds2 = miliseconds - (centenas * 100);
-	}	
+	}*/	
 }
 
 bool GUI::CleanUp()
@@ -158,8 +195,8 @@ bool GUI::LoadState(pugi::xml_node& data)
 
 bool GUI::SaveState(pugi::xml_node& data) const
 {
-	if(!app->removeGame)data.child("time").attribute("value").set_value(miliseconds*10+minuts*60000);
-	else data.child("time").attribute("value").set_value(0);
+	/*if(!app->removeGame)data.child("time").attribute("value").set_value(miliseconds*10+minuts*60000);
+	else data.child("time").attribute("value").set_value(0);*/
 	return true;
 }
 

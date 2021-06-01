@@ -79,14 +79,20 @@ public:
 	bool LoadDialogue(const char*);
 	bool LoadNodes(pugi::xml_node& trees, DialogueTree* oak);
 	bool LoadOptions(pugi::xml_node& text_node, DialogueNode* npc);
+
 	DialogueNode* currentNode;
 	std::vector <DialogueTree*> dialogueTrees;
-	bool onDialog = false;
+
 	void SetId(int id_) { id = id_; };
 	int id = 0;
 	int totalLetters = 0;
 	float actualLetter = 0;
 	int dialogSpeed = 1;
+
+	bool onDialog = false;
+	bool pendingDialog = false;
+	bool spawnDialog = false;
+	bool despawnDialog = true;
 	bool missClick = false;
 
 	uint fxDialog = -1;

@@ -186,8 +186,7 @@ bool Entity::CheckCollisionBoxes(iPoint positionMap)
 }
 // TODO move to Obstacle Object
 bool Entity::MoveBox()
-{	
-
+{
 	fPoint tmp= app->entityManager->boxes.At(posBox)->data->entityData.position;
 	fPoint tmp2= tmp;
 	fPoint aux;

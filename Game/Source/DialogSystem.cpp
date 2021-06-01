@@ -76,7 +76,9 @@ void DialogueSystem::PerformDialogue(int treeId, int playerInput)
 				}
 				if (currentNode->dialogueOptions[playerInput]->nextNode == 100)
 				{
-					onDialog = false;
+					spawnDialog = false;
+					despawnDialog = true;
+					app->dialogueSystem->onDialog = false;
 				}
 				else currentNode = dialogueTrees[treeId]->dialogueNodes[i];
 				break;

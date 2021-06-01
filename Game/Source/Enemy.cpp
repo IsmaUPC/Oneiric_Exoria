@@ -229,14 +229,18 @@ bool Enemy::Update(float dt)
 			//if (Radar(app->player->playerData.position, 75) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
 			if (Radar(app->player->playerData.position, 50)) app->guiManager->talkCloud->Update();
 
-			if (!app->dialogueSystem->onDialog && Radar(app->player->playerData.position, 50) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
+			if (!app->dialogueSystem->pendingDialog && Radar(app->player->playerData.position, 50) && (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN || (app->input->pads[0].a == true && !app->dialogueSystem->missClick)))
 			{
 				app->dialogueSystem->currentNode = app->dialogueSystem->dialogueTrees[entityData.id]->dialogueNodes[0];
 				app->dialogueSystem->PerformDialogue(entityData.id, 7);
 				app->dialogueSystem->SetId(entityData.id);
-				app->dialogueSystem->onDialog = true;
-				app->sceneManager->onDialog = true;
+				
+				app->dialogueSystem->pendingDialog = true;
+				app->dialogueSystem->spawnDialog = true;
+				app->dialogueSystem->despawnDialog = true;
 				app->dialogueSystem->missClick = true;
+				app->sceneManager->onDialog = true;
+
 				if (entityData.id == 13 || entityData.id == 14)
 				{
 					app->audio->PlayFx(fxCoffeButtons);

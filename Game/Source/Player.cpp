@@ -535,7 +535,6 @@ void Player::UpdatePointCheker()
 		{
 			//LOG("TOCADO");
 			MoveBox();
-
 		}
 
 	}

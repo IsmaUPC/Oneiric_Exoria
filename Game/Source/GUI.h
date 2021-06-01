@@ -27,6 +27,8 @@ public:
 
 	bool CleanUp();
 
+	void InitPosBoxText(int spawnPos, int deltaPos);
+
 	// Load state game
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
@@ -39,14 +41,23 @@ private:
 	iPoint point0 = { 0,0 };
 
 	bool inCheckPoint = false;
+	bool initSpawnPos = false;
 
 	SDL_Texture* playerUi = nullptr;
 	char textLive[8] = { "\0" };
 
 	bool activeFPS = false;
 	char fps[3] = { "\0" };
+
+	// Easings variables
+	int currentIteration = 0;
+	int totalIterations = 40;
+	int spawnPos = 0;
+	int deltaPos = 0;
+	int hight = 0;
+
 	// Time
-	Timer timer;
+	/*Timer timer;
 	char timeText[10] = { "\0" };
 	char scoreText[12] = { "\0" };
 	uint miliseconds = 0;
@@ -54,7 +65,7 @@ private:
 	uint seconds = 0;
 	uint minuts = 0;
 	Timer auxTimePause;
-	bool stopTime = false;
+	bool stopTime = false;*/
 };
 
 #endif // __GUI_H__
