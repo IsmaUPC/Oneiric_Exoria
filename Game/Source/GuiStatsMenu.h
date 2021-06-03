@@ -14,7 +14,8 @@
 enum PageType
 {
 	STATS = 1,
-	INVENTORY = 2
+	INVENTORY = 2,
+	QUEST = 3
 };
 
 class StatsPage
@@ -41,11 +42,14 @@ public:
 	~GuiStatsMenu();
 
 	bool Update(float dt);
+	void UpdateQuest();
 	void UpdateInventory();
 	void CheckSelectPlayer();
 	void UpdateStats();
 	void CloseBook();
 	bool PostUpdate();
+
+	void DrawQuest(int& posX, int& posY);
 
 	void DrawTitleStats(int posX, int& posY);
 	void DrawBoost(int& posY, int posX);

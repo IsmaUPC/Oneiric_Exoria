@@ -134,6 +134,9 @@ bool GuiStatsMenu::Update(float dt_)
 		case INVENTORY:
 			UpdateInventory();
 			break;
+		case QUEST:
+			UpdateQuest();
+			break;
 		default:
 			break;
 		}
@@ -144,6 +147,11 @@ bool GuiStatsMenu::Update(float dt_)
 	}
 
 	return ret;
+}
+
+void GuiStatsMenu::UpdateQuest()
+{
+	
 }
 
 void GuiStatsMenu::UpdateInventory()
@@ -343,6 +351,9 @@ bool GuiStatsMenu::PostUpdate()
 				}
 				else for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
 				break;
+			case QUEST:
+				DrawBookMarks(posX, posY2, page.numPage);
+				break;
 			default:
 				break;
 			}
@@ -357,6 +368,9 @@ bool GuiStatsMenu::PostUpdate()
 				break;
 			case INVENTORY:
 				DrawInventory(posX, posY);
+				break;
+			case QUEST:
+				DrawQuest(posX, posY);
 				break;
 			default:
 				break;
@@ -654,6 +668,12 @@ void GuiStatsMenu::DrawInventory(int posX, int& posY)
 
 }
 
+void GuiStatsMenu::DrawQuest(int& posX, int& posY)
+{
+	sprintf_s(textStats, 15, "Quest Log");
+	app->fonts->BlitText(posX, posY, 2, textStats, color);
+}
+
 void GuiStatsMenu::DrawItemList(int posX, int& posY, SDL_Rect& itemTextRect)
 {
 	for (int i = 0; i < app->player->inventory.Count(); i++)
@@ -929,11 +949,15 @@ void GuiStatsMenu::ChangePages()
 	app->audio->PlayFx(app->guiManager->fxChangePage);
 	changingPage = true;
 
-	if (pageType > 2) pageType = static_cast<PageType>(1);
-	if (pageType < 1) pageType = static_cast<PageType>(2);
-	if (pageType == INVENTORY)
+	if (pageType > 3) pageType = static_cast<PageType>(1);
+	if (pageType < 1) pageType = static_cast<PageType>(3);
+	if (pageType != STATS)
 	{
-		menuMagic->AbleDisableMagic();
-		menuMagic->close->active = false;
+		if (menuMagic->GetActiveMagic() == true)
+		{
+			menuMagic->AbleDisableMagic();
+			menuMagic->close->active == false;
+		}
 	}
+
 }
