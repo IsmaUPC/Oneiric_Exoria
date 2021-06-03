@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "SceneControl.h"
 #include "GuiManager.h"
+#include "QuestManager.h"
 #include "Fonts.h"
 #include "Player.h"
 
@@ -58,6 +59,12 @@ bool GuiStatsMenu::Update(float dt_)
 	if (active)
 	{
 		//Update stuff
+
+		// Get the Quest Active List
+		if (app->guiManager->openBookAnim->HasFinished())
+		{
+			questList = app->questManager->GetActiveQuestList();
+		}
 
 		if ((app->guiManager->openBookAnim->HasFinished() || app->guiManager->leftBook->HasFinished() || app->guiManager->rightBook->HasFinished()) && !closingBook)
 		{
@@ -670,8 +677,23 @@ void GuiStatsMenu::DrawInventory(int posX, int& posY)
 
 void GuiStatsMenu::DrawQuest(int& posX, int& posY)
 {
-	sprintf_s(textStats, 15, "Quest Log");
+	sprintf_s(textStats, 15, "Quest");
 	app->fonts->BlitText(posX, posY, 2, textStats, color);
+
+	// Draw the list of active Quest 
+	if (questList->Count() != 0) {
+		ListItem<Quest*> node = *questList->start;
+		for (int i = 0; i < questList->Count(); i++) {
+
+			sprintf_s(textDescription, 200,node.data->description.GetString());
+			app->fonts->BlitMarginText(posX, posY + 50 + (50 * i), 0, "-", color, 330);
+			app->fonts->BlitMarginText(posX+20, posY + 50 + (50 * i), 0, textDescription, color, 330);
+			
+			if (node.next != nullptr)
+				node = *node.next;
+		}
+	}
+
 }
 
 void GuiStatsMenu::DrawItemList(int posX, int& posY, SDL_Rect& itemTextRect)
@@ -948,7 +970,7 @@ void GuiStatsMenu::ChangePages()
 {
 	app->audio->PlayFx(app->guiManager->fxChangePage);
 	changingPage = true;
-
+	
 	if (pageType > 3) pageType = static_cast<PageType>(1);
 	if (pageType < 1) pageType = static_cast<PageType>(3);
 	if (pageType != STATS)

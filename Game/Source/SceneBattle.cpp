@@ -872,21 +872,17 @@ void SceneBattle::IconEnemySelected()
 		}
 		else if (magicInUse->type == 3)
 		{
-		for (int i = 0; i < enemies.Count(); i++) {
-			posCursorX = (int)enemies.At(i)->data->entityData.position.x + 50;
-			posCursorY = (int)enemies.At(i)->data->entityData.position.y - 70;
+			for (int i = 0; i < enemies.Count(); i++) {
+				posCursorX = (int)enemies.At(i)->data->entityData.position.x + 50;
+				posCursorY = (int)enemies.At(i)->data->entityData.position.y - 70;
 
-			posSelectX = (int)enemies.At(i)->data->entityData.position.x + 13;
-			posSelectY = (int)enemies.At(i)->data->entityData.position.y + 15;
+				posSelectX = (int)enemies.At(i)->data->entityData.position.x + 13;
+				posSelectY = (int)enemies.At(i)->data->entityData.position.y + 15;
 
-			app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
-			app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
+				app->render->DrawTexture(enemySelect, posSelectX, posSelectY, NULL, 3);
+				app->render->DrawTexture(app->guiManager->handCursor, posCursorX, posCursorY, &app->guiManager->handAnim->GetCurrentFrame(), 1, 0, 90);
+			}
 		}
-		}
-		// PUTA otro if para las magias de area, solo habria que marcar a todos sin mas, facil
-
-		//app->render->DrawRectangle({ posCursorX, posCursorY ,20,20 }, red.r, red.g, red.b, 255);
-
 	}
 }
 

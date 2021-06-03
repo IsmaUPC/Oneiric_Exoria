@@ -35,6 +35,7 @@ public:
 	SDL_Rect avatar;
 };
 
+class Quest;
 class GuiStatsMenu
 {
 public:
@@ -122,6 +123,8 @@ private:
 	SceneControl* observer = nullptr;
 
 	SDL_Rect screenRect = { NULL };
+
+	List<Quest*> *questList;
 
 	bool active = false;
 	bool changingPage = false;
