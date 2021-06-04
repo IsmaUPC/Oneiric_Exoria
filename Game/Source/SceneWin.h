@@ -1,7 +1,8 @@
 #ifndef __SCENEWIN_H__
 #define __SCENEWIN_H__
 
-#include "Animation.h"
+#include "Scene.h"
+#include "GuiButton.h"
 
 struct SDL_Texture;
 
