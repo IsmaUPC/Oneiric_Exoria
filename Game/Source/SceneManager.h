@@ -58,6 +58,7 @@ public:
 	void SetPause(bool statePause) { pause = statePause; };
 
 	TTF_Font* GetGuiFont() { return guiFont; };
+	TTF_Font* GetItemFont() { return itemFont; };
 
 	// Called before quitting
 	bool CleanUp();

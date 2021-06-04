@@ -60,10 +60,11 @@ bool GuiStatsMenu::Update(float dt_)
 	{
 		//Update stuff
 
-		// Get the Quest Active List
+		// Get the Quest Lists
 		if (app->guiManager->openBookAnim->HasFinished())
 		{
-			questList = app->questManager->GetActiveQuestList();
+			activeQuestList = app->questManager->GetActiveQuestList();
+			completeQuestList = app->questManager->GetCompleteQuestList();
 		}
 
 		if ((app->guiManager->openBookAnim->HasFinished() || app->guiManager->leftBook->HasFinished() || app->guiManager->rightBook->HasFinished()) && !closingBook)
@@ -359,7 +360,7 @@ bool GuiStatsMenu::PostUpdate()
 				else for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
 				break;
 			case QUEST:
-				DrawBookMarks(posX, posY2, page.numPage);
+				for (int i = 0; i < 4; i++) app->render->DrawTexture(app->guiManager->uiAtlas, posX + 858, posY2 + 200 + i * 40, &bookMarkRect);
 				break;
 			default:
 				break;
@@ -677,20 +678,53 @@ void GuiStatsMenu::DrawInventory(int posX, int& posY)
 
 void GuiStatsMenu::DrawQuest(int& posX, int& posY)
 {
-	sprintf_s(textStats, 15, "Quest");
+	sprintf_s(textStats, 15, "Active Quest");
 	app->fonts->BlitText(posX, posY, 2, textStats, color);
 
+	sprintf_s(textStats, 13, "Completed");
+	app->fonts->BlitText(posX + 500, posY, 2, textStats, color);
+
 	// Draw the list of active Quest 
-	if (questList->Count() != 0) {
-		ListItem<Quest*> node = *questList->start;
-		for (int i = 0; i < questList->Count(); i++) {
+	if (activeQuestList->Count() != 0) {
+		int padding = posY + 50;
+		ListItem<Quest*> node = *activeQuestList->start;
+		for (int i = 0; i < activeQuestList->Count(); i++) {
 
 			sprintf_s(textDescription, 200,node.data->description.GetString());
-			app->fonts->BlitMarginText(posX, posY + 50 + (50 * i), 0, "-", color, 330);
-			app->fonts->BlitMarginText(posX+20, posY + 50 + (50 * i), 0, textDescription, color, 330);
+
+			int w = 0;
+			int h = 0;
+			TTF_SizeText(app->sceneManager->GetItemFont(), textDescription, &w, &h);
+
+			app->fonts->BlitMarginText(posX		, padding, 0, "-", color, 330);
+			app->fonts->BlitMarginText(posX + 20, padding, 0, textDescription, color, 330);
 			
+			padding += (w > 380) ? 55 : 30;
+
 			if (node.next != nullptr)
 				node = *node.next;
+		}
+	}
+	// Draw the list of complete Quest 
+	if (completeQuestList->Count() != 0) {
+
+		int padding = posY + 50;
+		ListItem<Quest*> node = *completeQuestList->end;
+		for (int i = 0; i < completeQuestList->Count(); i++) {
+
+			sprintf_s(textDescription, 200, node.data->description.GetString());
+
+			int w = 0;
+			int h = 0;
+			TTF_SizeText(app->sceneManager->GetItemFont(), textDescription, &w, &h);
+
+			app->fonts->BlitMarginText(posX + 500, padding, 0, "X", grey, 330);
+			app->fonts->BlitMarginText(posX + 520, padding, 0, textDescription, grey, 330);
+			
+			padding += (w > 380) ? 55 : 30;
+
+			if (node.prev != nullptr)
+				node = *node.prev;
 		}
 	}
 

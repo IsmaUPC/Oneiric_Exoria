@@ -119,12 +119,14 @@ private:
 	SDL_Color green = { 0,187, 45 };
 	SDL_Color yellow = { 211,159,0 };
 	SDL_Color red = { 203,50,52 };
+	SDL_Color grey = { 75,75,75 };
 
 	SceneControl* observer = nullptr;
 
 	SDL_Rect screenRect = { NULL };
 
-	List<Quest*> *questList;
+	List<Quest*> *activeQuestList;
+	List<Quest*> *completeQuestList;
 
 	bool active = false;
 	bool changingPage = false;

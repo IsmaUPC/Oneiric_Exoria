@@ -50,6 +50,7 @@ public:
     void ResetQuestList();
 
     List<Quest*>* GetActiveQuestList() { return &activeQuestList; }
+    List<Quest*>* GetCompleteQuestList() { return &completeQuestList; }
 
     // 0 = INACTIVE | 1 = ACTIVE | 2 = COMPLETE
     int QuestState(int id);
