@@ -78,7 +78,7 @@ bool SceneIntro::Start()
 
 	menuSettings->MovePosition();
 
-	app->audio->PlayMusic("Audio/Music/music_intro.ogg");
+	app->audio->PlayMusic("Audio/Music/intro_music.ogg");
 
 	bgIntro = app->tex->Load("Textures/title_background.png");
 	logo = app->tex->Load("Textures/logo_title.png");
