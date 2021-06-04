@@ -176,7 +176,9 @@
     <ClCompile Include="Source\ObstacleObjects.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\AssetsManager.cpp" />
+    <ClCompile Include="Source\AssetsManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Defs.h">
@@ -362,7 +364,9 @@
     <ClInclude Include="Source\ObstacleObjects.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\AssetsManager.h" />
+    <ClInclude Include="Source\AssetsManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
