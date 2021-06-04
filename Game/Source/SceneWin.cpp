@@ -18,7 +18,6 @@ SceneWin::SceneWin(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneWin");
-
 }
 
 SceneWin::~SceneWin()
@@ -38,13 +37,18 @@ bool SceneWin::Start()
 
 	// GUI: Initialize required controls for the screen
 	int margin = 7;
-	int padding = 110;
+	int padding = 35;
 	int yPosition = 330 + margin;
 
-	btnContinue = new GuiButton(2, { 935 + 237 / 2, 510,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue = new GuiButton(2, { WINDOW_W / 2, WINDOW_H /2 + padding,  85, 25 }, "Continue", RECTANGLE);
 	btnContinue->active = false;
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
+
+	btnBackToTitle = new GuiButton(3, { WINDOW_W / 2, WINDOW_H / 2 + padding + 30, 85, 25 }, "Return to title", RECTANGLE);
+	btnBackToTitle->SetObserver(this);
+	btnBackToTitle->active = false;
+	app->guiManager->AddGuiButton(btnBackToTitle);
 
 	app->SetLastScene((Module*)this);
 
@@ -52,9 +56,9 @@ bool SceneWin::Start()
 
 	bgIntro = app->tex->Load("Textures/title_background.png");
 	logo = app->tex->Load("Textures/logo_title.png");
+	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);
 	cloud = app->tex->Load("Textures/GUI/cloud.png");
-	oneiric = app->tex->Load("Textures/oneiric_title.png");
-	exoria = app->tex->Load("Textures/exoria_title.png");
+	ending = app->tex->Load("Textures/oneiric_title.png");
 
 	fxStart = app->audio->LoadFx("Audio/Fx/start_button.wav");
 	fxTittle = app->audio->LoadFx("Audio/Fx/tittle.wav");
@@ -93,51 +97,51 @@ bool SceneWin::Update(float dt)
 	CloudsUpdate();
 
 	//Update Easings	
-	if (state == 0)
+
+	if (logoAlpha == 0) app->audio->PlayFx(fxFlash);
+	if (state == 0) state = 1;
+	if (state == 1)
 	{
-		positionExoria = EaseCircIn(currentIteration, initialPosition, -deltaPosition, totalIterations);
-		positionOneiric = EaseCircIn(currentIteration, -895, deltaPosition, totalIterations);
+		flash = true;
+		logoAlpha += (LOGO_FADE_SPEED);
+
+		if (logoAlpha > 255.0f)
+		{
+			logoAlpha = 255.0f;
+			state = 2;
+		}
 	}
+	else if (state == 2)
+	{
+		timeCounter += dt;
+		if (timeCounter >= 0.5f)
+		{
+			AbleButtons();
+			state = 3;
+		}
+	}
+	else if (state == 3)
+	{
+		if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
+
+		if (logoAlpha <= 0.0f)
+		{
+			flash = false;
+		}
+	}
+
+	if (state == 3) angle += dt * 10;
 
 	if (currentIteration < totalIterations)
 	{
-		++currentIteration;
+		hight = EaseBackOut(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
+		currentIteration++;
 	}
 	else
 	{
-		if (logoAlpha == 0) app->audio->PlayFx(fxFlash);
-		if (state == 0) state = 1;
-		if (state == 1)
-		{
-			flash = true;
-			logoAlpha += (LOGO_FADE_SPEED);
-
-			if (logoAlpha > 255.0f)
-			{
-				logoAlpha = 255.0f;
-				state = 2;
-			}
-		}
-		else if (state == 2)
-		{
-			timeCounter += dt;
-			if (timeCounter >= 0.5f)
-			{
-				AbleButtons();
-				state = 3;
-			}
-		}
-		else if (state == 3)
-		{
-			if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
-
-			if (logoAlpha <= 0.0f)
-			{
-				flash = false;
-			}
-		}
+		hight = 0;
+		AbleButtons();
 	}
-	if (state == 3) angle += dt * 10;
 
 	return ret;
 }
@@ -145,6 +149,7 @@ bool SceneWin::Update(float dt)
 void SceneWin::AbleButtons()
 {
 	btnContinue->active = true;
+	btnBackToTitle->active = true;
 }
 
 void SceneWin::CloudsUpdate()
@@ -190,15 +195,14 @@ bool SceneWin::PostUpdate()
 	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
 	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y, 0, 2);
 
-	app->render->DrawTexture(logo, 160, 33, 0, 1, 1, angle);
-	app->render->DrawTexture(oneiric, positionOneiric, 145, 0, 1.3);
-	app->render->DrawTexture(exoria, positionExoria, 325, 0, 1.3);
+	app->render->DrawTexture(logo, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2, 0, 1, 1, angle);
+	app->render->DrawTexture(ending, WINDOW_W / 2 - 250, 80, 0, 1.3);
 
 	CloudsDraw();
 
 	if (state == 3)
 	{
-		app->render->DrawTextBox(935, 427, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	}
 
 	if (flash)
@@ -227,8 +231,7 @@ bool SceneWin::CleanUp()
 	app->tex->UnLoad(bgIntro);
 	app->tex->UnLoad(logo);
 	app->tex->UnLoad(cloud);
-	app->tex->UnLoad(oneiric);
-	app->tex->UnLoad(exoria);
+	app->tex->UnLoad(ending);
 
 	app->audio->Unload1Fx(fxStart);
 	app->audio->Unload1Fx(fxTittle);
@@ -239,8 +242,7 @@ bool SceneWin::CleanUp()
 	bgIntro = nullptr;
 	logo = nullptr;
 	cloud = nullptr;
-	oneiric = nullptr;
-	exoria = nullptr;
+	ending = nullptr;
 	active = false;
 
 	return true;
@@ -257,6 +259,10 @@ bool SceneWin::OnGuiMouseClickEvent(GuiControl* control)
 			TransitionToScene(SceneType::LEVEL1), app->sceneManager->lastLevel = 1;
 			isContinue = true;
 			app->player->loadStats = true;
+		}
+		else if (control->id == 3)
+		{
+			TransitionToScene(SceneType::INTRO);
 		}
 	}
 	break;

@@ -52,11 +52,11 @@ private:
 	SDL_Texture* bgIntro = nullptr;
 	SDL_Texture* logo = nullptr;
 	SDL_Texture* cloud = nullptr;
-	SDL_Texture* oneiric = nullptr;
-	SDL_Texture* exoria = nullptr;
+	SDL_Texture* ending = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 
 	GuiButton* btnContinue = nullptr;
+	GuiButton* btnBackToTitle = nullptr;
 
 	uint fxStart = -1;
 	uint fxTittle = -1;
@@ -75,9 +75,7 @@ private:
 	float totalIterations;
 	float initialPosition;
 	float deltaPosition;
-
-	float positionOneiric = -500;
-	float positionExoria = -500;
+	int hight = 0;
 
 	bool flash = false;
 	float logoAlpha = 0;
