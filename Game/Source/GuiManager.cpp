@@ -196,6 +196,7 @@ bool GuiManager::CleanUp()
 	app->tex->UnLoad(moonCorner);
 	app->tex->UnLoad(handCursor);
 	app->tex->UnLoad(bookMenu);
+	app->tex->UnLoad(uiButtonHelp);
 	DeleteList();
 
 	app->audio->Unload1Fx(fxBtnSelected);

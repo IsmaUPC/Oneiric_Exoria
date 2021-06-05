@@ -145,15 +145,6 @@ bool GUI::PostUpdate()
 		app->fonts->BlitText(point0.x + 30, point0.y + 30, 0, fps, { 0, 255, 68 });
 
 	}
-	if (!app->sceneManager->GetIsPause())
-	{
-		SDL_Rect buttonRect = { 32,0, 16, 16 };
-		app->render->DrawTexture(app->guiManager->uiButtonHelp, point0.x + 32, point0.y + WINDOW_H - 64, &buttonRect, 2);
-		app->fonts->BlitText(point0.x + 70, point0.y + WINDOW_H - 62, 0, "Book", { 33, 35, 48 });
-		buttonRect = { 48,0, 16, 16 };
-		app->render->DrawTexture(app->guiManager->uiButtonHelp, point0.x + 140, point0.y + WINDOW_H - 64, &buttonRect, 2);
-		app->fonts->BlitText(point0.x + 178, point0.y + WINDOW_H - 62, 0, "Pause", { 33, 35, 48 });
-	}
 
 	return true;
 }

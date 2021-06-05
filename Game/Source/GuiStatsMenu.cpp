@@ -378,14 +378,27 @@ bool GuiStatsMenu::PostUpdate()
 			
 		}
 
-		if (!introBook)
+		if (!introBook && !closingBook)
 		{
 			SDL_Rect buttonRect = { 0,0, 16, 16 };
-			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 96, &buttonRect, 2);
-			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 94, 0, "Accept", { 33, 35, 48 });
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 102, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 100, 0, "Accept", { 255, 255, 255 });
+
 			buttonRect = { 0,48, 16, 16 };
 			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
-			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 62, 0, "Back", { 33, 35, 48 });
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 62, 0, "Back", { 255, 255, 255 });
+
+			buttonRect = { 32, 32, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + WINDOW_W - 132, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + WINDOW_W - 95, -app->render->camera.y + WINDOW_H - 62, 0, "Select", { 255, 255, 255 });
+
+			buttonRect = { 48, 64, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 138, -app->render->camera.y + 100, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 98, -app->render->camera.y + 105, 0, "Left", { 255, 255, 255 });
+
+			buttonRect = { 64, 64, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + WINDOW_W - 170, -app->render->camera.y + 100, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + WINDOW_W - 132, -app->render->camera.y + 105, 0, "Right", { 255, 255, 255 });
 		}
 
 	}
