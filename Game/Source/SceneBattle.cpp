@@ -1841,6 +1841,7 @@ bool SceneBattle::CleanUp()
 	app->tex->UnLoad(img);
 	app->tex->UnLoad(texEnemies);
 	app->tex->UnLoad(enemySelect);
+	texPlayers = nullptr;
 
 	app->audio->Unload1Fx(fxWin);
 	app->audio->Unload1Fx(fxLose);
@@ -1858,18 +1859,24 @@ bool SceneBattle::CleanUp()
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();
+	animationsHitPlayer.Clear();
 	animationsEnemies.Clear();
+	animationsHitEnemies.Clear();
+	animationsAttackEnemies.Clear();
+	app->entityManager->ClearList(ret);
 
+	enemies = app->entityManager->entities;
+	partners = app->entityManager->partners;
 	delete[] turnSort;
 	turnSort = nullptr;
 
-	app->entityManager->ClearList(ret);
-	enemies = app->entityManager->entities;
-	partners = app->entityManager->partners;
-
+	RELEASE(btnAttack);
+	RELEASE(btnContinue);
+	RELEASE(btnDefense);
+	RELEASE(btnExit);
+	RELEASE(btnMagic);
 	RELEASE(menuMagic);
 	magicInUse = nullptr;
-	texPlayers = nullptr;
 
 	app->sceneManager->SetWinBattle(false);
 

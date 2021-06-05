@@ -179,8 +179,6 @@ bool GUI::CleanUp()
 		return true;
 	}
 
-	app->tex->UnLoad(playerUi);
-
 	active = false;
 
 	pendingToDelete = true;
