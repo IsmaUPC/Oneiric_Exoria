@@ -92,7 +92,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\AssetsManager.cpp" />
-    <ClCompile Include="Source\Coins.cpp" />
     <ClCompile Include="Source\Collisions.cpp" />
     <ClCompile Include="Source\DialogSystem.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
@@ -144,7 +143,6 @@
     <ClInclude Include="PQueue.h" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\AssetsManager.h" />
-    <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\Collisions.h" />
     <ClInclude Include="Source\DialogSystem.h" />
     <ClInclude Include="Source\Enemy.h" />

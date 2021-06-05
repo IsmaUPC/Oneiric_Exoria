@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "GUI.h"
 #include "Enemy.h"
-#include "Coins.h"
 #include "Lives.h"
 #include "ObstacleObjects.h"
 

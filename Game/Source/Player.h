@@ -17,7 +17,6 @@ struct PlayerData : public Entity
 	int health = 0;
 	int mana = 0;
 	uint respawns = 0;
-	uint coins = 0;
 
 	SDL_Texture* texture = nullptr;
 	static const int numPoints = 4;
@@ -91,7 +90,6 @@ public:
 
 	void SetHit();
 
-	void CoinPlus() { playerData.coins++; };
 	void LivePlus() { playerData.respawns++; };
 
 	void ActiveCheckpoint(iPoint positionMapPlayer);
