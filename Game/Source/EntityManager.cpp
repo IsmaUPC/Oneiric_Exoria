@@ -32,6 +32,10 @@ bool EntityManager::Start()
 	texEnemies = app->tex->Load("Textures/Enemies/enemies_map.png");
 	texObstacles = app->tex->Load("Textures/Objects/objects.png");
 
+	// Load Fx
+	fxCoffeButtons = app->audio->LoadFx("Audio/Fx/coffe_buttons.wav");
+	fxEnemyFound = app->audio->LoadFx("Audio/Fx/enemy_triggers.wav");
+
 	// Animations
 	int numEnemies = 3;
 	int numSprites = 1;
@@ -101,6 +105,9 @@ bool EntityManager::CleanUp()
 
 	// Unload Tx
 	app->tex->UnLoad(texEnemies);
+	// Unload Fx
+	app->audio->Unload1Fx(fxCoffeButtons);
+	app->audio->Unload1Fx(fxEnemyFound);
 
 	// Unload Animations
 	animations.Clear();

@@ -81,12 +81,16 @@ public:
 
 	Entity* entityHUD = nullptr;
 	bool drawCloud = false;
+	// Fx
+	uint fxCoffeButtons = -1;
+	uint fxEnemyFound = -1;
 
 private:
 	// Textures
 	SDL_Texture* texEnemies = nullptr;
 	SDL_Texture* texObstacles = nullptr;
 	Enemy* current = nullptr;
+
 
 };
 
