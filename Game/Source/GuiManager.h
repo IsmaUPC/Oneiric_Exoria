@@ -92,6 +92,7 @@ public:
 	SDL_Texture* handCursor = nullptr;
 	SDL_Texture* bookMenu = nullptr;
 	SDL_Texture* iconsUiTex = nullptr;
+	SDL_Texture* uiButtonHelp = nullptr;
 
 	Animation* handAnim = nullptr;
 

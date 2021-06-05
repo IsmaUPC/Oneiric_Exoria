@@ -52,10 +52,6 @@ bool GUI::Start()
 
 bool GUI::PreUpdate()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-	{
-		activeFPS = !activeFPS;
-	}
 	return true;
 }
 
@@ -65,6 +61,11 @@ bool GUI::Update(float dt)
 	//Chronometer();
 	entityData.position.x = -app->render->camera.x;
 	entityData.position.y = -app->render->camera.y;		
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		activeFPS = !activeFPS;
+	}
 	
 	if (app->dialogueSystem->pendingDialog)
 	{
@@ -138,12 +139,20 @@ bool GUI::PostUpdate()
 
 	if (activeFPS)
 	{
-		point0.x += 170;
-		point0.y += WINDOW_H - 100;
-		sprintf_s(fps, 10, "%3d", app->GetFramesOnLastSecond());
 
-		app->fonts->BlitText(point0.x, point0.y, 0, fps, { 60, 43, 13 });
+		sprintf_s(fps, 10, "FPS: %3d", app->GetFramesOnLastSecond());
 
+		app->fonts->BlitText(point0.x + 30, point0.y + 30, 0, fps, { 0, 255, 68 });
+
+	}
+	if (!app->sceneManager->GetIsPause())
+	{
+		SDL_Rect buttonRect = { 32,0, 16, 16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, point0.x + 32, point0.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(point0.x + 70, point0.y + WINDOW_H - 62, 0, "Book", { 33, 35, 48 });
+		buttonRect = { 48,0, 16, 16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, point0.x + 140, point0.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(point0.x + 178, point0.y + WINDOW_H - 62, 0, "Pause", { 33, 35, 48 });
 	}
 
 	return true;

@@ -44,6 +44,7 @@ bool GuiManager::Start()
 	handCursor = app->tex->Load("Textures/GUI/hand_cursor.png");
 	bookMenu = app->tex->Load("Textures/GUI/stats_gui.png");
 	iconsUiTex = app->tex->Load("Textures/GUI/icons_atlas.png");
+	uiButtonHelp = app->tex->Load("Textures/GUI/xbox_buttons.png");
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;

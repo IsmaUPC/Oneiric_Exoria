@@ -233,14 +233,6 @@ void GuiStatsMenu::UpdateInventory()
 			}
 		}
 	}
-	//debugg
-	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		if (app->player->inventory.start != nullptr)
-		{
-			app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
-		}
-	}
 	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 	{
 		app->player->itemManager->AddItem(3);
@@ -384,6 +376,16 @@ bool GuiStatsMenu::PostUpdate()
 				break;
 			}
 			
+		}
+
+		if (!introBook)
+		{
+			SDL_Rect buttonRect = { 0,0, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 96, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 94, 0, "Accept", { 33, 35, 48 });
+			buttonRect = { 0,48, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 62, 0, "Back", { 33, 35, 48 });
 		}
 
 	}
