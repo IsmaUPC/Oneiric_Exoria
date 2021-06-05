@@ -7,6 +7,8 @@
 #include "Log.h"
 #include "SDL/include/SDL.h"
 
+#define LOGO_FADE_SPEED 7
+
 TransitionManager::TransitionManager(Render* render, Textures* tex, SceneManager* sceneManager) : Module()
 {
 	name.Create("transition_manager");
@@ -53,6 +55,7 @@ bool TransitionManager::Update(float dt)
 		if (doorRand == true)
 		{
 			randT = rand() % MAX_TRANSITIONS;
+			// if(ending == true) randT = MAX_TRANSITIONS + 1;
 			InitParameters();
 			doorRand = false;
 		}
@@ -102,6 +105,10 @@ bool TransitionManager::PostUpdate()
 			app->render->DrawTexture(logo, transit1[0].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[0].y + transit1[0].h - dimensionLogo.h / 2, &rect);
 			rect = { 0, dimensionLogo.h / 2, dimensionLogo.w,dimensionLogo.h / 2 };
 			app->render->DrawTexture(logo, transit1[1].x + WINDOW_W / 2 - dimensionLogo.w / 2, transit1[1].y + transit1[1].h, &rect);
+			break;
+		case 3:
+			app->render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 255, 255, 255, logoAlpha);
+			break;
 		default:
 			break;
 		}
@@ -247,6 +254,32 @@ void TransitionManager::Transition1(float dt)
 		transit1[1].x = -app->render->camera.x;
 		transit1[1].y = -app->render->camera.y + WINDOW_H;
 		break;
+	case 3:
+		switch (state)
+		{
+		case 0:
+			logoAlpha += (LOGO_FADE_SPEED);
+
+			if (logoAlpha > 255.0f)
+			{
+				logoAlpha = 255.0f;
+				state = 1;
+			}
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 0.5f)
+			{
+				state = 2;
+				midTransition = true;
+			}
+			break;
+		case 2:
+			if (logoAlpha > 0)logoAlpha -= (LOGO_FADE_SPEED);
+			else Reset();
+		default:
+			break;
+		}
 	default:
 		break;
 	}	
@@ -310,6 +343,7 @@ void TransitionManager::Reset()
 	endTransition = true;
 	state = 0;
 	timeCounter = 0;
+	logoAlpha = 0;
 	for (int i = 0; i < MAX_RECTANGLES; i++)
 	{
 		transit1[i].h = 0;

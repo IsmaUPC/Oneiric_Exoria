@@ -75,7 +75,7 @@ private:
 	float totalIterations;
 	float initialPosition;
 	float deltaPosition;
-	int hight = 0;
+	int hight = WINDOW_H / 2;
 
 	bool flash = false;
 	float logoAlpha = 0;

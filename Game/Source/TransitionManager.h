@@ -71,6 +71,7 @@ private:
 	bool endTransition = true;
 	int state = 0;
 	float timeCounter = 0;
+	int logoAlpha = 0;
 
 };
 

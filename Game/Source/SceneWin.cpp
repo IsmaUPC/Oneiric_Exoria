@@ -98,39 +98,7 @@ bool SceneWin::Update(float dt)
 
 	//Update Easings	
 
-	if (logoAlpha == 0) app->audio->PlayFx(fxFlash);
-	if (state == 0) state = 1;
-	if (state == 1)
-	{
-		flash = true;
-		logoAlpha += (LOGO_FADE_SPEED);
-
-		if (logoAlpha > 255.0f)
-		{
-			logoAlpha = 255.0f;
-			state = 2;
-		}
-	}
-	else if (state == 2)
-	{
-		timeCounter += dt;
-		if (timeCounter >= 0.5f)
-		{
-			AbleButtons();
-			state = 3;
-		}
-	}
-	else if (state == 3)
-	{
-		if (logoAlpha != 0)logoAlpha -= (LOGO_FADE_SPEED);
-
-		if (logoAlpha <= 0.0f)
-		{
-			flash = false;
-		}
-	}
-
-	if (state == 3) angle += dt * 10;
+	angle += dt * 10;
 
 	if (currentIteration < totalIterations)
 	{
@@ -200,15 +168,8 @@ bool SceneWin::PostUpdate()
 
 	CloudsDraw();
 
-	if (state == 3)
-	{
-		app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
-	}
-
-	if (flash)
-	{
-		app->render->DrawRectangle({ 0, 0, WINDOW_W, WINDOW_H }, 255, 255, 255, logoAlpha);
-	}
+	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	
 
 	return ret;
 }

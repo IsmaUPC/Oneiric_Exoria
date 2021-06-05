@@ -16,7 +16,7 @@
 	</window>
 	<audio>
 		<music volume="128" />
-		<fx volume="98" />
+		<fx volume="128" />
 	</audio>
 	<map>
 		<folder>Maps/</folder>
