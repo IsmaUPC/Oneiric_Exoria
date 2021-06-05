@@ -131,8 +131,12 @@ bool SceneManager::Update(float dt)
 				next->Start();	// Load next screen
 
 				//Spawn Player in node TP
-				tpManager->SpawnPlayerTpNode(originTpNode);
-				//originTpNode = nullptr;
+				if (originTpNode != nullptr)
+					tpManager->SpawnPlayerTpNode(originTpNode);
+				else
+					app->player->playerData.direction = WALK_DOWN;
+
+				originTpNode = nullptr;
 				app->player->RePositionPartners();
 
 

@@ -225,7 +225,8 @@ bool Audio::PlayFx(unsigned int id, int channel, int repeat, int volume)
 int Audio::SetChannel()
 {
 	int ret = -1;
-	if (channels.Count() != 0)
+	//if (channels.Count() != 0)
+	if (channels.start != NULL)
 	{
 		ret = channels.start->data;
 		channels.Del(channels.start);

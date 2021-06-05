@@ -59,7 +59,7 @@ private:
 
 	// Easings variables
 	int currentIteration = 0;
-	int totalIterations = 80;
+	int totalIterations = 50;
 	int spawnPos = 0;
 };
 
