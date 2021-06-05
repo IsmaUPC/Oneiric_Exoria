@@ -265,7 +265,6 @@ bool SceneManager::PostUpdate()
 					app->audio->PlayFx(app->player->fxStairs);
 					current->TransitionToScene(SceneType::DUNGEON);
 				}
-
 			}
 			break;
 		case UP_LADDER_NODE:

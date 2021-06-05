@@ -91,7 +91,11 @@ bool GuiMenuPause::Update(float dt)
 			btnResume->PressButtonSound();
 			DisableButtons();
 			currentIteration = 0;
-			spawnPos = 0;			
+			spawnPos = 0;
+
+			if (!app->audio->GetHasBeenModificated())
+				app->audio->SetVolumeMusic(app->sceneManager->GetCurrentVolume());
+			else app->audio->SetHasBeenModificated(false);
 		}
 		if (currentIteration >= totalIterations && spawnPos == 0)
 		{
