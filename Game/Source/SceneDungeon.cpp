@@ -9,7 +9,6 @@
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
-#include "Pathfinding.h"
 #include "DialogSystem.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
@@ -89,15 +88,7 @@ bool SceneDungeon::Start()
 
 void SceneDungeon::LoadDungeon(const char* dungeon)
 {
-	if (app->map->Load(dungeon) == true)
-	{
-		int w, h;
-		uchar* data = NULL;
-
-		if (app->map->CreateWalkabilityMap(w, h, &data)) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
+	app->map->Load(dungeon);
 }
 
 void SceneDungeon::SetDebugCollaider()

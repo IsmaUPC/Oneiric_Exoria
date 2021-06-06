@@ -136,8 +136,8 @@ struct CheckPoints{
 		list.Clear();
 	}
 
-	Animation* checkPointOffAnim = new Animation();
-	Animation* checkPointOnAnim = new Animation();
+	//Animation* checkPointOffAnim = new Animation();
+	//Animation* checkPointOnAnim = new Animation();
 	SDL_Texture* texture = nullptr;
 	List<CP*> list;
 };

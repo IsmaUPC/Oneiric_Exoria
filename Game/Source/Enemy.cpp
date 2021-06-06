@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "GUI.H"
 #include "EntityManager.h"
-#include "Pathfinding.h"
 #include "SceneManager.h"
 #include "DialogSystem.h"
 #include "GuiManager.h"

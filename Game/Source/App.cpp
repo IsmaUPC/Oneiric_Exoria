@@ -11,7 +11,6 @@
 #include "SceneManager.h"
 #include "GuiManager.h"
 #include "ModuleFadeToBlack.h"
-#include "Pathfinding.h"
 #include "DialogSystem.h"
 #include "Fonts.h"
 #include "TransitionManager.h"
@@ -40,7 +39,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	entityManager = new EntityManager();
 	sceneManager = new SceneManager(input, render, tex);
 	guiManager = new GuiManager(input, render);
-	pathfinding = new PathFinding();
 	fonts = new Fonts();
 	dialogueSystem = new DialogueSystem();
 	transitionManager = new TransitionManager(render,tex,sceneManager);
@@ -61,7 +59,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(player);
 	AddModule(guiManager);
 	AddModule(fonts);
-	AddModule(pathfinding);
 	AddModule(dialogueSystem);
 	AddModule(transitionManager);
 	AddModule(questManager);

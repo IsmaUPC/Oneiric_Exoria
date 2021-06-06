@@ -269,69 +269,81 @@ void GuiManager::AddGuiSlider(GuiSlider* slider)
 void GuiManager::SelectControl()
 {
 	GamePad& pad = app->input->pads[0];
-	if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN
-		|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y) && !press)
+	bool active = false;
+	for (int i = 0; i < controls.Count(); i++)
 	{
-		press = true;
-		bool isFocused = false;
-		int i = 0;
-		for (i; i < controls.Count(); i++)
+		if (controls.At(i)->data->active)
 		{
-			if (controls.At(i)->data->state == GuiControlState::FOCUSED)
-			{
-				isFocused = true;
-				if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || pad.down || pad.l_y > 0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || pad.right || pad.l_x > 0.2)
-					&& controls.At(i)->data->type != GuiControlType::SLIDER))
-				{
-					controls.At(i)->data->state = GuiControlState::NORMAL;
-					int j = i + 1;
-					while (j != i)
-					{
-						if (j == controls.Count()) j = 0;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
-						{
-							controls.At(j)->data->state = GuiControlState::FOCUSED;
-							break;
-						}
-						j++;
-					}
-				}
-				if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || pad.up || pad.l_y < -0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || pad.left || pad.l_x < -0.2)
-					&& controls.At(i)->data->type != GuiControlType::SLIDER))
-				{
-					controls.At(i)->data->state = GuiControlState::NORMAL;
-					int j = i - 1;
-					while (j != i)
-					{
-						if (j == -1) j = controls.Count() - 1;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
-						{
-							controls.At(j)->data->state = GuiControlState::FOCUSED;
-							break;
-						}
-						j--;
-					}
-				}
-				break;
-			}
+			active = true;
+			break;
 		}
-		if (!isFocused)
+	}
+	if (active)
+	{
+		if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN
+			|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y) && !press)
 		{
-			for (int i = 0; i < controls.Count(); i++)
+			press = true;
+			bool isFocused = false;
+			int i = 0;
+			for (i; i < controls.Count(); i++)
 			{
-				if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+				if (controls.At(i)->data->state == GuiControlState::FOCUSED)
 				{
-					controls.At(i)->data->state = GuiControlState::FOCUSED;
+					isFocused = true;
+					if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || pad.down || pad.l_y > 0.2 ||
+						((app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || pad.right || pad.l_x > 0.2)
+							&& controls.At(i)->data->type != GuiControlType::SLIDER))
+					{
+						controls.At(i)->data->state = GuiControlState::NORMAL;
+						int j = i + 1;
+						while (j != i)
+						{
+							if (j == controls.Count()) j = 0;
+							if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
+							{
+								controls.At(j)->data->state = GuiControlState::FOCUSED;
+								break;
+							}
+							j++;
+						}
+					}
+					if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || pad.up || pad.l_y < -0.2 ||
+						((app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || pad.left || pad.l_x < -0.2)
+							&& controls.At(i)->data->type != GuiControlType::SLIDER))
+					{
+						controls.At(i)->data->state = GuiControlState::NORMAL;
+						int j = i - 1;
+						while (j != i)
+						{
+							if (j == -1) j = controls.Count() - 1;
+							if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
+							{
+								controls.At(j)->data->state = GuiControlState::FOCUSED;
+								break;
+							}
+							j--;
+						}
+					}
 					break;
 				}
 			}
+			if (!isFocused)
+			{
+				for (int i = 0; i < controls.Count(); i++)
+				{
+					if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+					{
+						controls.At(i)->data->state = GuiControlState::FOCUSED;
+						break;
+					}
+				}
+			}
 		}
-	}
+	}	
 	
 	if (pad.l_y >= -0.2f && pad.l_y <= 0.2f && pad.l_x >= -0.2f && pad.l_x <= 0.2f && pad.up == false && pad.down == false && pad.left == false && pad.right == false && pad.a == false && pad.b == false) {
 		press = false;

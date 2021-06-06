@@ -53,9 +53,6 @@
     <ClCompile Include="Source\EntityManager.cpp">
       <Filter>Modules\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Pathfinding.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GUI.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
@@ -249,9 +246,6 @@
     </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
       <Filter>Modules\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Pathfinding.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI.h">
       <Filter>Modules\Gameplay</Filter>
