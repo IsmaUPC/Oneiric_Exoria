@@ -63,10 +63,6 @@ private:
 
 	Animation* walkAnimR = nullptr;
 
-	uint fxStart = -1;
-	uint fxTittle = -1;
-	uint fxFlash = -1;
-
 	fPoint sBackCloudPos = { 0,0 };
 	fPoint bBackCloudPos = { 0,0 };
 

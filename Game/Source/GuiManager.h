@@ -85,6 +85,7 @@ public:
 	uint fxBtnSlider = 0;
 	uint fxBookClose = 0;
 	uint fxChangePage = 0;
+	uint fxPauseMenu = 0;
 
 	SDL_Texture* btnTextureAtlas = nullptr;
 	SDL_Texture* moonCorner = nullptr;

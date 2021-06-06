@@ -38,6 +38,7 @@ bool GuiManager::Start()
 	fxBtnSlider = app->audio->LoadFx("Audio/Fx/coin.wav");
 	fxBookClose = app->audio->LoadFx("Audio/Fx/close_book.wav");
 	fxChangePage = app->audio->LoadFx("Audio/Fx/page1.wav");
+	fxPauseMenu = app->audio->LoadFx("Audio/Fx/pause_menu.wav");
 
 	uiAtlas = app->tex->Load("Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Textures/GUI/corner.png");
@@ -205,6 +206,7 @@ bool GuiManager::CleanUp()
 	app->audio->Unload1Fx(fxBtnSlider);
 	app->audio->Unload1Fx(fxBookClose);
 	app->audio->Unload1Fx(fxChangePage);
+	app->audio->Unload1Fx(fxPauseMenu);
 
 	delete stats;
 	stats = nullptr;
