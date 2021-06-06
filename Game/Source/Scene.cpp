@@ -143,8 +143,6 @@ bool Scene::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-	idleAnim->speed = (dt * 100) * 0.025f;
-
 	if(app->player->win)victory = true;
 
 	else if (app->player->CheckGameOver(1) && lose == false && app->player->godMode == false)
@@ -247,6 +245,10 @@ bool Scene::CleanUp()
 	app->map->CleanUp();
 	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
+
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
 
 	app->sceneManager->SetPause(false);
 

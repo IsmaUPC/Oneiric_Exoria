@@ -133,7 +133,7 @@ public:
 	PlayerData playerData;
 	int radiusCollision = 0;
 	bool godMode = false;
-	iPoint* positionInitial= new iPoint(0,0);	
+	iPoint* positionInitial;	
 	bool win = false;
 	bool loadStats = false;
 	bool play = false;

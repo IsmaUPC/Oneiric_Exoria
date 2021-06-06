@@ -991,6 +991,8 @@ bool Player::CleanUp()
 	RELEASE(walkAnimUp);
 	RELEASE(walkAnimDown);
 
+	RELEASE(bookAnim);
+
 	for (int i = 0; i < texPartners.Count(); i++)
 	{
 		app->tex->UnLoad(texPartners.At(i)->data);

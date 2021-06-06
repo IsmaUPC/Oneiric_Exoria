@@ -74,9 +74,7 @@ private:
 
 	GuiButton* btnPlay = nullptr;
 	GuiButton* btnContinue = nullptr;
-	GuiButton* btnRemove = nullptr;
 	GuiButton* btnSettings = nullptr;
-	GuiButton* btnCredits = nullptr;
 	GuiButton* btnExit = nullptr;
 
 	GuiSettings* menuSettings = nullptr;

@@ -228,6 +228,9 @@ bool SceneWin::CleanUp()
 	texPartners.Clear();
 	RELEASE(walkAnimR);
 
+	RELEASE(btnContinue);
+	RELEASE(btnBackToTitle);
+
 	app->guiManager->DeleteList();
 
 	bgIntro = nullptr;

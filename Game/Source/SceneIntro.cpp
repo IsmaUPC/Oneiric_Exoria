@@ -54,14 +54,6 @@ bool SceneIntro::Start()
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
 
-	/*btnRemove = new GuiButton(3, { WINDOW_W / 2 + 280 ,yPosition + (padding * 2), 88, 88 }, "", REMOVE, btnTextureAtlas);
-	btnRemove->SetObserver(this);
-	app->guiManager->AddGuiButton(btnRemove);*/
-
-	/*btnCredits = new GuiButton(4, { 20 , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
-	btnCredits->SetObserver(this);
-	app->guiManager->AddGuiButton(btnCredits);*/
-
 	btnSettings = new GuiButton(3, { 935 + 237/2, 550,  75, 25 }, "Settings", RECTANGLE);
 	btnSettings->active = false;
 	btnSettings->SetObserver(this);
@@ -301,6 +293,11 @@ bool SceneIntro::CleanUp()
 
 	app->guiManager->DeleteList();
 
+	RELEASE(btnPlay);
+	RELEASE(btnContinue);
+	RELEASE(btnSettings);
+	RELEASE(btnExit);
+
 	menuSettings->CleanUp();
 	RELEASE(menuSettings);
 
@@ -319,8 +316,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
-	{
-		
+	{		
 		if (control->id == 1)
 		{
 			app->questManager->ResetQuestList();
@@ -363,24 +359,6 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			//TransitionToScene(SceneType::LOGO);
 			app->audio->PlayFx(fxExit);
 			return false;
-		}
-		else if (control->id == 5)
-		{
-			//return false;
-		}
-		else if (control->id == 6)
-		{
-		/*	btnPlay->state = GuiControlState::DISABLED;
-			btnContinue->state = GuiControlState::DISABLED;
-			btnRemove->state = GuiControlState::DISABLED;
-			btnSettings->state = GuiControlState::DISABLED;
-			btnCredits->state = GuiControlState::DISABLED;
-			btnExit->state = GuiControlState::DISABLED;
-
-			menuSettings->MovePosition();
-			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
-			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
-			menuSettings->AbleDisableSetting();*/
 		}
 		else if (control->id == 10)
 		{

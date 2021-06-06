@@ -320,7 +320,12 @@ void SceneManager::AddScene(SceneControl* scene, bool active)
 bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
-	if (current != nullptr) current->CleanUp();
+	if (current != nullptr) 
+		current->CleanUp();
+
+	RELEASE(current);
+	RELEASE(next);
+	RELEASE(tpManager);
 
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);

@@ -60,7 +60,6 @@ private:
 
 	bool debugCollisions = false;
 
-	Animation* idleAnim= new Animation();
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg=0;
 

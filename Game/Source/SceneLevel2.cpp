@@ -260,6 +260,10 @@ bool SceneLevel2::CleanUp()
 
 	app->sceneManager->SetPause(false);
 
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
+
 	active = false;
 	return ret;
 }
