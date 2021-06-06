@@ -164,7 +164,7 @@ bool GuiMenuPause::Event(GuiControl* control)
 	{
 		if (control->id == 1) 
 		{
-			btnResume->PressButtonSound();
+			app->audio->PlayFx(app->guiManager->fxPauseMenu);
 			DisableButtons();
 			currentIteration = 0;
 			spawnPos = 0;

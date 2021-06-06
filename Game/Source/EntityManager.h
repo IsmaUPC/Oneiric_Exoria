@@ -5,10 +5,7 @@
 #include "Player.h"
 #include "GUI.h"
 #include "Enemy.h"
-#include "Lives.h"
 #include "ObstacleObjects.h"
-
-
 
 class EntityManager : public Module
 {

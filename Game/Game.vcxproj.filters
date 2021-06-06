@@ -95,9 +95,6 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Lives.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GuiSettings.cpp">
       <Filter>Modules\GuiControls</Filter>
     </ClCompile>
@@ -297,9 +294,6 @@
     </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Modules\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Lives.h">
-      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\GuiSettings.h">
       <Filter>Modules\GuiControls</Filter>
