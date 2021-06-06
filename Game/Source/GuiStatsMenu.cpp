@@ -181,10 +181,10 @@ void GuiStatsMenu::UpdateInventory()
 				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->next->data;
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a && !app->guiManager->press)
+			if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a) && !app->guiManager->press && !app->guiManager->missClick)
 			{
-				app->guiManager->missClick = true;
 				app->guiManager->press = true;
+				app->guiManager->missClick = true;
 				btnUseItem->state = GuiControlState::FOCUSED;
 				btnDelItem->state = GuiControlState::NORMAL;
 				btnUnEquipItem->state = GuiControlState::NORMAL;

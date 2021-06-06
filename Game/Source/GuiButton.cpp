@@ -49,7 +49,7 @@ bool GuiButton::Update(float dt)
 				padPreset = true;
 			}
 
-			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT && !app->guiManager->missClick) || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) && !app->guiManager->missClick)
 			{
 				//app->guiManager->press = true;
 				state = GuiControlState::PRESSED;
@@ -66,7 +66,7 @@ bool GuiButton::Update(float dt)
 		}
 	}
 
-	if (state == GuiControlState::PRESSED) 
+	if (state == GuiControlState::PRESSED && !app->guiManager->missClick)
 	{
 		// If mouse button pressed -> Generate event!
 		if (!pad.a && padPreset){

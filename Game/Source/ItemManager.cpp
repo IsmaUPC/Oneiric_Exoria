@@ -285,18 +285,18 @@ void Equipable::UnEquipItem(Equipable* item)
 	{
 		if (item->attribute == "attack")
 		{
-			currentOwner->stats.attack -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.attack -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 		if (item->attribute == "defense")
 		{
-			currentOwner->stats.defense -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.defense -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 		if (item->attribute == "speed")
 		{
-			currentOwner->stats.speed -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.speed -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 	}
 }

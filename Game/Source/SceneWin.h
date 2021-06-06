@@ -20,6 +20,8 @@ public:
 
 	// Called before the first frame
 	bool Start();
+	void LoadTexCharacters();
+	void LoadAnimations();
 	// Called before all Updates
 	bool PreUpdate();
 
@@ -53,10 +55,13 @@ private:
 	SDL_Texture* logo = nullptr;
 	SDL_Texture* cloud = nullptr;
 	SDL_Texture* ending = nullptr;
+	List<SDL_Texture*> texPartners;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 
 	GuiButton* btnContinue = nullptr;
 	GuiButton* btnBackToTitle = nullptr;
+
+	Animation* walkAnimR = nullptr;
 
 	uint fxStart = -1;
 	uint fxTittle = -1;
@@ -82,6 +87,7 @@ private:
 	float timeCounter = 0;
 	int state = 0;
 	float angle = 0;
+	float posPartnersX = -60;
 };
 
 #endif // !__SCENEWIN_H__
