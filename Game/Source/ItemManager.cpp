@@ -5,7 +5,6 @@
 
 ItemManager::ItemManager()
 {
-
 }
 
 ItemManager::~ItemManager()
@@ -150,6 +149,13 @@ const char* ItemManager::TypeToString(Type type)
 
 void ItemManager::SetItemEquip(Equipable* item)
 {
+}
+
+void ItemManager::CleanUp()
+{
+	itemList.Clear();
+	potionList.Clear();
+	ringList.Clear();
 }
 
 bool ItemManager::AddItem(int id)

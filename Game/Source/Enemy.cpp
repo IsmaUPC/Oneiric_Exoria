@@ -300,7 +300,7 @@ bool Enemy::CleanUp()
 	if (!active)
 		return true;
 
-	delete entityData.pointsCollision;
+	delete[] entityData.pointsCollision;
 	entityData.pointsCollision = nullptr;
 
 	delete lastPath;

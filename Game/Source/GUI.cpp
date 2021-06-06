@@ -181,7 +181,7 @@ bool GUI::CleanUp()
 
 	active = false;
 
-	delete entityData.pointsCollision;
+	delete[] entityData.pointsCollision;
 	entityData.pointsCollision = nullptr;
 
 	pendingToDelete = true;

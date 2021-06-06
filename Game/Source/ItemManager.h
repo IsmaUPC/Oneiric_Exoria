@@ -96,6 +96,8 @@ public:
 	const char* TypeToString(Type type);
 	void SetItemEquip(Equipable* item);
 
+	void CleanUp();
+
 public:
 
 	List<GameItem*> itemList;

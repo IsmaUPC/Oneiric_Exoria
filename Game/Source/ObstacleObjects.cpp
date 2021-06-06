@@ -78,7 +78,7 @@ bool ObstacleObjects::CleanUp()
 	LOG("Destroying ObstacleObjects");
 	active = false;
 
-	delete entityData.pointsCollision;
+	delete[] entityData.pointsCollision;
 	entityData.pointsCollision = nullptr;
 
 	return true;
