@@ -41,23 +41,49 @@ bool GuiButton::Update(float dt)
 	{
 		if (state != GuiControlState::DISABLED)
 		{
-			if (!mouseIn)app->audio->PlayFx(app->guiManager->fxBtnSelected), mouseIn = true;
-			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && !app->guiManager->press && !app->guiManager->missClick)
+			if (!mouseIn)app->audio->PlayFx(app->guiManager->fxBtnSelected), mouseIn = true; // && !app->guiManager->missClick
+
+			if (pad.a && !app->guiManager->press)
+			{
+				state = GuiControlState::PRESSED;
+				padPreset = true;
+			}
+
+			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT && !app->guiManager->missClick) || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 			{
 				//app->guiManager->press = true;
 				state = GuiControlState::PRESSED;
 			}
-
 			// If mouse button pressed -> Generate event!
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP || pad.a || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !app->guiManager->missClick)
+			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP && !app->guiManager->missClick)
 			{
 				app->guiManager->missClick = true;
 				app->audio->PlayFx(app->guiManager->fxBtnPressed);
 				ret = NotifyObserver();
 				app->guiManager->press = true;
+				lastState == GuiControlState::FOCUSED;
 			}
 		}
 	}
+
+	if (state == GuiControlState::PRESSED) 
+	{
+		// If mouse button pressed -> Generate event!
+		if (!pad.a && padPreset){
+			padPreset = false;
+			app->audio->PlayFx(app->guiManager->fxBtnPressed);
+			ret = NotifyObserver();
+			app->guiManager->press = true;
+			lastState == GuiControlState::FOCUSED;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_UP || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_UP)
+		{
+			app->audio->PlayFx(app->guiManager->fxBtnPressed);
+			ret = NotifyObserver();
+			lastState == GuiControlState::FOCUSED;
+		}
+	}
+
 	if(state == GuiControlState::NORMAL) mouseIn = false;
 
 	if (state == GuiControlState::FOCUSED)
