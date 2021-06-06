@@ -254,8 +254,8 @@ bool SceneManager::PostUpdate()
 			if (levelDungeon == 0)
 			{
 				app->audio->PlayFx(app->player->fxStairs);
-				//current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
-				current->TransitionToScene(SceneType::WIN);
+				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
+				//current->TransitionToScene(SceneType::WIN);
 			}
 			else
 			{

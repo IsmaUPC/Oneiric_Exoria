@@ -56,7 +56,6 @@ bool TransitionManager::Update(float dt)
 		{
 			randT = rand() % MAX_TRANSITIONS;
 			// if(ending == true) randT = MAX_TRANSITIONS + 1;
-			randT = 3;
 			InitParameters();
 			doorRand = false;
 		}

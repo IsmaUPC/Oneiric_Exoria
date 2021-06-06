@@ -145,6 +145,14 @@ bool GuiMenuPause::CleanUp()
 	activeSettings = false;
 	activePause = false;
 
+	RELEASE(btnResume);
+	RELEASE(btnSettings);
+	RELEASE(btnSave);
+	RELEASE(btnExit);
+	RELEASE(btnBackToTitle);
+	menuSettings->CleanUp();
+	RELEASE(menuSettings);
+
 	return true;
 }
 

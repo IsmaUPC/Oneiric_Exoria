@@ -810,6 +810,13 @@ bool GuiStatsMenu::CleanUp()
 {
 	active = false;
 
+	RELEASE(btnUseItem);
+	RELEASE(btnUnEquipItem);
+	RELEASE(btnDelItem);
+
+	menuMagic->CleanUp();
+	RELEASE(menuMagic);
+
 	return true;
 }
 

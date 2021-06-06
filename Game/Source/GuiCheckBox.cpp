@@ -10,7 +10,7 @@ GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* text, bool init
 	this->text = text;
 
 
-	button = { rectAtlasPos->x,rectAtlasPos->y,rectTexW + margin,rectTexH };
+	button = { rectAtlasPos.x,rectAtlasPos.y,rectTexW + margin,rectTexH };
 
 	checkBoxInput.x = bounds.x + bounds.w + (bounds.w / 4);
 	checkBoxInput.y = bounds.y;
@@ -155,14 +155,14 @@ void GuiCheckBox::ChangeImageChecked()
 {
 	if (checked)
 	{
-		checkBoxImage.x = trueAtlasPos->x;
-		checkBoxImage.y = trueAtlasPos->y;
+		checkBoxImage.x = trueAtlasPos.x;
+		checkBoxImage.y = trueAtlasPos.y;
 	}
 	else
 	{
-		checkBoxImage.x = falseAtlasPos->x;
-		checkBoxImage.y = falseAtlasPos->y;
+		checkBoxImage.x = falseAtlasPos.x;
+		checkBoxImage.y = falseAtlasPos.y;
 	}
-	button.x = rectAtlasPos->x;
+	button.x = rectAtlasPos.x;
 
 }

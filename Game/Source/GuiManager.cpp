@@ -206,6 +206,15 @@ bool GuiManager::CleanUp()
 	app->audio->Unload1Fx(fxBookClose);
 	app->audio->Unload1Fx(fxChangePage);
 
+	RELEASE(handAnim);
+	RELEASE(openBookAnim);
+	RELEASE(rightBook);
+	RELEASE(leftBook);
+	RELEASE(closeBook);
+	RELEASE(talkCloud);
+	RELEASE(enemyCloud);
+	RELEASE(idleBook);
+
 	delete stats;
 	stats = nullptr;
 
@@ -418,6 +427,8 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 void GuiManager::CreatMenuPause(SceneControl* current)
 {
 	// Menu pause
+	if (menu !=NULL)
+		menu->CleanUp();
 	delete menu;
 	menu = nullptr;
 	menu = (new GuiMenuPause({ WINDOW_W / 2 - 237 / 2, WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
@@ -426,6 +437,8 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 void GuiManager::CreateStatsMenu(SceneControl* current)
 {
 	// Stats Menu
+	if (stats != NULL)
+		stats->CleanUp();
 	delete stats;
 	stats = nullptr;
 	stats = (new GuiStatsMenu({ WINDOW_W / 2 - BOOK_W * 5 / 2, WINDOW_H / 2 - BOOK_H * 5 / 2 - 43 * 2 }, current, btnTextureAtlas));

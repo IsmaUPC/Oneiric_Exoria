@@ -1875,6 +1875,7 @@ bool SceneBattle::CleanUp()
 	RELEASE(btnDefense);
 	RELEASE(btnExit);
 	RELEASE(btnMagic);
+	menuMagic->CleanUp();
 	RELEASE(menuMagic);
 	magicInUse = nullptr;
 

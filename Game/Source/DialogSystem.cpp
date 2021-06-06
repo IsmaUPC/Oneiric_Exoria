@@ -48,11 +48,14 @@ bool DialogueSystem::CleanUp()
 {
 	for (int i = 0; i < dialogueTrees.size(); i++)
 	{
-		for (int j = 0; j < dialogueTrees[i]->dialogueNodes.size(); j++) delete dialogueTrees[i]->dialogueNodes[j];
-
+		for (int j = 0; j < dialogueTrees[i]->dialogueNodes.size(); j++)
+		{
+			dialogueTrees[i]->dialogueNodes[j]->answersList.Clear();
+			dialogueTrees[i]->dialogueNodes[j]->dialogueOptions.clear();
+		}
 		dialogueTrees[i]->dialogueNodes.clear();
-		delete dialogueTrees[i];
 	}
+	
 	dialogueTrees.clear();
 	app->audio->Unload1Fx(fxDialog);
 

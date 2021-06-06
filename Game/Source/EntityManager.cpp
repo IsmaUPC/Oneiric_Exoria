@@ -137,6 +137,10 @@ void EntityManager::ClearList(bool& ret)
 	entities.Clear();
 	partners.Clear();
 	spawnQueue.Clear();
+	RELEASE(entityHUD);
+	RELEASE(auxObstacle);
+	boxes.Clear();
+	holes.Clear();
 }
 
 void EntityManager::CheckSpawnEntities()

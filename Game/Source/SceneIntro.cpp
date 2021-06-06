@@ -301,8 +301,8 @@ bool SceneIntro::CleanUp()
 
 	app->guiManager->DeleteList();
 
-	delete menuSettings;
-	menuSettings = nullptr;
+	menuSettings->CleanUp();
+	RELEASE(menuSettings);
 
 	bgIntro = nullptr;
 	logo = nullptr;

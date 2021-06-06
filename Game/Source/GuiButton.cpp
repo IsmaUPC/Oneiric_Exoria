@@ -155,19 +155,19 @@ void GuiButton::DefinePositionAtlas()
 	switch (typeButton)
 	{
 	case RECTANGLE:
-		rect = { rectAtlasPos->x,rectAtlasPos->y,rectTexW + margin,rectTexH };
+		rect = { rectAtlasPos.x,rectAtlasPos.y,rectTexW + margin,rectTexH };
 		break;
 	case REMOVE:
-		rect = { removeAtlasPos->x,removeAtlasPos->y,squareTexW + marginSquare,squareTexH };
+		rect = { removeAtlasPos.x,removeAtlasPos.y,squareTexW + marginSquare,squareTexH };
 		break;
 	case CREDITS:
-		rect = { creditAtlasPos->x,creditAtlasPos->y,squareTexW + marginSquare,squareTexH };
+		rect = { creditAtlasPos.x,creditAtlasPos.y,squareTexW + marginSquare,squareTexH };
 		break;
 	case EXIT:
-		rect = { exitAtlasPos->x,exitAtlasPos->y,squareTexW + marginSquare,squareTexH };
+		rect = { exitAtlasPos.x,exitAtlasPos.y,squareTexW + marginSquare,squareTexH };
 		break;
 	case BACK:
-		rect = { backAtlasPos->x,backAtlasPos->y,squareTexW + marginSquare,squareTexH };
+		rect = { backAtlasPos.x,backAtlasPos.y,squareTexW + marginSquare,squareTexH };
 		break;
 	default:
 		break;
