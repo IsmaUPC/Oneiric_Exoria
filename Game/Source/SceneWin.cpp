@@ -62,12 +62,6 @@ bool SceneWin::Start()
 	LoadTexCharacters();
 	LoadAnimations();
 
-	fxStart = app->audio->LoadFx("Audio/Fx/start_button.wav");
-	fxTittle = app->audio->LoadFx("Audio/Fx/tittle.wav");
-	fxFlash = app->audio->LoadFx("Audio/Fx/sparkle.wav");
-
-	app->audio->PlayFx(fxTittle);
-
 	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
 	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
 
@@ -233,10 +227,6 @@ bool SceneWin::CleanUp()
 	}
 	texPartners.Clear();
 	RELEASE(walkAnimR);
-
-	app->audio->Unload1Fx(fxStart);
-	app->audio->Unload1Fx(fxTittle);
-	app->audio->Unload1Fx(fxFlash);
 
 	app->guiManager->DeleteList();
 

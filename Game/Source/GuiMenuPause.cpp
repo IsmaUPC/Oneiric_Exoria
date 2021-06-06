@@ -89,8 +89,8 @@ bool GuiMenuPause::Update(float dt)
 		{
 			app->guiManager->press = true;
 			app->guiManager->missClick = true;
-			btnResume->PressButtonSound();
 			DisableButtons();
+			app->audio->PlayFx(app->guiManager->fxPauseMenu);
 			currentIteration = 0;
 			spawnPos = 0;
 
@@ -353,7 +353,6 @@ void GuiMenuPause::AbleDisableMenu()
 
 	btnResume->state = GuiControlState::NORMAL;
 	
-	btnResume->PressButtonSound();
 	if (active == true)
 	{
 		MovePosition();

@@ -50,6 +50,9 @@ bool SceneDungeon::Start()
 	tmxDungeon = app->sceneManager->tmxDungeonsList.At(app->sceneManager->levelDungeon)->data.GetString();
 	// Load map
 	app->SetLastScene((Module*)this);
+
+	app->audio->PlayMusic("Audio/Music/dungeon_music.ogg");
+
 	victory = false;
 	app->player->win = false;
 	LoadDungeon(tmxDungeon);
