@@ -46,7 +46,7 @@ bool GuiButton::Update(float dt)
 			if (pad.a && !app->guiManager->press)
 			{
 				state = GuiControlState::PRESSED;
-				padPreset = true;
+				padPressed = true;
 			}
 
 			if ((app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT) && !app->guiManager->missClick)
@@ -69,8 +69,8 @@ bool GuiButton::Update(float dt)
 	if (state == GuiControlState::PRESSED && !app->guiManager->missClick)
 	{
 		// If mouse button pressed -> Generate event!
-		if (!pad.a && padPreset){
-			padPreset = false;
+		if (!pad.a && padPressed){
+			padPressed = false;
 			app->audio->PlayFx(app->guiManager->fxBtnPressed);
 			ret = NotifyObserver();
 			app->guiManager->press = true;
@@ -97,7 +97,6 @@ bool GuiButton::Update(float dt)
 		positionY = 0;
 	}
 		
-
 	return ret;
 }
 

@@ -44,7 +44,7 @@ private:
 	// Gui Button specific properties
 	// Maybe some animation properties for state change?
 	
-	bool padPreset = false;
+	bool padPressed = false;
 	GuiControlState lastState = GuiControlState::DISABLED;
 
 	int rectTexW= 183;

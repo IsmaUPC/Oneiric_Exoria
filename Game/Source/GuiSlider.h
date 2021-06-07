@@ -45,6 +45,9 @@ private:
 	SDL_Rect sliderBarInput = { 0,0,0,0 };
 	SDL_Rect sliderBarImage = { 0,0,0,0 };
 
+	bool padPressed = false;
+	GuiControlState lastState = GuiControlState::DISABLED;
+
 	int value = 0;
 	int lastValue = 0;
 

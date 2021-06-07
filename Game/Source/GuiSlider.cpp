@@ -56,8 +56,9 @@ bool GuiSlider::Update(float dt)
 		GamePad& pad = app->input->pads[0];
 		app->input->GetMousePosition(mouseX, mouseY);
 
+		
 		// Check collision between mouse and button bounds
-		if (state == GuiControlState::FOCUSED || state == GuiControlState::PRESSED)
+		if (state == GuiControlState::FOCUSED)
 		{
 			if (!mouseIn)app->audio->PlayFx(app->guiManager->fxBtnSelected), mouseIn = true;
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_REPEAT 
@@ -65,25 +66,34 @@ bool GuiSlider::Update(float dt)
 				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
 			{
 				state = GuiControlState::PRESSED;
+				lastState = GuiControlState::PRESSED;
 			}
-
-			if (state == GuiControlState::PRESSED)
-			{
-				SliderControl(mouseX, mouseY, pad);
-				NotifyObserver();
-				//state = GuiControlState::FOCUSED;
-			}
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP 
-				|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP 
-				|| pad.left || pad.right || pad.l_x > 0.2 || pad.l_x < -0.2)
-			{
+			if (lastState == GuiControlState::PRESSED && state == GuiControlState::FOCUSED) {
+				lastState = GuiControlState::FOCUSED;
 				if (text == "Fx")
 					app->audio->PlayFx(app->guiManager->fxBtnSlider);
-				state = GuiControlState::FOCUSED;
+			}
+			if (state == GuiControlState::PRESSED) {
+				SliderControl(mouseX, mouseY, pad);
+				NotifyObserver();
+
+				if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KeyState::KEY_UP
+					|| app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP
+					|| !pad.left || !pad.right || (pad.l_x < 0.2 && pad.l_x > -0.2))
+				{
+					state = GuiControlState::FOCUSED;
+				}
+
 			}
 		}
+		if (text == "Fx")
+		{
+			LOG("%d", state);
+		}
+
 		if (state == GuiControlState::NORMAL) mouseIn = false;
 	}
+
 
 	return false;
 }
