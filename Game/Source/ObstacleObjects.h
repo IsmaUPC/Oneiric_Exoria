@@ -19,19 +19,19 @@ public:
 	~ObstacleObjects();
 
 	// Called before render is available
-	virtual bool Awake(pugi::xml_node&);
+	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
-	virtual bool Start();
+	bool Start();
 	// Called each loop iteration
-	virtual bool PreUpdate();
+	bool PreUpdate();
 
 	// Called each loop iteration
-	virtual bool Update(float dt);
+	bool Update(float dt);
 	// Called each loop iteration
-	virtual bool PostUpdate();
+	bool PostUpdate();
 	// Called before quitting
-	virtual bool CleanUp();
+	bool CleanUp();
 
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&) const;

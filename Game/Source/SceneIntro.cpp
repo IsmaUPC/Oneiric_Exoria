@@ -8,6 +8,7 @@
 #include "GuiManager.h"
 #include "DialogSystem.h"
 #include "QuestManager.h"
+#include "Fonts.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -52,14 +53,6 @@ bool SceneIntro::Start()
 	btnContinue->active = false;
 	btnContinue->SetObserver(this);
 	app->guiManager->AddGuiButton(btnContinue);
-
-	/*btnRemove = new GuiButton(3, { WINDOW_W / 2 + 280 ,yPosition + (padding * 2), 88, 88 }, "", REMOVE, btnTextureAtlas);
-	btnRemove->SetObserver(this);
-	app->guiManager->AddGuiButton(btnRemove);*/
-
-	/*btnCredits = new GuiButton(4, { 20 , (margin * 4),  88, 88 }, "", CREDITS, btnTextureAtlas);
-	btnCredits->SetObserver(this);
-	app->guiManager->AddGuiButton(btnCredits);*/
 
 	btnSettings = new GuiButton(3, { 935 + 237/2, 550,  75, 25 }, "Settings", RECTANGLE);
 	btnSettings->active = false;
@@ -255,6 +248,13 @@ bool SceneIntro::PostUpdate()
 			app->render->DrawRectangle({ 935, 427, 237, 237 }, 0, 0, 0, 100);
 			menuSettings->Draw();
 		}
+
+		SDL_Rect buttonRect = { 0,0,16,16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, app->render->camera.x + 32, app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(app->render->camera.x + 70, app->render->camera.y + WINDOW_H - 62, 0, "Accept", { 33, 35, 48 });
+		buttonRect = { 0,48,16,16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, app->render->camera.x + 140, app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(app->render->camera.x + 178, app->render->camera.y + WINDOW_H - 62, 0, "Back", { 33, 35, 48 });
 	}
 	
 	if (flash)
@@ -293,8 +293,13 @@ bool SceneIntro::CleanUp()
 
 	app->guiManager->DeleteList();
 
-	delete menuSettings;
-	menuSettings = nullptr;
+	RELEASE(btnPlay);
+	RELEASE(btnContinue);
+	RELEASE(btnSettings);
+	RELEASE(btnExit);
+
+	menuSettings->CleanUp();
+	RELEASE(menuSettings);
 
 	bgIntro = nullptr;
 	logo = nullptr;
@@ -311,8 +316,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 	switch (control->type)
 	{
 	case GuiControlType::BUTTON:
-	{
-		
+	{		
 		if (control->id == 1)
 		{
 			app->questManager->ResetQuestList();
@@ -355,24 +359,6 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			//TransitionToScene(SceneType::LOGO);
 			app->audio->PlayFx(fxExit);
 			return false;
-		}
-		else if (control->id == 5)
-		{
-			//return false;
-		}
-		else if (control->id == 6)
-		{
-		/*	btnPlay->state = GuiControlState::DISABLED;
-			btnContinue->state = GuiControlState::DISABLED;
-			btnRemove->state = GuiControlState::DISABLED;
-			btnSettings->state = GuiControlState::DISABLED;
-			btnCredits->state = GuiControlState::DISABLED;
-			btnExit->state = GuiControlState::DISABLED;
-
-			menuSettings->MovePosition();
-			menuSettings->sldMusic->SetValue(app->audio->GetVolumeMusic());
-			menuSettings->sldFx->SetValue(app->audio->GetVolumeFx());
-			menuSettings->AbleDisableSetting();*/
 		}
 		else if (control->id == 10)
 		{

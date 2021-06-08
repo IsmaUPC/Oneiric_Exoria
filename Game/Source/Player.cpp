@@ -79,7 +79,6 @@ bool Player::Start()
 	playerData.centerPoint.y = app->entity->CalculateDistance(playerData.pointsCollision[0], playerData.pointsCollision[3]) / 2;
 
 	playerData.respawns = 3;
-	playerData.coins = 0;
 
 	inCheckPoint = false;
 	checkpointMove = false;
@@ -274,7 +273,6 @@ bool Player::LoadState(pugi::xml_node& player)
 	}
 
 	playerData.respawns = player.child("lives").attribute("num_respawns").as_int(playerData.respawns);
-	playerData.coins = player.child("coins").attribute("count").as_int(playerData.coins);
 
 	pugi::xml_node positionPartners = player.child("partners").child("partner");
 	int i = 0;
@@ -342,7 +340,6 @@ bool Player::LoadState(pugi::xml_node& player)
 bool Player::SaveState(pugi::xml_node& player) const
 {
 	pugi::xml_node positionPlayer = player.child("data");
-	pugi::xml_node coinsPlayer = player.child("coins");
 	pugi::xml_node respawnsPlayer = player.child("lives");
 
 	player.remove_child("path");
@@ -365,7 +362,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 			positionPlayer.attribute("y").set_value(1534);
 			positionPlayer.attribute("direction").set_value(0);
 		}
-		coinsPlayer.attribute("count").set_value(0);
 		respawnsPlayer.attribute("num_respawns").set_value(3);
 	}
 	else
@@ -373,7 +369,6 @@ bool Player::SaveState(pugi::xml_node& player) const
 		positionPlayer.attribute("x").set_value(playerData.position.x);
 		positionPlayer.attribute("y").set_value(playerData.position.y);
 		positionPlayer.attribute("direction").set_value(playerData.direction);
-		coinsPlayer.attribute("count").set_value(playerData.coins);
 		respawnsPlayer.attribute("num_respawns").set_value(playerData.respawns);
 
 		for (int i = 0; i < numPartners; i++)
@@ -996,6 +991,7 @@ bool Player::CleanUp()
 	RELEASE(walkAnimUp);
 	RELEASE(walkAnimDown);
 
+	RELEASE(bookAnim);
 
 	for (int i = 0; i < texPartners.Count(); i++)
 	{

@@ -92,7 +92,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\AssetsManager.cpp" />
-    <ClCompile Include="Source\Coins.cpp" />
     <ClCompile Include="Source\Collisions.cpp" />
     <ClCompile Include="Source\DialogSystem.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
@@ -109,7 +108,6 @@
     <ClCompile Include="Source\GuiSlider.cpp" />
     <ClCompile Include="Source\GuiStatsMenu.cpp" />
     <ClCompile Include="Source\ItemManager.cpp" />
-    <ClCompile Include="Source\Lives.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
     <ClCompile Include="Source\Audio.cpp" />
@@ -120,7 +118,6 @@
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\ParticleManager.cpp" />
     <ClCompile Include="Source\Path.cpp" />
-    <ClCompile Include="Source\Pathfinding.cpp" />
     <ClCompile Include="Source\PerfTimer.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\QuestManager.cpp" />
@@ -144,7 +141,6 @@
     <ClInclude Include="PQueue.h" />
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\AssetsManager.h" />
-    <ClInclude Include="Source\Coins.h" />
     <ClInclude Include="Source\Collisions.h" />
     <ClInclude Include="Source\DialogSystem.h" />
     <ClInclude Include="Source\Enemy.h" />
@@ -162,14 +158,12 @@
     <ClInclude Include="Source\GuiSlider.h" />
     <ClInclude Include="Source\GuiStatsMenu.h" />
     <ClInclude Include="Source\ItemManager.h" />
-    <ClInclude Include="Source\Lives.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\ModuleFadeToBlack.h" />
     <ClInclude Include="Source\ObstacleObjects.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\ParticleManager.h" />
     <ClInclude Include="Source\Path.h" />
-    <ClInclude Include="Source\Pathfinding.h" />
     <ClInclude Include="Source\PerfTimer.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\QuestManager.h" />

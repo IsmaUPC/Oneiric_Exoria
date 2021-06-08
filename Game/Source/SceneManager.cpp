@@ -100,6 +100,7 @@ bool SceneManager::Update(float dt)
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
 		pause = !pause;
 		app->guiManager->GetMenuPause()->SetActive(true);
+		app->audio->PlayFx(app->guiManager->fxPauseMenu);
 		app->fonts->ResetH();
 	}
 
@@ -265,7 +266,6 @@ bool SceneManager::PostUpdate()
 					app->audio->PlayFx(app->player->fxStairs);
 					current->TransitionToScene(SceneType::DUNGEON);
 				}
-
 			}
 			break;
 		case UP_LADDER_NODE:
@@ -320,7 +320,12 @@ void SceneManager::AddScene(SceneControl* scene, bool active)
 bool SceneManager::CleanUp()
 {
 	LOG("Freeing scene");
-	if (current != nullptr) current->CleanUp();
+	if (current != nullptr) 
+		current->CleanUp();
+
+	RELEASE(current);
+	RELEASE(next);
+	RELEASE(tpManager);
 
 	app->fonts->UnLoad(0);
 	app->fonts->UnLoad(1);

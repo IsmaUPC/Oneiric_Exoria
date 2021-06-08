@@ -50,14 +50,8 @@
     <ClCompile Include="Source\Entity.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Coins.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EntityManager.cpp">
       <Filter>Modules\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Pathfinding.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Source\GUI.cpp">
       <Filter>Modules\Gameplay</Filter>
@@ -97,9 +91,6 @@
     </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Lives.cpp">
-      <Filter>Modules\Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Source\GuiSettings.cpp">
       <Filter>Modules\GuiControls</Filter>
@@ -253,14 +244,8 @@
     <ClInclude Include="Source\Entity.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Coins.h">
-      <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
       <Filter>Modules\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Pathfinding.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\GUI.h">
       <Filter>Modules\Gameplay</Filter>
@@ -303,9 +288,6 @@
     </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Modules\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Lives.h">
-      <Filter>Modules\Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\GuiSettings.h">
       <Filter>Modules\GuiControls</Filter>

@@ -181,10 +181,10 @@ void GuiStatsMenu::UpdateInventory()
 				else currentItem = app->player->inventory.At(app->player->inventory.Find(currentItem))->next->data;
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a && !app->guiManager->press)
+			if ((app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a) && !app->guiManager->press && !app->guiManager->missClick)
 			{
-				app->guiManager->missClick = true;
 				app->guiManager->press = true;
+				app->guiManager->missClick = true;
 				btnUseItem->state = GuiControlState::FOCUSED;
 				btnDelItem->state = GuiControlState::NORMAL;
 				btnUnEquipItem->state = GuiControlState::NORMAL;
@@ -231,14 +231,6 @@ void GuiStatsMenu::UpdateInventory()
 				selectingPlayer = false;
 				app->guiManager->press = true;
 			}
-		}
-	}
-	//debugg
-	if (app->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	{
-		if (app->player->inventory.start != nullptr)
-		{
-			app->player->itemManager->UseItem(app->player->inventory.start->data, app->player);
 		}
 	}
 	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
@@ -384,6 +376,29 @@ bool GuiStatsMenu::PostUpdate()
 				break;
 			}
 			
+		}
+
+		if (!introBook && !closingBook)
+		{
+			SDL_Rect buttonRect = { 0,0, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 102, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 100, 0, "Accept", { 255, 255, 255 });
+
+			buttonRect = { 0,48, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 62, 0, "Back", { 255, 255, 255 });
+
+			buttonRect = { 32, 32, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + WINDOW_W - 132, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + WINDOW_W - 95, -app->render->camera.y + WINDOW_H - 62, 0, "Select", { 255, 255, 255 });
+
+			buttonRect = { 48, 64, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 138, -app->render->camera.y + 100, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + 98, -app->render->camera.y + 105, 0, "Left", { 255, 255, 255 });
+
+			buttonRect = { 64, 64, 16, 16 };
+			app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + WINDOW_W - 170, -app->render->camera.y + 100, &buttonRect, 2);
+			app->fonts->BlitText(-app->render->camera.x + WINDOW_W - 132, -app->render->camera.y + 105, 0, "Right", { 255, 255, 255 });
 		}
 
 	}
@@ -794,6 +809,13 @@ void GuiStatsMenu::DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect)
 bool GuiStatsMenu::CleanUp()
 {
 	active = false;
+
+	RELEASE(btnUseItem);
+	RELEASE(btnUnEquipItem);
+	RELEASE(btnDelItem);
+
+	menuMagic->CleanUp();
+	RELEASE(menuMagic);
 
 	return true;
 }

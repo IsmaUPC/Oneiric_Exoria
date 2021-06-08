@@ -10,7 +10,7 @@ GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* text, bool init
 	this->text = text;
 
 
-	button = { rectAtlasPos->x,rectAtlasPos->y,rectTexW + margin,rectTexH };
+	button = { rectAtlasPos.x,rectAtlasPos.y,rectTexW + margin,rectTexH };
 
 	checkBoxInput.x = bounds.x + bounds.w + (bounds.w / 4);
 	checkBoxInput.y = bounds.y;
@@ -143,7 +143,9 @@ bool GuiCheckBox::Draw()
 	centradoX = (bounds.w / 2) - (((float)(text.Length() / 2) + 0.5f) * 14);
 	// 48 = height image of font, whith 2 Raws, 48/2 = half a letter's height
 	centradoY = (bounds.h / 2) - (48 / 4);
-	app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), { 60, 43, 13 });
+	if (state == GuiControlState::DISABLED) app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), { 88, 88, 88 });
+	else if (state == GuiControlState::FOCUSED) app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), { 199, 147, 55 });
+	else app->fonts->BlitText(bounds.x, bounds.y, 0, text.GetString(), { 60, 43, 13 });
 
 
 	return false;
@@ -153,14 +155,14 @@ void GuiCheckBox::ChangeImageChecked()
 {
 	if (checked)
 	{
-		checkBoxImage.x = trueAtlasPos->x;
-		checkBoxImage.y = trueAtlasPos->y;
+		checkBoxImage.x = trueAtlasPos.x;
+		checkBoxImage.y = trueAtlasPos.y;
 	}
 	else
 	{
-		checkBoxImage.x = falseAtlasPos->x;
-		checkBoxImage.y = falseAtlasPos->y;
+		checkBoxImage.x = falseAtlasPos.x;
+		checkBoxImage.y = falseAtlasPos.y;
 	}
-	button.x = rectAtlasPos->x;
+	button.x = rectAtlasPos.x;
 
 }

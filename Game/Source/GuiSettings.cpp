@@ -55,12 +55,10 @@ GuiSettings::GuiSettings(iPoint Position, SceneControl* moduleObserver)
 	btnBack->SetObserver(moduleObserver);
 	btnBack->active = false;
 	app->guiManager->AddGuiButton(btnBack);
-
 }
 
 GuiSettings::~GuiSettings()
 {
-
 }
 
 bool GuiSettings::Update(float dt)
@@ -104,6 +102,17 @@ bool GuiSettings::Draw()
 
 bool GuiSettings::CleanUp()
 {
+	RELEASE(sldFx);
+	RELEASE(sldMusic);
+
+	RELEASE(chBxFullScreen);
+	RELEASE(chBxVSync);
+	RELEASE(chBxTextSpeed0);
+	RELEASE(chBxTextSpeed1);
+	RELEASE(chBxTextSpeed2);
+
+	RELEASE(btnBack);
+
 	return true;
 }
 

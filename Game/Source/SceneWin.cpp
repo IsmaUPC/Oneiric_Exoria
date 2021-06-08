@@ -37,7 +37,7 @@ bool SceneWin::Start()
 
 	// GUI: Initialize required controls for the screen
 	int margin = 7;
-	int padding = 35;
+	int padding = 65;
 	int yPosition = 330 + margin;
 
 	btnContinue = new GuiButton(2, { WINDOW_W / 2, WINDOW_H /2 + padding,  85, 25 }, "Continue", RECTANGLE);
@@ -58,13 +58,9 @@ bool SceneWin::Start()
 	logo = app->tex->Load("Textures/logo_title.png");
 	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);
 	cloud = app->tex->Load("Textures/GUI/cloud.png");
-	ending = app->tex->Load("Textures/oneiric_title.png");
-
-	fxStart = app->audio->LoadFx("Audio/Fx/start_button.wav");
-	fxTittle = app->audio->LoadFx("Audio/Fx/tittle.wav");
-	fxFlash = app->audio->LoadFx("Audio/Fx/sparkle.wav");
-
-	app->audio->PlayFx(fxTittle);
+	ending = app->tex->Load("Textures/ending_text.png");
+	LoadTexCharacters();
+	LoadAnimations();
 
 	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
 	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
@@ -83,6 +79,24 @@ bool SceneWin::Start()
 	deltaPosition = 1025;
 
 	return true;
+}
+
+void SceneWin::LoadTexCharacters()
+{
+
+	texPartners.Add(app->tex->Load("Textures/Characters/kenzie.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/brenda.png"));
+}
+
+void SceneWin::LoadAnimations()
+{
+	walkAnimR = new Animation();
+	for (int i = 0; i < 6; i++)
+	{
+		walkAnimR->PushBack({ (32 * i) , 142, 32, 50 });
+	}
 }
 
 bool SceneWin::PreUpdate()
@@ -110,6 +124,13 @@ bool SceneWin::Update(float dt)
 		hight = 0;
 		AbleButtons();
 	}
+
+	posPartnersX += dt * 50;
+	if (posPartnersX > WINDOW_W + 220)
+		posPartnersX = -60;
+
+	walkAnimR->speed = (dt * 6);
+	walkAnimR->Update();
 
 	return ret;
 }
@@ -162,14 +183,20 @@ bool SceneWin::PostUpdate()
 
 	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
 	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y, 0, 2);
-
-	app->render->DrawTexture(logo, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2, 0, 1, 1, angle);
-	app->render->DrawTexture(ending, WINDOW_W / 2 - 250, 80, 0, 1.3);
-
 	CloudsDraw();
 
-	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	app->render->DrawRectangle({ 0,0,WINDOW_W, WINDOW_H},0,0,0, 180);
+	app->render->DrawTexture(logo, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2 -20, 0, 1, 1, angle);
+	app->render->DrawTexture(ending, WINDOW_W / 2 - 320, 60, 0, 1.3);
+
+
+	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight + 30, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
 	
+	for (int i = 0; i < 4; i++)
+	{
+		app->render->DrawTexture(texPartners[i], posPartnersX - 70*i, WINDOW_H - 140, &walkAnimR->GetCurrentFrame(),1.8);
+	}
+	app->render->DrawRectangle({ 0,WINDOW_H - 50,WINDOW_W, 20 }, 255, 255, 255, 200);
 
 	return ret;
 }
@@ -194,9 +221,15 @@ bool SceneWin::CleanUp()
 	app->tex->UnLoad(cloud);
 	app->tex->UnLoad(ending);
 
-	app->audio->Unload1Fx(fxStart);
-	app->audio->Unload1Fx(fxTittle);
-	app->audio->Unload1Fx(fxFlash);
+	for (int i = 0; i < texPartners.Count(); i++)
+	{
+		app->tex->UnLoad(texPartners.At(i)->data);
+	}
+	texPartners.Clear();
+	RELEASE(walkAnimR);
+
+	RELEASE(btnContinue);
+	RELEASE(btnBackToTitle);
 
 	app->guiManager->DeleteList();
 

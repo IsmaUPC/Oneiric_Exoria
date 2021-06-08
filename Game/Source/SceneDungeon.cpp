@@ -9,7 +9,6 @@
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
-#include "Pathfinding.h"
 #include "DialogSystem.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
@@ -50,6 +49,9 @@ bool SceneDungeon::Start()
 	tmxDungeon = app->sceneManager->tmxDungeonsList.At(app->sceneManager->levelDungeon)->data.GetString();
 	// Load map
 	app->SetLastScene((Module*)this);
+
+	app->audio->PlayMusic("Audio/Music/dungeon_music.ogg");
+
 	victory = false;
 	app->player->win = false;
 	LoadDungeon(tmxDungeon);
@@ -86,15 +88,7 @@ bool SceneDungeon::Start()
 
 void SceneDungeon::LoadDungeon(const char* dungeon)
 {
-	if (app->map->Load(dungeon) == true)
-	{
-		int w, h;
-		uchar* data = NULL;
-
-		if (app->map->CreateWalkabilityMap(w, h, &data)) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
+	app->map->Load(dungeon);
 }
 
 void SceneDungeon::SetDebugCollaider()
@@ -208,6 +202,10 @@ bool SceneDungeon::CleanUp()
 	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
 	app->sceneManager->SetPause(false);
+
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
 
 	active = false;
 	return ret;

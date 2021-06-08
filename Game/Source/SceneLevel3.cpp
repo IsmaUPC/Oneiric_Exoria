@@ -9,7 +9,6 @@
 #include "EntityManager.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
-#include "Pathfinding.h"
 #include "DialogSystem.h"
 #include "QuestManager.h"
 
@@ -50,15 +49,7 @@ bool SceneLevel3::Start()
 	app->SetLastScene((Module*)this);
 	victory = false;
 	app->player->win = false;
-	if (app->map->Load("school_3.tmx") == true)
-	{
-		int w, h;
-		uchar* data = NULL;
-
-		if (app->map->CreateWalkabilityMap(w, h, &data)) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
+	app->map->Load("school_3.tmx");
 	app->map->active = true;
 	// Positions initials
 	app->player->positionInitial = new iPoint(480, 600);
@@ -107,7 +98,7 @@ bool SceneLevel3::Update(float dt)
 {
 	// DEBUG KEYS
 	DebugKeys();
-	app->map->checKpointsMap.checkPointOnAnim->Update();
+	//app->map->checKpointsMap.checkPointOnAnim->Update();
 	iPoint vec;
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
@@ -229,6 +220,10 @@ bool SceneLevel3::CleanUp()
 	app->entityManager->ClearList(ret);
 
 	app->sceneManager->SetPause(false);
+
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
 
 	active = false;
 	return ret;

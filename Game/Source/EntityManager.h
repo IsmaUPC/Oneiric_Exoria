@@ -5,11 +5,7 @@
 #include "Player.h"
 #include "GUI.h"
 #include "Enemy.h"
-#include "Coins.h"
-#include "Lives.h"
 #include "ObstacleObjects.h"
-
-
 
 class EntityManager : public Module
 {
@@ -81,12 +77,16 @@ public:
 
 	Entity* entityHUD = nullptr;
 	bool drawCloud = false;
+	// Fx
+	uint fxCoffeButtons = -1;
+	uint fxEnemyFound = -1;
 
 private:
 	// Textures
 	SDL_Texture* texEnemies = nullptr;
 	SDL_Texture* texObstacles = nullptr;
 	Enemy* current = nullptr;
+
 
 };
 

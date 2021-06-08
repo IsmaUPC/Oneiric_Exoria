@@ -9,7 +9,6 @@
 #include "Map.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
-#include "Pathfinding.h"
 #include "DialogSystem.h"
 #include "QuestManager.h"
 
@@ -52,17 +51,7 @@ bool Scene::Start()
 	victory = false;
 	app->player->win = false;
 
-	if (app->map->Load("school_1.tmx") == true)
-	//if (app->map->Load("level.tmx") == true)
-	//if (app->map->Load("room.tmx") == true)
-	{
-		int w, h;
-		uchar* data = NULL;
-
-		if (app->map->CreateWalkabilityMap(w, h, &data)) app->pathfinding->SetMap(w, h, data);
-
-		RELEASE_ARRAY(data);
-	}
+	app->map->Load("school_1.tmx");
 	app->map->active = true;
 
 	// Positions Initials
@@ -142,7 +131,7 @@ bool Scene::Update(float dt)
 
 	// DEBUG KEYS
 	DebugKeys();
-	app->map->checKpointsMap.checkPointOnAnim->Update();
+	//app->map->checKpointsMap.checkPointOnAnim->Update();
 	if (app->input->GetKey(SDL_SCANCODE_M)==KEY_UP)
 	{
 		app->input->GetMousePosition(app->map->tileDestiny.x, app->map->tileDestiny.y);
@@ -153,8 +142,6 @@ bool Scene::Update(float dt)
 	iPoint vec;
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
-
-	idleAnim->speed = (dt * 100) * 0.025f;
 
 	if(app->player->win)victory = true;
 
@@ -258,6 +245,10 @@ bool Scene::CleanUp()
 	app->map->CleanUp();
 	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
+
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
 
 	app->sceneManager->SetPause(false);
 

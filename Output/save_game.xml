@@ -6,29 +6,31 @@
 	<audio />
 	<scene />
 	<renderer>
-		<camera x="319" y="-91" />
+		<camera x="-282" y="-371" />
 	</renderer>
 	<player>
-		<data x="96" y="544" direction="3" level="1" exp="0" health="8" mana="11" attack="13" defend="0" speed="10" />
+		<data x="352" y="832" direction="2" level="1" exp="0" health="8" mana="11" attack="13" defend="0" speed="10" />
 		<coins count="0" />
 		<path />
 		<partners>
-			<partner x="96" y="504" breadcrumb="0" direction="3" level="1" exp="0" health="14" mana="10" attack="8" defense="7" speed="11" />
-			<partner x="96" y="464" breadcrumb="0" direction="3" level="1" exp="0" health="10" mana="12" attack="9" defense="9" speed="10" />
-			<partner x="96" y="424" breadcrumb="0" direction="3" level="1" exp="0" health="13" mana="8" attack="8" defense="13" speed="8" />
+			<partner x="352" y="872" breadcrumb="0" direction="2" level="1" exp="0" health="14" mana="10" attack="8" defense="7" speed="11" />
+			<partner x="352" y="912" breadcrumb="0" direction="2" level="1" exp="0" health="10" mana="12" attack="9" defense="9" speed="10" />
+			<partner x="352" y="952" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" attack="8" defense="13" speed="8" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="1" />
+		<level lvl="2" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
 		<time value="130" />
 		<entities>
-			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="16" y="20" id="3" level="0" state="0" move="false" />
-			<entity type="14" x="31" y="29" id="8" level="0" state="0" move="false" />
+			<entity type="14" x="23" y="20" id="4" level="0" state="0" move="false" />
+			<entity type="14" x="24" y="18" id="10" level="0" state="0" move="false" />
+			<entity type="14" x="11" y="21" id="14" level="0" state="0" move="false" />
+			<entity type="14" x="24" y="18" id="10" level="0" state="0" move="false" />
+			<entity type="14" x="11" y="21" id="14" level="0" state="0" move="false" />
 		</entities>
 	</entity_manager>
 	<particle_manager>

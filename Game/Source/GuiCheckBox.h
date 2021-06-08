@@ -25,7 +25,7 @@ private:
 	void ChangeImageChecked();
 
 	// GuiCheckBox specific properties
-	iPoint* rectAtlasPos = new iPoint(87, 99);
+	iPoint rectAtlasPos = { 87, 99 };
 	int margin = 10;
 
 	SDL_Rect button = {0,0,0,0};
@@ -35,8 +35,8 @@ private:
 	SDL_Rect checkBoxInput = { 0,0,0,0 };
 	SDL_Rect checkBoxImage = { 0,0,0,0 };
 
-	iPoint* falseAtlasPos = new iPoint(227, 201);
-	iPoint* trueAtlasPos = new iPoint(552, 1407);
+	iPoint falseAtlasPos = { 227, 201 };
+	iPoint trueAtlasPos = { 552, 1407 };
 	int squareTexW = 32;
 	int squareTexH = 32;
 	int marginSquare = 9;

@@ -5,7 +5,6 @@
 
 ItemManager::ItemManager()
 {
-
 }
 
 ItemManager::~ItemManager()
@@ -152,6 +151,13 @@ void ItemManager::SetItemEquip(Equipable* item)
 {
 }
 
+void ItemManager::CleanUp()
+{
+	itemList.Clear();
+	potionList.Clear();
+	ringList.Clear();
+}
+
 bool ItemManager::AddItem(int id)
 {
 	bool ret = true;
@@ -285,18 +291,18 @@ void Equipable::UnEquipItem(Equipable* item)
 	{
 		if (item->attribute == "attack")
 		{
-			currentOwner->stats.attack -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.attack -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 		if (item->attribute == "defense")
 		{
-			currentOwner->stats.defense -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.defense -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 		if (item->attribute == "speed")
 		{
-			currentOwner->stats.speed -= item->value;
-			currentOwner->entityData.equipedItem = NULL;
+			item->currentOwner->stats.speed -= item->value;
+			item->currentOwner->entityData.equipedItem = NULL;
 		}
 	}
 }

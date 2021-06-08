@@ -5,6 +5,7 @@
 #include "SceneControl.h"
 #include "GuiManager.h"
 #include "DialogSystem.h"
+#include "Fonts.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -88,10 +89,14 @@ bool GuiMenuPause::Update(float dt)
 		{
 			app->guiManager->press = true;
 			app->guiManager->missClick = true;
-			btnResume->PressButtonSound();
 			DisableButtons();
+			app->audio->PlayFx(app->guiManager->fxPauseMenu);
 			currentIteration = 0;
-			spawnPos = 0;			
+			spawnPos = 0;
+
+			if (!app->audio->GetHasBeenModificated())
+				app->audio->SetVolumeMusic(app->sceneManager->GetCurrentVolume());
+			else app->audio->SetHasBeenModificated(false);
 		}
 		if (currentIteration >= totalIterations && spawnPos == 0)
 		{
@@ -116,6 +121,13 @@ bool GuiMenuPause::PostUpdate()
 		screenRect.y = -app->render->camera.y;
 		app->render->DrawRectangle(screenRect, 0, 0, 0, 200);
 		app->render->DrawTextBox(-app->render->camera.x + initialPos.x + offsetSpawnX, -app->render->camera.y + initialPos.y + offsetSpawnY, 237, 237, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		
+		SDL_Rect buttonRect = { 0,0,16,16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 32, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(-app->render->camera.x + 70, -app->render->camera.y + WINDOW_H - 62, 0, "Accept", { 255, 255, 255 });
+		buttonRect = { 0,48,16,16 };
+		app->render->DrawTexture(app->guiManager->uiButtonHelp, -app->render->camera.x + 140, -app->render->camera.y + WINDOW_H - 64, &buttonRect, 2);
+		app->fonts->BlitText(-app->render->camera.x + 178, -app->render->camera.y + WINDOW_H - 62, 0, "Back", { 255, 255, 255 });
 	}
 
 	if (menuSettings->active)
@@ -133,6 +145,14 @@ bool GuiMenuPause::CleanUp()
 	activeSettings = false;
 	activePause = false;
 
+	RELEASE(btnResume);
+	RELEASE(btnSettings);
+	RELEASE(btnSave);
+	RELEASE(btnExit);
+	RELEASE(btnBackToTitle);
+	menuSettings->CleanUp();
+	RELEASE(menuSettings);
+
 	return true;
 }
 
@@ -144,7 +164,7 @@ bool GuiMenuPause::Event(GuiControl* control)
 	{
 		if (control->id == 1) 
 		{
-			btnResume->PressButtonSound();
+			app->audio->PlayFx(app->guiManager->fxPauseMenu);
 			DisableButtons();
 			currentIteration = 0;
 			spawnPos = 0;
@@ -333,7 +353,6 @@ void GuiMenuPause::AbleDisableMenu()
 
 	btnResume->state = GuiControlState::NORMAL;
 	
-	btnResume->PressButtonSound();
 	if (active == true)
 	{
 		MovePosition();

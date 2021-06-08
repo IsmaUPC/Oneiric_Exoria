@@ -44,6 +44,8 @@ private:
 	// Gui Button specific properties
 	// Maybe some animation properties for state change?
 	
+	bool padPressed = false;
+	GuiControlState lastState = GuiControlState::DISABLED;
 
 	int rectTexW= 183;
 	int rectTexH= 91;
@@ -52,11 +54,11 @@ private:
 
 	TypeButton typeButton;
 
-	iPoint* rectAtlasPos = new iPoint(87, 99);
-	iPoint* removeAtlasPos = new iPoint( 552,713 );
-	iPoint* creditAtlasPos = new iPoint(550, 412);
-	iPoint* exitAtlasPos = new iPoint(0, 1810);
-	iPoint* backAtlasPos = new iPoint( 0, 1114);
+	iPoint rectAtlasPos = { 87, 99 };
+	iPoint removeAtlasPos = { 552,713 };
+	iPoint creditAtlasPos = { 550, 412 };
+	iPoint exitAtlasPos = { 0, 1810 };
+	iPoint backAtlasPos = { 0, 1114 };
 	
 	SDL_Rect rect = { 0,0,0,0 };
 

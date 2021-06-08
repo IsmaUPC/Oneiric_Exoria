@@ -43,7 +43,6 @@ private:
 	bool inCheckPoint = false;
 	bool initSpawnPos = false;
 
-	SDL_Texture* playerUi = nullptr;
 	char textLive[8] = { "\0" };
 
 	bool activeFPS = false;

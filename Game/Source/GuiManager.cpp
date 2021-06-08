@@ -38,12 +38,14 @@ bool GuiManager::Start()
 	fxBtnSlider = app->audio->LoadFx("Audio/Fx/coin.wav");
 	fxBookClose = app->audio->LoadFx("Audio/Fx/close_book.wav");
 	fxChangePage = app->audio->LoadFx("Audio/Fx/page1.wav");
+	fxPauseMenu = app->audio->LoadFx("Audio/Fx/pause_menu.wav");
 
 	uiAtlas = app->tex->Load("Textures/GUI/ui_atlas.png");
 	moonCorner = app->tex->Load("Textures/GUI/corner.png");
 	handCursor = app->tex->Load("Textures/GUI/hand_cursor.png");
 	bookMenu = app->tex->Load("Textures/GUI/stats_gui.png");
 	iconsUiTex = app->tex->Load("Textures/GUI/icons_atlas.png");
+	uiButtonHelp = app->tex->Load("Textures/GUI/xbox_buttons.png");
 
 	handAnim = new Animation();
 	handAnim->speed = 0.1f;
@@ -195,6 +197,7 @@ bool GuiManager::CleanUp()
 	app->tex->UnLoad(moonCorner);
 	app->tex->UnLoad(handCursor);
 	app->tex->UnLoad(bookMenu);
+	app->tex->UnLoad(uiButtonHelp);
 	DeleteList();
 
 	app->audio->Unload1Fx(fxBtnSelected);
@@ -203,6 +206,16 @@ bool GuiManager::CleanUp()
 	app->audio->Unload1Fx(fxBtnSlider);
 	app->audio->Unload1Fx(fxBookClose);
 	app->audio->Unload1Fx(fxChangePage);
+	app->audio->Unload1Fx(fxPauseMenu);
+
+	RELEASE(handAnim);
+	RELEASE(openBookAnim);
+	RELEASE(rightBook);
+	RELEASE(leftBook);
+	RELEASE(closeBook);
+	RELEASE(talkCloud);
+	RELEASE(enemyCloud);
+	RELEASE(idleBook);
 
 	delete stats;
 	stats = nullptr;
@@ -256,67 +269,81 @@ void GuiManager::AddGuiSlider(GuiSlider* slider)
 void GuiManager::SelectControl()
 {
 	GamePad& pad = app->input->pads[0];
-	if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
-		|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y) && !press)
+	bool active = false;
+	for (int i = 0; i < controls.Count(); i++)
 	{
-		press = true;
-		bool isFocused = false;
-		int i = 0;
-		for (i; i < controls.Count(); i++)
+		if (controls.At(i)->data->active)
 		{
-			if (controls.At(i)->data->state == GuiControlState::FOCUSED)
-			{
-				isFocused = true;
-				if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || pad.down || pad.l_y > 0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || pad.right || pad.l_x > 0.2) 
-					&& controls.At(i)->data->type != GuiControlType::SLIDER))
-				{
-					controls.At(i)->data->state = GuiControlState::NORMAL;
-					int j = i + 1;
-					while (j != i)
-					{
-						if (j == controls.Count()) j = 0;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
-						{
-							controls.At(j)->data->state = GuiControlState::FOCUSED;
-							break;
-						}
-						j++;
-					}
-				}
-				if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || pad.up || pad.l_y < -0.2 ||
-					((app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || pad.left || pad.l_x < -0.2)
-					&& controls.At(i)->data->type != GuiControlType::SLIDER))
-				{
-					controls.At(i)->data->state = GuiControlState::NORMAL;
-					int j = i - 1;
-					while (j != i)
-					{
-						if (j == -1) j = controls.Count() - 1;
-						if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
-						{
-							controls.At(j)->data->state = GuiControlState::FOCUSED;
-							break;
-						}
-						j--;
-					}
-				}
-				break;
-			}
+			active = true;
+			break;
 		}
-		if (!isFocused)
+	}
+	if (active)
+	{
+		if ((app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN
+			|| app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN
+			|| pad.right || pad.left || pad.up || pad.down || pad.l_x || pad.l_y) && !press)
 		{
-			for (int i = 0; i < controls.Count(); i++)
+			press = true;
+			bool isFocused = false;
+			int i = 0;
+			for (i; i < controls.Count(); i++)
 			{
-				if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+				if (controls.At(i)->data->state == GuiControlState::FOCUSED)
 				{
-					controls.At(i)->data->state = GuiControlState::FOCUSED;
+					isFocused = true;
+					if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || pad.down || pad.l_y > 0.2 ||
+						((app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || pad.right || pad.l_x > 0.2)
+							&& controls.At(i)->data->type != GuiControlType::SLIDER))
+					{
+						controls.At(i)->data->state = GuiControlState::NORMAL;
+						int j = i + 1;
+						while (j != i)
+						{
+							if (j == controls.Count()) j = 0;
+							if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
+							{
+								controls.At(j)->data->state = GuiControlState::FOCUSED;
+								break;
+							}
+							j++;
+						}
+					}
+					if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || pad.up || pad.l_y < -0.2 ||
+						((app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || pad.left || pad.l_x < -0.2)
+							&& controls.At(i)->data->type != GuiControlType::SLIDER))
+					{
+						controls.At(i)->data->state = GuiControlState::NORMAL;
+						int j = i - 1;
+						while (j != i)
+						{
+							if (j == -1) j = controls.Count() - 1;
+							if (controls.At(j)->data->state != GuiControlState::DISABLED && controls.At(j)->data->active)
+							{
+								controls.At(j)->data->state = GuiControlState::FOCUSED;
+								break;
+							}
+							j--;
+						}
+					}
 					break;
 				}
 			}
+			if (!isFocused)
+			{
+				for (int i = 0; i < controls.Count(); i++)
+				{
+					if (controls.At(i)->data->state != GuiControlState::DISABLED && controls.At(i)->data->active)
+					{
+						controls.At(i)->data->state = GuiControlState::FOCUSED;
+						break;
+					}
+				}
+			}
 		}
-	}
+	}	
 	
 	if (pad.l_y >= -0.2f && pad.l_y <= 0.2f && pad.l_x >= -0.2f && pad.l_x <= 0.2f && pad.up == false && pad.down == false && pad.left == false && pad.right == false && pad.a == false && pad.b == false) {
 		press = false;
@@ -414,6 +441,8 @@ void GuiManager::ReAssignState(int i, GamePad& pad)
 void GuiManager::CreatMenuPause(SceneControl* current)
 {
 	// Menu pause
+	if (menu !=NULL)
+		menu->CleanUp();
 	delete menu;
 	menu = nullptr;
 	menu = (new GuiMenuPause({ WINDOW_W / 2 - 237 / 2, WINDOW_H / 2 - 237 / 2 }, current, btnTextureAtlas));
@@ -422,6 +451,8 @@ void GuiManager::CreatMenuPause(SceneControl* current)
 void GuiManager::CreateStatsMenu(SceneControl* current)
 {
 	// Stats Menu
+	if (stats != NULL)
+		stats->CleanUp();
 	delete stats;
 	stats = nullptr;
 	stats = (new GuiStatsMenu({ WINDOW_W / 2 - BOOK_W * 5 / 2, WINDOW_H / 2 - BOOK_H * 5 / 2 - 43 * 2 }, current, btnTextureAtlas));

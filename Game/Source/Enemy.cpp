@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "GUI.H"
 #include "EntityManager.h"
-#include "Pathfinding.h"
 #include "SceneManager.h"
 #include "DialogSystem.h"
 #include "GuiManager.h"
@@ -52,9 +51,6 @@ bool Enemy::Start()
 			break;
 		}
 	}
-
-	fxCoffeButtons = app->audio->LoadFx("Audio/Fx/coffe_buttons.wav");
-	fxEnemyFound = app->audio->LoadFx("Audio/Fx/enemy_triggers.wav");
 
 	// Enemy Path
 	destination = entityData.positionInitial;
@@ -215,7 +211,7 @@ bool Enemy::Update(float dt)
 		{
 			if (Radar(app->player->playerData.position, range))
 			{
-				if(isDetected == false) app->audio->PlayFx(fxEnemyFound);
+				if(isDetected == false) app->audio->PlayFx(app->entityManager->fxEnemyFound);
 				isDetected = true;
 				app->guiManager->enemyCloud->Update();
 			}
@@ -243,7 +239,7 @@ bool Enemy::Update(float dt)
 
 				if (entityData.id == 13 || entityData.id == 14)
 				{
-					app->audio->PlayFx(fxCoffeButtons);
+					app->audio->PlayFx(app->entityManager->fxCoffeButtons);
 				}
 			}
 		}
@@ -303,14 +299,11 @@ bool Enemy::CleanUp()
 	if (!active)
 		return true;
 
-	delete entityData.pointsCollision;
+	delete[] entityData.pointsCollision;
 	entityData.pointsCollision = nullptr;
 
 	delete lastPath;
 	lastPath = nullptr;
-
-	app->audio->Unload1Fx(fxCoffeButtons);
-	app->audio->Unload1Fx(fxEnemyFound);
 
 	pendingToDelete = true;
 	active = false;

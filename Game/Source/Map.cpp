@@ -467,12 +467,14 @@ bool Map::CleanUp()
 
 	while (item2 != NULL)
 	{
-		RELEASE(item2->data);
+		item2->data->properties.list.Clear();
+		RELEASE_ARRAY(item2->data->data);
 		item2 = item2->next;
 	}
 	data.layers.Clear();
-
+	layerDrawUp->Clear();
 	checKpointsMap.~CheckPoints();
+	tpNodeUpLadder.Clear();
 	
 	// Clean up the pugui tree
 	mapFile.reset();
@@ -690,11 +692,11 @@ int Map::LoadCheckPoint()
 	SDL_QueryTexture(checKpointsMap.texture, NULL, NULL, &texW, &texH);
 	texW = texW / 9;
 
-	checKpointsMap.checkPointOnAnim->speed = 0.1f;
+	//checKpointsMap.checkPointOnAnim->speed = 0.1f;
 
-	checKpointsMap.checkPointOffAnim->PushBack({ 0,0, texW, texH });
-	for (int i = 1; i < 8; i++)
-		checKpointsMap.checkPointOnAnim->PushBack({ texW * i,0, texW, texH });
+	//checKpointsMap.checkPointOffAnim->PushBack({ 0,0, texW, texH });
+	//for (int i = 1; i < 8; i++)
+		//checKpointsMap.checkPointOnAnim->PushBack({ texW * i,0, texW, texH });
 	
 
 	int checkPointCount = 0;

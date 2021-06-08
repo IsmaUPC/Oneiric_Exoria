@@ -128,8 +128,6 @@ public:
 	SceneLevel3* sceneLevel3 = nullptr;
 	SceneBattle* sceneBattle = nullptr;
 
-	ItemManager* itemManager = nullptr;
-
 	SceneControl* sceneControl = nullptr;
 
 	//Origin player tp
