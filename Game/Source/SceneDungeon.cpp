@@ -51,7 +51,6 @@ bool SceneDungeon::Start()
 	app->SetLastScene((Module*)this);
 
 	app->audio->PlayMusic("Audio/Music/dungeon_music.ogg");
-	app->audio->SetVolumeMusic(app->sceneManager->GetCurrentVolume() + 20);
 	victory = false;
 	app->player->win = false;
 	LoadDungeon(tmxDungeon);
