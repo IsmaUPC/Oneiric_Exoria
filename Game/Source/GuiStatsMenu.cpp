@@ -219,7 +219,7 @@ void GuiStatsMenu::UpdateInventory()
 			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || app->input->pads[0].a && !app->guiManager->press)
 			{
 				app->guiManager->press = true;
-				app->player->itemManager->UseItem(currentItem, selectPlayer);
+				app->sceneManager->itemManager->UseItem(currentItem, selectPlayer);
 				currentItem = app->player->inventory.start->data;
 				selectingPlayer = false;
 			}
@@ -235,10 +235,10 @@ void GuiStatsMenu::UpdateInventory()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
 	{
-		app->player->itemManager->AddItem(3);
-		app->player->itemManager->AddItem(4);
-		app->player->itemManager->AddItem(5);
-		app->player->itemManager->AddItem(6);
+		app->sceneManager->itemManager->AddItem(3);
+		app->sceneManager->itemManager->AddItem(4);
+		app->sceneManager->itemManager->AddItem(5);
+		app->sceneManager->itemManager->AddItem(6);
 	}
 }
 
@@ -785,7 +785,7 @@ void GuiStatsMenu::DrawItemInfo(int posX, int& posY, SDL_Rect& itemTextRect)
 	sprintf_s(textItemName, 30, currentItem->name.GetString());
 	app->fonts->BlitText(posX + 650 - w / 2, posY, 4, textItemName, color);
 
-	sprintf_s(textItemName, 30, "Type: %s", app->player->itemManager->TypeToString(currentItem->type));
+	sprintf_s(textItemName, 30, "Type: %s", app->sceneManager->itemManager->TypeToString(currentItem->type));
 	app->fonts->BlitText(posX + 473, posY + 250, 0, textItemName, color);
 
 	sprintf_s(textDescription, 200, currentItem->description.GetString());
@@ -837,7 +837,7 @@ bool GuiStatsMenu::Event(GuiControl* control)
 			}
 			else if (control->id == 8)
 			{
-				if (currentItem->equiped) app->player->itemManager->UnEquipItem(currentItem);
+				if (currentItem->equiped) app->sceneManager->itemManager->UnEquipItem(currentItem);
 				currentItem->equiped = false;
 				btnUseItem->state = GuiControlState::DISABLED;
 				btnDelItem->state = GuiControlState::DISABLED;
@@ -848,7 +848,7 @@ bool GuiStatsMenu::Event(GuiControl* control)
 				btnUseItem->state = GuiControlState::DISABLED;
 				btnDelItem->state = GuiControlState::DISABLED;
 				btnUnEquipItem->state = GuiControlState::DISABLED;
-				app->player->itemManager->DelItem(currentItem);
+				app->sceneManager->itemManager->DelItem(currentItem);
 				if (currentItem->equiped) currentItem->equiped = false;
 				currentItem = app->player->inventory.start->data;
 			}

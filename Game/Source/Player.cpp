@@ -11,7 +11,6 @@
 Player::Player() : Entity()
 {
 	name.Create("player");
-	itemManager = new ItemManager();
 	entityData.type = KENZIE_;
 	partners[0].entityData.type = KEILER_;
 	partners[1].entityData.type = ISRRA_;
@@ -31,7 +30,6 @@ Player::~Player()
 bool Player::Start()
 {
 	//Animations
-	itemManager->LoadItems(itemsFile, LIST_ITEMS_FILENAME);
 
 	idleAnimR = new Animation();
 	idleAnimL = new Animation();

@@ -171,7 +171,7 @@ bool ItemManager::AddItem(int id)
 	{
 		for (int i = 0; i < app->player->inventory.Count(); i++)
 		{
-			if (app->player->inventory.At(i)->data == app->player->itemManager->itemList.At(id)->data)
+			if (app->player->inventory.At(i)->data == app->sceneManager->itemManager->itemList.At(id)->data)
 			{
 				app->player->inventory.At(i)->data->multi++;
 				return ret;
