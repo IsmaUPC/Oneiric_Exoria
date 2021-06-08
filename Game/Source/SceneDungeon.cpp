@@ -51,6 +51,10 @@ bool SceneDungeon::Start()
 	app->SetLastScene((Module*)this);
 
 	app->audio->PlayMusic("Audio/Music/dungeon_music.ogg");
+	fxEnding = app->audio->LoadFx("Audio/Fx/ending.wav");
+
+	app->audio->PlayFx(fxEnding);
+
 	victory = false;
 	app->player->win = false;
 	LoadDungeon(tmxDungeon);
@@ -196,6 +200,8 @@ bool SceneDungeon::CleanUp()
 		return true;
 
 	LOG("Freeing scene");
+	app->audio->Unload1Fx(fxEnding);
+
 	Mix_HaltMusic();
 	app->map->CleanUp();
 	app->player->CleanUp();

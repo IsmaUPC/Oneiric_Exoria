@@ -65,6 +65,8 @@ private:
 
 	bool debugCollisions = false;
 
+	uint fxEnding = -1;
+
 	int moveBG0 = 0;
 	int moveBG1 = 0;
 	int moveBG2 = 0;
