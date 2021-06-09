@@ -48,7 +48,7 @@ bool SceneLevel3::Start()
 	// Load map
 	app->SetLastScene((Module*)this);
 	victory = false;
-	app->player->win = false;
+	app->player->changeScene = false;
 	app->map->Load("school_3.tmx");
 	app->map->active = true;
 	// Positions initials
@@ -104,7 +104,7 @@ bool SceneLevel3::Update(float dt)
 	app->input->GetMousePosition(vec.x, vec.y);
 
 
-	if (app->player->win)victory = true;
+	if (app->player->changeScene)victory = true;
 
 	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
 	{

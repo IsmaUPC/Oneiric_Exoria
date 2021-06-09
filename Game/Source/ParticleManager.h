@@ -9,10 +9,13 @@
 //#include "Animation.h"
 #include "Particle.h"
 #include "SceneManager.h"
+#include "Animation.h"
+
 
 
 class ParticleManager: public Module
 {
+public:
 
 	ParticleManager();
 	~ParticleManager();
@@ -43,13 +46,16 @@ class ParticleManager: public Module
 public:
 
 	void SpeedAnimationCheck(float dt);
-	bool AddParticle(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
+	bool AddParticleType(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
+	bool AddParticle(iPoint* pos, TypeParticle type);
 	bool LoadParticleProperties();
+
+	void AssignPartAnim(Particle* p);
 
 
 private:
 	SDL_Texture* texParticles = nullptr;
-	List<Particle*>* particles;
+	List<ParticleToDraw*> particles;
 	List<ParticleProperties*>* typeProperties;
 	List<Entity*>* spawnQueue;
 	List<Animation*>* animations;
@@ -58,8 +64,11 @@ private:
 	pugi::xml_node rootNode;
 public:
 
-
+	Animation* animFireBall = new Animation();
+	Animation* animLightning = new Animation();
 };
+
+
 
 
 #endif // __PARTICLE_MANAGER_H__

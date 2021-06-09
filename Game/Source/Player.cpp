@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "DialogSystem.h"
 #include "GuiManager.h"
+#include "ParticleManager.h"
 
 Player::Player() : Entity()
 {
@@ -81,7 +82,7 @@ bool Player::Start()
 	inCheckPoint = false;
 	checkpointMove = false;
 	endUpdate = true;
-	win = false;
+	changeScene = false;
 	debugCheckPoints = false;
 
 	idleAnimL->speed = 0.05f;
@@ -465,6 +466,20 @@ bool Player::Update(float dt)
 		app->guiManager->GetStatsMenu()->AbleDisableMenu();
 		bookAnim->Reset();
 		playerData.state = IDLE;
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		iPoint* pos= new iPoint;
+		app->input->GetMousePosition(pos->x, pos->y);
+		app->particleManager->AddParticle(pos,TypeParticle::LIGHTNING);
+	
+	}
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		iPoint* pos = new iPoint;
+		app->input->GetMousePosition(pos->x, pos->y);
+		app->particleManager->AddParticle(pos, TypeParticle::FIRE_BALL);
 	}
 
 	if (!app->sceneManager->GetIsPause())

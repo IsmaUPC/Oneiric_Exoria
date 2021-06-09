@@ -56,7 +56,7 @@ bool SceneDungeon::Start()
 	app->audio->PlayFx(fxEnding);
 
 	victory = false;
-	app->player->win = false;
+	app->player->changeScene = false;
 	LoadDungeon(tmxDungeon);
 
 	app->map->LoadObstaclesDungeon();
@@ -113,7 +113,7 @@ bool SceneDungeon::Update(float dt)
 	iPoint vec;
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
-	if (app->player->win)victory = true;
+	if (app->player->changeScene)victory = true;
 	else if (app->player->CheckGameOver(2) && lose == false && app->player->godMode == false)
 	{
 		LOG("GAME OVER!");

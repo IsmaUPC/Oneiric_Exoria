@@ -130,7 +130,8 @@ public:
 	int radiusCollision = 0;
 	bool godMode = false;
 	iPoint* positionInitial;	
-	bool win = false;
+	bool changeScene = false;
+	bool winGame = false;
 	bool loadStats = false;
 	bool play = false;
 	bool load = false;

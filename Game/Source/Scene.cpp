@@ -49,7 +49,7 @@ bool Scene::Start()
 	fxCount = 1;
 
 	victory = false;
-	app->player->win = false;
+	app->player->changeScene = false;
 
 	app->map->Load("school_1.tmx");
 	app->map->active = true;
@@ -143,7 +143,7 @@ bool Scene::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-	if(app->player->win)victory = true;
+	if(app->player->changeScene)victory = true;
 
 	else if (app->player->CheckGameOver(1) && lose == false && app->player->godMode == false)
 	{
