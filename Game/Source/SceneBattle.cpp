@@ -231,6 +231,50 @@ void SceneBattle::AddEntities()
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
 		app->entityManager->AddEntity(SAPLING, 7, 17, 0, randomLvl);
 		break;
+
+	case 5:
+		// Load textures
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
+
+		// Add Enemies
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(SAPLING, 13, 17, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(BANDIT, 10, 15, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(BANDIT, 10, 19, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 7, 17, 0, randomLvl);
+		break;
+	case 6:
+		// Load textures
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
+
+		// Add Enemies
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(SAPLING, 10, 19, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(SAPLING, 10, 15, 0, randomLvl);
+		break;
+	case 7:
+		// Load textures
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
+
+		// Add Enemies
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 10, 19, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(FIGHTER, 13, 17, 0, randomLvl);
+		break;
+	case 8:
+		// Load textures
+		img = app->tex->Load("Textures/Backgrounds/background_1.png");
+
+		// Add Enemies
+		while (randomLvl < 0) randomLvl = level + (rand() % 3);
+		app->entityManager->AddEntity(BANDIT, 10, 19, 0, randomLvl);
 	default:
 		break;
 	}
@@ -1998,7 +2042,9 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 				ContinueGame();
 				isContinue = true;
 				app->audio->PlayFx(fxExit);
-				TransitionToScene(SceneType::LEVEL3);
+				if (app->sceneManager->GetCurrentScene()->type == SceneType::DUNGEON)
+					TransitionToScene(SceneType::DUNGEON);
+				else TransitionToScene(SceneType::LEVEL3);
 			}			
 		}
 		// Continue
@@ -2014,7 +2060,9 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			}
 
 			isContinue = true;
-			TransitionToScene(SceneType::LEVEL3);
+			if (app->sceneManager->GetCurrentScene()->type == SceneType::DUNGEON)
+				TransitionToScene(SceneType::DUNGEON);
+			else TransitionToScene(SceneType::LEVEL3);
 		}
 
 		//--MAGIC MENU--

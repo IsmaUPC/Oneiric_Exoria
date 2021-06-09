@@ -61,6 +61,14 @@ bool SceneDungeon::Start()
 
 	app->map->LoadObstaclesDungeon();
 
+	if (strcmp(tmxDungeon, "dungeon_2.tmx") == 0)
+	{
+		app->entityManager->AddEntity(BANDIT, 11, 13, 5, 2, false);
+		app->entityManager->AddEntity(SAPLING, 15, 12, 6, 1, false);
+		app->entityManager->AddEntity(FIGHTER, 2, 5, 7, 2, false);
+		app->entityManager->AddEntity(BANDIT, 6, 11, 8, 4, false);
+	}
+
 	app->map->active = true;
 	// Positions initials
 	//app->player->positionInitial = new iPoint(930,730);
