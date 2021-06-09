@@ -50,10 +50,15 @@ private:
 
 	// Easings variables
 	int currentIteration = 0;
+	int currentIterationNewMision = 0;
 	int totalIterations = 40;
 	int spawnPos = 0;
 	int deltaPos = 0;
 	int hight = 0;
+	int offsetAnim = 0;
+	int state = 0;
+	float timeCounter = 0;
+	bool newMision = false;
 
 	// Time
 	/*Timer timer;

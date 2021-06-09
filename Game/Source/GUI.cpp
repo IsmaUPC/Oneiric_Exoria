@@ -7,6 +7,7 @@
 #include "GuiManager.h"
 #include "SceneBattle.h"
 #include "EntityManager.h"
+#include "QuestManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -90,14 +91,58 @@ bool GUI::Update(float dt)
 		else
 		{
 			if (!app->dialogueSystem->spawnDialog)
+			{
+				currentIteration = 0;
+				newMision = app->questManager->newMision;
 				app->dialogueSystem->pendingDialog = false;
+			}
 			else
 			{
 				hight = 0;
 				app->dialogueSystem->onDialog = true;
 			}
 		}
-	}	
+	}
+
+	if (newMision)
+	{
+		switch (state)
+		{
+		case 0:
+			offsetAnim = EaseCubicIn(currentIterationNewMision, -110, 110, 60);
+			if (currentIterationNewMision < 60)
+			{
+				currentIterationNewMision++;
+			}
+			else state = 1;
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 1.5f)
+			{
+				state = 2;
+				currentIterationNewMision = 0;
+			}
+			break;
+		case 2:
+			offsetAnim = EaseCubicIn(currentIterationNewMision, 0, -110, 60);
+			if (currentIterationNewMision < 60)
+			{
+				currentIterationNewMision++;
+			}
+			else
+			{
+				state = 0;
+				timeCounter = 0;
+				currentIterationNewMision = 0;
+				app->questManager->newMision = false;
+				newMision = false;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 	return true;
 }
@@ -114,9 +159,18 @@ bool GUI::PostUpdate()
 		app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
 		app->entityManager->drawCloud = false;
 	}
+
+	if (newMision)
+	{
+		int posX = -app->render->camera.x + 20;
+		int posY = -app->render->camera.y + 20 + offsetAnim;
+		app->render->DrawTextBox(posX, posY, 300, 90, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		app->fonts->BlitText(posX + 50, posY + 25, 0, "New Mision", { 60, 43, 13 });
+		app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+	}
+
 	point0.x = -app->render->camera.x;
 	point0.y = -app->render->camera.y;
-
 	// Time
 	//point0.x = -app->render->camera.x;
 	//point0.y = -app->render->camera.y;
@@ -139,11 +193,8 @@ bool GUI::PostUpdate()
 
 	if (activeFPS)
 	{
-
 		sprintf_s(fps, 10, "FPS: %3d", app->GetFramesOnLastSecond());
-
 		app->fonts->BlitText(point0.x + 30, point0.y + 30, 0, fps, { 0, 255, 68 });
-
 	}
 
 	return true;

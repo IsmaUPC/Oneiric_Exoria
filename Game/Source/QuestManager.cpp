@@ -68,6 +68,7 @@ bool QuestManager::ActiveQuest(int id)
 		if (idRequires == 0) {
 			node.data->state = ACTIVE;
 			activeQuestList.Add(node.data);
+			newMision = true;
 			result = true;
 		}
 		else {
@@ -79,6 +80,7 @@ bool QuestManager::ActiveQuest(int id)
 					if (nodeComplete.data->id == idRequires) {
 						node.data->state = ACTIVE;
 						activeQuestList.Add(node.data);
+						newMision = true;
 						result = true;
 						break;
 					}
