@@ -144,6 +144,7 @@ public:
 
 	List<SString> tmxDungeonsList;
 	int levelDungeon = 0;
+	bool ending = false;
 
 	ItemManager* itemManager = nullptr;
 	pugi::xml_document	itemsFile;

@@ -55,7 +55,7 @@ bool TransitionManager::Update(float dt)
 		if (doorRand == true)
 		{
 			randT = rand() % MAX_TRANSITIONS;
-			// if(ending == true) randT = MAX_TRANSITIONS + 1;
+			if(app->sceneManager->ending == true) randT = MAX_TRANSITIONS;
 			InitParameters();
 			doorRand = false;
 		}
@@ -276,7 +276,11 @@ void TransitionManager::Transition1(float dt)
 			break;
 		case 2:
 			if (logoAlpha > 0)logoAlpha -= (LOGO_FADE_SPEED);
-			else Reset();
+			else
+			{
+				Reset();
+				app->sceneManager->ending = false;
+			}
 		default:
 			break;
 		}
