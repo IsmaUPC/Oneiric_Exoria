@@ -1,4 +1,5 @@
 # Oneiric Exoria
+![](https://github.com/IsmaUPC/Oneiric_Exoria/blob/master/docs/Wiki/Home/game_logo.png)
 
 Welcome to Lansdowne, one of the few academies where magic is considered another area in scientific studies. The students are divided into factions which compete with each other to show which one is the best. All magic and knowledge is allowed in the school except for dark magic. If used, it would weaken the magical seal that keeps an old former student, Cassiel Dragneel who was exiled and locked in the Crazed dimension, allowing him a chance to escape, altering order and creating chaos. Our heroes will infiltrate the parallel dimension called Oneiric to prevent Cassiel Dragneel from reaching our world.
 
@@ -28,6 +29,13 @@ Mario Hernandez
 
 ### QA Workflow Manager & Text Localization
 Enric Morales
+
+## Links
+
+* **Repository** [Github](https://github.com/IsmaUPC/Oneiric_Exoria)
+* **Tutor:** [Ramon Santamaria](https://github.com/raysan5)
+* **University:** [CITM UPC](https://www.citm.upc.edu/)
+
 
 ## License
 ~~~
