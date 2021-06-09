@@ -4,7 +4,7 @@
 
 <img src="https://github.com/IsmaUPC/Oneiric_Exoria/blob/gh-pages/Webpage/7HD_Logo.bmp">
 
-![](IsmaUPC/Oneiric_Exoria/blob/gh-pages/Webpage/7HD_Logo.bmp)
+![](https://github.com/IsmaUPC/Oneiric_Exoria/blob/gh-pages/Webpage/7HD_Logo.bmp)
 
 <img src="../IsmaUPC/Oneiric_Exoria/blob/gh-pages/Webpage/7HD_Logo.bmp">
 
