@@ -118,7 +118,7 @@ void DialogueSystem::DrawDialogue()
 	{
 		if (actualLetter == 0)
 		{
-			app->audio->PlayFx(fxDialog);
+			//app->audio->PlayFx(fxDialog);
 		}
 		totalLetters = strlen(NPCdialogue);
 
