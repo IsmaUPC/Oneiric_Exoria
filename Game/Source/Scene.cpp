@@ -55,7 +55,7 @@ bool Scene::Start()
 	app->map->active = true;
 
 	// Positions Initials
-	app->player->positionInitial = new iPoint(325, 450);	
+	app->player->positionInitial = new iPoint(672, 200);
 
 	// Active calls
 	app->player->Init();
@@ -69,7 +69,11 @@ bool Scene::Start()
 		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
 	}
 	else app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
-	app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
+	if (app->questManager->QuestState(3) == COMPLETE)
+	{
+		app->entityManager->AddEntity(NPC, 16, 21, 17, 0, false);
+	}
+	else app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
 
 	//Interactuable objects
 	app->entityManager->AddEntity(NPC, 20, 12, 7, 0, false);

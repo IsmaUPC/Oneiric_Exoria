@@ -8,7 +8,7 @@ struct PlayerData : public Entity
 	iPoint position = { 0,0 };
 	iPoint centerPoint = { 0,0 };
 	State state = IDLE;
-	MoveDirection direction = WALK_DOWN;
+	MoveDirection direction = WALK_UP;
 	Animation* currentAnimation = nullptr;
 	float velocity = 1;
 	int level = 1;

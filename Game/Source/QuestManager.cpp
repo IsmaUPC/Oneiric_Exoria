@@ -129,6 +129,9 @@ void QuestManager::ChangeNPC(int id)
 		app->entityManager->DeleteEntity(app->entityManager->FindNPC(2));
 		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
 		break;
+	case 3:
+		app->entityManager->DeleteEntity(app->entityManager->FindNPC(12));
+		break;
 	default:
 		break;
 	}

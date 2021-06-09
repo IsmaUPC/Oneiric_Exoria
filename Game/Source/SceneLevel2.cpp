@@ -76,7 +76,10 @@ bool SceneLevel2::Start()
 	// Interactive objects
 	app->entityManager->AddEntity(NPC, 24, 19, 10, 0, false); // Arcade 
 	app->entityManager->AddEntity(NPC, 33, 18, 11, 0, false); // Tv
-	app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false); // Book
+	if (app->questManager->QuestState(3) != COMPLETE)
+	{
+		app->entityManager->AddEntity(NPC, 45, 37, 12, 0, false); // Book
+	} 
 	app->entityManager->AddEntity(NPC, 46, 22, 13, 0, false); // Coffe
 	app->entityManager->AddEntity(NPC, 11, 22, 14, 0, false); // Water
 
