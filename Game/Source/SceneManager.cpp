@@ -239,60 +239,61 @@ bool SceneManager::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->player->win== true)
-	{
-
-		app->player->win = false;
-		current->victory = false;
-
-		if(!onTransition)
-		switch (originTpNode->typeTpNode)
+	if(app->player->winGame) current->TransitionToScene(SceneType(SceneType::WIN)), app->player->winGame=false;
+	else if (app->player->changeScene== true)
 		{
-		case UNKNOW:
-			break;
-		case DOWN_LADDER_NODE:
-			if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
-			if (levelDungeon == 0)
+
+			app->player->changeScene = false;
+			current->victory = false;
+
+			if(!onTransition && originTpNode != NULL)
+			switch (originTpNode->typeTpNode)
 			{
-				app->audio->PlayFx(app->player->fxStairs);
-				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
-				//current->TransitionToScene(SceneType::WIN);
-			}
-			else
-			{
+			case UNKNOW:
+				break;
+			case DOWN_LADDER_NODE:
+				if (originTpNode->idFloor <= 0)originTpNode->idFloor = 1;
+				if (levelDungeon == 0)
+				{
+					app->audio->PlayFx(app->player->fxStairs);
+					current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) - 1));
+					//current->TransitionToScene(SceneType::WIN);
+				}
+				else
+				{
+					if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
+					{
+						levelDungeon--;
+						app->audio->PlayFx(app->player->fxStairs);
+						current->TransitionToScene(SceneType::DUNGEON);
+					}
+				}
+				break;
+			case UP_LADDER_NODE:
 				if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
 				{
-					levelDungeon--;
+					app->audio->PlayFx(app->player->fxStairs);
+					levelDungeon++;
+				}
+				if ((int)SceneType::LEVEL1 + originTpNode->idFloor != (int)SceneType::DUNGEON)
+				{
+					app->audio->PlayFx(app->player->fxStairs);
+					current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) + 1));
+				}
+				else 
+				{
 					app->audio->PlayFx(app->player->fxStairs);
 					current->TransitionToScene(SceneType::DUNGEON);
+
 				}
+				return true;
+				break;
+			default:
+				break;
 			}
-			break;
-		case UP_LADDER_NODE:
-			if (SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor)) == SceneType::DUNGEON)
-			{
-				app->audio->PlayFx(app->player->fxStairs);
-				levelDungeon++;
-			}
-			if ((int)SceneType::LEVEL1 + originTpNode->idFloor != (int)SceneType::DUNGEON)
-			{
-				app->audio->PlayFx(app->player->fxStairs);
-				current->TransitionToScene(SceneType(((int)SceneType::LEVEL1 + originTpNode->idFloor) + 1));
-			}
-			else 
-			{
-				app->audio->PlayFx(app->player->fxStairs);
-				current->TransitionToScene(SceneType::DUNGEON);
 
-			}
-			return true;
-			break;
-		default:
-			break;
 		}
-
-	}
-	if (current->lose == true)
+	else if (current->lose == true)
 	{
 		current->lose = false;
 		current->TransitionToScene(SceneType::LOSE);
@@ -301,11 +302,6 @@ bool SceneManager::PostUpdate()
 
 	// Draw current scene
 	current->PostUpdate();
-	// Draw full screen rectangle in front of everything
-	if (onTransition)
-	{
-		//render->DrawRectangle({ -app->render->camera.x, -app->render->camera.y, WINDOW_W, WINDOW_H }, 0, 0, 0, (unsigned char)(255.0f * transitionAlpha));
-	}	
 
 	return ret;
 }

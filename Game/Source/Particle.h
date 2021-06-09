@@ -5,19 +5,28 @@
 #include "Module.h"
 #include "Render.h"
 #include "List.h"
+#include "Animation.h";
 #include "Point.h"
 
 
 enum class TypeParticle
 {
-	LIGHTNING,
-	FIRE_BALL,
+	LIGHTNING=0,
+	FIRE_BALL=1,
 
 	//Add the new types in the line above
 	COUNT,
 	UNKNOWN,
 	
 };
+struct ParticleToDraw
+{
+	iPoint* pos = nullptr;
+	Animation* animation = nullptr;
+	TypeParticle type;
+	bool pendingToDelete = false;
+};
+
 struct ParticleProperties
 {
 public:
@@ -66,6 +75,8 @@ public:
 	iPoint* vMax=nullptr;
 
 	TypeParticle type= TypeParticle::UNKNOWN;
+
+	Animation* anim =nullptr;
 };
 
 // utilility struct to save xml file loaded content

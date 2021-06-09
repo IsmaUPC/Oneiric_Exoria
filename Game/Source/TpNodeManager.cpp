@@ -94,7 +94,7 @@ TeleportNode* TpNodeManager::FindNodeTpInPlayer(uint typeTilePlayer)
 			node->data->position == listPointsCollision[2] ||
 			node->data->position == listPointsCollision[3])
 		{
-			//app->player->win = true;
+			//app->player->changeScene = true;
 			//app->sceneManager->originTpNode = node->data;
 			return  node->data;
 			break;

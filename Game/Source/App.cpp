@@ -16,6 +16,7 @@
 #include "TransitionManager.h"
 #include "TpNodeManager.h"
 #include "QuestManager.h"
+#include "ParticleManager.h"
 #include "AssetsManager.h"
 
 #include "Defs.h"
@@ -45,6 +46,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tpNodeManager = new TpNodeManager();
 	assets = new AssetsManager();
 	questManager = new QuestManager();
+	particleManager = new ParticleManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -62,6 +64,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(dialogueSystem);
 	AddModule(transitionManager);
 	AddModule(questManager);
+	AddModule(particleManager);
 
 	audio->active = true;
 	player->active = false;

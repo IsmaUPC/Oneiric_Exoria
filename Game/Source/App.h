@@ -37,6 +37,7 @@ class Fonts;
 class TransitionManager;
 class TpNodeManager;
 class QuestManager;
+class ParticleManager;
 class AssetsManager;
 
 class App
@@ -130,6 +131,7 @@ public:
 	TransitionManager* transitionManager = nullptr;
 	TpNodeManager* tpNodeManager = nullptr;
 	QuestManager* questManager = nullptr;
+	ParticleManager* particleManager = nullptr;
 	AssetsManager* assets = nullptr;
 
 	bool fullScreen=0;

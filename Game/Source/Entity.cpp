@@ -104,14 +104,14 @@ int Entity::CheckCollision(iPoint positionMap)
 	uint firstgidLayerCollisions = app->map->data.tilesets.At(0)->data->firstgid;
 	typeTilePlayer -= firstgidLayerCollisions;
 
-	if (app->player->godMode == false && app->player->win != true)
+	if (app->player->godMode == false && app->player->changeScene != true)
 	{
 		switch (typeTilePlayer)
 		{
 		case VICTORY:
 			// Victory
 			if(positionMap == app->map->WorldToMap( app->player->playerData.position))
-			app->player->win = true;
+			app->player->winGame = true;
 			return VICTORY;
 			break;
 
@@ -126,7 +126,7 @@ int Entity::CheckCollision(iPoint positionMap)
 		case DOWN_HALL:
 			// Fill node origin in Scene manager
 			app->sceneManager->originTpNode = app->sceneManager->tpManager->FindNodeTpInPlayer(typeTilePlayer);
-			app->player->win = true;
+			app->player->changeScene = true;
 			break;
 
 		case CHECK_POINT:

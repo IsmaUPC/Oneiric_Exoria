@@ -48,6 +48,9 @@ bool Particle::CleanUp()
 {
 	LOG("Destroying ModuleParticles");
 	active = false;
+
+	RELEASE(properties);
+	RELEASE(particleData);
 	free(this);
 	return true;
 }
