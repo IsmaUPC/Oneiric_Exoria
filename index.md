@@ -7,7 +7,7 @@ Welcome to Lansdowne, one of the few academies where magic is considered another
 ## Game Trailer
 See our first gameplay trailer launched exclusively in CITM Centre, part of the UPC University in Catalonia, Spain.
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=Va3BqB9HALk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IAedd1ZcyT4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Our team
 
