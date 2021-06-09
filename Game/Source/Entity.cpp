@@ -112,6 +112,7 @@ int Entity::CheckCollision(iPoint positionMap)
 			// Victory
 			if(positionMap == app->map->WorldToMap( app->player->playerData.position))
 			app->player->winGame = true;
+			app->sceneManager->ending = true;
 			return VICTORY;
 			break;
 
