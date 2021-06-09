@@ -26,6 +26,9 @@ bool ParticleManager::Start()
 	LOG("ParticleManager start");
 	active = true;
 
+	animLightning = new Animation();
+	animFireBall = new Animation();
+
 	// Load Fx
 
 	// Load Textures
@@ -61,8 +64,6 @@ bool ParticleManager::PreUpdate()
 	for (ListItem<ParticleToDraw*>* particle = particles.start; particle; particle = particle->next) {
 
 		if (particle->data->pendingToDelete)particles.Del(particle);
-
-
 	}
 
 	return true;
@@ -163,9 +164,10 @@ bool ParticleManager::CleanUp()
 	app->tex->UnLoad(texParticles);
 
 	// Unload Animations
-	if(animations!= NULL)
-	animations->Clear();
-	//RELEASE(isDetectedAnim);
+	//if(animations!= NULL)
+	//animations->Clear();
+	RELEASE(animLightning);
+	RELEASE(animFireBall);
 
 	active = false;
 
@@ -174,13 +176,9 @@ bool ParticleManager::CleanUp()
 
 void ParticleManager::ClearList(bool& ret)
 {
-
 	// Clear list
-	if (typeProperties != NULL)
-	typeProperties->Clear();
-
-	if(spawnQueue != NULL)
-	spawnQueue->Clear();
+	typeProperties.Clear();
+	//spawnQueue.Clear();
 }
 
 bool ParticleManager::LoadState(pugi::xml_node&)
@@ -213,7 +211,6 @@ bool ParticleManager::LoadParticleProperties()
 		// Read the atributes of the type particle 
 		for (int x = 0; x < numTypes; x++)
 		{
-
 			p->particleData->type = (TypeParticle)rootNode.attribute("type").as_int((int)TypeParticle::UNKNOWN);
 			p->properties->lifespanMin = rootNode.child("lifespan").attribute("min").as_float();
 			p->properties->lifespanMax = rootNode.child("lifespan").attribute("max").as_float();
@@ -234,7 +231,7 @@ bool ParticleManager::LoadParticleProperties()
 
 			AssignPartAnim(p);
 
-			typeProperties->Add(p->properties);
+			typeProperties.Add(p->properties);
 
 			rootNode = rootNode.next_sibling();
 		}

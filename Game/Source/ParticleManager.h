@@ -1,6 +1,7 @@
 #ifndef __PARTICLE_MANAGER_H__
 #define __PARTICLE_MANAGER_H__
 
+
 #include "Module.h"
 #include "Render.h"
 #include "App.h"
@@ -9,6 +10,8 @@
 #include "Particle.h"
 #include "SceneManager.h"
 #include "Animation.h"
+
+
 
 class ParticleManager: public Module
 {
@@ -43,7 +46,7 @@ public:
 public:
 
 	void SpeedAnimationCheck(float dt);
-	//bool AddParticleType(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
+	// bool AddParticleType(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
 	bool AddParticle(iPoint* pos, TypeParticle type);
 	bool LoadParticleProperties();
 
@@ -53,15 +56,19 @@ public:
 private:
 	SDL_Texture* texParticles = nullptr;
 	List<ParticleToDraw*> particles;
-	List<ParticleProperties*>* typeProperties;
-	List<Entity*>* spawnQueue;
+	List<ParticleProperties*> typeProperties;
+	//List<Entity*> spawnQueue;
 	List<Animation*>* animations;
 
 	pugi::xml_document propertiesFile;
 	pugi::xml_node rootNode;
 public:
 
-	Animation* animFireBall = new Animation();
-	Animation* animLightning = new Animation();
+	Animation* animFireBall;
+	Animation* animLightning;
 };
+
+
+
+
 #endif // __PARTICLE_MANAGER_H__

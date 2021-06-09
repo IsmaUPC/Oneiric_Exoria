@@ -122,8 +122,8 @@ public:
 	bool debugDraw = false;
 
 	unsigned int particles_count = 0;
-	ParticleProperties* properties=nullptr;
-	ParticleData* particleData;
+	ParticleProperties* properties = nullptr;
+	ParticleData* particleData = nullptr;
 
 };
 
