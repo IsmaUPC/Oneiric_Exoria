@@ -169,9 +169,17 @@ void Enemy::MoveEnemy()
 	}
 	else
 	{
-		if (entityData.id == 1)
+		if (entityData.id == 1 || entityData.id == 5 || entityData.id == 7 || entityData.id == 8)
 		{
-			int numTiles = 5;
+			int numTiles = 0;
+			if (entityData.id == 1)
+				numTiles = 5;
+			else if (entityData.id == 5)
+				numTiles = 6;
+			else if (entityData.id == 7)
+				numTiles = 7;
+			else if (entityData.id == 8)
+				numTiles = 3;
 
 			if (enemyCenter.x < destination.x)
 			{

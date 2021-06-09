@@ -191,10 +191,8 @@ bool SceneManager::Update(float dt)
 		case SceneType::LEVEL2: next = new SceneLevel2(SceneType::LEVEL2 ); break;
 		case SceneType::LEVEL3: next = new SceneLevel3(SceneType::LEVEL3); break;
 		case SceneType::DUNGEON: 
-			//if (current->name != "dungeon")
 				next = new SceneDungeon(SceneType::DUNGEON);
-			//else 
-				//next = current;
+				inDungeon = true;
 			break;
 
 		case SceneType::WIN: next = new SceneWin(SceneType::WIN); break;
@@ -202,7 +200,7 @@ bool SceneManager::Update(float dt)
 		case SceneType::BATTLE: next = new SceneBattle(SceneType::BATTLE); app->audio->PlayFx(fxTransition); break;
 		default: break;
 		}
-
+		if (next->type != SceneType::DUNGEON && next->type != SceneType::BATTLE) inDungeon = false;
 		current->transitionRequired = false;
 	}
 	

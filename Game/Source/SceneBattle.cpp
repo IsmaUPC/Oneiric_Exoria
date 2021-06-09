@@ -2042,9 +2042,10 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 				ContinueGame();
 				isContinue = true;
 				app->audio->PlayFx(fxExit);
-				if (app->sceneManager->GetCurrentScene()->type == SceneType::DUNGEON)
+				if (app->sceneManager->inDungeon)
 					TransitionToScene(SceneType::DUNGEON);
-				else TransitionToScene(SceneType::LEVEL3);
+				else 
+					TransitionToScene(SceneType::LEVEL3);
 			}			
 		}
 		// Continue
@@ -2060,9 +2061,10 @@ bool SceneBattle::OnGuiMouseClickEvent(GuiControl* control)
 			}
 
 			isContinue = true;
-			if (app->sceneManager->GetCurrentScene()->type == SceneType::DUNGEON)
+			if (app->sceneManager->inDungeon)
 				TransitionToScene(SceneType::DUNGEON);
-			else TransitionToScene(SceneType::LEVEL3);
+			else 
+				TransitionToScene(SceneType::LEVEL3);
 		}
 
 		//--MAGIC MENU--

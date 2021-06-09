@@ -63,10 +63,10 @@ bool SceneDungeon::Start()
 
 	if (strcmp(tmxDungeon, "dungeon_2.tmx") == 0)
 	{
-		app->entityManager->AddEntity(BANDIT, 11, 13, 5, 2, false);
+		app->entityManager->AddEntity(BANDIT, 3, 18, 5, 2);
 		app->entityManager->AddEntity(SAPLING, 15, 12, 6, 1, false);
-		app->entityManager->AddEntity(FIGHTER, 2, 5, 7, 2, false);
-		app->entityManager->AddEntity(BANDIT, 6, 11, 8, 4, false);
+		app->entityManager->AddEntity(FIGHTER, 5, 5, 7, 2);
+		app->entityManager->AddEntity(BANDIT, 5, 11, 8, 4);
 	}
 
 	app->map->active = true;
