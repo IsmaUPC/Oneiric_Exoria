@@ -55,6 +55,8 @@ public:
     // 0 = INACTIVE | 1 = ACTIVE | 2 = COMPLETE
     int QuestState(int id);
 
+    bool newMision = false;
+
 private:
 
     ListItem<Quest*> FindQuestForID(int id);

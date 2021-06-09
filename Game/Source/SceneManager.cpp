@@ -139,7 +139,7 @@ bool SceneManager::Update(float dt)
 				if (originTpNode != nullptr)
 					tpManager->SpawnPlayerTpNode(originTpNode);
 				else
-					app->player->playerData.direction = WALK_DOWN;
+					app->player->playerData.direction = WALK_UP;
 
 				originTpNode = nullptr;
 				app->player->RePositionPartners();

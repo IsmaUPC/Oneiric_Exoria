@@ -68,6 +68,7 @@ bool QuestManager::ActiveQuest(int id)
 		if (idRequires == 0) {
 			node.data->state = ACTIVE;
 			activeQuestList.Add(node.data);
+			newMision = true;
 			result = true;
 		}
 		else {
@@ -79,6 +80,7 @@ bool QuestManager::ActiveQuest(int id)
 					if (nodeComplete.data->id == idRequires) {
 						node.data->state = ACTIVE;
 						activeQuestList.Add(node.data);
+						newMision = true;
 						result = true;
 						break;
 					}
@@ -128,6 +130,9 @@ void QuestManager::ChangeNPC(int id)
 	case 1:
 		app->entityManager->DeleteEntity(app->entityManager->FindNPC(2));
 		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
+		break;
+	case 3:
+		app->entityManager->DeleteEntity(app->entityManager->FindNPC(12));
 		break;
 	default:
 		break;
