@@ -9,6 +9,7 @@
 #include "TpNodeManager.h"
 #include "easings.h"
 #include "ItemManager.h"
+#include "ItemManager.h"
 
 class GuiButton;
 
@@ -144,6 +145,8 @@ public:
 	List<SString> tmxDungeonsList;
 	int levelDungeon = 0;
 
+	ItemManager* itemManager = nullptr;
+	pugi::xml_document	itemsFile;
 
 	pugi::xml_document stateFile;
 	pugi::xml_node rootStateFile;

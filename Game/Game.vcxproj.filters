@@ -349,6 +349,7 @@
     <ClInclude Include="Source\AssetsManager.h">
       <Filter>Modules\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -383,6 +384,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="PlatformerGame.rc" />
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Output\icon.ico" />
   </ItemGroup>
 </Project>

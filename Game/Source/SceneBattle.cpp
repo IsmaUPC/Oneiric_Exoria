@@ -680,7 +680,7 @@ void SceneBattle::DrawSceneWin()
 	{
 		if (itemsId[i] != 0)
 		{
-			sprintf_s(textItems, 24, "%s x%d", app->player->itemManager->itemList.At(itemsId[i])->data->name.GetString(), itemMulti);
+			sprintf_s(textItems, 24, "%s x%d", app->sceneManager->itemManager->itemList.At(itemsId[i])->data->name.GetString(), itemMulti);
 			app->fonts->BlitText(281, rec.y + rec.h / 2 - h / 2 + 100 + i * 25, 0, textItems, { 60, 43, 13 });
 		}
 		if (itemMulti == 2)
@@ -696,7 +696,7 @@ void SceneBattle::GenerateItems()
 	for (int i = 0; i < fnumb; i++)
 	{
 		int numb = rand() % 5 + 1;
-		app->player->itemManager->AddItem(numb);
+		app->sceneManager->itemManager->AddItem(numb);
 		itemsId[i] = numb;
 	}
 	for (int i = 0; i < fnumb-1; i++)

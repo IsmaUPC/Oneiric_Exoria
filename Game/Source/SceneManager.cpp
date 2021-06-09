@@ -39,6 +39,8 @@ SceneManager::SceneManager(Input* input, Render* render, Textures* tex) : Module
 	this->input = input;
 	this->render = render;
 	this->tex = tex;
+
+	itemManager = new ItemManager();
 }
 
 // Destructor
@@ -61,6 +63,8 @@ bool SceneManager::Start()
 	current->Start();
 
 	tpManager = new TpNodeManager();
+
+	itemManager->LoadItems(itemsFile, LIST_ITEMS_FILENAME);
 
 	guiFont = app->fonts->Load("Fonts/RPGSystem.ttf", 25);
 	titleFont = app->fonts->Load("Fonts/title_font.ttf", 48);
@@ -95,12 +99,12 @@ bool SceneManager::Update(float dt)
 	if (!pause && (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || app->input->pads[0].start) 
 		&& (current->name == "scene" || current->name == "sceneLevel2" || current->name == "sceneLevel3" || current->name == "dungeon"))
 	{
+		app->audio->PlayFx(app->guiManager->fxPauseMenu);
 		app->guiManager->press = true;
 		currentVolume = app->audio->GetVolumeMusic();
 		if (currentVolume > 10) app->audio->SetVolumeMusic(10); 
 		pause = !pause;
 		app->guiManager->GetMenuPause()->SetActive(true);
-		app->audio->PlayFx(app->guiManager->fxPauseMenu);
 		app->fonts->ResetH();
 	}
 
@@ -338,6 +342,9 @@ bool SceneManager::CleanUp()
 	next = nullptr;
 	transition = nullptr;
 	texPlayers = nullptr;
+
+	itemManager->CleanUp();
+	RELEASE(itemManager);
 
 	scenes.Clear();
 

@@ -2,7 +2,6 @@
 #define __PLAYER_H__
 
 #include "Entity.h"
-#include "ItemManager.h"
 
 struct PlayerData : public Entity
 {
@@ -124,9 +123,6 @@ private:
 	void OffsetPartners();
 
 public:
-
-	ItemManager* itemManager = nullptr;
-	pugi::xml_document	itemsFile;
 
 	List<GameItem*> inventory;
 
