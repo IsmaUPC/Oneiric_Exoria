@@ -1,6 +1,6 @@
 # Oneiric Exoria
 
-![Image](/Oneiric_Exoria/blob/master/docs/Wiki/Home/game_logo.png)
+![Image](https://github.com/IsmaUPC/Oneiric_Exoria/blob/master/docs/Wiki/Home/game_logo.png)
 
 ![](https://github.com/IsmaUPC/Oneiric_Exoria/blob/master/docs/Wiki/Home/game_logo.png)
 
