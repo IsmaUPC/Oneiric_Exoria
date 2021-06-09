@@ -68,7 +68,7 @@ bool QuestManager::ActiveQuest(int id)
 		if (idRequires == 0) {
 			node.data->state = ACTIVE;
 			activeQuestList.Add(node.data);
-			newMision = true;
+			if (id != 2 && id != 4) newMision = true;
 			result = true;
 		}
 		else {
@@ -80,7 +80,7 @@ bool QuestManager::ActiveQuest(int id)
 					if (nodeComplete.data->id == idRequires) {
 						node.data->state = ACTIVE;
 						activeQuestList.Add(node.data);
-						newMision = true;
+						if (id != 2 && id != 4) newMision = true;
 						result = true;
 						break;
 					}
@@ -109,7 +109,8 @@ bool QuestManager::FinishQuest(int id)
 				// Quitar quest de la lista de activadas
 				node->data->state = COMPLETE;
 				completeQuestList.Add(node->data);
-
+				if (id != 1 && id != 3) completedMision = true;
+				else if (id == 1 || id == 3)updateMision = true;
 				activeQuestList.Del(node);
 				result = true;
 				break;

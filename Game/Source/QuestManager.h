@@ -56,6 +56,8 @@ public:
     int QuestState(int id);
 
     bool newMision = false;
+    bool updateMision = false;
+    bool completedMision = false;
 
 private:
 

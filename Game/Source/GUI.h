@@ -59,6 +59,8 @@ private:
 	int state = 0;
 	float timeCounter = 0;
 	bool newMision = false;
+	bool updateMision = false;
+	bool completedMision = false;
 
 	// Time
 	/*Timer timer;

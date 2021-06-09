@@ -94,6 +94,8 @@ bool GUI::Update(float dt)
 			{
 				currentIteration = 0;
 				newMision = app->questManager->newMision;
+				updateMision = app->questManager->updateMision;
+				completedMision = app->questManager->completedMision;
 				app->dialogueSystem->pendingDialog = false;
 			}
 			else
@@ -104,7 +106,7 @@ bool GUI::Update(float dt)
 		}
 	}
 
-	if (newMision)
+	if (newMision || completedMision || updateMision)
 	{
 		switch (state)
 		{
@@ -136,7 +138,11 @@ bool GUI::Update(float dt)
 				timeCounter = 0;
 				currentIterationNewMision = 0;
 				app->questManager->newMision = false;
+				app->questManager->updateMision = false;
+				app->questManager->completedMision = false;
 				newMision = false;
+				updateMision = false;
+				completedMision = false;
 			}
 			break;
 		default:
@@ -160,13 +166,27 @@ bool GUI::PostUpdate()
 		app->entityManager->drawCloud = false;
 	}
 
-	if (newMision)
+	if (newMision || completedMision || updateMision)
 	{
 		int posX = -app->render->camera.x + 20;
 		int posY = -app->render->camera.y + 20 + offsetAnim;
 		app->render->DrawTextBox(posX, posY, 300, 90, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
-		app->fonts->BlitText(posX + 50, posY + 25, 0, "New Mision", { 60, 43, 13 });
-		app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+		if (newMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "New Mision", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+		}
+		else if (completedMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "Congratulations!", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Mision completed", { 60, 43, 13 });
+		}
+		else if (updateMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "Update Mision!", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+		}
+		
 	}
 
 	point0.x = -app->render->camera.x;
