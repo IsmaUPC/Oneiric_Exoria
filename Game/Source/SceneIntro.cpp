@@ -323,6 +323,7 @@ bool SceneIntro::OnGuiMouseClickEvent(GuiControl* control)
 			app->audio->PlayFx(fxStart);
 			app->removeGame = false;
 			TransitionToScene(SceneType::LEVEL1);
+			app->player->inventory.Clear();
 			app->sceneManager->lastLevel = 1;
 			isContinue = false;
 			app->player->play = true;
