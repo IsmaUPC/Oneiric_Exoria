@@ -9,30 +9,80 @@
 		<camera x="315" y="-90" />
 	</renderer>
 	<player>
-		<data x="930" y="730" direction="2" level="1" exp="0" health="8" mana="11" attack="13" defend="0" speed="10" />
+		<data x="472" y="372" direction="2" level="1" exp="0" health="8" mana="11" attack="13" defend="0" speed="10" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="931" y="237" />
+			<breadcrumb x="384" y="640" />
+			<breadcrumb x="386" y="640" />
+			<breadcrumb x="386" y="638" />
+			<breadcrumb x="386" y="636" />
+			<breadcrumb x="386" y="634" />
+			<breadcrumb x="386" y="632" />
+			<breadcrumb x="386" y="630" />
+			<breadcrumb x="386" y="628" />
+			<breadcrumb x="388" y="626" />
+			<breadcrumb x="390" y="624" />
+			<breadcrumb x="392" y="622" />
+			<breadcrumb x="394" y="620" />
+			<breadcrumb x="396" y="618" />
+			<breadcrumb x="398" y="616" />
+			<breadcrumb x="400" y="614" />
+			<breadcrumb x="402" y="612" />
+			<breadcrumb x="404" y="610" />
+			<breadcrumb x="406" y="608" />
+			<breadcrumb x="408" y="606" />
+			<breadcrumb x="410" y="604" />
+			<breadcrumb x="412" y="602" />
+			<breadcrumb x="414" y="600" />
+			<breadcrumb x="416" y="598" />
+			<breadcrumb x="418" y="596" />
+			<breadcrumb x="420" y="594" />
+			<breadcrumb x="422" y="592" />
+			<breadcrumb x="424" y="590" />
+			<breadcrumb x="426" y="588" />
+			<breadcrumb x="428" y="586" />
+			<breadcrumb x="430" y="584" />
+			<breadcrumb x="432" y="582" />
+			<breadcrumb x="434" y="580" />
+			<breadcrumb x="436" y="578" />
+			<breadcrumb x="438" y="576" />
+			<breadcrumb x="440" y="574" />
+			<breadcrumb x="442" y="572" />
+			<breadcrumb x="444" y="570" />
+			<breadcrumb x="446" y="568" />
+			<breadcrumb x="448" y="566" />
+			<breadcrumb x="450" y="564" />
+			<breadcrumb x="452" y="562" />
+			<breadcrumb x="454" y="560" />
+			<breadcrumb x="456" y="558" />
+			<breadcrumb x="458" y="556" />
+			<breadcrumb x="460" y="554" />
+			<breadcrumb x="462" y="552" />
+			<breadcrumb x="464" y="452" />
+			<breadcrumb x="466" y="450" />
+			<breadcrumb x="468" y="448" />
+			<breadcrumb x="470" y="446" />
+			<breadcrumb x="472" y="444" />
+		</path>
 		<partners>
-			<partner x="930" y="770" breadcrumb="0" direction="2" level="1" exp="0" health="14" mana="10" attack="8" defense="7" speed="11" />
-			<partner x="930" y="810" breadcrumb="0" direction="2" level="1" exp="0" health="10" mana="12" attack="9" defense="9" speed="10" />
-			<partner x="930" y="850" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" attack="8" defense="13" speed="8" />
+			<partner x="654" y="410" breadcrumb="0" direction="2" level="1" exp="0" health="14" mana="10" attack="8" defense="7" speed="11" />
+			<partner x="654" y="450" breadcrumb="0" direction="2" level="1" exp="0" health="10" mana="12" attack="9" defense="9" speed="10" />
+			<partner x="654" y="490" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" attack="8" defense="13" speed="8" />
 		</partners>
 	</player>
 	<scene_manager>
-		<level lvl="2" />
+		<level lvl="1" />
 	</scene_manager>
 	<entities />
 	<entity_manager>
 		<score value="0" />
 		<time value="130" />
 		<entities>
-			<entity type="14" x="23" y="20" id="4" level="0" state="0" move="false" />
-			<entity type="14" x="24" y="18" id="10" level="0" state="0" move="false" />
-			<entity type="14" x="33" y="17" id="11" level="0" state="0" move="false" />
-			<entity type="14" x="11" y="21" id="14" level="0" state="0" move="false" />
-			<entity type="14" x="24" y="18" id="10" level="0" state="0" move="false" />
-			<entity type="14" x="33" y="17" id="11" level="0" state="0" move="false" />
-			<entity type="14" x="11" y="21" id="14" level="0" state="0" move="false" />
+			<entity type="3" x="15" y="12" id="6" level="1" state="6" move="false" />
+			<entity type="1" x="3" y="18" id="5" level="2" state="0" move="true" />
+			<entity type="1" x="5" y="11" id="8" level="4" state="0" move="true" />
+			<entity type="2" x="5" y="5" id="7" level="2" state="0" move="true" />
 		</entities>
 	</entity_manager>
 	<particle_manager>
