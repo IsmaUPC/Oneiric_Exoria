@@ -49,16 +49,14 @@ public:
 	// bool AddParticleType(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
 	bool AddParticle(iPoint* pos, TypeParticle type);
 	bool LoadParticleProperties();
-
 	void AssignPartAnim(Particle* p);
-
 
 private:
 	SDL_Texture* texParticles = nullptr;
 	List<ParticleToDraw*> particles;
 	List<ParticleProperties*> typeProperties;
 	//List<Entity*> spawnQueue;
-	List<Animation*>* animations;
+	List<Animation*> animations;
 
 	pugi::xml_document propertiesFile;
 	pugi::xml_node rootNode;
@@ -66,9 +64,13 @@ public:
 
 	Animation* animFireBall;
 	Animation* animLightning;
+	Animation* animExplosion;
+	Animation* animExplosionBall;
+	Animation* animFireSmoke;
+	Animation* animShadow;
+	Animation* animEnergy;
+	Animation* animClaw;
 };
-
-
 
 
 #endif // __PARTICLE_MANAGER_H__

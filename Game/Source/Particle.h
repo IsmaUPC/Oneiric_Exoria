@@ -13,6 +13,12 @@ enum class TypeParticle
 {
 	LIGHTNING=0,
 	FIRE_BALL=1,
+	EXPLOSION = 2,
+	EXPLOSION_BALL=3,
+	FIRE_SMOKE=4,
+	SHADOW=5,
+	ENERGY=6,
+	CLAW=7,
 
 	//Add the new types in the line above
 	COUNT,

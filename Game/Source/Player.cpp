@@ -472,14 +472,26 @@ bool Player::Update(float dt)
 	{
 		iPoint* pos= new iPoint;
 		app->input->GetMousePosition(pos->x, pos->y);
-		app->particleManager->AddParticle(pos,TypeParticle::LIGHTNING);
+		app->particleManager->AddParticle(pos,TypeParticle::FIRE_SMOKE);
 	
 	}
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		iPoint* pos = new iPoint;
 		app->input->GetMousePosition(pos->x, pos->y);
-		app->particleManager->AddParticle(pos, TypeParticle::FIRE_BALL);
+		app->particleManager->AddParticle(pos, TypeParticle::ENERGY);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		iPoint* pos = new iPoint;
+		app->input->GetMousePosition(pos->x, pos->y);
+		app->particleManager->AddParticle(pos, TypeParticle::CLAW);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		iPoint* pos = new iPoint;
+		app->input->GetMousePosition(pos->x, pos->y);
+		app->particleManager->AddParticle(pos, TypeParticle::SHADOW);
 	}
 
 	if (!app->sceneManager->GetIsPause())
