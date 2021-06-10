@@ -82,6 +82,7 @@ void GuiMenuMagic::LoadMagics(const char* file)
 				magic->mana = n.attribute("mana").as_int();
 				magic->description = n.attribute("description").as_string("");
 				magic->element = n.attribute("element").as_int();
+				magic->particle = n.attribute("particle").as_int();
 				magics.Add(magic);
 			}
 		}

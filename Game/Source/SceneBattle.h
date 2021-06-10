@@ -86,6 +86,7 @@ public:
 	void ContinueGame();
 
 private:
+	void ParticleEffect(iPoint* pos, int particle);
 
 	void HealArea();
 	void AttackArea();
@@ -136,17 +137,25 @@ private:
 	uint fxFireball = -1;
 	uint fxShadow = -1;
 	uint fxHealing = -1;
+	uint fxLighting = -1;
+	uint fxSlash = -1;
+	uint fxExplosion = -1;
 	uint fxBanditDies = -1;
 	uint fxFighterDies = -1;
 	uint fxSaplingDies = -1;
 	uint fxAllyDies = -1;
 	uint fxCancelButton = -1;
+	
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
 	
 	Magic* magicInUse = nullptr;
 	bool activeMenuMagic =false;
+
+	// 10 / 17 ___ 27 / 16
+	iPoint centralPosEnemy = app->map->MapToWorld(iPoint(8, 13));
+	iPoint centralPosParty = app->map->MapToWorld(iPoint(27, 15));
 
 	int itemsId[2] = {0,0};
 	int itemMulti = 1;

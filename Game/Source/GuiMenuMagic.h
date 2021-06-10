@@ -14,6 +14,7 @@ struct Magic
 	int mana = 0;
 	SString description = "";
 	int element = 0;
+	int particle = 0;
 };
 
 class GuiMenuMagic

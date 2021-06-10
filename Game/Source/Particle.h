@@ -27,7 +27,7 @@ enum class TypeParticle
 };
 struct ParticleToDraw
 {
-	iPoint* pos = nullptr;
+	iPoint pos = iPoint(0,0);
 	Animation* animation = nullptr;
 	TypeParticle type;
 	bool pendingToDelete = false;

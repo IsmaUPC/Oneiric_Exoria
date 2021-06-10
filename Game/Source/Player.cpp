@@ -468,7 +468,7 @@ bool Player::Update(float dt)
 		playerData.state = IDLE;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	/*if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		iPoint* pos= new iPoint;
 		app->input->GetMousePosition(pos->x, pos->y);
@@ -492,7 +492,7 @@ bool Player::Update(float dt)
 		iPoint* pos = new iPoint;
 		app->input->GetMousePosition(pos->x, pos->y);
 		app->particleManager->AddParticle(pos, TypeParticle::SHADOW);
-	}
+	}*/
 
 	if (!app->sceneManager->GetIsPause())
 	{

@@ -162,7 +162,7 @@ void ParticleManager::SpeedAnimationCheck(float dt)
 //	return true;
 //}
 
-bool ParticleManager::AddParticle(iPoint* pos, TypeParticle type)
+bool ParticleManager::AddParticle(iPoint pos, TypeParticle type)
 {
 	ParticleToDraw* pd= new ParticleToDraw();
 	pd->pos = pos;
@@ -235,7 +235,7 @@ bool ParticleManager::PostUpdate()
 				p->data->animation->Reset();
 			}
 			else 
-				app->render->DrawTexture(texParticles,p->data->pos->x, p->data->pos->y, &rect, 2);
+				app->render->DrawTexture(texParticles,p->data->pos.x, p->data->pos.y, &rect, 2);
 		}
 	return true;
 }
