@@ -44,7 +44,7 @@ bool SceneDungeon::Start()
 	//app->SaveConfigRequested();
 	
 	//app->audio->PlayMusic("Audio/Music/level_music.ogg");
-	app->player->positionInitial = new iPoint(200, 500);
+	app->player->positionInitial = new iPoint(128, 1800);
 
 	// TODO dungoen
 	tmxDungeon = app->sceneManager->tmxDungeonsList.At(app->sceneManager->levelDungeon)->data.GetString();
