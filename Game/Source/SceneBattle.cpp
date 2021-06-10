@@ -55,6 +55,9 @@ bool SceneBattle::Start()
 	fxFireball = app->audio->LoadFx("Audio/Fx/spell_fireball.wav");
 	fxShadow = app->audio->LoadFx("Audio/Fx/spell_shadow.wav");
 	fxHealing = app->audio->LoadFx("Audio/Fx/spell_healing.wav");
+	fxLighting = app->audio->LoadFx("Audio/Fx/lighting.wav");
+	fxSlash = app->audio->LoadFx("Audio/Fx/slash.wav");
+	fxExplosion = app->audio->LoadFx("Audio/Fx/explosion.wav");
 	fxBanditDies = app->audio->LoadFx("Audio/Fx/bandit_slain.wav");
 	fxFighterDies = app->audio->LoadFx("Audio/Fx/fighter_slain.wav");
 	fxSaplingDies = app->audio->LoadFx("Audio/Fx/sapling_slain.wav");
@@ -1172,9 +1175,17 @@ void SceneBattle::BattleSystem()
 				case 3:
 					app->audio->PlayFx(fxShadow);
 					break;
+				case 4:
+					app->audio->PlayFx(fxLighting);
+					break;
+				case 5:
+					app->audio->PlayFx(fxSlash);
+					break;
+				case 6:
+					app->audio->PlayFx(fxExplosion);
+					break;
 				default:
 					break;
-
 				}
 
 				activeMenuMagic = false;

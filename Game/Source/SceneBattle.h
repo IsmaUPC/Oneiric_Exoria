@@ -137,11 +137,15 @@ private:
 	uint fxFireball = -1;
 	uint fxShadow = -1;
 	uint fxHealing = -1;
+	uint fxLighting = -1;
+	uint fxSlash = -1;
+	uint fxExplosion = -1;
 	uint fxBanditDies = -1;
 	uint fxFighterDies = -1;
 	uint fxSaplingDies = -1;
 	uint fxAllyDies = -1;
 	uint fxCancelButton = -1;
+	
 
 	GuiMenuMagic* menuMagic = nullptr;
 	pugi::xml_document saveFile;
