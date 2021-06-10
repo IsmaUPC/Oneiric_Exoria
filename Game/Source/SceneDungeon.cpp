@@ -70,19 +70,19 @@ bool SceneDungeon::Start()
 	}
 	if (strcmp(tmxDungeon, "dungeon_3.tmx") == 0)
 	{
-		app->entityManager->AddEntity(BANDIT, 4, 44, 5, 2);
+		app->entityManager->AddEntity(BANDIT, 2, 44, 5, 2);
 		app->entityManager->AddEntity(BANDIT, 36, 28, 8, 4);
 		app->entityManager->AddEntity(BANDIT, 14, 28, 8, 4);
 		app->entityManager->AddEntity(BANDIT, 34, 59, 8, 3);
-		app->entityManager->AddEntity(BANDIT, 27, 48, 8, 2);
-		app->entityManager->AddEntity(SAPLING, 30, 12, 6, 2, false);
+		app->entityManager->AddEntity(BANDIT, 33, 12, 8, 2); 
+		app->entityManager->AddEntity(BANDIT, 46, 32, 8, 2); 
+		app->entityManager->AddEntity(SAPLING, 30, 34, 6, 2, false);
 		app->entityManager->AddEntity(SAPLING, 24, 24, 6, 3, false);
-		app->entityManager->AddEntity(SAPLING, 60, 34, 6, 2, false);
-		app->entityManager->AddEntity(SAPLING, 46, 38, 6, 2, false);
+		app->entityManager->AddEntity(SAPLING, 60, 33, 6, 2, false);
 		app->entityManager->AddEntity(FIGHTER, 54, 49, 7, 2);
 		app->entityManager->AddEntity(FIGHTER, 56, 23, 7, 3);
 		app->entityManager->AddEntity(FIGHTER, 50, 73, 7, 2);
-		app->entityManager->AddEntity(FIGHTER, 36, 6, 7, 4);
+		app->entityManager->AddEntity(FIGHTER, 50, 6, 7, 4);
 
 
 	}
