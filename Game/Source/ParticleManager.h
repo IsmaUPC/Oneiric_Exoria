@@ -47,7 +47,7 @@ public:
 
 	void SpeedAnimationCheck(float dt);
 	// bool AddParticleType(iPoint* pos, iPoint* vMax, int lifetime, TypeParticle type, bool isActive = true);
-	bool AddParticle(iPoint* pos, TypeParticle type);
+	bool AddParticle(iPoint pos, TypeParticle type);
 	bool LoadParticleProperties();
 	void AssignPartAnim(Particle* p);
 

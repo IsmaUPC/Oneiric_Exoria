@@ -10,6 +10,8 @@
 
 #include "SceneManager.h"
 #include "GuiManager.h"
+#include "ParticleManager.h"
+#include "Particle.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -961,6 +963,53 @@ void SceneBattle::UpdateAnimationEnemies()
 	}
 }
 
+void SceneBattle::ParticleEffect(iPoint* pos, int particle)
+{	
+
+	iPoint ret = *pos;
+	switch (particle)
+	{
+	case (int)TypeParticle::LIGHTNING:
+		ret.x += 13;
+		ret.y -= 8;
+		break;
+	case (int)TypeParticle::FIRE_BALL:
+		ret.x -= 32;
+		ret.y -= 64;
+		break;
+	case (int)TypeParticle::EXPLOSION:
+		ret.x -= 40;
+		ret.y -= 40;
+		break;
+	case (int)TypeParticle::EXPLOSION_BALL:
+
+		break;
+	case (int)TypeParticle::FIRE_SMOKE:
+		ret.x += 20;
+		break;
+	case (int)TypeParticle::SHADOW:
+		//ret.x -= 64;
+		ret.y -= 96;
+		break;
+	case (int)TypeParticle::ENERGY:
+		ret.x -= 70;
+		ret.y -= 64;
+		break;
+	case (int)TypeParticle::CLAW:
+		ret.x -= 25;
+		ret.y -= 64;
+		break;
+	case (int)TypeParticle::COUNT:
+
+		break;
+	case (int)TypeParticle::UNKNOWN:
+
+		break;
+	}
+	
+	app->particleManager->AddParticle(ret, (TypeParticle)magicInUse->particle);
+}
+
 void SceneBattle::BattleSystem()
 {
 	switch (faseAction)
@@ -1083,31 +1132,35 @@ void SceneBattle::BattleSystem()
 				app->audio->PlayFx(fxAttack);
 			}
 			else
-			{
+			{ 
+				iPoint pos;
 				switch (magicInUse->type)
 				{
 				case 0:
 					newHealth = enemies.At(enemySelected)->data->stats.health - magicInUse->damage;
+					ParticleEffect(&enemies.At(enemySelected)->data->entityData.positionInitial, magicInUse->particle);
 					break;
 				case 1:
 					newHealth = partners.At(enemySelected)->data->stats.health + magicInUse->damage;
+					ParticleEffect(&partners.At(enemySelected)->data->entityData.positionInitial, magicInUse->particle);
 					break;
 				case 2:
-					for (int i = 0; i < partners.Count(); i++)
-					{
+					for (int i = 0; i < partners.Count(); i++) {
 						newHealthTeam[i] = partners.At(i)->data->stats.health + magicInUse->damage;
 					}
+					ParticleEffect(&centralPosParty, magicInUse->particle);
 					break;
 				case 3:
 					for (int i = 0; i < enemies.Count(); i++)
 					{
 						newHealthTeam[i] = enemies.At(i)->data->stats.health - magicInUse->damage;
 					}
+					ParticleEffect(&centralPosEnemy, magicInUse->particle);
 					break;
 				default:
 					break;
 				}
-
+				// Aqui los FX
 				switch (magicInUse->element)
 				{
 				case 1:

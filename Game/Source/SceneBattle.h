@@ -86,6 +86,7 @@ public:
 	void ContinueGame();
 
 private:
+	void ParticleEffect(iPoint* pos, int particle);
 
 	void HealArea();
 	void AttackArea();
@@ -147,6 +148,10 @@ private:
 	
 	Magic* magicInUse = nullptr;
 	bool activeMenuMagic =false;
+
+	// 10 / 17 ___ 27 / 16
+	iPoint centralPosEnemy = app->map->MapToWorld(iPoint(8, 13));
+	iPoint centralPosParty = app->map->MapToWorld(iPoint(27, 15));
 
 	int itemsId[2] = {0,0};
 	int itemMulti = 1;
