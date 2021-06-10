@@ -1978,6 +1978,9 @@ bool SceneBattle::CleanUp()
 	app->audio->Unload1Fx(fxSaplingDies);
 	app->audio->Unload1Fx(fxAllyDies);
 	app->audio->Unload1Fx(fxCancelButton);
+	app->audio->Unload1Fx(fxLighting);
+	app->audio->Unload1Fx(fxExplosion);
+	app->audio->Unload1Fx(fxSlash);
 
 	spritesBarTurn.Clear();
 	animationsPlayer.Clear();

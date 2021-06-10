@@ -154,9 +154,9 @@ void EntityManager::CheckSpawnEntities()
 		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
 			a = spawnEntity->data->entityData.position;
-			if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD
-				|| (spawnEntity->data->entityData.type == TypeEntity::BOX_ENTITY || spawnEntity->data->entityData.type == TypeEntity::HOLE_ENTITY))
+			//if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+			//	&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD
+			//	|| (spawnEntity->data->entityData.type == TypeEntity::BOX_ENTITY || spawnEntity->data->entityData.type == TypeEntity::HOLE_ENTITY))
 				SpawnEntity(spawnEntity->data);
 		}
 	}
@@ -170,10 +170,10 @@ void EntityManager::CheckDespawnEntities()
 		for (ListItem<Entity*>* despawnEntity = entities.start; despawnEntity; despawnEntity = despawnEntity->next)
 		{
 			a = despawnEntity->data->entityData.position;
-			if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
-				&&  (despawnEntity->data->entityData.type != TypeEntity::BOX_ENTITY && despawnEntity->data->entityData.type != TypeEntity::HOLE_ENTITY))
-				DespawnEntity(despawnEntity->data);
+			//if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+			//	&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
+			//	&&  (despawnEntity->data->entityData.type != TypeEntity::BOX_ENTITY && despawnEntity->data->entityData.type != TypeEntity::HOLE_ENTITY))
+			//	DespawnEntity(despawnEntity->data);
 
 			if (despawnEntity->data->entityData.state == DEAD)
 			{

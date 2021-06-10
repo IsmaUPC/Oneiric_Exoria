@@ -40,6 +40,7 @@ bool SceneDungeon::Awake()
 // Called before the first frame
 bool SceneDungeon::Start()
 {
+
 	//app->SaveConfigRequested();
 	
 	//app->audio->PlayMusic("Audio/Music/level_music.ogg");
@@ -59,30 +60,33 @@ bool SceneDungeon::Start()
 	app->player->changeScene = false;
 	LoadDungeon(tmxDungeon);
 
-	app->map->LoadObstaclesDungeon();
 
-	if (strcmp(tmxDungeon, "dungeon_2.tmx") == 0)
+	if (app->sceneManager->GetCurrentScene()->type != SceneType::BATTLE)
 	{
-		app->entityManager->AddEntity(BANDIT, 1, 17, 5, 2);
-		app->entityManager->AddEntity(SAPLING, 15, 12, 6, 1, false);
-		app->entityManager->AddEntity(FIGHTER, 2, 4, 7, 2);
-		app->entityManager->AddEntity(BANDIT, 5, 12, 8, 4);
-	}
-	if (strcmp(tmxDungeon, "dungeon_3.tmx") == 0)
-	{
-		app->entityManager->AddEntity(BANDIT, 5, 48, 9, 2);
-		app->entityManager->AddEntity(BANDIT, 36, 28, 10, 4);
-		app->entityManager->AddEntity(BANDIT, 14, 28, 11, 4);
-		app->entityManager->AddEntity(BANDIT, 34, 59, 12, 3);
-		app->entityManager->AddEntity(BANDIT, 33, 12, 13, 2); 
-		app->entityManager->AddEntity(BANDIT, 40, 38, 14, 2); 
-		app->entityManager->AddEntity(SAPLING, 29, 34, 15, 2, false);
-		app->entityManager->AddEntity(SAPLING, 24, 24, 16, 3, false);
-		app->entityManager->AddEntity(SAPLING, 60, 33, 17, 2, false);
-		app->entityManager->AddEntity(FIGHTER, 51, 49, 18, 2);
-		app->entityManager->AddEntity(FIGHTER, 56, 23, 19, 3);
-		app->entityManager->AddEntity(FIGHTER, 20, 7, 20, 2);
-		app->entityManager->AddEntity(FIGHTER, 50, 6, 21, 4);
+		app->map->LoadObstaclesDungeon();
+		if (strcmp(tmxDungeon, "dungeon_2.tmx") == 0)
+		{
+			app->entityManager->AddEntity(BANDIT, 1, 17, 5, 2);
+			app->entityManager->AddEntity(SAPLING, 15, 12, 6, 1, false);
+			app->entityManager->AddEntity(FIGHTER, 2, 4, 7, 2);
+			app->entityManager->AddEntity(BANDIT, 5, 12, 8, 4);
+		}
+		if (strcmp(tmxDungeon, "dungeon_3.tmx") == 0)
+		{
+			app->entityManager->AddEntity(BANDIT, 5, 48, 9, 2);
+			app->entityManager->AddEntity(BANDIT, 36, 28, 10, 4);
+			app->entityManager->AddEntity(BANDIT, 14, 28, 11, 4);
+			app->entityManager->AddEntity(BANDIT, 34, 59, 12, 3);
+			app->entityManager->AddEntity(BANDIT, 33, 12, 13, 2);
+			app->entityManager->AddEntity(BANDIT, 40, 38, 14, 2);
+			app->entityManager->AddEntity(SAPLING, 29, 34, 15, 2, false);
+			app->entityManager->AddEntity(SAPLING, 24, 24, 16, 3, false);
+			app->entityManager->AddEntity(SAPLING, 60, 33, 17, 2, false);
+			app->entityManager->AddEntity(FIGHTER, 51, 49, 18, 2);
+			app->entityManager->AddEntity(FIGHTER, 56, 23, 19, 3);
+			app->entityManager->AddEntity(FIGHTER, 20, 7, 20, 2);
+			app->entityManager->AddEntity(FIGHTER, 50, 6, 21, 4);
+		}
 	}
 
 	app->map->active = true;
