@@ -79,12 +79,10 @@ bool SceneDungeon::Start()
 		app->entityManager->AddEntity(SAPLING, 29, 34, 15, 2, false);
 		app->entityManager->AddEntity(SAPLING, 24, 24, 16, 3, false);
 		app->entityManager->AddEntity(SAPLING, 60, 33, 17, 2, false);
-		app->entityManager->AddEntity(FIGHTER, 54, 49, 18, 2);
+		app->entityManager->AddEntity(FIGHTER, 51, 49, 18, 2);
 		app->entityManager->AddEntity(FIGHTER, 56, 23, 19, 3);
-		app->entityManager->AddEntity(FIGHTER, 50, 73, 20, 2);
+		app->entityManager->AddEntity(FIGHTER, 20, 7, 20, 2);
 		app->entityManager->AddEntity(FIGHTER, 50, 6, 21, 4);
-
-
 	}
 
 	app->map->active = true;

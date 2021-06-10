@@ -169,16 +169,16 @@ void Enemy::MoveEnemy()
 	}
 	else
 	{
-		if (entityData.id == 1 || entityData.id == 5 || entityData.id == 7 || entityData.id == 8)
+		if (entityData.id == 1 || entityData.id == 5 || entityData.id >= 7)
 		{
 			int numTiles = 0;
-			if (entityData.id == 1)
+			if (entityData.id == 1 || (entityData.id >=9 && entityData.id <= 11))
 				numTiles = 5;
-			else if (entityData.id == 5)
+			else if (entityData.id == 5 || (entityData.id >= 18 && entityData.id <= 20))
 				numTiles = 6;
-			else if (entityData.id == 7)
+			else if (entityData.id == 7 || (entityData.id >= 12 && entityData.id <= 14))
 				numTiles = 7;
-			else if (entityData.id == 8)
+			else if (entityData.id == 8 || entityData.id == 21)
 				numTiles = 3;
 
 			if (enemyCenter.x < destination.x)
@@ -211,7 +211,7 @@ bool Enemy::PreUpdate()
 
 bool Enemy::Update(float dt)
 {
-	if (entityData.id != 0)
+	if (entityData.id != 0 && app->sceneManager->GetCurrentScene()->type != SceneType::BATTLE)
 	{
 		entityData.velocity = floor(1000 * dt) / 16;
 

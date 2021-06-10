@@ -41,6 +41,7 @@ bool SceneBattle::Start()
 	app->render->camera.x = app->render->camera.y = 0;
 
 	app->sceneManager->SetEnemeyDetected(false);
+
 	texPlayers = app->sceneManager->GetPlayerTexture();
 	texEnemies = app->tex->Load("Textures/Enemies/enemies_battle.png");
 	enemySelect = app->tex->Load("Textures/GUI/enemy_selector.png");
@@ -185,6 +186,9 @@ void SceneBattle::AddEntities()
 	switch (id)
 	{
 	case 1:
+	case 9:
+	case 13:
+	case 18:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -200,6 +204,8 @@ void SceneBattle::AddEntities()
 		break;
 
 	case 2:
+	case 14:
+	case 19:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -213,6 +219,7 @@ void SceneBattle::AddEntities()
 		break;
 
 	case 3:
+	case 20:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -223,6 +230,8 @@ void SceneBattle::AddEntities()
 		app->entityManager->AddEntity(FIGHTER, 10, 15, 0, randomLvl);
 		break;
 	case 4:
+	case 11:
+	case 17:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -238,6 +247,8 @@ void SceneBattle::AddEntities()
 		break;
 
 	case 5:
+	case 12:
+	case 16:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -252,6 +263,7 @@ void SceneBattle::AddEntities()
 		app->entityManager->AddEntity(FIGHTER, 7, 17, 0, randomLvl);
 		break;
 	case 6:
+	case 15:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -262,6 +274,7 @@ void SceneBattle::AddEntities()
 		app->entityManager->AddEntity(SAPLING, 10, 15, 0, randomLvl);
 		break;
 	case 7:
+	case 21:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
@@ -274,12 +287,13 @@ void SceneBattle::AddEntities()
 		app->entityManager->AddEntity(FIGHTER, 13, 17, 0, randomLvl);
 		break;
 	case 8:
+	case 10:
 		// Load textures
 		img = app->tex->Load("Textures/Backgrounds/background_1.png");
 
 		// Add Enemies
 		while (randomLvl < 0) randomLvl = level + (rand() % 3);
-		app->entityManager->AddEntity(BANDIT, 10, 19, 0, randomLvl);
+		app->entityManager->AddEntity(BANDIT, 13, 17, 0, randomLvl);
 	default:
 		break;
 	}
