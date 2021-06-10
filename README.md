@@ -33,22 +33,36 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 
 ## Key Bindings
 
-- MOVE:    A-W-S-D | PAD
+- MOVE:    A-W-S-D | L-STICK
 - INTERACT: E | CROSS
-- TRAVEL BETWEEN BUTTONS: ARROWS & MOUSE | PAD
-- PRESS BUTTON: ENTER | CROSS
+- TRAVEL BETWEEN BUTTONS: ARROWS & MOUSE | L-STICK - D-PAD
+- PRESS BUTTON: ENTER | A
+- PAUSE GAME / OPTIONS: ESC | START
+- BACK: ESC | B
+
+
+## Inventory Key Bindings
+
+- OPEN INVENTORY: I | BACK
+- PASS PAGE: A-D | LB-RB
+- CHANGE PLAYER: W-S | D-PAD (Only up-down)
+- SELECT MAGIC: D-PAD (Only left-right)
+- BACK: ESC | B
 
 ## Combat Key Bindings
 
-- SELECT OBJECTIVE: RIGHT CLICK - E | CROSS
-- CANCEL OBJECTIVE: LEFT CLICK - Q   | CIRCLE 
-- TRAVEL BETWEEN OPTIONS: A-D | PAD
+- MENU
+- CONFIRM OBJECTIVE: RIGHT CLICK - E | A
+- CANCEL OBJECTIVE: LEFT CLICK - Q   | B
+- TRAVEL BETWEEN OPTIONS: A-W-S-D | D-PAD
+- TRAVEL BETWEEN ENEMIES: A-D | D-PAD (Only left-right)
 
 ## Debug Key Bindings
 
 - F1 TRAVEL TO FLOOR 1
 - F2 TRAVEL TO FLOOR 2
 - F3 TRAVEL TO FLOOR 3
+- 8 TRAVEL TO DUNGEON
 - F4 SHOW FPS
 - F5 SAVE GAME
 - F6 LOAD GAME
@@ -59,12 +73,16 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 
 ## Features
 
-
 - Screen Logo with custom logo, audio and FX.
-- Title Screen with Save/Load to/from external file
+- Title Screen with Save/Load to/from external file.
+- Custom Installer.
+- Quest Feedback.
+- 5 Missions.
+- Particle system.
 - Fx and Music track.
 - UI with custom menu, buttons and Fx feedback.
 - Custom school map with 3 different floors to explore.
+- Dungeons with 3 puzzles.
 - Up to 4 playable characters in-game (and combat!).
 - 6 NPCs to interact with!
 - 13 different Dialogs.
@@ -78,13 +96,19 @@ Oneiric Exoria is a 2d game based on an RPG with turn-based combat. The artistic
 - Fx according to all the actions.
 - Screen and Fx upon winning and losing.
 - 100% combat with mouse, keyboard or pad independently.
-
+- Finite game with ending.
+- Added ending screen.
+- Combat animations.
+- Inventory System to show player stats, items & magic.
+- Vsync.
+- Assets from Zip
 
 ## Links
 
 * **Repository** [Github](https://github.com/IsmaUPC/Oneiric_Exoria)
 * **Tutor:** [Ramon Santamaria](https://github.com/raysan5)
 * **University:** [CITM UPC](https://www.citm.upc.edu/)
+* **WebPage** [Oneiric_Exoria](https://ismaupc.github.io/Oneiric_Exoria/)
 
 ## License
 ~~~
