@@ -755,7 +755,7 @@ void SceneBattle::DrawSceneWin()
 
 void SceneBattle::GenerateItems()
 {
-	int fnumb = rand() % 3;
+	int fnumb = rand() % 3 +1;
 	for (int i = 0; i < fnumb; i++)
 	{
 		int numb = rand() % 5 + 1;

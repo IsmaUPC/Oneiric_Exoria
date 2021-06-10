@@ -251,7 +251,7 @@ bool SceneWin::OnGuiMouseClickEvent(GuiControl* control)
 		if (control->id == 2)
 		{
 			TransitionToScene(SceneType::LEVEL1), app->sceneManager->lastLevel = 1;
-			isContinue = true;
+			//isContinue = true;
 			app->player->loadStats = true;
 		}
 		else if (control->id == 3)
