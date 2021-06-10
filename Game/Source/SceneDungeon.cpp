@@ -231,10 +231,10 @@ bool SceneDungeon::CleanUp()
 	app->audio->Unload1Fx(fxEnding);
 
 	Mix_HaltMusic();
-	app->map->CleanUp();
-	app->player->CleanUp();
 	app->entityManager->ClearList(ret);
 	app->sceneManager->SetPause(false);
+	app->map->CleanUp();
+	app->player->CleanUp();
 
 	RELEASE(btn1);
 	RELEASE(btn2);

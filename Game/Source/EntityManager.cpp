@@ -117,7 +117,8 @@ bool EntityManager::CleanUp()
 	score = 0;
 	timeSave = 0;
 	active = false;
-
+	boxes.Clear();
+	holes.Clear();
 	return ret;
 }
 

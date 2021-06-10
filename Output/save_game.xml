@@ -9,13 +9,102 @@
 		<camera x="315" y="-90" />
 	</renderer>
 	<player>
-		<data x="672" y="200" direction="2" level="1" exp="6" health="8" mana="11" attack="13" defend="0" speed="10" />
+		<data x="458" y="847" direction="3" level="1" exp="0" health="8" mana="11" attack="13" defend="0" speed="10" />
 		<coins count="0" />
-		<path />
+		<path>
+			<breadcrumb x="271" y="554" />
+			<breadcrumb x="273" y="556" />
+			<breadcrumb x="275" y="558" />
+			<breadcrumb x="277" y="560" />
+			<breadcrumb x="279" y="562" />
+			<breadcrumb x="281" y="564" />
+			<breadcrumb x="283" y="566" />
+			<breadcrumb x="286" y="568" />
+			<breadcrumb x="288" y="571" />
+			<breadcrumb x="290" y="573" />
+			<breadcrumb x="292" y="575" />
+			<breadcrumb x="294" y="577" />
+			<breadcrumb x="296" y="579" />
+			<breadcrumb x="298" y="581" />
+			<breadcrumb x="301" y="583" />
+			<breadcrumb x="303" y="586" />
+			<breadcrumb x="305" y="588" />
+			<breadcrumb x="308" y="590" />
+			<breadcrumb x="310" y="593" />
+			<breadcrumb x="312" y="595" />
+			<breadcrumb x="314" y="597" />
+			<breadcrumb x="316" y="599" />
+			<breadcrumb x="318" y="601" />
+			<breadcrumb x="320" y="603" />
+			<breadcrumb x="322" y="605" />
+			<breadcrumb x="324" y="607" />
+			<breadcrumb x="326" y="609" />
+			<breadcrumb x="328" y="611" />
+			<breadcrumb x="330" y="613" />
+			<breadcrumb x="332" y="615" />
+			<breadcrumb x="335" y="617" />
+			<breadcrumb x="337" y="620" />
+			<breadcrumb x="339" y="622" />
+			<breadcrumb x="341" y="624" />
+			<breadcrumb x="343" y="626" />
+			<breadcrumb x="345" y="628" />
+			<breadcrumb x="348" y="630" />
+			<breadcrumb x="351" y="633" />
+			<breadcrumb x="354" y="636" />
+			<breadcrumb x="356" y="639" />
+			<breadcrumb x="358" y="641" />
+			<breadcrumb x="360" y="643" />
+			<breadcrumb x="362" y="645" />
+			<breadcrumb x="364" y="647" />
+			<breadcrumb x="366" y="649" />
+			<breadcrumb x="368" y="651" />
+			<breadcrumb x="370" y="653" />
+			<breadcrumb x="372" y="655" />
+			<breadcrumb x="374" y="657" />
+			<breadcrumb x="376" y="659" />
+			<breadcrumb x="378" y="661" />
+			<breadcrumb x="380" y="663" />
+			<breadcrumb x="382" y="665" />
+			<breadcrumb x="384" y="667" />
+			<breadcrumb x="386" y="669" />
+			<breadcrumb x="389" y="671" />
+			<breadcrumb x="391" y="674" />
+			<breadcrumb x="393" y="676" />
+			<breadcrumb x="395" y="678" />
+			<breadcrumb x="397" y="680" />
+			<breadcrumb x="399" y="682" />
+			<breadcrumb x="402" y="684" />
+			<breadcrumb x="404" y="687" />
+			<breadcrumb x="406" y="689" />
+			<breadcrumb x="408" y="691" />
+			<breadcrumb x="410" y="693" />
+			<breadcrumb x="412" y="695" />
+			<breadcrumb x="414" y="697" />
+			<breadcrumb x="416" y="699" />
+			<breadcrumb x="418" y="701" />
+			<breadcrumb x="420" y="703" />
+			<breadcrumb x="422" y="705" />
+			<breadcrumb x="424" y="707" />
+			<breadcrumb x="426" y="709" />
+			<breadcrumb x="428" y="711" />
+			<breadcrumb x="430" y="713" />
+			<breadcrumb x="432" y="715" />
+			<breadcrumb x="434" y="717" />
+			<breadcrumb x="436" y="719" />
+			<breadcrumb x="438" y="721" />
+			<breadcrumb x="440" y="723" />
+			<breadcrumb x="443" y="725" />
+			<breadcrumb x="445" y="728" />
+			<breadcrumb x="447" y="730" />
+			<breadcrumb x="449" y="732" />
+			<breadcrumb x="452" y="734" />
+			<breadcrumb x="455" y="737" />
+			<breadcrumb x="458" y="740" />
+		</path>
 		<partners>
-			<partner x="672" y="240" breadcrumb="0" direction="2" level="1" exp="6" health="0" mana="10" attack="8" defense="7" speed="11" />
-			<partner x="672" y="280" breadcrumb="0" direction="2" level="2" exp="1" health="10" mana="12" attack="9" defense="9" speed="10" />
-			<partner x="672" y="320" breadcrumb="0" direction="2" level="2" exp="1" health="13" mana="8" attack="8" defense="13" speed="8" />
+			<partner x="272" y="555" breadcrumb="1" direction="2" level="1" exp="0" health="14" mana="10" attack="8" defense="7" speed="11" />
+			<partner x="272" y="555" breadcrumb="1" direction="2" level="1" exp="0" health="10" mana="12" attack="9" defense="9" speed="10" />
+			<partner x="270" y="553" breadcrumb="0" direction="2" level="1" exp="0" health="13" mana="8" attack="8" defense="13" speed="8" />
 		</partners>
 	</player>
 	<scene_manager>
@@ -26,14 +115,33 @@
 		<score value="0" />
 		<time value="130" />
 		<entities>
-			<entity type="14" x="31" y="23" id="1" level="0" state="0" move="false" />
-			<entity type="14" x="21" y="4" id="2" level="0" state="0" move="false" />
-			<entity type="14" x="16" y="20" id="3" level="0" state="0" move="false" />
-			<entity type="14" x="20" y="11" id="7" level="0" state="0" move="false" />
-			<entity type="14" x="31" y="29" id="8" level="0" state="0" move="false" />
-			<entity type="14" x="10" y="2" id="9" level="0" state="0" move="false" />
-			<entity type="14" x="31" y="2" id="9" level="0" state="0" move="false" />
-			<entity type="14" x="28" y="5" id="15" level="0" state="0" move="false" />
+			<entity type="20" x="1664" y="800" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="1696" y="800" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="896" y="928" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="928" y="928" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="1632" y="928" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="1664" y="928" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="352" y="960" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="384" y="960" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="512" y="1088" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="544" y="1088" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="992" y="1088" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="1024" y="1088" id="0" level="0" state="0" move="true" />
+			<entity type="19" x="1664" y="1120" id="0" level="0" state="0" move="true" />
+			<entity type="20" x="1664" y="1152" id="0" level="0" state="0" move="true" />
+			<entity type="1" x="5" y="48" id="9" level="2" state="0" move="true" />
+			<entity type="1" x="36" y="28" id="10" level="4" state="0" move="true" />
+			<entity type="1" x="14" y="28" id="11" level="4" state="6" move="true" />
+			<entity type="1" x="34" y="59" id="12" level="3" state="0" move="true" />
+			<entity type="1" x="33" y="12" id="13" level="2" state="0" move="true" />
+			<entity type="1" x="40" y="38" id="14" level="2" state="0" move="true" />
+			<entity type="3" x="29" y="34" id="15" level="2" state="0" move="false" />
+			<entity type="3" x="24" y="24" id="16" level="3" state="0" move="false" />
+			<entity type="3" x="60" y="33" id="17" level="2" state="0" move="false" />
+			<entity type="2" x="51" y="49" id="18" level="2" state="0" move="true" />
+			<entity type="2" x="56" y="23" id="19" level="3" state="0" move="true" />
+			<entity type="2" x="20" y="7" id="20" level="2" state="0" move="true" />
+			<entity type="2" x="50" y="6" id="21" level="4" state="0" move="true" />
 		</entities>
 	</entity_manager>
 	<particle_manager>
