@@ -105,6 +105,7 @@ bool EntityManager::CleanUp()
 
 	// Unload Tx
 	app->tex->UnLoad(texEnemies);
+	app->tex->UnLoad(texObstacles);
 	// Unload Fx
 	app->audio->Unload1Fx(fxCoffeButtons);
 	app->audio->Unload1Fx(fxEnemyFound);

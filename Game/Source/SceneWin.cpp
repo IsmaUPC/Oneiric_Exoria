@@ -6,6 +6,7 @@
 #include "Render.h"
 #include "SceneManager.h"
 #include "GuiManager.h"
+#include "EntityManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
@@ -211,6 +212,7 @@ void SceneWin::CloudsDraw()
 
 bool SceneWin::CleanUp()
 {
+	bool ret = true;
 	if (!active)
 		return true;
 
@@ -220,7 +222,7 @@ bool SceneWin::CleanUp()
 	app->tex->UnLoad(logo);
 	app->tex->UnLoad(cloud);
 	app->tex->UnLoad(ending);
-
+	app->entityManager->ClearList(ret);
 	for (int i = 0; i < texPartners.Count(); i++)
 	{
 		app->tex->UnLoad(texPartners.At(i)->data);

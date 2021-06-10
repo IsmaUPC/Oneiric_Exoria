@@ -242,7 +242,7 @@ bool SceneManager::PostUpdate()
 {
 	bool ret = true;
 
-	if(app->player->winGame) current->TransitionToScene(SceneType(SceneType::WIN)), app->player->winGame=false;
+	if(app->player->winGame) current->TransitionToScene(SceneType(SceneType::WIN)), app->player->winGame=false, app->player->changeScene=true;
 	else if (app->player->changeScene== true)
 		{
 
@@ -334,9 +334,10 @@ bool SceneManager::CleanUp()
 	app->tex->UnLoad(texPlayers);
 	app->audio->Unload1Fx(fxTransition);
 
+	tex = nullptr;
+
 	input = nullptr;
 	render = nullptr;
-	tex = nullptr;
 	current = nullptr;
 	next = nullptr;
 	transition = nullptr;

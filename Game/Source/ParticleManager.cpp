@@ -253,6 +253,7 @@ bool ParticleManager::CleanUp()
 
 	// Unload Animations
 	animations.Clear();
+	typeProperties.Clear();
 
 	active = false;
 
