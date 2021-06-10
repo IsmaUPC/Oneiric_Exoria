@@ -35,8 +35,8 @@ enum TypeEntity {
 	KEILER_ = 16,
 	ISRRA_ = 17,
 	BRENDA_ = 18,
-	BOX_ENTITY,
-	HOLE_ENTITY,
+	BOX_ENTITY=19,
+	HOLE_ENTITY=20,
 };
 
 

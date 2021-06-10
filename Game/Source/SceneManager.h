@@ -75,6 +75,7 @@ public:
 	void SetEnemeyDetected(bool ret) { enemyDetected = ret; }
 
 	SceneControl* GetCurrentScene() { return current; };
+	SceneControl* GetNextScene() { return next; };
 	bool GetOnTransition() { return onTransition; };
 	int GetCurrentVolume() { return currentVolume; };
 

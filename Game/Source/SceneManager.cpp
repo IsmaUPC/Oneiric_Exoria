@@ -230,6 +230,7 @@ bool SceneManager::Update(float dt)
 		if (!app->player->load) app->player->play = true;
 		current->TransitionToScene(SceneType::DUNGEON);
 		lastLevel = 8;
+		app->sceneManager->levelDungeon=2;
 		originTpNode = nullptr;
 	}
 

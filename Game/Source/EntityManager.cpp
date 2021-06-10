@@ -138,9 +138,11 @@ void EntityManager::ClearList(bool& ret)
 	partners.Clear();
 	spawnQueue.Clear();
 	RELEASE(entityHUD);
+
 	RELEASE(auxObstacle);
 	boxes.Clear();
 	holes.Clear();
+	
 }
 
 void EntityManager::CheckSpawnEntities()
@@ -153,7 +155,8 @@ void EntityManager::CheckSpawnEntities()
 		{
 			a = spawnEntity->data->entityData.position;
 			if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD)
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD
+				|| (spawnEntity->data->entityData.type == TypeEntity::BOX_ENTITY || spawnEntity->data->entityData.type == TypeEntity::HOLE_ENTITY))
 				SpawnEntity(spawnEntity->data);
 		}
 	}
@@ -168,7 +171,8 @@ void EntityManager::CheckDespawnEntities()
 		{
 			a = despawnEntity->data->entityData.position;
 			if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
-				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)))
+				&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
+				&&  (despawnEntity->data->entityData.type != TypeEntity::BOX_ENTITY && despawnEntity->data->entityData.type != TypeEntity::HOLE_ENTITY))
 				DespawnEntity(despawnEntity->data);
 
 			if (despawnEntity->data->entityData.state == DEAD)
@@ -202,6 +206,7 @@ bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int leve
 	{
 		Entity* b = new Entity;
 		iPoint positionSpawn = app->map->MapToWorld(pX, pY);
+
 		if (pType == NPC) positionSpawn.y -= 12;
 		b->entityData.type = pType;
 		b->entityData.position.x = positionSpawn.x;
@@ -309,7 +314,7 @@ void EntityManager::SpawnEntity(Entity* info)
 }
 
 void EntityManager::DespawnEntity(Entity* spawnEntity)
-{
+{ 
 	spawnQueue.Add(spawnEntity);
 	DeleteEntity(spawnEntity);
 }
@@ -373,13 +378,22 @@ bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
 	if (entitiesNode != NULL)
 	{
 		ClearList(ret);
-
+		TypeEntity typeEn;
+		iPoint pos;
 		entityManagerNode.next_sibling();
 		while (entitiesNode)
 		{
-			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(),
-				entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), entitiesNode.attribute("move").as_bool(), (State)entitiesNode.attribute("state").as_int());
-			entitiesNode = entitiesNode.next_sibling();
+			typeEn = (TypeEntity)entitiesNode.attribute("type").as_int();
+			pos = iPoint(entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int());
+			if (typeEn == TypeEntity::BOX_ENTITY || typeEn == TypeEntity::HOLE_ENTITY)
+			{
+				AddEntity(typeEn,pos);
+			}
+			else 
+			{
+				AddEntity(typeEn, pos.x, pos.y,	entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), entitiesNode.attribute("move").as_bool(), (State)entitiesNode.attribute("state").as_int());
+			}
+				entitiesNode = entitiesNode.next_sibling();
 		}
 	}
 	
@@ -403,10 +417,23 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 			positionSpawn = app->map->WorldToMap(entiti->data->entityData.positionInitial.x, entiti->data->entityData.positionInitial.y);
 			if(entiti->data->entityData.type == HUD) 
 				positionSpawn = app->map->WorldToMap(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
-			
+
 			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData.type);
-			entitiesNode.last_child().append_attribute("x").set_value(positionSpawn.x);
-			entitiesNode.last_child().append_attribute("y").set_value(positionSpawn.y);
+
+			if (entiti->data->entityData.type == TypeEntity::BOX_ENTITY || entiti->data->entityData.type == TypeEntity::HOLE_ENTITY)
+			{
+				positionSpawn = iPoint(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
+				positionSpawn = app->map->WorldToMap(positionSpawn);
+				entitiesNode.last_child().append_attribute("x").set_value(entiti->data->entityData.position.x);
+				entitiesNode.last_child().append_attribute("y").set_value(entiti->data->entityData.position.y);
+			}
+			else
+			{
+				entitiesNode.last_child().append_attribute("x").set_value(positionSpawn.x);
+				entitiesNode.last_child().append_attribute("y").set_value(positionSpawn.y);
+			}
+
+
 			entitiesNode.last_child().append_attribute("id").set_value(entiti->data->entityData.id);
 			entitiesNode.last_child().append_attribute("level").set_value(entiti->data->entityData.level);
 			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData.state);
