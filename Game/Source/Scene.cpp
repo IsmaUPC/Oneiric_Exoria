@@ -8,14 +8,16 @@
 #include "EntityManager.h"
 #include "Map.h"
 #include "SceneManager.h"
-#include "Pathfinding.h"
+#include "GuiManager.h"
+#include "DialogSystem.h"
+#include "QuestManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene()
+Scene::Scene(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("scene");
@@ -40,50 +42,73 @@ bool Scene::Start()
 	app->SaveConfigRequested();
 	app->SetLastScene((Module*)this);
 
-	victory=false;
-	app->player->win = false;
+	// Load music and Fx
+	app->audio->PlayMusic("Audio/Music/level_music.ogg");
 
-	if (app->map->Load("map_1.tmx") == true)
-	{
-		int w, h;
-		uchar* data = NULL;
+	fxList[0].fxName = app->audio->LoadFx("Audio/Fx/pc_typing.wav");
+	fxCount = 1;
 
-		if (app->map->CreateWalkabilityMap(w, h, &data)) app->pathfinding->SetMap(w, h, data);
+	victory = false;
+	app->player->changeScene = false;
 
-		RELEASE_ARRAY(data);
-	}
+	app->map->Load("school_1.tmx");
 	app->map->active = true;
 
 	// Positions Initials
-	app->entityManager->Start();
-	app->player->positionInitial = new iPoint(432,1170 );
-	app->entityManager->AddEntity(GROUND_ENEMY, 43, 27);
-	app->entityManager->AddEntity(GROUND_ENEMY, 30, 17);
-	app->entityManager->AddEntity(GROUND_ENEMY, 20, 14);	
+	app->player->positionInitial = new iPoint(672, 200);
 
 	// Active calls
 	app->player->Init();
 	app->player->Start();
 	app->audio->active = true;
 
-	// Load music
-	app->audio->PlayMusic("Assets/Audio/Music/hades_8bits.ogg");
-	img = app->tex->Load("Assets/Textures/sky.png");
-	animationFather.texture = app->tex->Load("Assets/Textures/dino_orange.png");
-	
-	animationFather.position = { 2352, 495 };
-	idleAnim->loop = true;
-	idleAnim->speed = 0.025;
+	//NPCs
+	app->entityManager->AddEntity(NPC, 31, 24, 1, 0, false);
+	if (app->questManager->QuestState(1) == COMPLETE)
+	{
+		app->entityManager->AddEntity(NPC, 21, 5, 16, 0, false);
+	}
+	else app->entityManager->AddEntity(NPC, 21, 5, 2, 0, false);
+	if (app->questManager->QuestState(3) == COMPLETE)
+	{
+		app->entityManager->AddEntity(NPC, 16, 21, 17, 0, false);
+	}
+	else app->entityManager->AddEntity(NPC, 16, 21, 3, 0, false);
 
-	for (int i = 0; i < 4; i++)
-		idleAnim->PushBack({ 117 * i,0, 117, 117 });
+	//Interactuable objects
+	app->entityManager->AddEntity(NPC, 20, 12, 7, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 30, 8, 0, false);
+	app->entityManager->AddEntity(NPC, 10, 3, 9, 0, false);
+	app->entityManager->AddEntity(NPC, 31, 3, 9, 0, false);
+	app->entityManager->AddEntity(NPC, 28, 6, 15, 0, false);
 
-	animationFather.currentAnimation = idleAnim;
+	// Position Items
+	fxList[0].position = { 31,24 };
+	fxList[0].position = app->map->MapToWorld(fxList[0].position);
 
-	SDL_QueryTexture(img, NULL,NULL,&imgW,&imgH);
+	// Items Channel
+	for (int i = 0; i < fxCount; i++)
+	{
+		fxList[i].channel = app->audio->SetChannel();
+	}
 
-	app->render->camera.y -= imgH;
+	// Set Max Distance
+	fxList[0].maxDistance = 64;
 
+	// Dialog System buttons
+	btn1 = new GuiButton(40, { -app->render->camera.x + WINDOW_W / 2 - 400, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
+	btn1->SetObserver(this);
+	app->guiManager->AddGuiButton(btn1);
+
+	btn2 = new GuiButton(41, { -app->render->camera.x + WINDOW_W / 2 - 400 + 175, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
+	btn2->SetObserver(this);
+	app->guiManager->AddGuiButton(btn2);
+
+	btn3 = new GuiButton(42, { -app->render->camera.x + WINDOW_W / 2 - 400 + 250, -app->render->camera.y + 675, 150, 50 }, "", RECTANGLE);
+	btn3->SetObserver(this);
+	app->guiManager->AddGuiButton(btn3);
+
+	//app->dialogueSystem->missClick = false;
 	return true;
 }
 
@@ -103,9 +128,14 @@ bool Scene::Update(float dt)
 {
 	bool ret = true;
 
+	//GamePad& pad = app->input->pads[0];
+	if (app->dialogueSystem->missClick && !app->input->pads[0].a) {
+		app->dialogueSystem->missClick = false;
+	}
+
 	// DEBUG KEYS
 	DebugKeys();
-	app->map->checKpointsMap.checkPointOnAnim->Update();
+	//app->map->checKpointsMap.checkPointOnAnim->Update();
 	if (app->input->GetKey(SDL_SCANCODE_M)==KEY_UP)
 	{
 		app->input->GetMousePosition(app->map->tileDestiny.x, app->map->tileDestiny.y);
@@ -117,46 +147,86 @@ bool Scene::Update(float dt)
 	vec.x = 0, vec.y = 0;
 	app->input->GetMousePosition(vec.x, vec.y);
 
-	idleAnim->speed = (dt * 100) * 0.025f;
-
-	animationFather.currentAnimation->Update();
-
-	if(app->player->win)victory = true;
+	if(app->player->changeScene)victory = true;
 
 	else if (app->player->CheckGameOver(1) && lose == false && app->player->godMode == false)
 	{
 		LOG("GAME OVER!");
 		lose = true;
 	}
+
+	UpdateDialog();
+
+	for (int i = 0; i < fxCount; i++)
+	{
+		if (app->audio->SetDistanceFx(fxList[i].channel, AngleToListener(app->player->playerData.position, fxList[i].position) + 90,
+			DistanceToListener(app->player->playerData.position, fxList[i].position), fxList[i].maxDistance))
+			app->audio->PlayFx(fxList[i].fxName, fxList[i].channel);
+		else app->audio->StopFx(fxList[i].channel);
+	}
+
 	return ret;
+}
+
+void Scene::UpdateDialog()
+{
+	if ((app->dialogueSystem->onDialog == true) && (app->dialogueSystem->actualLetter == app->dialogueSystem->totalLetters || app->dialogueSystem->dialogSpeed == 0))
+	{
+		int w, h;
+		for (int i = 0; i < app->dialogueSystem->currentNode->answersList.Count(); i++)
+		{
+			btn1->active = false;
+			btn2->active = false;
+			btn3->active = false;
+			if (i == 0)
+			{
+				btn1->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn1->text.GetString(), &w, &h);
+				btn1->ResizeButton(&w, &h);
+				btn1->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80;
+				btn1->bounds.y = -app->render->camera.y + 665;
+			}
+			if (i == 1)
+			{
+				btn2->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn2->text.GetString(), &w, &h);
+				btn2->ResizeButton(&w, &h);
+				btn2->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175;
+				btn2->bounds.y = -app->render->camera.y + 665;
+			}
+			if (i == 2)
+			{
+				btn3->text = app->dialogueSystem->currentNode->answersList.At(i)->data.c_str();
+				btn1->active = true;
+				btn2->active = true;
+				btn3->active = true;
+				TTF_SizeText(app->sceneManager->guiFont, btn3->text.GetString(), &w, &h);
+				btn3->ResizeButton(&w, &h);
+				btn3->bounds.x = (-app->render->camera.x + WINDOW_W / 2 - 300) + 80 + 175*2;
+				btn3->bounds.y = -app->render->camera.y + 665;
+			}
+		}
+	}
+
+	if (app->dialogueSystem->onDialog == false || app->sceneManager->GetIsPause())
+	{
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
+	}
+
 }
 
 // Called each loop iteration
 bool Scene::PostUpdate()
 {
-	// Draw Background
-	Parallax();
 	// Draw map
 	app->map->Draw();
 
 	bool ret = true;
-	SDL_Rect rectFather;
-	rectFather = animationFather.currentAnimation->GetCurrentFrame();
-
-	if (victory == true)
-	{
-		victory = false;
-		TransitionToScene(SceneType::WIN);
-		return true;
-	}
-	if (lose == true)
-	{
-		lose = false;
-		TransitionToScene(SceneType::LOSE);
-		return true;
-	}
-	app->render->DrawTextureFlip(animationFather.texture, animationFather.position.x, animationFather.position.y - (rectFather.h), &rectFather);
-
 
 	return ret;
 }
@@ -164,37 +234,35 @@ bool Scene::PostUpdate()
 // Called before quitting
 bool Scene::CleanUp()
 {
+	bool ret = true;
 	if (!active)
 		return true;
 
-	LOG("Freeing scene");
+	for (int i = 0; i < fxCount; i++)
+	{
+		app->audio->Unload1Fx(fxList[i].fxName);
+		app->audio->DeleteChannel(fxList[i].channel);
+	}
+
+	//////LOG("Freeing scene");
 	Mix_HaltMusic();
 	app->map->CleanUp();
-	app->tex->UnLoad(img);
-	app->tex->UnLoad(animationFather.texture);
 	app->player->CleanUp();
-	app->entityManager->CleanUp();
+	app->entityManager->ClearList(ret);
+
+	RELEASE(btn1);
+	RELEASE(btn2);
+	RELEASE(btn3);
 
 	app->sceneManager->SetPause(false);
 
 	active = false;
-	return true;
-}
-
-void Scene::Parallax()
-{
-	speedImg = -0.9f;
-	imgX = (int)(app->render->camera.x / 6) - 10;
-	imgX *= speedImg;
-
-	imgY = (int)((app->render->camera.y / 6) + 1250) * 0.2f;
-
-	app->render->DrawTexture(img, imgX, imgY);
+	return ret;
 }
 
 void Scene::DebugKeys()
 {
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
 		app->render->camera.x = 0;
 		app->player->playerData.position = *app->player->positionInitial;
@@ -222,7 +290,41 @@ void Scene::DebugKeys()
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-	return app->sceneManager->menu->Event(control);
+	bool ret = true;
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		//Option 1
+		if (control->id == 40 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 0);
+			btn1->state = GuiControlState::NORMAL;
+		}
+		//Option 2
+		else if (control->id == 41 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 1);
+			btn2->state = GuiControlState::NORMAL;
+		}
+		//Option 3
+		else if (control->id == 42 && !app->dialogueSystem->missClick)
+		{
+			app->dialogueSystem->PerformDialogue(app->dialogueSystem->id, 2);
+			btn3->state = GuiControlState::NORMAL;
+		}
+		app->dialogueSystem->missClick = true;
+		app->dialogueSystem->actualLetter = 0;
+		btn1->active = false;
+		btn2->active = false;
+		btn3->active = false;
+	}
+	default: break;
+	}
+	ret = app->guiManager->GetMenuPause()->Event(control);
+	app->guiManager->GetStatsMenu()->Event(control);
+
+	return ret;
 }
 
 bool Scene::LoadState(pugi::xml_node& data)

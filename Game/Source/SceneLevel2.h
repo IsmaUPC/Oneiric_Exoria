@@ -2,24 +2,17 @@
 #define __SCENE_LEVEL_2_H__
 
 #include "SceneControl.h"
-#include "Point.h"
 #include "Animation.h"
+#include "GuiManager.h"
 #include "PugiXml\src\pugixml.hpp"
 
 struct SDL_Texture;
-
-struct AnimationFather2
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
 
 class SceneLevel2 : public SceneControl
 {
 public:
 
-	SceneLevel2();
+	SceneLevel2(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneLevel2();
@@ -38,6 +31,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void UpdateDialog();
+
 	// Called before all Updates
 	bool PostUpdate();
 
@@ -46,7 +41,7 @@ public:
 
 	int GetNumThisScene()
 	{
-		return 0;
+		return numThisScene;
 	};
 	bool OnGuiMouseClickEvent(GuiControl* control);
 	// Load state game
@@ -56,29 +51,28 @@ public:
 
 private:
 
-	int numThisScene;
+	int numThisScene = 2;
 
-	void Parallax();
 	void DebugKeys();
 
 	bool debugCollisions = false;
-	bool victory = false;
-	bool lose = false;
-	AnimationFather2 animationFather;
-	Animation idleAnim;
-	SDL_Texture* img;
-	int moveBG0;
-	int moveBG1;
-	int moveBG2;
-	int withBG;
-	int posX0;
-	int posX1;
-	int posX2;
-	int xW;
-	int xSpeed;
+
+	int moveBG0 = 0;
+	int moveBG1 = 0;
+	int moveBG2 = 0;
+	int withBG = 0;
+	int posX0 = 0;
+	int posX1 = 0;
+	int posX2 = 0;
+	int xW = 0;
+	int xSpeed = 0;
 
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg = 0;
+
+	GuiButton* btn1 = nullptr;
+	GuiButton* btn2 = nullptr;
+	GuiButton* btn3 = nullptr;
 };
 
 #endif // __SCENELEVEL2_H__

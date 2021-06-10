@@ -3,27 +3,44 @@
 
 #include "Entity.h"
 
-struct PlayerData
+struct PlayerData : public Entity
 {
-	iPoint position;
-	State state;
-	MoveDirection direction;
-	Animation* currentAnimation;
-	float velocity ;
-	bool isJumped;
-	bool isJumpedAgain;
-	uint lives = 0;
+	iPoint position = { 0,0 };
+	iPoint centerPoint = { 0,0 };
+	State state = IDLE;
+	MoveDirection direction = WALK_UP;
+	Animation* currentAnimation = nullptr;
+	float velocity = 1;
+	int level = 1;
+	int exp = 0;
+	int health = 0;
+	int mana = 0;
 	uint respawns = 0;
-	uint coins = 0;
-	uint *stateShoot = 0;
-	iPoint* shootPosition;
-	iPoint* shootPointsCollision;
 
-	SDL_Texture* texture;
-	static const int numPoints = 6;
+	SDL_Texture* texture = nullptr;
+	static const int numPoints = 4;
 
-	iPoint pointsCollision[numPoints] = { { 0,0 },{45 , 0},{ 45,-26 },{45 ,-54 }, {0, -54},{0, -26} };
-
+	iPoint pointsCollision[numPoints] =  { { 2,30 },{ 28, 30 },{ 28,50 },{ 2, 50 } };
+};
+enum TypePartner
+{
+	KEILER,
+	ISRRA,
+	BRENDA
+};
+struct Partner : public Entity
+{
+	iPoint position = {0,0};
+	State state = IDLE;
+	MoveDirection direction = WALK_R;
+	Animation* currentAnimation = nullptr;
+	SDL_Texture* texture = nullptr;
+	TypePartner type;
+	int level = 1;
+	int exp = 0;
+	int health = 0;
+	int mana = 0;
+	int breadcrumb = 0;
 };
 
 
@@ -39,25 +56,27 @@ public:
 
 	bool Start();
 
+	void LoadTexCharacters();
+
+	void LoadPartners();
+
+	void RePositionPartners();
+
 	bool PreUpdate();
 
 	bool Update(float dt);
 
-	void MoveHit();
-
-	void GravityDown(float dt);
+	void UpdatePointCheker();
 
 	void SpeedAnimationCheck(float dt);
 
 	void MoveBetweenCheckPoints();
 
-	void CameraPlayer();
+	void CameraPlayer(float dt);
 
-	void PlayerMoveAnimation();
+	void PlayerMoveAnimation(State state, MoveDirection direction, Animation* &currentAnimation);
 
 	void PlayerControls(float dt);
-
-	void Jump();
 
 	void MovePlayer(MoveDirection playerDirection, float dt);
 
@@ -66,27 +85,24 @@ public:
 	bool CleanUp();
 
 	bool CollisionPlayer(iPoint nextPosition);
-	bool CollisionJumping(iPoint positionMapPlayer);
 	bool CheckGameOver(int level);
 
 	void SetHit();
 
-	void CoinPlus() { playerData.coins++; };
 	void LivePlus() { playerData.respawns++; };
 
 	void ActiveCheckpoint(iPoint positionMapPlayer);
 
 	iPoint IPointMapToWorld(iPoint ipoint);
 
-
+	Partner* GetPartners() { return partners; };
+	int GetNumPartners() { return numPartners; };
 	bool GetInCheckPoint() { return inCheckPoint; };
 	bool GetCheckPointMove() { return checkpointMove; };
-	uint* GetStateShoot() { return playerData.stateShoot; };
 
-	void SetStateShoot(uint *state) { playerData.stateShoot = state; };
-	void SetPositionShoot(iPoint* position) { playerData.shootPosition = position; };
-	void SetCollidersShoot(iPoint* colliders) { playerData.shootPointsCollision = colliders; };
+	bool UpdatePlayerStats(Entity* entity, TypeEntity type);
 
+	bool SaveLevel(pugi::xml_node& data)const;
 private:
 
 	// Load state game
@@ -94,55 +110,81 @@ private:
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
 
-	void GravityDownCollision(float dt);
-	void MoveToDirection(int velocity);
+	void MoveToDirection(MoveDirection direction, iPoint &position);
 
 	void DebugCP();
 
+	void AddBreadcrumb();
+	void DeleteBreadcrumb(iPoint* pos);
+
+	void PartnerDirection(int index);
+	void NextBreadcrumb(int index);
+	void MovePartners();
+	void OffsetPartners();
+
 public:
 
+	List<GameItem*> inventory;
+
 	PlayerData playerData;
+	int radiusCollision = 0;
 	bool godMode = false;
-	iPoint* positionInitial= new iPoint(0,0);	
-	bool win= false;
+	iPoint* positionInitial;	
+	bool changeScene = false;
+	bool winGame = false;
+	bool loadStats = false;
+	bool play = false;
+	bool load = false;
+	fPoint lerpCamera = { 0,0 };
+
+	uint fxStairs = -1;
 
 private:
 	
-	int levelScene;
+	int levelScene = 0;
+	float vel = 0;
 
-	float gravity = 0.3f;
-	float velY = 0;
-	float velX = 0;
+	// Partners
+	int numPartners = 3;
+	Partner partners[3];
+	MoveDirection lastDirection;
+	List<iPoint*> path;
+	bool playerCollision = true;
+	int diagonal = 0;
+	
+	uint fxBookOpen = -1;
 
-	Animation* idleAnim= new Animation();
-	Animation* walkAnim = new Animation();
-	Animation* atakAnim = new Animation();
-	Animation* damageAnim = new Animation();
-	Animation* deadAnim = new Animation();
-	Animation* runAnim = new Animation( );
-	Animation* jumpAnim = new Animation( );
+	Animation* idleAnimR = nullptr;
+	Animation* idleAnimL = nullptr;
+	Animation* idleAnimUp = nullptr;
+	Animation* idleAnimDown = nullptr;
+
+	Animation* bookAnim = nullptr;
+
+	Animation* walkAnimR = nullptr;
+	Animation* walkAnimL = nullptr;
+	Animation* walkAnimUp = nullptr;
+	Animation* walkAnimDown = nullptr;
 
 	pugi::xml_document playerFile;
 	SString folder;
-	iPoint tmp;
-
-	uint bonfireFx;
-	uint damageFx;
+	iPoint tmp = {0,0};
 
 	// CheckPoint's vars
-	bool inCheckPoint;
+	bool inCheckPoint = false;
 	List<iPoint> checkPoints;
-	bool debugCheckPoints;
+	bool debugCheckPoints = false;
 
-	int lastCP;
-	bool checkpointMove;
-	bool endUpdate;
-	bool jumpHit;
+	int lastCP = 0;
+	bool checkpointMove = false;
+	bool endUpdate = false;
 
 	State lastState;
 	MoveDirection hitDirection;
+	List<SDL_Texture*> texPartners;
+
+	iPoint pointCheker = { 0,0 };
+
 };
 
 #endif // _PLAYER_H_
-
-

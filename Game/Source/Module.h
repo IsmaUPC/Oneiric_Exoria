@@ -75,14 +75,12 @@ public:
 
 public:
 
-	SString name;
-	bool active;
+	SString name = "";
+	bool active = false;
 private:
-	int numThisScene;
-	float oldFPS=-1;
-	bool firstCheck =true;
-	
-
+	int numThisScene = 0;
+	float oldFPS = -1;
+	bool firstCheck = true;
 };
 
 #endif // __MODULE_H__

@@ -1,9 +1,7 @@
 #ifndef __GUISETTINGS_H__
 #define __GUISETTINGS_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiButton.h"
 #include "GuiCheckBox.h"
 #include "GuiSlider.h"
@@ -18,29 +16,43 @@ public:
 	~GuiSettings();
 
 	bool Update(float dt);
+	void AbleDisableButtons();
 	bool Draw();
 
 	bool CleanUp();
 
-	void AbleDisableSetting() { active = !active; };
+	void AbleDisableSetting();
 	bool GetActiveSettings() { return active; };
+
+	void DesactiveSettingMenu();
 
 	void MovePosition();
 
 
-	GuiSlider* sldMusic;
-	GuiSlider* sldFx;
-	GuiCheckBox* chBxFullScreen;
-	GuiCheckBox* chBxVSync;
+	GuiSlider* sldMusic = nullptr;
+	GuiSlider* sldFx = nullptr;
+	GuiCheckBox* chBxFullScreen = nullptr;
+	GuiCheckBox* chBxVSync = nullptr;
+	GuiCheckBox* chBxTextSpeed0 = nullptr;
+	GuiCheckBox* chBxTextSpeed1 = nullptr;
+	GuiCheckBox* chBxTextSpeed2 = nullptr;
 
-	GuiButton* btnBack;
+	GuiButton* btnBack = nullptr;
+
+	bool active = false;
+	bool pendingDesactive = false;
 
 private:
-	int padding = 98;
+	int padding = 60;
 
-	iPoint initialPos;
+	char textSpeedOptions[20] = { "Slow Fast Off" };
 
-	bool active;
+	iPoint initialPos = { 0,0};
+
+	// Easings variables
+	int currentIteration = 0;
+	int totalIterations = 60;
+	int hight = 10;
 
 };
 #endif // __GUISETTINGS_H__

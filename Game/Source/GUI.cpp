@@ -1,9 +1,13 @@
 ﻿#include "GUI.h"
 #include "Player.h"
-#include "FireBall.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
-#include "ModuleFonts.h"
+#include "Fonts.h"
+#include "DialogSystem.h"
+#include "GuiManager.h"
+#include "SceneBattle.h"
+#include "EntityManager.h"
+#include "QuestManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -14,10 +18,11 @@ GUI::GUI() : Entity()
 	name.Create("GUI");
 }
 
-GUI::GUI(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture)
-	: Entity(pTypeEntity, pPosition, pVelocity, pTexture)
+GUI::GUI(Entity* entity, SDL_Texture* pTexture)
 {
 	name.Create("GUI");
+	entityData = entity->entityData;
+	entityData.texture = pTexture;
 }
 
 GUI::~GUI()
@@ -34,182 +39,197 @@ bool GUI::Awake(pugi::xml_node& config)
 
 bool GUI::Start()
 {
-
-	headAnim = new Animation();
-	arrowAnim = new Animation();
-	buttonEAnim = new Animation();
-	fireBallOnAnim = new Animation();
-	fireBallOffAnim = new Animation();
-	coinHudAnim = new Animation();
-
 	active = true;
 	int imgH = 0;
 	int imgW = 0;
 
-	headTex = entityData->texture;
-	SDL_QueryTexture(headTex, NULL, NULL, &headW, &imgH);
-
-	headAnim->PushBack({0,0,headW,imgH });
-
-	imgH = 0;
-	imgW = 0;
-	arrowTex = app->tex->Load("Assets/Textures/GUI/arrows.png");
-	SDL_QueryTexture(arrowTex, NULL, NULL, &imgW, &imgH);
-	imgW = imgW / 2;
-
-	arrowAnim->PushBack({ 0,0,imgW,imgH });
-	buttonEAnim->PushBack({ imgW,0,imgW,imgH });
-
-
-	imgCoin = app->tex->Load("Assets/Textures/GUI/coin.png");
-	coinHudAnim->loop = true;
-	coinHudAnim->speed = 0.20f;
-
-	for (int i = 0; i < 16; i++)
-		coinHudAnim->PushBack({ 0,(80 * i), 80, 80 });
-
-	imgH = 0;
-	imgW = 0;
-	fireBallTex = app->tex->Load("Assets/Textures/GUI/fire_ball.png");
-	SDL_QueryTexture(fireBallTex, NULL, NULL, &imgW, &imgH);
-	imgH = imgH / 2;
-
-	fireBallOnAnim->PushBack(	{ 0,0,imgW,imgH		});
-	fireBallOffAnim->PushBack(	{ 0,imgH,imgW,imgH	});
-
-	respawn = &app->player->playerData.respawns;
-	coins = &app->player->playerData.coins;
-
-	// Text
-	hudFont = app->fonts->Load("Assets/Textures/GUI/hud_font.png", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,0123456789им?!*$%&()+-/:;<=>@_      ", 5, 705, 225);
-
-	fireBallState = app->player->GetStateShoot();
+	//playerUi = app->tex->Load("Textures/Characters/atlas_players_battle.png");
 
 	activeFPS = false;
-	timer.Start();
-	minuts = app->entityManager->timeSave / 60000;
+	/*timer.Start();
+	minuts = app->entityManager->timeSave / 60000;*/
 	return true;
 }
 
 bool GUI::PreUpdate()
 {
-
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-	{
-		activeFPS = !activeFPS;
-
-	}
 	return true;
 }
 
 bool GUI::Update(float dt)
 {
+	//miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
+	//Chronometer();
+	entityData.position.x = -app->render->camera.x;
+	entityData.position.y = -app->render->camera.y;		
 
-	coinHudAnim->speed = (dt * 9);
-	miliseconds = timer.Read()+app->entityManager->timeSave - minuts * 60000;
-	coinHudAnim->Update();
-	Chronometer();
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		activeFPS = !activeFPS;
+	}
+	
+	if (app->dialogueSystem->pendingDialog)
+	{
+		if (app->dialogueSystem->despawnDialog)
+		{
+			initSpawnPos = true;
+			app->dialogueSystem->despawnDialog = false;
+		}			
+
+		if (initSpawnPos)
+		{
+			if (app->dialogueSystem->spawnDialog) InitPosBoxText(160, -160);
+			else InitPosBoxText(0, 160);
+			initSpawnPos = false;
+		}		
+
+		if (currentIteration < totalIterations)
+		{
+			hight = EaseCubicIn(currentIteration, spawnPos, deltaPos, totalIterations);
+			currentIteration++;
+		}
+		else
+		{
+			if (!app->dialogueSystem->spawnDialog)
+			{
+				currentIteration = 0;
+				newMision = app->questManager->newMision;
+				updateMision = app->questManager->updateMision;
+				completedMision = app->questManager->completedMision;
+				app->dialogueSystem->pendingDialog = false;
+			}
+			else
+			{
+				hight = 0;
+				app->dialogueSystem->onDialog = true;
+			}
+		}
+	}
+
+	if (newMision || completedMision || updateMision)
+	{
+		switch (state)
+		{
+		case 0:
+			offsetAnim = EaseCubicIn(currentIterationNewMision, -110, 110, 60);
+			if (currentIterationNewMision < 60)
+			{
+				currentIterationNewMision++;
+			}
+			else state = 1;
+			break;
+		case 1:
+			timeCounter += dt;
+			if (timeCounter >= 1.5f)
+			{
+				state = 2;
+				currentIterationNewMision = 0;
+			}
+			break;
+		case 2:
+			offsetAnim = EaseCubicIn(currentIterationNewMision, 0, -110, 60);
+			if (currentIterationNewMision < 60)
+			{
+				currentIterationNewMision++;
+			}
+			else
+			{
+				state = 0;
+				timeCounter = 0;
+				currentIterationNewMision = 0;
+				app->questManager->newMision = false;
+				app->questManager->updateMision = false;
+				app->questManager->completedMision = false;
+				newMision = false;
+				updateMision = false;
+				completedMision = false;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
 	return true;
 }
 
 bool GUI::PostUpdate()
 {
-	point0.x = -app->render->camera.x;
-	point0.y = -app->render->camera.y;
-	
-	point0.x = point0.x + headPositionX;
-	point0.y = point0.y + headPositionY;
-
-
-	// Respawns
-	SDL_Rect rectGUI;
-	rectGUI = headAnim->GetCurrentFrame();
-	for (int i = 0; i < *respawn; i++)
-		app->render->DrawTexture(headTex,point0.x +((headW + headSeparation)*i),point0.y,&rectGUI);
-	
-	// ChecKPoints HUD
-	rectGUI = buttonEAnim->GetCurrentFrame();
-	if (app->player->GetInCheckPoint())
-		app->render->DrawTexture(arrowTex, app->player->playerData.position.x+10, app->player->playerData.position.y - 90, &rectGUI);
-	
-	rectGUI = arrowAnim->GetCurrentFrame();
-	if (app->player->GetCheckPointMove())
+	// Text box
+	if (app->dialogueSystem->pendingDialog == true)
 	{
-		app->render->DrawTexture(arrowTex, app->player->playerData.position.x + 60, app->player->playerData.position.y - 40, &rectGUI);
-		app->render->DrawTextureFlip(arrowTex,app->player->playerData.position.x - 45, app->player->playerData.position.y - 40, &rectGUI);
+		app->render->DrawTextBox(-app->render->camera.x + WINDOW_W / 2 - 300, -app->render->camera.y + 565 + hight, 600, 150, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	}
+	if (app->entityManager->drawCloud == true)
+	{
+		app->render->DrawTexture(app->guiManager->uiAtlas, app->player->playerData.position.x + 10, app->player->playerData.position.y - 30, &app->guiManager->talkCloud->GetCurrentFrame());
+		app->entityManager->drawCloud = false;
+	}
+
+	if (newMision || completedMision || updateMision)
+	{
+		int posX = -app->render->camera.x + 20;
+		int posY = -app->render->camera.y + 20 + offsetAnim;
+		app->render->DrawTextBox(posX, posY, 300, 90, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+		if (newMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "New Mision", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+		}
+		else if (completedMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "Congratulations!", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Mision completed", { 60, 43, 13 });
+		}
+		else if (updateMision)
+		{
+			app->fonts->BlitText(posX + 50, posY + 25, 0, "Update Mision!", { 60, 43, 13 });
+			app->fonts->BlitText(posX + 50, posY + 45, 0, "Check the Quest log", { 60, 43, 13 });
+		}
+		
 	}
 
 	point0.x = -app->render->camera.x;
 	point0.y = -app->render->camera.y;
-
-	// Score
-	point0.x = point0.x + 50;
-	point0.y = point0.y + 100;
-	
-	sprintf_s(scoreText, 12, "%.06d", app->entityManager->score);
-	app->fonts->BlitText(point0.x, point0.y, hudFont, scoreText);
-
-	// Coin HUD
-	point0.x = point0.x - 20;
-	point0.y = point0.y + 70;
-
-	SDL_Rect rectCoins;
-	rectCoins = coinHudAnim->GetCurrentFrame();
-	app->render->DrawTexture(imgCoin, point0.x, point0.y, &rectCoins);
-
-	sprintf_s(coinText, 9, "x%d", *coins);
-	app->fonts->BlitText(point0.x + rectCoins.w, point0.y + 12, hudFont, coinText);
-
-	// FireBall
-	point0.x = -app->render->camera.x;
-	point0.y = -app->render->camera.y;
-	point0.x = point0.x + 40;
-	point0.y = point0.y + WINDOW_H - 120;
-
-	if (*fireBallState == 0)
-	{
-		rectGUI = fireBallOnAnim->GetCurrentFrame();
-		app->render->DrawTexture(fireBallTex, point0.x, point0.y,&rectGUI);
-	}
-	else
-	{
-		rectGUI = fireBallOffAnim->GetCurrentFrame();
-		app->render->DrawTexture(fireBallTex, point0.x, point0.y, &rectGUI);
-	}
-	point0.x = -app->render->camera.x;
-	point0.y = -app->render->camera.y;
-	point0.x = point0.x + (WINDOW_W - 250);
-	point0.y = point0.y + 20;
 	// Time
-	if (app->sceneManager->GetIsPause() && !stopTime)
-	{
-		auxTimePause.Start();
-		stopTime = true;
-	}
-	if (!app->sceneManager->GetIsPause() && stopTime)
-	{
-		timer.startTime += auxTimePause.Read();
-		stopTime = false;
-	}
-	point0.x = point0.x - 100;
-	sprintf_s(timeText, 10, "%d:%02d:%02d", minuts, miliseconds / 100, miliseconds2);
-	app->fonts->BlitText(point0.x, point0.y, hudFont, timeText);
+	//point0.x = -app->render->camera.x;
+	//point0.y = -app->render->camera.y;
+	//point0.x = point0.x + (WINDOW_W - 250);
+	//point0.y = point0.y + 20;
+	//
+	//if (app->sceneManager->GetIsPause() && !stopTime)
+	//{
+	//	auxTimePause.Start();
+	//	stopTime = true;
+	//}
+	//if (!app->sceneManager->GetIsPause() && stopTime)
+	//{
+	//	timer.startTime += auxTimePause.Read();
+	//	stopTime = false;
+	//}
+	//point0.x = point0.x - 100;
+	//sprintf_s(timeText, 10, "%d:%02d:%02d", minuts, miliseconds / 100, miliseconds2);
+	//app->fonts->BlitText(point0.x, point0.y, 0, timeText, { 255, 255, 255 });
 
 	if (activeFPS)
 	{
-		point0.x += 170;
-		point0.y += WINDOW_H - 100;
-		sprintf_s(coinText, 10, "%3d", app->GetFramesOnLastSecond());
-
-		app->fonts->BlitText(point0.x, point0.y, hudFont, coinText);
-
+		sprintf_s(fps, 10, "FPS: %3d", app->GetFramesOnLastSecond());
+		app->fonts->BlitText(point0.x + 30, point0.y + 30, 0, fps, { 0, 255, 68 });
 	}
+
 	return true;
+}
+
+void GUI::InitPosBoxText(int spawnPos_, int deltaPos_)
+{
+	spawnPos = spawnPos_;
+	deltaPos = deltaPos_;
+	currentIteration = 0;
 }
 
 void GUI::Chronometer()
 {
-	if (miliseconds >= 60000 && !stopTime)
+	/*if (miliseconds >= 60000 && !stopTime)
 	{
 		minuts++;
 	}
@@ -220,7 +240,7 @@ void GUI::Chronometer()
 	{
 		centenas = miliseconds / 100;
 		miliseconds2 = miliseconds - (centenas * 100);
-	}	
+	}*/	
 }
 
 bool GUI::CleanUp()
@@ -230,19 +250,10 @@ bool GUI::CleanUp()
 		return true;
 	}
 
-	app->tex->UnLoad(arrowTex);
-	app->tex->UnLoad(imgCoin);
-	app->tex->UnLoad(fireBallTex);
-	app->fonts->UnLoad(hudFont);
-
-	delete headAnim;
-	delete arrowAnim;
-	delete buttonEAnim;
-	delete fireBallOnAnim;
-	delete fireBallOffAnim;
-	delete coinHudAnim;
-
 	active = false;
+
+	delete[] entityData.pointsCollision;
+	entityData.pointsCollision = nullptr;
 
 	pendingToDelete = true;
 	return true;
@@ -256,8 +267,8 @@ bool GUI::LoadState(pugi::xml_node& data)
 
 bool GUI::SaveState(pugi::xml_node& data) const
 {
-	if(!app->removeGame)data.child("time").attribute("value").set_value(miliseconds*10+minuts*60000);
-	else data.child("time").attribute("value").set_value(0);
+	/*if(!app->removeGame)data.child("time").attribute("value").set_value(miliseconds*10+minuts*60000);
+	else data.child("time").attribute("value").set_value(0);*/
 	return true;
 }
 

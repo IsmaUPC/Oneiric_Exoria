@@ -1,9 +1,7 @@
 #ifndef __GUIMENUPAUSE_H__
 #define __GUIMENUPAUSE_H__
 
-#include "Point.h"
 #include "SString.h"
-
 #include "GuiSettings.h"
 
 class GuiMenuPause
@@ -13,37 +11,56 @@ public:
 	~GuiMenuPause();
 
 	bool Update(float dt);
-	bool Draw();
+	void UpdateSpawnPosition();
+	void AssignRandomAnimation();
+	bool PostUpdate();
 
 	bool CleanUp();
 
 	bool Event(GuiControl* control);
 
-	void AbleDisableSetting() { active = !active; };
-	void AbleDisableMenu() { activeMenu = !activeMenu; };
+	void AbleDisableMenu();
+	void DisableButtons();
+	void AbleDisableSetting();
 
 	void CloaseMenuSettings();
 
 	void MovePosition();
 
+	bool GetActive() { return active; }
+	void SetActive(bool active_) { active = active_; }
+	GuiButton* GetButtonResume() { return btnResume; };
+
+	GuiSettings* GetMenuSettings() { return menuSettings; }
+
 private:
-	int padding = 98;
-	GuiButton* btnResume;
-	GuiButton* btnSettings;
-	GuiButton* btnBackToTitle;
-	GuiButton* btnExit;
+	int padding = 40;
+	GuiButton* btnResume = nullptr;
+	GuiButton* btnSettings = nullptr;
+	GuiButton* btnBackToTitle = nullptr;
+	GuiButton* btnSave = nullptr;
+	GuiButton* btnExit = nullptr;
 
-	GuiSettings* menuSettings;
+	GuiSettings* menuSettings = nullptr;
 
-	iPoint initialPos;
+	iPoint initialPos = { 0,0 };
 
-	SceneControl* observer;
+	SceneControl* observer = nullptr;
 
 	SDL_Rect screenRect = { NULL };
 
-	bool active;
-	bool activeMenu;
+	bool active = false;
+	bool activeSettings = false;
+	bool activePause = false;
+	bool doorRand = true;
+	int randT = 0;
+	float offsetSpawnX = 0;
+	float offsetSpawnY = 0;
 
+	// Easings variables
+	int currentIteration = 0;
+	int totalIterations = 50;
+	int spawnPos = 0;
 };
 
 #endif // !__GUIMENUPAUSE_H__

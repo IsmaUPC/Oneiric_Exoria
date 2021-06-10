@@ -2,7 +2,6 @@
 #define __ENTITY_H__
 
 #include "Module.h"
-#include "Point.h"
 #include "Animation.h"
 #include "App.h"
 #include "Render.h"
@@ -12,25 +11,38 @@
 #include "Collisions.h"
 #include "Defs.h"
 #include "Log.h"
+#include "ItemManager.h"
 
 
 enum TypeEntity {
 
-	UNKNOWN=0,
-	PLAYER=1,
-	GROUND_ENEMY=2,
-	AIR_ENEMY=3,
-	HUD=4,
-	FIREBALL=5,
-	COIN=6,
-	LIVE=7,
+	UNKNOWN = 0,
+	BANDIT = 1,
+	FIGHTER = 2,
+	SAPLING = 3,
+	TRUNK = 4,
+	PERRY = 5,
+	ALENS = 6,
+	LIAM = 7,
+	NAN_ = 8,
+	BIN = 9,
+	LICAN = 10,
+	EESAAC = 11,
+	HEADACHE = 12,
+	HUD = 13,
+	NPC = 14,
+	KENZIE_ = 15,
+	KEILER_ = 16,
+	ISRRA_ = 17,
+	BRENDA_ = 18,
+	BOX_ENTITY=19,
+	HOLE_ENTITY=20,
 };
 
 
 enum State {
 
 	IDLE,
-	JUMP,
 	WALK,
 	RUN,
 	RETURN,
@@ -38,40 +50,65 @@ enum State {
 	DEADING,
 	DEAD,
 	HIT,
+	MOBILE,
 };
 
 enum MoveDirection {
 
-	WALK_L=-1,
-	WALK_R=1,
+	WALK_L,
+	WALK_R,
+	WALK_UP,
+	WALK_DOWN
 };
 enum TypeCollision {
 
-	VICTORY=0,
-	COLLISION=1,
-	CHECK_POINT=2,
+	VICTORY = 1,
+	COLLISION = 0, // Change to id tile of collision
+	DOWN_LADDER = 2,
+	UP_LADDER = 3,
+	DOWN_HALL = 4,
+	UP_HALL = 5,
+	HOLE = 6,
+	BOX = 7,
+	CHECK_POINT = 8, 
 	AIR,
 };
+struct Stats
+{
+	int attack = 0;
+	int defense = 0;
+	int speed = 0;
+	float health = 0;
+	int maxHealth = 0;
+	int mana = 0;
+	int maxMana = 0;
+	float exp = 0;
+	bool defenseOn = false;
+};
+
 
 struct EntityData
 {
-	iPoint position;
-	State state;
-	MoveDirection direction;
+	fPoint position = {0,0};
+	iPoint centerPoint = { 0,0 };
+	iPoint positionInitial = { 0,0 };
+	State state = IDLE;
+	MoveDirection direction = WALK_R;
 	Animation* currentAnimation = nullptr;
-	float velocity;
-	TypeEntity type;
-	SDL_Texture* texture;
-	int numPoints = 0;
-	iPoint* pointsCollision;
-	int fireBallState;
-	uint deadFx;
-	int dropScore;
+	TypeEntity type = UNKNOWN;
+	SDL_Texture* texture = nullptr;
+	float velocity = 1;
+	int numPoints = 4;
+	iPoint* pointsCollision = new iPoint[numPoints];
+	int level = 0;
+	int id = 0;
+	int channel = -1;
+	Equipable* equipedItem = nullptr;
 
 public:
-	EntityData(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx) :
+	EntityData(TypeEntity pTypeEntity, fPoint pPosition, float pVelocity, SDL_Texture* pTexture) :
 		position(pPosition), state(IDLE), direction(WALK_R), velocity(pVelocity),
-		texture(pTexture), type(pTypeEntity),deadFx(deadFx), dropScore(dropScore)
+		texture(pTexture), type(pTypeEntity)
 	{};
 	EntityData::EntityData() {};
 };
@@ -81,7 +118,7 @@ class Entity : public Module
 public:
 
 
-	Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore=0, uint deadFx=0);
+	Entity(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture);
 	Entity();
 	~Entity();
 
@@ -108,14 +145,27 @@ public:
 	iPoint TransformFPoint(fPoint fpoint);
 	iPoint MapToWorld(iPoint position);
 	int CheckCollision(iPoint positionMap);
-	
+	bool CheckCollisionObstacle(iPoint positionMap);
+	bool CheckCollisionBoxes(iPoint positionMap);
+	bool CheckCollisionHoles(iPoint positionMap);
+
+	int CalculateDistance(iPoint origin, iPoint destination);
+	bool MoveBox();
+
+
 public:
 
 	bool isAlive= false;
 	bool pendingToDelete = false;
 
-	EntityData* entityData;
+	EntityData entityData;
 	Collisions collision;
+	Stats stats;
+	bool move = true;
+
+	ListItem<TeleportNode*>* node=nullptr;
+	int posBox;
+	int posHole;
 };
 
 #endif // __MODULE_H__

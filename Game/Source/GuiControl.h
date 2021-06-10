@@ -4,12 +4,10 @@
 #include "Input.h"
 #include "Render.h"
 #include "SceneControl.h"
-#include "ModuleFonts.h"
-
-#include "Point.h"
 #include "SString.h"
 
 #include "SDL/include/SDL.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 enum class GuiControlType
 {
@@ -78,7 +76,7 @@ public:
 
 public:
 
-	uint32 id;
+	uint32 id = 0;
 	GuiControlType type;
 
    // TypeButton typeButton= RECTANGLE;
@@ -89,11 +87,13 @@ public:
 	SDL_Color color;		// Tint color
 
 	SDL_Texture* texture;   // Texture atlas reference
+	SDL_Texture* handCursor; // Hand cursor texture
 	SDL_Rect section;	   // Texture atlas base section
 
-	int font;			// Text font
+	TTF_Font* font;			// Text font
+	bool active = true;
 
-	SceneControl* observer;		// Observer module (it should probably be an array/list)
+	SceneControl* observer = nullptr;	// Observer module (it should probably be an array/list)
 };
 
 #endif // __GUICONTROL_H__

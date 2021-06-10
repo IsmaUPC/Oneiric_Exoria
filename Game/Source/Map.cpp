@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "SceneLevel2.h"
+#include "SceneDungeon.h"
 #include "Map.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
@@ -238,9 +239,11 @@ int Properties::GetProperty(const char* value, int defaultValue) const
 {
 	for (int i = 0; i < list.Count(); i++)
 	{
+
 		if (strcmp(list.At(i)->data->name.GetString(), value)==0)
 		{
-			if (list.At(i)->data->value != defaultValue) return list.At(i)->data->value;
+			if (list.At(i)->data->value != defaultValue) 
+				return list.At(i)->data->value;
 			else return defaultValue;
 		}
 	}
@@ -263,56 +266,80 @@ bool Map::Awake(pugi::xml_node& config)
 void Map::Draw()
 {
 	if (mapLoaded == false) return;
-
+	int tileId;
 	// Make sure we draw all the layers and not just the first one
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
-	{
+		if (!(layer->data->properties.GetProperty("up_draw", 0) == 1)|| layer->data->properties.GetProperty("Nodraw", 0) == 1)
 		for (int y = 0; y < data.height; ++y)
-		{
 			for (int x = 0; x < data.width; ++x)
 			{
-				int tileId = layer->data->Get(x, y);
+				 tileId = layer->data->Get(x, y);
 				if (tileId > 0)
-				{	
+				{
+					vec = MapToWorld(x, y);
+					for (int i = 0; i < data.tilesets.Count(); i++)
+						if (layer->data->properties.GetProperty("Nodraw", 0) == 0|| drawColl)
+							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+				}
+			}
+}
+
+
+void Map::DrawUp()
+{
+	if (layerDrawUp != NULL)
+	{
+
+	
+	if (layerDrawUp->Count() <= 0) return;
+	// Make sure we draw all the layers and not just the first one
+	for (ListItem<MapLayer*>* layersUp = layerDrawUp->start; layersUp; layersUp = layersUp->next)
+		for (int y = 0; y < data.height; ++y)
+			for (int x = 0; x < data.width; ++x)
+			{
+				int tileId = layersUp->data->Get(x, y);
+				if (tileId > 0)
+				{
 					iPoint vec = MapToWorld(x, y);
 					for (int i = 0; i < data.tilesets.Count(); i++)
 					{
-						if(data.layers.At(i)->data->properties.GetProperty("Nodraw",0)==0 || drawColl)
-							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
-						else if (data.layers.At(i)->data->properties.GetProperty("Nodraw", 0) == 0 || drawColl2)
-							app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
+						if (layersUp->data->properties.GetProperty("Nodraw", 0) == 0 || drawColl)
+						app->render->DrawTexture(GetTilesetFromTileId(tileId)->texture, vec.x, vec.y, &data.tilesets.At(i)->data->GetTileRect(tileId));
 					}
 				}
 			}
-		}
 	}
-	
-	// CheckPoints
-	for (int i = 0; i < checKpointsMap.list.Count(); i++)
-	{
-		iPoint pos = checKpointsMap.list.At(i)->data->pos;
-		pos = MapToWorld(pos.x,pos.y);
-
-		CheckPoints::CP* actCP = checKpointsMap.list.At(i)->data;
-		SDL_Rect rectCP;
-
-		if (actCP->active)
-			rectCP = checKpointsMap.checkPointOnAnim->GetCurrentFrame();
-		else
-			rectCP = checKpointsMap.checkPointOffAnim->GetCurrentFrame();
-		
-		app->render->DrawTexture(checKpointsMap.texture, pos.x, pos.y-2, &rectCP);
-	}
-
-
-	if(drawColl)app->map->DrawPath();
-	if(drawColl2)app->map->DrawPath();
 }
+
 
 // Translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
+
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		ret.x = x * data.tileWidth;
+		ret.y = y * data.tileHeight;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+		ret.x = (x - y) * (data.tileWidth / 2);
+		ret.y = (x + y) * (data.tileHeight / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+
+	return ret;
+}
+iPoint Map::MapToWorld(iPoint position) const
+{
+	iPoint ret;
+	int x= position.x;
+	int y= position.y;
 
 	if (data.type == MAPTYPE_ORTHOGONAL)
 	{
@@ -440,12 +467,14 @@ bool Map::CleanUp()
 
 	while (item2 != NULL)
 	{
-		RELEASE(item2->data);
+		item2->data->properties.list.Clear();
+		RELEASE_ARRAY(item2->data->data);
 		item2 = item2->next;
 	}
 	data.layers.Clear();
-
+	layerDrawUp->Clear();
 	checKpointsMap.~CheckPoints();
+	tpNodeUpLadder.Clear();
 	
 	// Clean up the pugui tree
 	mapFile.reset();
@@ -459,7 +488,10 @@ bool Map::Load(const char* filenameGame)
 	bool ret = true;
 	SString tmp("%s%s", folder.GetString(), filenameGame);
 
-	pugi::xml_parse_result result = mapFile.load_file(tmp.GetString());
+	int size = app->assets->MakeLoad(tmp.GetString());
+
+	pugi::xml_parse_result result = mapFile.load_buffer(app->assets->GetLastBuffer(), size);
+	app->assets->DeleteBuffer();
 
 	if(result == NULL)
 	{
@@ -494,6 +526,7 @@ bool Map::Load(const char* filenameGame)
 		MapLayer* lay = new MapLayer();
 
 		ret = LoadLayer(layer, lay);
+		LoadDrawUp();
 
 		if (ret == true)
 			data.layers.Add(lay);
@@ -508,8 +541,7 @@ bool Map::Load(const char* filenameGame)
 			lay->properties = *property;
 		}
 	}
-
-	LoadCollectable();
+	// LoadCollectable();
 
 	if(ret == true)
 	{
@@ -529,7 +561,7 @@ bool Map::Load(const char* filenameGame)
 			LOG("NumTilesHeight: %d", data.tilesets.At(i)->data->numTilesHeight);
 		}
 		// LOG("CheckPoint count: %d", LoadCheckPoint());
-		LoadCheckPoint();
+		//LoadCheckPoint();
 		for (int i = 0; i < data.layers.Count(); i++)
 		{
 			/*
@@ -540,6 +572,7 @@ bool Map::Load(const char* filenameGame)
 		}
 	}
 
+	LoadTpNodes();
 	mapLoaded = ret;
 
 	return ret;
@@ -550,6 +583,8 @@ bool Map::LoadMap()
 {
 	bool ret = true;
 	pugi::xml_node map = mapFile.child("map");
+
+	layerDrawUp = new List<MapLayer*>();
 
 	if (map == NULL)
 	{
@@ -566,6 +601,22 @@ bool Map::LoadMap()
 		else if (strcmp(map.attribute("orientation").as_string("MAPTYPE_UNKNOWN"), "isometric")==0)data.type = MAPTYPE_ISOMETRIC;
 		else if (strcmp(map.attribute("orientation").as_string("MAPTYPE_UNKNOWN"), "staggered")==0)data.type = MAPTYPE_STAGGERED;
 	}
+
+	return ret;
+}
+
+bool Map::LoadDrawUp() 
+{
+	bool ret = false;
+
+	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
+		if ((layer->data->properties.GetProperty("up_draw", 0) == 1) || layer->data->properties.GetProperty("Nodraw", 0) == 1)
+		{
+			ret = true;
+			if (layerDrawUp->Count() >= 0)
+				if (layerDrawUp->Find(layer->data) == -1)layerDrawUp->Add(layer->data);
+			else layerDrawUp->Add(layer->data);
+		}
 
 	return ret;
 }
@@ -613,8 +664,9 @@ bool Map::LoadTilesetImage(pugi::xml_node& tilesetNode, TileSet* set)
 bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
-
 	layer->name = node.attribute("name").as_string("");
+
+	layer->height = node.attribute("height").as_int(0);
 	layer->width = node.attribute("width").as_int(0);
 	layer->height = node.attribute("height").as_int(0);
 	layer->mapHeight = data.height* data.tileWidth;
@@ -634,28 +686,28 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 int Map::LoadCheckPoint()
 {
 	if (checKpointsMap.texture != nullptr) app->tex->UnLoad(checKpointsMap.texture);
-	checKpointsMap.texture = app->tex->Load("Assets/Textures/checkpoint.png");
+	checKpointsMap.texture = app->tex->Load("Textures/checkpoint.png");
 
 	int texW, texH;
 	SDL_QueryTexture(checKpointsMap.texture, NULL, NULL, &texW, &texH);
 	texW = texW / 9;
 
-	checKpointsMap.checkPointOnAnim->loop = true;
-	checKpointsMap.checkPointOnAnim->speed = 0.1f;
+	//checKpointsMap.checkPointOnAnim->speed = 0.1f;
 
-	checKpointsMap.checkPointOffAnim->PushBack({ 0,0, texW, texH });
-	for (int i = 1; i < 8; i++)
-		checKpointsMap.checkPointOnAnim->PushBack({ texW * i,0, texW, texH });
+	//checKpointsMap.checkPointOffAnim->PushBack({ 0,0, texW, texH });
+	//for (int i = 1; i < 8; i++)
+		//checKpointsMap.checkPointOnAnim->PushBack({ texW * i,0, texW, texH });
 	
 
 	int checkPointCount = 0;
+	int tileId;
 	for (ListItem<MapLayer*>* layer = data.layers.start; layer; layer = layer->next)
 	{
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
 			{
-				int tileId = layer->data->Get(x, y);
+				tileId = layer->data->Get(x, y);
 				if (tileId == data.tilesets.At(2)->data->firstgid + 2)
 				{
 					checkPointCount++;
@@ -678,17 +730,118 @@ void Map::LoadCollectable()
 			for (int x = 0; x < data.width; ++x)
 			{
 				int tileId = layer->data->Get(x, y);
-				if (tileId == data.tilesets.At(3)->data->firstgid)
-				{
-					app->entityManager->AddEntity(COIN,x,y);
-				}
-				if (tileId == data.tilesets.At(3)->data->firstgid+3)
-				{
-					app->entityManager->AddEntity(LIVE, x, y);
-				}
+				// Add collectable
 			}
 		}
 	}
+}
+
+bool Map::LoadObstaclesDungeon()
+{
+	app->entityManager->boxes.Clear();
+	app->entityManager->holes.Clear();
+
+
+	iPoint auxPos = { 0, 0 };
+
+	if (!data.layers.start) return false;
+	int height = data.height;
+	int width = data.width;
+	int tileId;
+	uint obstacle;
+	uint firstgidLayerCollisions;
+	MapLayer* layer = data.layers.At(7)->data;
+
+
+
+	for (int y = 0; y < height; ++y)
+		for (int x = 0; x < width; ++x)
+		{
+			auxPos.x = x;
+			auxPos.y = y;
+
+			obstacle = layer->Get(x, y);
+			firstgidLayerCollisions = data.tilesets.At(0)->data->firstgid;
+			obstacle -= firstgidLayerCollisions;
+
+			switch (obstacle)
+			{
+			case TypeCollision::BOX:
+				//TypeEntity pType, int pX, int pY, int id, int level, bool move_, State state
+				app->entityManager->AddEntity(TypeEntity::BOX_ENTITY, MapToWorld(auxPos));
+				break;
+
+			case TypeCollision::HOLE:
+				app->entityManager->AddEntity(TypeEntity::HOLE_ENTITY, MapToWorld(auxPos));
+				break;
+
+			default:
+				break;
+			}
+		}
+	return true;
+}
+
+
+bool Map::LoadTpNodes()
+{
+
+	
+	if (!data.layers.start) return false;
+	
+	tpNodeUpLadder.Clear();
+	tpNodeDownLadder.Clear();
+	tpNodeUpHall.Clear();
+	tpNodeDownHall.Clear();
+	int tileId;
+	uint typeNode;
+	uint firstgidLayerCollisions; 
+	MapLayer* layer = data.layers.At(7)->data;
+	int height = data.height;
+	int width = data.width;
+	idFloor= data.layers.At(0)->data->properties.GetProperty("IdFloor", 0);
+	
+	
+		for (int y = 0; y < height; ++y)
+			for (int x = 0; x < width; ++x)
+			{
+				// vec = MapToWorld(x, y);
+				vec.x = x;
+				vec.y = y;
+			
+				typeNode = layer->Get(x, y);
+				firstgidLayerCollisions = data.tilesets.At(0)->data->firstgid;
+				typeNode -= firstgidLayerCollisions;
+
+				if (typeNode >= TypeCollision::DOWN_LADDER && typeNode <= TypeCollision::UP_HALL)
+				{
+					nodeTp = new TeleportNode(vec, idFloor, idFloor + 1, (TpNodesTypes)typeNode);
+				}
+		
+				switch (typeNode)
+				{
+				case TypeCollision::UP_LADDER:
+					nodeTp->idNode = tpNodeUpLadder.Count();
+					tpNodeUpLadder.Add(nodeTp);
+					break;
+				case TypeCollision::DOWN_LADDER:
+					nodeTp->idNode = tpNodeDownLadder.Count();
+					tpNodeDownLadder.Add(nodeTp);
+					break;
+				case TypeCollision::UP_HALL:
+					nodeTp->idNode = tpNodeUpHall.Count();
+					tpNodeUpHall.Add(nodeTp);
+					break;
+				case TypeCollision::DOWN_HALL:
+					nodeTp->idNode = tpNodeDownHall.Count();
+					tpNodeDownHall.Add(nodeTp);
+
+					break;
+				default:
+					break;
+				}
+			}
+		return true;
 }
 
 
@@ -751,3 +904,5 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 
 	return ret;
 }
+
+

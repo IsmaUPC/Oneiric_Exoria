@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<app framerate_cap="60">
-		<title>DINO</title>
+		<title>Oneiric Exoria</title>
 		<organization>UPC</organization>
 	</app>
 	<renderer>
@@ -15,10 +15,10 @@
 		<fullscreen_window value="false" />
 	</window>
 	<audio>
-		<music volume="55" />
-		<fx volume="100" />
+		<music volume="0" />
+		<fx volume="2" />
 	</audio>
 	<map>
-		<folder>Assets/Maps/</folder>
+		<folder>Maps/</folder>
 	</map>
 </config>

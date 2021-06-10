@@ -6,7 +6,6 @@
 EntityManager::EntityManager() : Module()
 {
 	name.Create("entity_manager");
-
 }
 
 // Destructor
@@ -28,17 +27,30 @@ bool EntityManager::Start()
 	LOG("EntityManager start");
 	active = true;
 
-	chickenFx = app->audio->LoadFx("Assets/Audio/Fx/chicken.wav");
-	batFx = app->audio->LoadFx("Assets/Audio/Fx/bat.wav");
-	liveFx = app->audio->LoadFx("Assets/Audio/Fx/lives.wav");
-	texCoin = app->tex->Load("Assets/Textures/coin_square.png");
-	texLive = app->tex->Load("Assets/Textures/lives.png");
-	texChicken = app->tex->Load("Assets/Textures/enemy_walk.png");
-	texBat  =app->tex->Load("Assets/Textures/enemy_fly.png");
-	texHead = app->tex->Load("Assets/Textures/GUI/dino_head.png");
 
+	// Load Textures
+	texEnemies = app->tex->Load("Textures/Enemies/enemies_map.png");
+	texObstacles = app->tex->Load("Textures/Objects/objects.png");
 
-	// back background
+	// Load Fx
+	fxCoffeButtons = app->audio->LoadFx("Audio/Fx/coffe_buttons.wav");
+	fxEnemyFound = app->audio->LoadFx("Audio/Fx/enemy_triggers.wav");
+
+	// Animations
+	int numEnemies = 3;
+	int numSprites = 1;
+	for (int i = 0; i < numEnemies * 2; i++)
+	{
+		Animation* b = new Animation;
+		if (i % 2) numSprites = 6;
+		else numSprites = 4;
+		for (int j = 0; j < numSprites; j++)
+		{
+			b->PushBack({ 64 * j, 32 * i, 64, 32 });
+		}
+		animations.Add(b);
+	}
+
 	return true;
 }
 
@@ -46,10 +58,7 @@ bool EntityManager::Start()
 bool EntityManager::PreUpdate()
 {
 	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
-		if(entiti->data->pendingToDelete)entities.Del(entiti);
-	
-
-	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next) entiti->data->PreUpdate();
+		entiti->data->PreUpdate();
 
 	return true;
 }
@@ -58,9 +67,14 @@ bool EntityManager::Update(float dt)
 {
 	if (!app->sceneManager->GetIsPause())
 	{
-		HandleEntitiesSpawn();
-		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next) entiti->data->Update(dt);
-		HandleEntitiesDespawn();
+		CheckDespawnEntities();
+		SpeedAnimationCheck(dt);
+		CheckSpawnEntities();
+
+		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next) 
+			entity->data->Update(dt);
+		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
+			partner->data->Update(dt);
 	}
 
 	return true;
@@ -68,8 +82,14 @@ bool EntityManager::Update(float dt)
 
 bool EntityManager::PostUpdate()
 {
-	for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next) entiti->data->PostUpdate();
-	if(app->sceneManager->GetIsPause())(app->sceneManager->menu->Draw());
+	if ((!app->sceneManager->GetWinBattle() && app->sceneManager->GetTransitionToBattleFinish() && partners.start != NULL) || partners.start == NULL)
+	{
+		for (ListItem<Entity*>* entity = entities.start; entity; entity = entity->next)		
+			entity->data->PostUpdate();
+		for (ListItem<Entity*>* partner = partners.start; partner; partner = partner->next)
+			partner->data->PostUpdate();
+	}
+		
 	return true;
 }
 
@@ -79,6 +99,31 @@ bool EntityManager::CleanUp()
 	LOG("Destroying EntityManager");
 
 	bool ret = true;
+	ClearList(ret);
+	current = nullptr;
+	// Unload Fx
+
+	// Unload Tx
+	app->tex->UnLoad(texEnemies);
+	app->tex->UnLoad(texObstacles);
+	// Unload Fx
+	app->audio->Unload1Fx(fxCoffeButtons);
+	app->audio->Unload1Fx(fxEnemyFound);
+
+	// Unload Animations
+	animations.Clear();
+	//RELEASE(isDetectedAnim);
+
+	score = 0;
+	timeSave = 0;
+	active = false;
+	boxes.Clear();
+	holes.Clear();
+	return ret;
+}
+
+void EntityManager::ClearList(bool& ret)
+{
 	ListItem<Entity*>* item;
 	item = entities.start;
 
@@ -90,92 +135,240 @@ bool EntityManager::CleanUp()
 		item = item->next;
 	}
 
-	app->audio->Unload1Fx(chickenFx);
-	app->audio->Unload1Fx(batFx);
-	app->audio->Unload1Fx(liveFx);
-	app->tex->UnLoad(texCoin);
-	app->tex->UnLoad(texLive);
-	app->tex->UnLoad(texChicken);
-	app->tex->UnLoad(texBat);
-	app->tex->UnLoad(texHead);
-
+	// Clear list
 	entities.Clear();
-	score = 0;
-	timeSave = 0;
-	active = false;
-	return ret;
+	partners.Clear();
+	spawnQueue.Clear();
+	RELEASE(entityHUD);
+
+	RELEASE(auxObstacle);
+	boxes.Clear();
+	holes.Clear();
+	
 }
 
-
-bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY)
+void EntityManager::CheckSpawnEntities()
 {
-	iPoint positionSpawn = app->entity->MapToWorld(iPoint(pX,pY));
-	if (spawnQueue.Add(new EntitySpawnPoint(pType, positionSpawn.x, positionSpawn.y))) return true;
-	else return false;
-}
-bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY,int num)
-{
-	if (spawnQueue.Add(new EntitySpawnPoint(pType, pX, pY))) return true;
-	else return false;
-}
-void EntityManager::HandleEntitiesSpawn()
-{
-	for (ListItem<EntitySpawnPoint*>* spawnEntiti = spawnQueue.start; spawnEntiti; spawnEntiti = spawnEntiti->next)
+	if (spawnQueue.Count() != 0)
 	{
-		if (spawnEntiti->data->type != TypeEntity::UNKNOWN)
+		fPoint a;
+		SDL_Rect b = app->render->camera;
+		for (ListItem<Entity*>* spawnEntity = spawnQueue.start; spawnEntity; spawnEntity = spawnEntity->next)
 		{
-			LOG("Spawning enemy at x:%d  y: %d", spawnEntiti->data->x * SCREEN_SIZE, spawnEntiti->data->x * SCREEN_SIZE);
+			a = spawnEntity->data->entityData.position;
+			//if (((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+			//	&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN)) || spawnEntity->data->entityData.type == HUD
+			//	|| (spawnEntity->data->entityData.type == TypeEntity::BOX_ENTITY || spawnEntity->data->entityData.type == TypeEntity::HOLE_ENTITY))
+				SpawnEntity(spawnEntity->data);
+		}
+	}
+}
+void EntityManager::CheckDespawnEntities()
+{
+	if (entities.Count() != 0)
+	{
+		fPoint a;
+		SDL_Rect b = app->render->camera;
+		for (ListItem<Entity*>* despawnEntity = entities.start; despawnEntity; despawnEntity = despawnEntity->next)
+		{
+			a = despawnEntity->data->entityData.position;
+			//if (!((a.x > -b.x - SPAWN_MARGIN && a.x < -b.x + b.w + SPAWN_MARGIN)
+			//	&& (a.y > -b.y - SPAWN_MARGIN && a.y < -b.y + b.h + SPAWN_MARGIN))
+			//	&&  (despawnEntity->data->entityData.type != TypeEntity::BOX_ENTITY && despawnEntity->data->entityData.type != TypeEntity::HOLE_ENTITY))
+			//	DespawnEntity(despawnEntity->data);
 
-			SpawnEnemy(*spawnEntiti->data);
-			spawnEntiti->data->type = TypeEntity::UNKNOWN; // Removing the newly spawned enemy from the queue
+			if (despawnEntity->data->entityData.state == DEAD)
+			{
+				app->audio->DeleteChannel(despawnEntity->data->entityData.channel);
+				entities.Del(despawnEntity);
+			}
+		}
+		for (ListItem<Entity*>* despawnPartner = partners.start; despawnPartner; despawnPartner = despawnPartner->next)
+		{
+			if (despawnPartner->data->entityData.state == DEAD)
+			{
+				app->audio->DeleteChannel(despawnPartner->data->entityData.channel);
+				partners.Del(despawnPartner);
+			}
+		}
+	}
+}
+bool EntityManager::AddEntity(TypeEntity pType, iPoint pos)
+{
+	Entity* ent = new Entity;
+	ent->entityData.type = pType;
+	ent->entityData.position =fPoint(pos.x,pos.y);
+	spawnQueue.Add(ent);
+	return true;
+}
+
+bool EntityManager::AddEntity(TypeEntity pType, int pX, int pY, int id, int level, bool move_, State state)
+{
+	if (state == IDLE)
+	{
+		Entity* b = new Entity;
+		iPoint positionSpawn = app->map->MapToWorld(pX, pY);
+
+		if (pType == NPC) positionSpawn.y -= 12;
+		b->entityData.type = pType;
+		b->entityData.position.x = positionSpawn.x;
+		b->entityData.position.y = positionSpawn.y;
+		b->entityData.positionInitial = positionSpawn;
+		b->entityData.level = level;
+		//b->entityData.channel = app->audio->SetChannel();
+		b->entityData.id = id;
+		b->move = move_;
+
+		// Collisons
+		if (pType == KENZIE_ || pType == KEILER_ || pType == ISRRA_ || pType == BRENDA_)
+		{
+			b->entityData.pointsCollision[0] = { 0, 0 };
+			b->entityData.pointsCollision[1] = { 56, 0 };
+			b->entityData.pointsCollision[2] = { 56, 92 };
+			b->entityData.pointsCollision[3] = { 0, 92 };
+		}
+		else
+		{
+			b->entityData.pointsCollision[0] = { 18, 4 };
+			b->entityData.pointsCollision[1] = { 48, 4 };
+			b->entityData.pointsCollision[2] = { 48, 32 };
+			b->entityData.pointsCollision[3] = { 18, 32 };
+		}
+
+		b->entityData.centerPoint.x = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[1]) / 2;
+		b->entityData.centerPoint.y = app->entity->CalculateDistance(b->entityData.pointsCollision[0], b->entityData.pointsCollision[3]) / 2;
+
+		spawnQueue.Add(b);
+	}
+	return true;
+}
+
+Entity* EntityManager::FindNPC(int id)
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->entityData.type == NPC && item->data->entityData.id == id)
+		{
+			return item->data;
 		}
 	}
 }
 
-void EntityManager::SpawnEnemy(const EntitySpawnPoint& info)
+void EntityManager::SpawnEntity(Entity* info)
 {
-	Entity* iterateEntity;
-	SDL_Texture* tex=nullptr;
-	// Find an empty slot in the enemies array
-	ListItem<Entity*>* entiti= entities.start;
-	switch (info.type)
+	switch (info->entityData.type)
 	{
-	case TypeEntity::PLAYER:
-		entities.Add(new Player(info.type,{ info.x,info.y }, 1, tex));
+	case BANDIT:
+	case FIGHTER:
+	case SAPLING:
+	case TRUNK:
+	case PERRY:
+	case ALENS:
+	case LIAM:
+	case NAN_:
+	case BIN:
+	case LICAN:
+	case EESAAC:
+	case HEADACHE:
+		if(info->entityData.texture == nullptr)
+			entities.Add(new Enemy(info, texEnemies));
+		else entities.Add(new Enemy(info, info->entityData.texture));
 		entities.end->data->Start();
 		break;
 
-	case TypeEntity::GROUND_ENEMY:
-		entities.Add(new Enemy(info.type, { info.x,info.y }, 1, texChicken,100,chickenFx));
+	case KENZIE_:
+	case KEILER_:
+	case ISRRA_:
+	case BRENDA_:
+		partners.Add(new Enemy(info, info->entityData.texture));
+		break;
+
+	case HUD:
+		//entities.Add(new GUI(info, texEnemies));
+		entityHUD = new GUI(info, texEnemies);
+		entityHUD->Start();
+		//entities.end->data->Start();
+		break;
+
+	case NPC:
+		entities.Add(new Enemy(info));
 		entities.end->data->Start();
 		break;
 
-	case TypeEntity::AIR_ENEMY:
-		entities.Add(new Enemy(info.type, { info.x,info.y }, 1, texBat,150,batFx));
+	case TypeEntity::BOX_ENTITY:
+		auxObstacle = new ObstacleObjects(info, texObstacles);
+		entities.Add(auxObstacle);
+		boxes.Add(auxObstacle);
 		entities.end->data->Start();
 		break;
-	case TypeEntity::HUD:
-		entities.Add(new GUI(info.type, { info.x,info.y }, 1, texHead));
+
+	case TypeEntity::HOLE_ENTITY:
+		auxObstacle = new ObstacleObjects(info, texObstacles);
+		entities.Add(auxObstacle);
+		holes.Add(auxObstacle);
 		entities.end->data->Start();
 		break;
-	case TypeEntity::FIREBALL:
-		entities.Add(new FireBall(info.type, { info.x,info.y }, 1, tex));
-		entities.end->data->Start();
-		break;
-	case TypeEntity::COIN:
-		entities.Add(new Coins(info.type, { info.x,info.y }, 1, texCoin));
-		entities.end->data->Start();
-		break;
-	case TypeEntity::LIVE:
-		entities.Add(new Lives(info.type, { info.x,info.y }, 1, texLive,(int)50,liveFx));
-		entities.end->data->Start();
-	break;
+	}
+
+	DeleteSpawnEntity(info);
+}
+
+void EntityManager::DespawnEntity(Entity* spawnEntity)
+{ 
+	spawnQueue.Add(spawnEntity);
+	DeleteEntity(spawnEntity);
+}
+
+void EntityManager::DeleteEntity(Entity* entity)
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data == entity)
+		{
+			// Notify the audio manager that a channel can be released 
+			//app->audio->DeleteChannel(item->data->entityData.channel);
+			entities.Del(item);
+			break;
+		}
+	}
+}
+void EntityManager::DeleteHUD()
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->entityData.type == HUD)
+		{
+			DeleteEntity(item->data);
+		}
+	}
+}
+void EntityManager::DeleteSpawnEntity(Entity* entity)
+{
+	ListItem<Entity*>* item;
+
+	for (item = spawnQueue.start; item != NULL; item = item->next)
+	{
+		if (item->data == entity)
+		{
+			spawnQueue.Del(item);
+			break;
+		}
 	}
 }
 
-void EntityManager::HandleEntitiesDespawn()
+void EntityManager::SpeedAnimationCheck(float dt)
 {
-
+	for (int i = 0; i < animations.Count(); i++)
+	{
+		animations.At(i)->data->speed = dt * 6;
+	}
+	//isDetectedAnim->speed = (dt * 1);
 }
 
 bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
@@ -186,18 +379,23 @@ bool EntityManager::LoadState(pugi::xml_node& entityManagerNode)
 	score = entityManagerNode.child("score").attribute("value").as_int(0);
 	if (entitiesNode != NULL)
 	{
-		for (ListItem<Entity*>* entiti = entities.start; entiti; entiti = entiti->next)
-		{
-			if (entiti->data->entityData->type == TypeEntity::HUD)entiti->data->LoadState(entityManagerNode);
-			entiti->data->CleanUp();
-			entities.Clear();
-		}
-
+		ClearList(ret);
+		TypeEntity typeEn;
+		iPoint pos;
 		entityManagerNode.next_sibling();
 		while (entitiesNode)
 		{
-			AddEntity((TypeEntity)entitiesNode.attribute("type").as_int(), entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int(), 0);
-			entitiesNode = entitiesNode.next_sibling();
+			typeEn = (TypeEntity)entitiesNode.attribute("type").as_int();
+			pos = iPoint(entitiesNode.attribute("x").as_int(), entitiesNode.attribute("y").as_int());
+			if (typeEn == TypeEntity::BOX_ENTITY || typeEn == TypeEntity::HOLE_ENTITY)
+			{
+				AddEntity(typeEn,pos);
+			}
+			else 
+			{
+				AddEntity(typeEn, pos.x, pos.y,	entitiesNode.attribute("id").as_int(), entitiesNode.attribute("level").as_int(), entitiesNode.attribute("move").as_bool(), (State)entitiesNode.attribute("state").as_int());
+			}
+				entitiesNode = entitiesNode.next_sibling();
 		}
 	}
 	
@@ -215,14 +413,34 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 	{
 		pugi::xml_node entitiesNode = entityManagerNode.child("entities");
 		pugi::xml_node entity_node = entitiesNode;
-
+		iPoint positionSpawn;
 		for (entiti; entiti; entiti = entiti->next)
 		{
-			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData->type);
-			entitiesNode.last_child().append_attribute("x").set_value(entiti->data->entityData->position.x);
-			entitiesNode.last_child().append_attribute("y").set_value(entiti->data->entityData->position.y);
-			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData->state);
-			if (entiti->data->entityData->type == TypeEntity::HUD)
+			positionSpawn = app->map->WorldToMap(entiti->data->entityData.positionInitial.x, entiti->data->entityData.positionInitial.y);
+			if(entiti->data->entityData.type == HUD) 
+				positionSpawn = app->map->WorldToMap(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
+
+			entitiesNode.append_child("entity").append_attribute("type").set_value(entiti->data->entityData.type);
+
+			if (entiti->data->entityData.type == TypeEntity::BOX_ENTITY || entiti->data->entityData.type == TypeEntity::HOLE_ENTITY)
+			{
+				positionSpawn = iPoint(entiti->data->entityData.position.x, entiti->data->entityData.position.y);
+				positionSpawn = app->map->WorldToMap(positionSpawn);
+				entitiesNode.last_child().append_attribute("x").set_value(entiti->data->entityData.position.x);
+				entitiesNode.last_child().append_attribute("y").set_value(entiti->data->entityData.position.y);
+			}
+			else
+			{
+				entitiesNode.last_child().append_attribute("x").set_value(positionSpawn.x);
+				entitiesNode.last_child().append_attribute("y").set_value(positionSpawn.y);
+			}
+
+
+			entitiesNode.last_child().append_attribute("id").set_value(entiti->data->entityData.id);
+			entitiesNode.last_child().append_attribute("level").set_value(entiti->data->entityData.level);
+			entitiesNode.last_child().append_attribute("state").set_value(entiti->data->entityData.state);
+			entitiesNode.last_child().append_attribute("move").set_value(entiti->data->move);
+			if (entiti->data->entityData.type == TypeEntity::HUD)
 				entiti->data->SaveState(entityManagerNode);
 		}
 	}
@@ -230,7 +448,7 @@ bool EntityManager::SaveState(pugi::xml_node& entityManagerNode) const
 	{
 		for (entiti; entiti; entiti = entiti->next)
 		{
-			if (entiti->data->entityData->type == TypeEntity::HUD)
+			if (entiti->data->entityData.type == TypeEntity::HUD)
 				entiti->data->SaveState(entityManagerNode);
 			break;
 		}

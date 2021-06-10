@@ -4,8 +4,6 @@
 #include "GuiControl.h"
 #include "Audio.h"
 #include "App.h"
-
-#include "Point.h"
 #include "SString.h"
 
 enum TypeButton {
@@ -23,6 +21,7 @@ class GuiButton : public GuiControl
 public:
 
 	GuiButton(uint32 id, SDL_Rect bounds, const char *text, TypeButton typeButton, SDL_Texture* texture = NULL);
+	void ResizeButton(int* w, int* h);
 	virtual ~GuiButton();
 
 	bool Update(float dt);
@@ -30,12 +29,23 @@ public:
 
 	void DefinePositionAtlas();
 	void PressButtonSound();
+	int GetTexButtonW()
+	{
+		return rectTexW;
+	}
+	int GetTexButtonH()
+	{
+		return rectTexH;
+
+	}
 
 private:
 	bool mouseIn = false;
 	// Gui Button specific properties
 	// Maybe some animation properties for state change?
 	
+	bool padPressed = false;
+	GuiControlState lastState = GuiControlState::DISABLED;
 
 	int rectTexW= 183;
 	int rectTexH= 91;
@@ -44,18 +54,20 @@ private:
 
 	TypeButton typeButton;
 
-	iPoint* rectAtlasPos = new iPoint(87, 99);
-	iPoint* removeAtlasPos = new iPoint( 552,713 );
-	iPoint* creditAtlasPos = new iPoint(550, 412);
-	iPoint* exitAtlasPos = new iPoint(0, 1810);
-	iPoint* backAtlasPos = new iPoint( 0, 1114);
+	iPoint rectAtlasPos = { 87, 99 };
+	iPoint removeAtlasPos = { 552,713 };
+	iPoint creditAtlasPos = { 550, 412 };
+	iPoint exitAtlasPos = { 0, 1810 };
+	iPoint backAtlasPos = { 0, 1114 };
 	
-	SDL_Rect rect;
+	SDL_Rect rect = { 0,0,0,0 };
 
 	bool textDisable = false;
 	
 	int margin = 10;
 	int marginSquare = 9;
+	float angle = 0;
+	float positionY = 0;
 };
 
 #endif // __GUIBUTTON_H__

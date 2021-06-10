@@ -9,9 +9,15 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
 #include "ModuleFadeToBlack.h"
-#include "Pathfinding.h"
-#include "ModuleFonts.h"
+#include "DialogSystem.h"
+#include "Fonts.h"
+#include "TransitionManager.h"
+#include "TpNodeManager.h"
+#include "QuestManager.h"
+#include "ParticleManager.h"
+#include "AssetsManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -33,21 +39,32 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	player = new Player();
 	entityManager = new EntityManager();
 	sceneManager = new SceneManager(input, render, tex);
-	pathfinding = new PathFinding();
-	fonts = new ModuleFonts();
+	guiManager = new GuiManager(input, render);
+	fonts = new Fonts();
+	dialogueSystem = new DialogueSystem();
+	transitionManager = new TransitionManager(render,tex,sceneManager);
+	tpNodeManager = new TpNodeManager();
+	assets = new AssetsManager();
+	questManager = new QuestManager();
+	particleManager = new ParticleManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(win);
 	AddModule(input);
+	AddModule(assets);
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(map);
 	AddModule(sceneManager);
 	AddModule(entityManager);
 	AddModule(player);
+	AddModule(guiManager);
 	AddModule(fonts);
-	AddModule(pathfinding);
+	AddModule(dialogueSystem);
+	AddModule(transitionManager);
+	AddModule(questManager);
+	AddModule(particleManager);
 
 	audio->active = true;
 	player->active = false;
@@ -145,7 +162,6 @@ bool App::Start()
 bool App::Update()
 {
 	bool ret = true;
-
 
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) changeFPS = !changeFPS;
 	

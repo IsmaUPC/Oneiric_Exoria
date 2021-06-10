@@ -11,7 +11,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneLose::SceneLose()
+SceneLose::SceneLose(SceneType type) : SceneControl(type)
 {
 	active = true;
 	name.Create("sceneLose");
@@ -33,9 +33,9 @@ bool SceneLose::Start()
 	app->SetLastScene((Module*)this);
 	transition = false;
 
-	app->audio->PlayMusic("Assets/Audio/Music/music_lost.ogg");
-	img = app->tex->Load("Assets/Textures/end_screen.png");
-	animationEnd.texture = app->tex->Load("Assets/Textures/dino_sprites_dead.png");
+	app->audio->PlayMusic("Audio/Music/music_lost.ogg");
+	img = app->tex->Load("Textures/end_screen.png");
+	animationEnd.texture = app->tex->Load("Textures/dino_sprites_dead.png");
 	animationEnd.position = { 480 , 345 };
 	idleAnim.loop = true;
 	idleAnim.speed = 0.008f;
@@ -76,6 +76,7 @@ bool SceneLose::PostUpdate()
 		transition = true;
 		if (app->sceneManager->lastLevel == 1) TransitionToScene(SceneType::LEVEL1);
 		if (app->sceneManager->lastLevel == 2) TransitionToScene(SceneType::LEVEL2);
+		if (app->sceneManager->lastLevel == 3) TransitionToScene(SceneType::LEVEL3);
 		return true;
 	}
 

@@ -1,23 +1,16 @@
 #ifndef __SCENEWIN_H__
 #define __SCENEWIN_H__
 
-#include "SceneControl.h"
-#include "Animation.h"
+#include "Scene.h"
+#include "GuiButton.h"
 
 struct SDL_Texture;
-
-struct AnimationWin
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
 
 class SceneWin :public SceneControl
 {
 public:
 
-	SceneWin();
+	SceneWin(SceneType type);
 
 	// Destructor
 	virtual ~SceneWin();
@@ -27,35 +20,70 @@ public:
 
 	// Called before the first frame
 	bool Start();
+	void LoadTexCharacters();
+	void LoadAnimations();
 	// Called before all Updates
 	bool PreUpdate();
 
 	// Called each loop iteration
 	bool Update(float dt);
+	void CloudsUpdate();
 
 	// Called before all Updates
 	bool PostUpdate();
+	void CloudsDraw();
 
 	// Called before quitting
 	bool CleanUp();
+
+	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	int GetNumThisScene()
 	{
 		return 0;
 	};
 
+	void AbleButtons();
+
+	bool LoadState(pugi::xml_node& data);
+	bool SaveState(pugi::xml_node& data)const;
+
 
 private:
-	AnimationWin animationSon;
-	Animation idleAnimSon;
-	AnimationWin animationFather;
-	Animation idleAnimFather;
 
-	SDL_Texture* img;
+	SDL_Texture* bgIntro = nullptr;
+	SDL_Texture* logo = nullptr;
+	SDL_Texture* cloud = nullptr;
+	SDL_Texture* ending = nullptr;
+	List<SDL_Texture*> texPartners;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	bool transition;
 
-	Timer timer;
+	GuiButton* btnContinue = nullptr;
+	GuiButton* btnBackToTitle = nullptr;
+
+	Animation* walkAnimR = nullptr;
+
+	fPoint sBackCloudPos = { 0,0 };
+	fPoint bBackCloudPos = { 0,0 };
+
+	fPoint bCloudPos = { 0,0 };
+	fPoint bCloudPos2 = { 0,0 };
+	fPoint sCloudPos = { 0,0 };
+	fPoint sCloudPos2 = { 0,0 };
+
+	//Easings title
+	float currentIteration;
+	float totalIterations;
+	float initialPosition;
+	float deltaPosition;
+	int hight = WINDOW_H / 2;
+
+	bool flash = false;
+	float logoAlpha = 0;
+	float timeCounter = 0;
+	int state = 0;
+	float angle = 0;
+	float posPartnersX = -60;
 };
 
 #endif // !__SCENEWIN_H__

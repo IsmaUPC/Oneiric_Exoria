@@ -9,7 +9,7 @@ class Enemy : public Entity
 {
 public:
 	Enemy();
-	Enemy(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture, int dropScore, uint deadFx);
+	Enemy(Entity* entity, SDL_Texture* tex = nullptr);
 
 	virtual ~Enemy();
 
@@ -17,12 +17,11 @@ public:
 
 	bool Start();
 
-	void CheckCollisions();
+	bool CheckCollisionEnemy(fPoint nextPosition);
 
 	bool PreUpdate();
 
 	void CheckCollisionEnemyToPlayer();
-	void CheckCollisionEnemyToFireBall();
 
 	bool Update(float dt);
 
@@ -32,34 +31,23 @@ public:
 
 private:
 
-	bool Radar(iPoint origin);
+	bool Radar(iPoint origin, int range);
 	void CreatePathEnemy(iPoint origin, iPoint destination);
-	bool CheckAllPoints(iPoint& mapPositionDestination, TypeCollision typeCollision);
 	int GetCurrentPositionInPath(iPoint mapPositionEnemy);
-	void MoveEnemy(iPoint nextAuxPositionEenemy, iPoint mapPositionEnemy, TypeEntity type);
-	void MoveEnemyNULL(iPoint mapPositionEnemy);
-	int CalculateDistance(iPoint origin, iPoint destination);
-	void SpeedAnimationCheck(float dt);
-
+	void MoveEnemy();
 
 private:
-	Animation* idleAnim = new Animation();
-	Animation* isDetectedAnim = new Animation();
-	Animation* walkAnim = new Animation();
-	Animation* deadAnim = new Animation();
 
-	int range = 500;
+	int range = 150;
+	int rangeMax = 200;
 	bool isDetected = false;
-	bool returning;
-	// Timer
-	Timer* checkDestination = new Timer();
-	iPoint destination;
-	iPoint positionInitial;
-	// We store the created path here
-	DynArray<iPoint>* lastPath;
+	bool returning = false;
+	int radiusCollision = 0;
 
-	uint chickenFx;
-	uint batFx;
-	
+	iPoint destination = { 0,0 };
+	fPoint tmp = { 0.0f,0.0f };
+
+	// We store the created path here
+	DynArray<iPoint>* lastPath = nullptr;
 };
 #endif // _ENEMY_H_

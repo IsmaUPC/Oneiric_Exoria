@@ -5,12 +5,20 @@
 #include "List.h"
 #include "PerfTimer.h"
 #include "Timer.h"
+#include "Point.h"
+#include "AssetsManager.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
 #define CONFIG_FILENAME		"config.xml"
 #define SAVE_STATE_FILENAME "save_game.xml"
-	
+#define DIALOGUE_TREE_FILENAME "XMLs/dialogue_tree.xml"
+#define LIST_ITEMS_FILENAME "XMLs/items_list.xml"
+#define LIST_MAGIC_FILENAME "XMLs/magic_list.xml"	
+#define PROPERTIES_FILE "XMLs/particles_properties.xml"
+#define DUNGEONS_FILE "XMLs/dungeons.xml"
+#define QUEST_FILE "XMLs/quest_list.xml"
+
 // Modules
 class Window;
 class Input;
@@ -21,9 +29,16 @@ class Map;
 class Player;
 class EntityManager;
 class SceneManager;
+class GuiManager;
 class Entity;
 class PathFinding;
-class ModuleFonts;
+class DialogueSystem;
+class Fonts;
+class TransitionManager;
+class TpNodeManager;
+class QuestManager;
+class ParticleManager;
+class AssetsManager;
 
 class App
 {
@@ -99,31 +114,38 @@ private:
 public:
 
 	// Modules
-	Window* win;
-	Input* input;
-	Render* render;
-	Textures* tex;
-	Audio* audio;
-	Map* map;
-	Player* player;
-	EntityManager* entityManager;
-	SceneManager* sceneManager;
-	Entity* entity;
-	PathFinding* pathfinding;
-	ModuleFonts* fonts;
+	Window* win = nullptr;
+	Input* input = nullptr;
+	Render* render = nullptr;
+	Textures* tex = nullptr;
+	Audio* audio = nullptr;
+	Map* map = nullptr;
+	Player* player = nullptr;
+	EntityManager* entityManager = nullptr;
+	SceneManager* sceneManager = nullptr;
+	GuiManager* guiManager = nullptr;
+	Entity* entity = nullptr;
+	PathFinding* pathfinding = nullptr;
+	DialogueSystem* dialogueSystem = nullptr;
+	Fonts* fonts = nullptr;
+	TransitionManager* transitionManager = nullptr;
+	TpNodeManager* tpNodeManager = nullptr;
+	QuestManager* questManager = nullptr;
+	ParticleManager* particleManager = nullptr;
+	AssetsManager* assets = nullptr;
 
 	bool fullScreen=0;
 	bool removeGame = false;
 private:
 
-	int argc;
+	int argc = 0;
 	char** args;
 	SString title;
 	SString organization;
-	int framerate;
+	int framerate = 60;
 	List<Module *> modules;
 
-	uint frames;
+	uint frames = 0;
 	PerfTimer ptimer;
 	uint64 frameCount = 0;
 
@@ -135,13 +157,13 @@ private:
 	uint32 framesOnLastSecond = 0;
 	uint32 lastFrameMs = 0;
 	float dt = 0.0f;
-	float perfTime;
+	float perfTime = 0.0f;
 	float oldLastFrame = 0.0f;
 	float timeFramesSecond = 0.0f;
-	float	cappedMs = -1;
+	float cappedMs = -1;
 
 	mutable bool saveGameRequested;
-	bool loadGameRequested;
+	bool loadGameRequested = false;
 
 	pugi::xml_document stateFile;
 	pugi::xml_node rootStateFile;

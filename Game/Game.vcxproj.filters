@@ -50,23 +50,11 @@
     <ClCompile Include="Source\Entity.cpp">
       <Filter>Modules\Gameplay</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Coins.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EntityManager.cpp">
       <Filter>Modules\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Pathfinding.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GUI.cpp">
       <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FireBall.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ModuleFonts.cpp">
-      <Filter>Modules\Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\GuiManager.cpp">
       <Filter>Modules\Managers</Filter>
@@ -104,9 +92,6 @@
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Modules\Gameplay\Scenas</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Lives.cpp">
-      <Filter>Modules\Gameplay</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GuiSettings.cpp">
       <Filter>Modules\GuiControls</Filter>
     </ClCompile>
@@ -133,6 +118,57 @@
     </ClCompile>
     <ClCompile Include="Source\Collisions.cpp">
       <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneBattle.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DialogSystem.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Fonts.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiMenuMagic.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TeleportNode.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLevel3.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TpNodeManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiStatsMenu.cpp">
+      <Filter>Modules\GuiControls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Path.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParticleManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Particle.cpp">
+      <Filter>Modules\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TransitionManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ItemManager.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneDungeon.cpp">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\QuestManager.cpp">
+      <Filter>Modules\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObstacleObjects.cpp">
+      <Filter>Modules\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AssetsManager.cpp">
+      <Filter>Modules\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,23 +244,11 @@
     <ClInclude Include="Source\Entity.h">
       <Filter>Modules\Gameplay</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Coins.h">
-      <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EntityManager.h">
       <Filter>Modules\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Pathfinding.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GUI.h">
       <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FireBall.h">
-      <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ModuleFonts.h">
-      <Filter>Modules\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\GuiManager.h">
       <Filter>Modules\Managers</Filter>
@@ -265,9 +289,6 @@
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Modules\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Lives.h">
-      <Filter>Modules\Gameplay</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GuiSettings.h">
       <Filter>Modules\GuiControls</Filter>
     </ClInclude>
@@ -277,6 +298,58 @@
     <ClInclude Include="Source\Collisions.h">
       <Filter>Modules\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneBattle.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DialogSystem.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Fonts.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiMenuMagic.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TeleportNode.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneLevel3.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TpNodeManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiStatsMenu.h">
+      <Filter>Modules\GuiControls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Path.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ParticleManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Particle.h">
+      <Filter>Modules\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TransitionManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ItemManager.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneDungeon.h">
+      <Filter>Modules\Gameplay\Scenas</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\QuestManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObstacleObjects.h">
+      <Filter>Modules\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AssetsManager.h">
+      <Filter>Modules\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -311,6 +384,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="PlatformerGame.rc" />
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Output\icon.ico" />
   </ItemGroup>
 </Project>

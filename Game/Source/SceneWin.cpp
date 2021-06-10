@@ -1,20 +1,24 @@
+#include "SceneWin.h"
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
 #include "Render.h"
-#include "SceneWin.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
+#include "EntityManager.h"
 
 #include <SDL_mixer\include\SDL_mixer.h>
 
 #include "Defs.h"
 #include "Log.h"
 
-SceneWin::SceneWin()
+#define LOGO_FADE_SPEED 7
+
+SceneWin::SceneWin(SceneType type) : SceneControl(type)
 {
-	name.Create("sceneWin");
 	active = true;
+	name.Create("sceneWin");
 }
 
 SceneWin::~SceneWin()
@@ -23,43 +27,77 @@ SceneWin::~SceneWin()
 
 bool SceneWin::Awake()
 {
-	LOG("Loading SceneWin");
+	LOG("Loading Scene");
 	bool ret = true;
+
 	return ret;
 }
 
 bool SceneWin::Start()
 {
+
+	// GUI: Initialize required controls for the screen
+	int margin = 7;
+	int padding = 65;
+	int yPosition = 330 + margin;
+
+	btnContinue = new GuiButton(2, { WINDOW_W / 2, WINDOW_H /2 + padding,  85, 25 }, "Continue", RECTANGLE);
+	btnContinue->active = false;
+	btnContinue->SetObserver(this);
+	app->guiManager->AddGuiButton(btnContinue);
+
+	btnBackToTitle = new GuiButton(3, { WINDOW_W / 2, WINDOW_H / 2 + padding + 30, 85, 25 }, "Return to title", RECTANGLE);
+	btnBackToTitle->SetObserver(this);
+	btnBackToTitle->active = false;
+	app->guiManager->AddGuiButton(btnBackToTitle);
+
 	app->SetLastScene((Module*)this);
-	transition = false;
 
-	app->audio->PlayMusic("Assets/Audio/Music/music_victory.ogg");
-	img = app->tex->Load("Assets/Textures/scene_win.png");
-	animationSon.texture = app->tex->Load("Assets/Textures/dino_sprites.png");
-	animationSon.position = { 340 , 372 };
-	idleAnimSon.loop = true;
-	idleAnimSon.speed = 0.01;
+	app->audio->PlayMusic("Audio/Music/ending_music.ogg");
 
-	for (int i = 0; i < 4; i++)
-		idleAnimSon.PushBack({ 336 * i,0, 336, 336 });
+	bgIntro = app->tex->Load("Textures/title_background.png");
+	logo = app->tex->Load("Textures/logo_title.png");
+	SDL_QueryTexture(logo, NULL, NULL, &imgW, &imgH);
+	cloud = app->tex->Load("Textures/GUI/cloud.png");
+	ending = app->tex->Load("Textures/ending_text.png");
+	LoadTexCharacters();
+	LoadAnimations();
 
-	animationSon.currentAnimation = &idleAnimSon;
+	sBackCloudPos = { WINDOW_W / 2 - 420, WINDOW_H / 3 + 300 };
+	bBackCloudPos = { WINDOW_W / 2 - 350, WINDOW_H / 3 - 100 };
 
-	animationFather.texture = app->tex->Load("Assets/Textures/dino_orange_big.png");
-	animationFather.position = { 540 , 180 };
-	idleAnimFather.loop = true;
-	idleAnimFather.speed = 0.01;
+	bCloudPos = { WINDOW_W / 2 + 150, WINDOW_H / 3 };
+	bCloudPos2 = { WINDOW_W / 2 + 850, WINDOW_H / 3 - 100 };
+	sCloudPos = { WINDOW_W / 2 + 500, WINDOW_H / 3 - 50 };
+	sCloudPos2 = { WINDOW_W / 2, WINDOW_H / 3 + 250 };
 
-	for (int i = 0; i < 4; i++)
-		idleAnimFather.PushBack({ 558 * i,0, 558, 558 });
-
-	animationFather.currentAnimation = &idleAnimFather;
-
-	SDL_QueryTexture(img, NULL, NULL, &imgW, &imgH);
 	app->render->camera.x = app->render->camera.y = 0;
 
-	timer.Start();
+	// Easings inicialize variables
+	currentIteration = 0;
+	totalIterations = 100;
+	initialPosition = 1280;
+	deltaPosition = 1025;
+
 	return true;
+}
+
+void SceneWin::LoadTexCharacters()
+{
+
+	texPartners.Add(app->tex->Load("Textures/Characters/kenzie.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/keiler.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/isrra.png"));
+	texPartners.Add(app->tex->Load("Textures/Characters/brenda.png"));
+}
+
+void SceneWin::LoadAnimations()
+{
+	walkAnimR = new Animation();
+	for (int i = 0; i < 6; i++)
+	{
+		walkAnimR->PushBack({ (32 * i) , 142, 32, 50 });
+	}
 }
 
 bool SceneWin::PreUpdate()
@@ -69,49 +107,174 @@ bool SceneWin::PreUpdate()
 
 bool SceneWin::Update(float dt)
 {
-	animationSon.currentAnimation->Update();
-	animationFather.currentAnimation->Update();
-	
-		idleAnimSon.speed = (dt * 100) * 0.08f;
-		idleAnimFather.speed = (dt * 100) * 0.08f;
-	
-	return true;
+	bool ret = true;
+
+	CloudsUpdate();
+
+	//Update Easings	
+
+	angle += dt * 10;
+
+	if (currentIteration < totalIterations)
+	{
+		hight = EaseBackOut(currentIteration, WINDOW_H / 2, -WINDOW_H / 2, totalIterations);
+		currentIteration++;
+	}
+	else
+	{
+		hight = 0;
+		AbleButtons();
+	}
+
+	posPartnersX += dt * 50;
+	if (posPartnersX > WINDOW_W + 220)
+		posPartnersX = -60;
+
+	walkAnimR->speed = (dt * 6);
+	walkAnimR->Update();
+
+	return ret;
+}
+
+void SceneWin::AbleButtons()
+{
+	btnContinue->active = true;
+	btnBackToTitle->active = true;
+}
+
+void SceneWin::CloudsUpdate()
+{
+	bCloudPos.x -= 0.5f;
+	bCloudPos2.x -= 0.5f;
+	sCloudPos.x -= 0.75f;
+	sCloudPos2.x -= 0.75f;
+	sBackCloudPos.x -= 0.75f;
+	bBackCloudPos.x -= 0.5f;
+	if (bCloudPos.x + 585 < 0)
+	{
+		bCloudPos.x = WINDOW_W;
+	}
+	if (bCloudPos2.x + 585 < 0)
+	{
+		bCloudPos2.x = WINDOW_W;
+	}
+	if (sCloudPos.x + 292 < 0)
+	{
+		sCloudPos.x = WINDOW_W;
+	}
+	if (sCloudPos2.x + 292 < 0)
+	{
+		sCloudPos2.x = WINDOW_W;
+	}
+	if (sBackCloudPos.x + 292 < 0)
+	{
+		sBackCloudPos.x = WINDOW_W;
+	}
+	if (bBackCloudPos.x + 585 < 0)
+	{
+		bBackCloudPos.x = WINDOW_W;
+	}
 }
 
 bool SceneWin::PostUpdate()
 {
 	bool ret = true;
-	SDL_Rect rectSon;
-	rectSon = animationSon.currentAnimation->GetCurrentFrame();
-	SDL_Rect rectFather;
-	rectFather = animationFather.currentAnimation->GetCurrentFrame();
 
-	if (!transition && timer.ReadSec() >= CCOOLDOWNSCENE)
+	app->render->DrawTexture(bgIntro, app->render->camera.x, app->render->camera.y);
+
+	app->render->DrawTexture(cloud, sBackCloudPos.x, sBackCloudPos.y);
+	app->render->DrawTexture(cloud, bBackCloudPos.x, bBackCloudPos.y, 0, 2);
+	CloudsDraw();
+
+	app->render->DrawRectangle({ 0,0,WINDOW_W, WINDOW_H},0,0,0, 180);
+	app->render->DrawTexture(logo, WINDOW_W/2 - imgW/2, WINDOW_H / 2 - imgH / 2 -20, 0, 1, 1, angle);
+	app->render->DrawTexture(ending, WINDOW_W / 2 - 320, 60, 0, 1.3);
+
+
+	app->render->DrawTextBox(WINDOW_W / 2 - 119, WINDOW_H / 2 + hight + 30, 238, 119, { 251, 230, 139 }, { 227, 207, 127 }, { 60, 43, 13 }, app->guiManager->moonCorner);
+	
+	for (int i = 0; i < 4; i++)
 	{
-		transition = true;
-		if (app->sceneManager->lastLevel == 1) TransitionToScene(SceneType::LEVEL2);
-		if (app->sceneManager->lastLevel == 2) TransitionToScene(SceneType::INTRO);
-		return true;
+		app->render->DrawTexture(texPartners[i], posPartnersX - 70*i, WINDOW_H - 140, &walkAnimR->GetCurrentFrame(),1.8);
 	}
-
-	app->render->DrawTexture(img, app->render->camera.x, app->render->camera.y);
-	app->render->DrawTexture(animationSon.texture, animationSon.position.x, animationSon.position.y, &rectSon);
-	app->render->DrawTextureFlip(animationFather.texture, animationFather.position.x, animationFather.position.y, &rectFather);
+	app->render->DrawRectangle({ 0,WINDOW_H - 50,WINDOW_W, 20 }, 255, 255, 255, 200);
 
 	return ret;
 }
 
+void SceneWin::CloudsDraw()
+{
+	app->render->DrawTexture(cloud, bCloudPos.x, bCloudPos.y, 0, 2);
+	app->render->DrawTexture(cloud, bCloudPos2.x, bCloudPos2.y, 0, 2);
+	app->render->DrawTexture(cloud, sCloudPos.x, sCloudPos.y);
+	app->render->DrawTexture(cloud, sCloudPos2.x, sCloudPos2.y);
+}
+
 bool SceneWin::CleanUp()
 {
+	bool ret = true;
 	if (!active)
 		return true;
 
 	LOG("Freeing scene");
 	Mix_HaltMusic();
-	app->tex->UnLoad(img);
-	app->tex->UnLoad(animationSon.texture);
-	app->tex->UnLoad(animationFather.texture);
-	img = nullptr;
+	app->tex->UnLoad(bgIntro);
+	app->tex->UnLoad(logo);
+	app->tex->UnLoad(cloud);
+	app->tex->UnLoad(ending);
+	app->entityManager->ClearList(ret);
+	for (int i = 0; i < texPartners.Count(); i++)
+	{
+		app->tex->UnLoad(texPartners.At(i)->data);
+	}
+	texPartners.Clear();
+	RELEASE(walkAnimR);
+
+	RELEASE(btnContinue);
+	RELEASE(btnBackToTitle);
+
+	app->guiManager->DeleteList();
+
+	bgIntro = nullptr;
+	logo = nullptr;
+	cloud = nullptr;
+	ending = nullptr;
 	active = false;
+
+	return true;
+}
+
+bool SceneWin::OnGuiMouseClickEvent(GuiControl* control)
+{
+	switch (control->type)
+	{
+	case GuiControlType::BUTTON:
+	{
+		if (control->id == 2)
+		{
+			TransitionToScene(SceneType::LEVEL1), app->sceneManager->lastLevel = 1;
+			//isContinue = true;
+			app->player->loadStats = true;
+		}
+		else if (control->id == 3)
+		{
+			TransitionToScene(SceneType::INTRO);
+		}
+	}
+	break;
+	}
+	return true;
+}
+
+bool SceneWin::LoadState(pugi::xml_node& data)
+{
+	lastLevel = data.child("level").attribute("lvl").as_int(0);
+	return true;
+}
+
+bool SceneWin::SaveState(pugi::xml_node& data) const
+{
+	data.child("level").attribute("lvl").set_value(lastLevel);
+
 	return true;
 }

@@ -9,7 +9,7 @@ class GUI : public Entity
 public:
 
 	GUI();
-	GUI(TypeEntity pTypeEntity, iPoint pPosition, float pVelocity, SDL_Texture* pTexture);
+	GUI(Entity* entity, SDL_Texture* pTexture);
 
 	virtual ~GUI();
 
@@ -27,6 +27,8 @@ public:
 
 	bool CleanUp();
 
+	void InitPosBoxText(int spawnPos, int deltaPos);
+
 	// Load state game
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
@@ -36,49 +38,40 @@ public:
 
 private:
 
-	// Positions vars
-	int headSeparation = 10;
-	int headPositionX = 20;
-	int headPositionY = 20;
-
-	int headW = 0;
-
-	uint* respawn = 0;
-	uint* fireBallState = 0;
-
 	iPoint point0 = { 0,0 };
-	SDL_Texture* headTex;
-	SDL_Texture* arrowTex;
-	SDL_Texture* fireBallTex;
 
-	Animation* headAnim;
-	Animation* arrowAnim;
-	Animation* buttonEAnim;
-	Animation* fireBallOnAnim;
-	Animation* fireBallOffAnim;
+	bool inCheckPoint = false;
+	bool initSpawnPos = false;
 
-	bool inCheckPoint;
+	char textLive[8] = { "\0" };
 
-	// Coin
-	SDL_Texture* imgCoin;
-	Animation* coinHudAnim;
+	bool activeFPS = false;
+	char fps[3] = { "\0" };
 
-	// Text
-	uint* coins = 0;
-	int hudFont = 0;
-	char coinText[10] = { "\0" };
+	// Easings variables
+	int currentIteration = 0;
+	int currentIterationNewMision = 0;
+	int totalIterations = 40;
+	int spawnPos = 0;
+	int deltaPos = 0;
+	int hight = 0;
+	int offsetAnim = 0;
+	int state = 0;
+	float timeCounter = 0;
+	bool newMision = false;
+	bool updateMision = false;
+	bool completedMision = false;
 
-	bool activeFPS;
 	// Time
-	Timer timer;
+	/*Timer timer;
 	char timeText[10] = { "\0" };
 	char scoreText[12] = { "\0" };
-	uint miliseconds=0;
+	uint miliseconds = 0;
 	uint miliseconds2 = 0;
 	uint seconds = 0;
-	uint minuts=0;
+	uint minuts = 0;
 	Timer auxTimePause;
-	bool stopTime = false;
+	bool stopTime = false;*/
 };
 
 #endif // __GUI_H__

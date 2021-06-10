@@ -14,17 +14,30 @@ enum class SceneType
 {
 	LOGO,
 	INTRO,
-	LEVEL1,
-	LEVEL2,
 	WIN,
-	LOSE
+	LOSE,
+	BATTLE,
+	LEVEL1 = 5,
+	LEVEL2 =6,
+	LEVEL3 =7,
+	DUNGEON =8,
 };
+
+class Fx
+{
+public:
+	uint fxName = 0;
+	int channel = -1;
+	iPoint position = { 0,0 };
+	int maxDistance = 0;
+};
+
 
 class SceneControl
 {
 public:
 
-	SceneControl() : active(true), loaded(false), transitionRequired(false) {}
+	SceneControl(SceneType type) : active(true), loaded(false), transitionRequired(false),type(type) {}
 
 	virtual bool Start()
 	{
@@ -72,19 +85,44 @@ public:
 	{
 		return true;
 	}
+	// Distance Fx
+	int DistanceToListener(iPoint player, iPoint channel)
+	{
+		iPoint pos;
+		pos.x = player.x - channel.x;
+		pos.y = player.y - channel.y;
 
+		return sqrt(pow(pos.x, 2) + pow(pos.y, 2));
+	}
+	// Angle Fx
+	int AngleToListener(iPoint player, iPoint channel)
+	{
+		iPoint pos;
+		pos.x = player.x - channel.x;
+		pos.y = player.y - channel.y;
+
+		return atan2(pos.y, pos.x);
+	}
 public:
 
 	bool active = true;
 	SString name;
 
+	bool victory=false;
+	bool lose=false;
+
 	// Possible properties
 	bool loaded = false;
 
-	bool transitionRequired;
+	bool transitionRequired = false;
 	SceneType nextScene;
+	SceneType type;
 	int lastLevel = 0;
 	bool isContinue = false;
+
+	//Fx list
+	Fx fxList[10];
+	int fxCount = 0;
 };
 
 #endif // __SCENECONTROL_H__

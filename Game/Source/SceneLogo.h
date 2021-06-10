@@ -9,7 +9,7 @@ class SceneLogo : public SceneControl
 {
 public:
 
-	SceneLogo();
+	SceneLogo(SceneType type) ;
 
 	// Destructor
 	virtual ~SceneLogo();
@@ -34,16 +34,19 @@ public:
 
 private:
 
-	SDL_Rect logo;
-	SDL_Texture* img;
+	SDL_Rect logoRect;
+	SDL_Texture* logo = nullptr;
+	SDL_Texture* cracks = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	uint introFx;
+	uint fxIntro = -1;
+
+	SDL_Color color;		// Tint color
 
 	int state;
-	float timeCounter;
-	float logoAlpha;
-
-	
+	bool cracksOn = false;
+	float scale = 0;
+	float timeCounter = 0;
+	float logoAlpha = 0;	
 };
 
 #endif // __SCENELOGO_H__

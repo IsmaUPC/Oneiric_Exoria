@@ -9,18 +9,11 @@
 
 struct SDL_Texture;
 
-struct AnimationIntro
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
-
 class SceneIntro : public SceneControl
 {
 public:
 
-	SceneIntro();
+	SceneIntro(SceneType type);
 
 	// Destructor
 	virtual ~SceneIntro();
@@ -36,8 +29,12 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void CloudsUpdate();
+
 	// Called before all Updates
 	bool PostUpdate();
+
+	void CloudsDraw();
 
 	// Called before quitting
 	bool CleanUp();
@@ -50,30 +47,56 @@ public:
 	bool SaveState(pugi::xml_node& data)const;
 
 	void ComprobeState(int id);
+	void AbleButtons();
 
 private:
-	AnimationIntro animationIntro;
-	Animation* idleAnim=new Animation();
 
-	SDL_Texture* btnSettingsTex;
-	SDL_Texture* btnExitTex;
-
-	SDL_Texture* bgIntro;
+	SDL_Texture* bgIntro = nullptr;
+	SDL_Texture* logo = nullptr;
+	SDL_Texture* cloud = nullptr;
+	SDL_Texture* oneiric = nullptr;
+	SDL_Texture* exoria = nullptr;
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
-	bool transition;
+
+	bool transition = false;
+	bool closeSettings = false;
+
+	fPoint sBackCloudPos = { 0,0 };
+	fPoint bBackCloudPos = { 0,0 };
+
+	fPoint bCloudPos = { 0,0 };
+	fPoint bCloudPos2 = { 0,0 };
+	fPoint sCloudPos = { 0,0 };
+	fPoint sCloudPos2 = { 0,0 };
 
 	pugi::xml_document sceneFile;
 	pugi::xml_node sceneStateFile;
 
-	GuiButton* btnPlay;
-	GuiButton* btnContinue;
-	GuiButton* btnRemove;
-	GuiButton* btnSettings;
-	GuiButton* btnCredits;
-	GuiButton* btnExit;
+	GuiButton* btnPlay = nullptr;
+	GuiButton* btnContinue = nullptr;
+	GuiButton* btnSettings = nullptr;
+	GuiButton* btnExit = nullptr;
 
+	GuiSettings* menuSettings = nullptr;
+	uint fxStart = -1;
+	uint fxExit = -1;
+	uint fxTittle = -1;
+	uint fxFlash = -1;
 
-	GuiSettings* menuSettings;
+	//Easings title
+	float currentIteration;
+	float totalIterations;
+	float initialPosition;
+	float deltaPosition;
+
+	float positionOneiric = -500;
+	float positionExoria = -500;
+
+	bool flash = false;
+	float logoAlpha = 0;
+	float timeCounter = 0;
+	int state = 0;
+	float angle = 0;
 };
 
 #endif // __SCENEINTRO_H__

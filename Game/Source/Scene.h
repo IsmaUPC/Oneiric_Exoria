@@ -3,24 +3,17 @@
 
 #include "SceneControl.h"
 #include "Animation.h"
-#include "Point.h"
+#include "GuiManager.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
 struct SDL_Texture;
 
-struct AnimationFather
-{
-	iPoint position;
-	Animation* currentAnimation;
-	SDL_Texture* texture;
-};
-
 class Scene : public SceneControl
 {
 public:
 
-	Scene();
+	Scene(SceneType type) ;
 
 	// Destructor
 	virtual ~Scene();
@@ -39,6 +32,8 @@ public:
 	// Called each loop iteration
 	bool Update(float dt);
 
+	void UpdateDialog();
+
 	// Called before all Updates
 	bool PostUpdate();
 
@@ -51,27 +46,26 @@ public:
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-
 	// Load state game
 	bool LoadState(pugi::xml_node& data);
 	// Save state game
 	bool SaveState(pugi::xml_node& data)const;
+	
+
 private:
 
-	int numThisScene;
+	int numThisScene = 1;
 
-	void Parallax();
 	void DebugKeys();
 
 	bool debugCollisions = false;
-	bool victory = false;
-	bool lose = false;
-	AnimationFather animationFather;
-	Animation* idleAnim= new Animation();
-	SDL_Texture* img;
+
 	int imgX = 0, imgY = 0, imgW = 0, imgH = 0;
 	float speedImg=0;
 
+	GuiButton* btn1 = nullptr;
+	GuiButton* btn2 = nullptr;
+	GuiButton* btn3 = nullptr;
 };
 
 #endif // __SCENE_H__

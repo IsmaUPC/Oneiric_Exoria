@@ -3,10 +3,10 @@
 
 #include "Module.h"
 #include "List.h"
-#include "Point.h"
 #include "PQueue.h"
 #include "DynArray.h"
 #include "Animation.h"
+#include "TeleportNode.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -15,21 +15,23 @@
 
 struct TileSet
 {
-	SString	name;
-	int	firstgid;
-	int margin;
-	int	spacing;
-	int	tileWidth;
-	int	tileHeight;
+	SString	name = "";
+	int	firstgid = 1;
+	int margin = 0;
+	int	spacing = 0;
+	int	tileWidth = 0;
+	int	tileHeight = 0;
 
-	SDL_Texture* texture;
-	int	texWidth;
-	int	texHeight; 
-	int	numTilesWidth;
-	int	numTilesHeight;
-	int	offsetX;
-	int	offsetY;
-	int tilecount;
+	int idFloor = 0;
+
+	SDL_Texture* texture = nullptr;
+	int	texWidth = 0;
+	int	texHeight = 0;
+	int	numTilesWidth = 0;
+	int	numTilesHeight = 0;
+	int	offsetX = 0;
+	int	offsetY = 0;
+	int tilecount = 0;
 
 	SDL_Rect GetTileRect(int id) const;
 };
@@ -46,8 +48,8 @@ struct Properties
 {
 	struct Property
 	{
-		SString	name;
-		int value;
+		SString	name = "";
+		int value = 0;
 	};
 	
 	~Properties()
@@ -64,6 +66,7 @@ struct Properties
 
 	// Method to ask for the value of a custom property
 	int GetProperty(const char* name, int defaultValue = 0) const;
+	int GetPropertyValue(const char* name);
 
 	List<Property*> list;
 };
@@ -75,7 +78,7 @@ struct MapLayer
 	int height = 0;	
 	int mapWidth = 0;
 	int mapHeight = 0;
-	uint* data;
+	uint* data = nullptr;
 
 	Properties properties;
 
@@ -98,10 +101,10 @@ struct MapLayer
 
 struct MapData
 {
-	int width;
-	int	height;
-	int	tileWidth;
-	int	tileHeight;
+	int width = 0;
+	int	height = 0;
+	int	tileWidth = 0;
+	int	tileHeight = 0;
 	SDL_Color backgroundColor;
 	MapTypes type;
 	List<TileSet*> tilesets;
@@ -109,15 +112,14 @@ struct MapData
 	List<MapLayer*> layers;
 };
 
+
 struct CheckPoints{
-	
 	struct CP
 	{
 		CP(iPoint pos) : pos(pos)
 		{
 			active = false;
 		}
-
 		iPoint pos;
 		bool active;
 	};
@@ -134,9 +136,9 @@ struct CheckPoints{
 		list.Clear();
 	}
 
-	Animation* checkPointOffAnim = new Animation();
-	Animation* checkPointOnAnim = new Animation();
-	SDL_Texture* texture;
+	//Animation* checkPointOffAnim = new Animation();
+	//Animation* checkPointOnAnim = new Animation();
+	SDL_Texture* texture = nullptr;
 	List<CP*> list;
 };
 
@@ -155,6 +157,9 @@ public:
 	// Called each loop iteration
 	void Draw();
 
+	// Called each loop iteration, post player draw
+	void DrawUp();
+
 	// Called before quitting
 	bool CleanUp();
 
@@ -163,6 +168,7 @@ public:
 
 	// Translates x,y coordinates from map positions to world positions
 	iPoint MapToWorld(int x, int y) const;
+	iPoint MapToWorld(iPoint position) const;
 
 	// Translates x,y coordinates from  world positions to map positions 
 	iPoint WorldToMap(int x, int y) const;
@@ -199,6 +205,8 @@ public:
 		drawColl = !drawColl; 
 		drawColl2 = !drawColl2;
 	};
+	bool GetDraw() { return drawColl; };
+	bool LoadObstaclesDungeon();
 private:
 
 	// Methods to load all required map data
@@ -208,6 +216,9 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	int LoadCheckPoint();
 	void LoadCollectable();
+	bool LoadTpNodes();
+	bool LoadDrawUp();
+
 
 	// Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
@@ -219,13 +230,21 @@ private:
 public:
 
 	MapData data;
-	iPoint tileDestiny;
+	iPoint tileDestiny = { 0,0 };
 	CheckPoints checKpointsMap;
+
+
+	List<TeleportNode*> tpNodeUpLadder;
+	List<TeleportNode*> tpNodeDownLadder;
+	List<TeleportNode*> tpNodeUpHall;
+	List<TeleportNode*> tpNodeDownHall;
 private:
+
+	TeleportNode* nodeTp = nullptr;
 
 	pugi::xml_document mapFile;
 	SString folder;
-	bool mapLoaded;
+	bool mapLoaded = false;
 
 	bool drawColl=false;
 	bool drawColl2=false;
@@ -241,10 +260,17 @@ private:
 
 
 	// AStar (A*) variables
-	iPoint goalAStar;			// Store goal target tile
+	iPoint goalAStar = { 0,0 };	// Store goal target tile
 	bool finishAStar = false;	// Detect when reached goal
 
 	SDL_Texture* tileX = nullptr;
+
+	List<MapLayer*>* layerDrawUp;
+
+	iPoint vec = { 0,0 };
+	int idFloor = 0;
+
+
 
 };
 

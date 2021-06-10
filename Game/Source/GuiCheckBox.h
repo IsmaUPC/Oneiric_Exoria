@@ -4,7 +4,6 @@
 #include "GuiControl.h"
 #include "Audio.h"
 
-#include "Point.h"
 #include "SString.h"
 
 class GuiCheckBox : public GuiControl
@@ -19,32 +18,33 @@ public:
 
 	bool GetValue() { return checked; };
 	void SetValue(bool state) { checked = state; };
+	SDL_Rect GetCheckBoxInput() { return checkBoxInput; };
 
 private:
 
 	void ChangeImageChecked();
 
 	// GuiCheckBox specific properties
-	iPoint* rectAtlasPos = new iPoint(87, 99);
+	iPoint rectAtlasPos = { 87, 99 };
 	int margin = 10;
 
-	SDL_Rect button;
+	SDL_Rect button = {0,0,0,0};
 	int rectTexW = 183;
 	int rectTexH = 91;
 
-	SDL_Rect checkBoxInput;
-	SDL_Rect checkBoxImage;
+	SDL_Rect checkBoxInput = { 0,0,0,0 };
+	SDL_Rect checkBoxImage = { 0,0,0,0 };
 
-	iPoint* falseAtlasPos = new iPoint(227, 201);
-	iPoint* trueAtlasPos = new iPoint(552, 1407);
-	int squareTexW = 88;
-	int squareTexH = 88;
+	iPoint falseAtlasPos = { 227, 201 };
+	iPoint trueAtlasPos = { 552, 1407 };
+	int squareTexW = 32;
+	int squareTexH = 32;
 	int marginSquare = 9;
 
 	bool textDisable = false;
 
 	bool mouseIn = false;
-	bool checked;
+	bool checked = false;
 };
 
 #endif // __GUICHECKBOX_H__

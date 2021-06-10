@@ -33,8 +33,13 @@ bool Render::Awake(pugi::xml_node& config)
 
 	if(config.child("vsync").attribute("value").as_bool(true) == true)
 	{
-		flags |= SDL_RENDERER_PRESENTVSYNC;
+		SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
 		LOG("Using vsync");
+	}	
+	else
+	{
+		SDL_SetHint(SDL_HINT_RENDER_VSYNC, "0");
+		LOG("Not using vsync");
 	}
 
 	renderer = SDL_CreateRenderer(app->win->window, -1, flags);
@@ -139,7 +144,7 @@ void Render::ResetViewPort()
 }
 
 // Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float _scale, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -158,8 +163,8 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= scale;
-	rect.h *= scale;
+	rect.w *= _scale;
+	rect.h *= _scale;
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -180,7 +185,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, const SDL_Rect* sec
 	return ret;
 }
 
-bool Render::DrawTextureFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool Render::DrawTextureFlip(SDL_Texture* texture, int x, int y, const SDL_Rect* section, int _scale, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -199,8 +204,8 @@ bool Render::DrawTextureFlip(SDL_Texture* texture, int x, int y, const SDL_Rect*
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= scale;
-	rect.h *= scale;
+	rect.w *= _scale;
+	rect.h *= _scale;
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -299,6 +304,36 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
+
+	return ret;
+}
+
+bool Render::DrawTextBox(int x, int y, int w, int h, SDL_Color base, SDL_Color interiorBorder, SDL_Color exteriorBorder, SDL_Texture* cornerTex, Uint8 a) const
+{
+	bool ret = true;
+	
+	//Base rectangle
+	DrawRectangle({ x + 10, y + 10, w - 20, h - 20}, base.r, base.g, base.b, a);
+
+	//Interior border
+	DrawRectangle({ x + 5, y + 5, 5, h - 10 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + w - 10, y + 5, 5, h - 10 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + 10, y + 5, w - 20, 5 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+	DrawRectangle({ x + 10, y + h - 10, w - 20, 5 }, interiorBorder.r, interiorBorder.g, interiorBorder.b, a);
+
+	//Exterior border
+	DrawRectangle({ x, y, 5, h }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + w - 5, y, 5, h}, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + 5, y, w - 10, 5 }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+	DrawRectangle({ x + 5, y + h - 5, w - 10, 5 }, exteriorBorder.r, exteriorBorder.g, exteriorBorder.b, a);
+
+	//Corner draw
+	uint texW, texH;
+	app->tex->GetSize(cornerTex, texW, texH);
+	DrawTexture(cornerTex, x + 15, y + 15);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + 15, 0, 1, 1.0f, 90);
+	DrawTexture(cornerTex, x + w - 15 - texW, y + h - 15 - texH, 0, 1, 1.0f, 180);
+	DrawTexture(cornerTex, x + 15, y + h - 15 - texH, 0, 1, 1.0f, 270);
 
 	return ret;
 }
